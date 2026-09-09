@@ -264,7 +264,7 @@ export const QuranModule: React.FC = () => {
         {/* Subtle Decorative Mosque Silhouette in background */}
         <div 
           className="absolute right-0 top-0 bottom-0 w-1/3 opacity-15 pointer-events-none bg-no-repeat bg-right bg-contain hidden md:block"
-          style={{ backgroundImage: "url('/quran-banner-mosque.png')" }}
+          style={{ backgroundImage: "url('./quran-banner-mosque.png')" }}
         />
 
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
@@ -272,7 +272,7 @@ export const QuranModule: React.FC = () => {
           <div className="flex items-center gap-4 sm:gap-6">
             <div className="shrink-0 w-20 sm:w-24 md:w-28 rounded-2xl overflow-hidden shadow-xs border border-emerald-900/10 bg-emerald-50/50">
               <img 
-                src="/quran-banner-art.png" 
+                src="./quran-banner-art.png" 
                 alt="Holy Quran Rehal" 
                 className="w-full h-full object-cover object-center"
               />

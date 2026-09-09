@@ -360,7 +360,7 @@ export const TeachersModule: React.FC = () => {
         {/* Subtle Decorative Mosque Silhouette on the right */}
         <div 
           className="absolute right-0 top-0 bottom-0 w-1/3 opacity-15 pointer-events-none bg-no-repeat bg-right bg-contain hidden md:block"
-          style={{ backgroundImage: "url('/quran-banner-mosque.png')" }}
+          style={{ backgroundImage: "url('./quran-banner-mosque.png')" }}
         />
 
         <div className="flex items-center gap-3.5 relative z-10">

@@ -563,8 +563,7 @@ export const Indopak15LinesMushaf: React.FC<Indopak15LinesMushafProps> = ({
             </div>
 
             {/* Center: Ornate Page Medallion */}
-            <div className="flex items-center gap-2">
-              <span className="text-amber-600 select-none">۞</span>
+            <span className="text-amber-600 select-none">۞</span>
               <span className="text-base sm:text-lg font-bold font-quran px-3 py-0.5 rounded-lg border border-amber-500/40 bg-amber-500/10">
                 صفحہ {toArabicDigits(currentPage)}
               </span>
@@ -591,98 +590,106 @@ export const Indopak15LinesMushaf: React.FC<Indopak15LinesMushafProps> = ({
             <div className="absolute bottom-1.5 left-1.5 text-amber-700/60 select-none text-xs">✦</div>
 
             {/* Render 15 Lines */}
-            <div className="space-y-1">
-              {linesData.map((lineObj) => {
-                const isFocused = focusedLineNumber === lineObj.line;
-                const isRevealed = revealedLines[lineObj.line];
-                const isVeiled = hifzTestingMode && !isRevealed;
+            {linesData.length === 0 ? (
+              <div className="py-24 text-center space-y-3">
+                <div className="w-10 h-10 border-4 border-emerald-700 border-t-transparent rounded-full animate-spin mx-auto" />
+                <p className="font-quran text-xl text-emerald-950 font-bold">جاري تحميل آيات القرآن الكريم...</p>
+                <p className="text-xs text-gray-500 font-medium">Loading Holy Quran pages and text...</p>
+              </div>
+            ) : (
+              <div className="space-y-1">
+                {linesData.map((lineObj) => {
+                  const isFocused = focusedLineNumber === lineObj.line;
+                  const isRevealed = revealedLines[lineObj.line];
+                  const isVeiled = hifzTestingMode && !isRevealed;
 
-                return (
-                  <div
-                    key={lineObj.line}
-                    onClick={() => {
-                      if (hifzTestingMode) {
-                        setRevealedLines(prev => ({ ...prev, [lineObj.line]: true }));
-                      } else {
-                        setFocusedLineNumber(prev => prev === lineObj.line ? null : lineObj.line);
-                      }
-                    }}
-                    className={`relative flex items-center transition-all cursor-pointer rounded-xl px-2 py-0.5 group ${
-                      isFocused && showRulers
-                        ? 'bg-emerald-100/70 border border-emerald-300 ring-2 ring-emerald-500/20 shadow-xs'
-                        : 'hover:bg-amber-50/50'
-                    }`}
-                    style={{ minHeight: `${fontSize * 1.85}px` }}
-                  >
-                    {/* Line Number Indicator on Side (1 to 15) */}
-                    {showLineNumbers && (
-                      <div className="w-7 shrink-0 text-left select-none text-[10px] font-mono font-bold text-gray-400 group-hover:text-emerald-800">
-                        {toArabicDigits(lineObj.line)}
-                      </div>
-                    )}
-
-                    {/* Line Content */}
-                    <div className="flex-1 text-center w-full">
-                      {isVeiled ? (
-                        /* Hifz Testing Veil */
-                        <div className="py-2.5 rounded-lg bg-amber-100/80 border border-dashed border-amber-300 text-amber-900 text-xs font-bold flex items-center justify-center gap-2 select-none">
-                          <EyeOff className="w-3.5 h-3.5" />
-                          <span>Line {lineObj.line} hidden &bull; Tap to reveal</span>
-                        </div>
-                      ) : lineObj.type === 'header' ? (
-                        /* Surah Title Frame */
-                        <div className="my-1 py-2 px-4 rounded-xl border-2 border-[#0C3524] bg-emerald-50/90 text-center font-bold text-[#0C3524] shadow-xs">
-                          <span className="text-sm sm:text-base tracking-wide font-quran" style={{ fontSize: `${fontSize * 0.72}px` }}>
-                            {lineObj.content}
-                          </span>
-                        </div>
-                      ) : lineObj.type === 'bismillah' ? (
-                        /* Bismillah Line */
-                        <div className="py-1 text-center font-bold text-[#0C3524] font-quran" style={{ fontSize: `${fontSize * 0.9}px` }}>
-                          <span>{lineObj.content}</span>
-                        </div>
-                      ) : lineObj.type === 'tazheeb' ? (
-                        /* Illuminated Lauh Medallion for Page 1 Bottom */
-                        <div className="h-6 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center my-0.5 select-none">
-                          <span className="text-amber-700/60 text-xs tracking-widest">❖ ❖ ❖ ❖ ❖ ❖ ❖ ❖ ❖ ❖ ❖</span>
-                        </div>
-                      ) : (
-                        /* Standard Arabic Quran Verse Text Line - Full Width Justified */
-                        <div 
-                          dir="rtl"
-                          className="font-bold select-text leading-loose font-quran w-full px-1"
-                          style={{ 
-                            fontSize: `${fontSize}px`,
-                            wordSpacing: '1px',
-                            textAlign: 'justify',
-                            textJustify: 'inter-word',
-                            textAlignLast: (lineObj.content.trim().split(/\s+/).length <= 3) ? 'center' : 'justify'
-                          }}
-                        >
-                          <span>{lineObj.content}</span>
+                  return (
+                    <div
+                      key={lineObj.line}
+                      onClick={() => {
+                        if (hifzTestingMode) {
+                          setRevealedLines(prev => ({ ...prev, [lineObj.line]: true }));
+                        } else {
+                          setFocusedLineNumber(prev => prev === lineObj.line ? null : lineObj.line);
+                        }
+                      }}
+                      className={`relative flex items-center transition-all cursor-pointer rounded-xl px-2 py-0.5 group ${
+                        isFocused && showRulers
+                          ? 'bg-emerald-100/70 border border-emerald-300 ring-2 ring-emerald-500/20 shadow-xs'
+                          : 'hover:bg-amber-50/50'
+                      }`}
+                      style={{ minHeight: `${fontSize * 1.85}px` }}
+                    >
+                      {/* Line Number Indicator on Side (1 to 15) */}
+                      {showLineNumbers && (
+                        <div className="w-7 shrink-0 text-left select-none text-[10px] font-mono font-bold text-gray-400 group-hover:text-emerald-800">
+                          {toArabicDigits(lineObj.line)}
                         </div>
                       )}
-                    </div>
 
-                    {/* Quick Sabaq Assign Trigger on Hover */}
-                    {onAssignSabaq && !isVeiled && lineObj.type === 'text' && (
-                      <button
-                        type="button"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          const startAyah = parseInt(ayahRangeText.split(' - ')[0]?.split(':')[1] || '1', 10);
-                          onAssignSabaq(activeSurahMeta.nameArabic, startAyah, currentJuzNumber);
-                        }}
-                        className="opacity-0 group-hover:opacity-100 transition-opacity ml-2 px-2 py-0.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-[10px] font-bold shadow-xs whitespace-nowrap no-print"
-                        title="Assign Sabaq from this line"
-                      >
-                        + Sabaq
-                      </button>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+                      {/* Line Content */}
+                      <div className="flex-1 text-center w-full">
+                        {isVeiled ? (
+                          /* Hifz Testing Veil */
+                          <div className="py-2.5 rounded-lg bg-amber-100/80 border border-dashed border-amber-300 text-amber-900 text-xs font-bold flex items-center justify-center gap-2 select-none">
+                            <EyeOff className="w-3.5 h-3.5" />
+                            <span>Line {lineObj.line} hidden &bull; Tap to reveal</span>
+                          </div>
+                        ) : lineObj.type === 'header' ? (
+                          /* Surah Title Frame */
+                          <div className="my-1 py-2 px-4 rounded-xl border-2 border-[#0C3524] bg-emerald-50/90 text-center font-bold text-[#0C3524] shadow-xs">
+                            <span className="text-sm sm:text-base tracking-wide font-quran" style={{ fontSize: `${fontSize * 0.72}px` }}>
+                              {lineObj.content}
+                            </span>
+                          </div>
+                        ) : lineObj.type === 'bismillah' ? (
+                          /* Bismillah Line */
+                          <div className="py-1 text-center font-bold text-[#0C3524] font-quran" style={{ fontSize: `${fontSize * 0.9}px` }}>
+                            <span>{lineObj.content}</span>
+                          </div>
+                        ) : lineObj.type === 'tazheeb' ? (
+                          /* Illuminated Lauh Medallion for Page 1 Bottom */
+                          <div className="h-6 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center my-0.5 select-none">
+                            <span className="text-amber-700/60 text-xs tracking-widest">❖ ❖ ❖ ❖ ❖ ❖ ❖ ❖ ❖ ❖ ❖</span>
+                          </div>
+                        ) : (
+                          /* Standard Arabic Quran Verse Text Line - Full Width Justified */
+                          <div 
+                            dir="rtl"
+                            className="font-quran font-bold tracking-normal leading-loose text-justify w-full select-text"
+                            style={{ 
+                              fontSize: `${fontSize}px`,
+                              textAlignLast: 'justify',
+                              textJustify: 'inter-word',
+                              lineHeight: 1.85,
+                              color: paperTheme === 'night' ? '#E0EAE5' : '#0B3A2C'
+                            }}
+                          >
+                            {lineObj.content}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Action Button on Hover */}
+                      {onAssignSabaq && lineObj.type === 'text' && !isVeiled && (
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            const startAyah = parseInt(ayahRangeText.split(' - ')[0]?.split(':')[1] || '1', 10);
+                            onAssignSabaq(activeSurahMeta.nameArabic, startAyah, currentJuzNumber);
+                          }}
+                          className="opacity-0 group-hover:opacity-100 transition-opacity ml-2 px-2 py-0.5 rounded-lg bg-emerald-700 hover:bg-emerald-800 text-white text-[10px] font-bold shadow-xs whitespace-nowrap no-print"
+                          title="Assign Sabaq from this line"
+                        >
+                          + Sabaq
+                        </button>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {/* ORNATE FOOTER */}
@@ -744,7 +751,6 @@ export const Indopak15LinesMushaf: React.FC<Indopak15LinesMushafProps> = ({
           </button>
         </div>
       </div>
-    </div>
   );
 };
 

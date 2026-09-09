@@ -1563,17 +1563,57 @@ export function toVerseSymbol(num: number): string {
 }
 
 let quranCache: Surah[] | null = null;
+let quranFetchPromise: Promise<Surah[]> | null = null;
 
 export async function getFullQuran(): Promise<Surah[]> {
-  if (quranCache) return quranCache;
-  try {
-    const res = await fetch('/data/quran.json');
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    quranCache = await res.json();
-    return quranCache || [];
-  } catch (err) {
-    console.error('Failed to load Quran JSON:', err);
+  if (quranCache && quranCache.length > 0) return quranCache;
+  if (quranFetchPromise) return quranFetchPromise;
+
+  quranFetchPromise = (async () => {
+    // Generate intelligent URL candidates supporting root domain, repository subpath, and base url
+    const origin = typeof window !== 'undefined' ? window.location.origin : '';
+    const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
+    const directoryPath = pathname.substring(0, pathname.lastIndexOf('/') + 1);
+    const absoluteDirectoryUrl = origin && directoryPath ? `${origin}${directoryPath}` : '';
+
+    const candidates = [
+      absoluteDirectoryUrl ? `${absoluteDirectoryUrl}data/quran.json` : null,
+      './data/quran.json',
+      'data/quran.json',
+      `${import.meta.env.BASE_URL || ''}data/quran.json`.replace(/\/\//g, '/'),
+      '/madrasa-management-system/data/quran.json',
+      '/data/quran.json'
+    ].filter(Boolean) as string[];
+
+    for (const url of candidates) {
+      try {
+        const res = await fetch(url);
+        if (res.ok) {
+          const contentType = res.headers.get('content-type') || '';
+          if (contentType.includes('text/html')) {
+            continue; // Skip HTML 404 response pages
+          }
+          const data = await res.json();
+          if (Array.isArray(data) && data.length > 0) {
+            quranCache = data;
+            console.log(`[Quran] Successfully loaded ${data.length} Surahs from: ${url}`);
+            return data;
+          }
+        }
+      } catch {
+        // Continue to next candidate
+      }
+    }
+
+    console.error('[Quran] Failed to load Holy Quran JSON from all candidate URLs');
     return [];
+  })();
+
+  try {
+    const result = await quranFetchPromise;
+    return result;
+  } finally {
+    quranFetchPromise = null;
   }
 }
 
