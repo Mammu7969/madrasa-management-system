@@ -51,8 +51,19 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
   const teachers = db.getTeachers(activeMadrasa?.id);
   const fees = db.getFees(activeMadrasa?.id);
   const notices = db.getNotices(activeMadrasa?.id);
-  const schedule = db.getSchedule();
+  const schedule = db.getSchedule(activeMadrasa?.id);
   const gallery = db.getGallery(activeMadrasa?.id);
+  const classes = db.getClasses(activeMadrasa?.id);
+  const subjects = db.getSubjects(activeMadrasa?.id);
+  const staff = db.getStaff(activeMadrasa?.id);
+  const transactions = db.getFinanceTransactions(activeMadrasa?.id);
+
+  // Setup Detection Tabs (if no subjects, no classes, no schedule, no teachers)
+  const noSubjects = subjects.length === 0;
+  const noClasses = classes.length === 0;
+  const noSchedule = schedule.length === 0;
+  const noTeachers = teachers.length === 0;
+  const hasSetupPending = noSubjects || noClasses || noSchedule || noTeachers;
 
   // Namaz state
   const [namazTimings, setNamazTimings] = useState<MadrasaNamazTimings>(() => 
@@ -88,18 +99,28 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
   // Attendance metrics calculation
   const totalStudents = students.length;
   const activeStudents = totalStudents;
-  const presentStudentsCount = students.filter(s => s.totalAbsentsMonthly === 0).length || Math.floor(totalStudents * 0.88);
+  const presentStudentsCount = students.filter(s => s.totalAbsentsMonthly === 0).length;
   const absentStudentsCount = Math.max(0, totalStudents - presentStudentsCount);
+  const attendanceRate = totalStudents > 0 ? Math.round((presentStudentsCount / totalStudents) * 100) : 100;
 
   const totalTeachers = teachers.length;
   const presentTeachersCount = teachers.filter(t => t.isPresentToday).length;
-  const absentTeachersCount = totalTeachers - presentTeachersCount;
+  const absentTeachersCount = Math.max(0, totalTeachers - presentTeachersCount);
 
-  // Fees metrics calculation
+  // Fees & Finance metrics calculation
   const totalCollectedThisMonth = fees
-    .filter(f => f.month.toLowerCase().includes('september'))
-    .reduce((sum, f) => sum + f.amount, 0) || 12500;
-  const totalPendingThisMonth = students.reduce((sum, s) => sum + s.monthlyFees, 0) - totalCollectedThisMonth;
+    .filter(f => f.status === 'Paid')
+    .reduce((sum, f) => sum + f.amount, 0);
+  const totalPendingThisMonth = Math.max(0, students.reduce((sum, s) => sum + (s.monthlyFees || 0), 0) - totalCollectedThisMonth);
+
+  const totalIncome = transactions
+    .filter(t => t.type === 'Income')
+    .reduce((sum, t) => sum + (t.incomeAmount || 0), 0) + totalCollectedThisMonth;
+  const totalExpenses = transactions
+    .filter(t => t.type === 'Expense')
+    .reduce((sum, t) => sum + (t.expenseAmount || 0), 0);
+  const netSurplus = totalIncome - totalExpenses;
+  const cashInHand = Math.max(0, netSurplus);
 
   // Lists
   const mostAbsentStudents = [...students].sort((a, b) => b.totalAbsentsYearly - a.totalAbsentsYearly).slice(0, 4);
@@ -212,6 +233,141 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
         </div>
       </div>
 
+      {/* ================= FOUNDATION SETUP CHECKLIST / ACTION TABS ================= */}
+      {hasSetupPending && (
+        <div className="glossy-card p-5 border-2 border-emerald-500/30 bg-emerald-50/20 backdrop-blur-xl animate-in fade-in duration-300">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-200/60 dark:border-slate-700/60">
+            <div className="flex items-center gap-2.5">
+              <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-xs">
+                <Sparkles className="w-5 h-5 animate-pulse" />
+              </div>
+              <div>
+                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                  <span>Madrasa Setup Required</span>
+                  <span className="text-xs font-urdu text-emerald-800 font-medium">مدرسہ سیٹ اپ و ضروری ترتیبات</span>
+                </h3>
+                <p className="text-xs text-slate-500">
+                  Complete these essential setup steps to activate registers, timetables, and academic operations.
+                </p>
+              </div>
+            </div>
+            <span className="text-[11px] font-bold text-emerald-800 bg-emerald-100 dark:bg-emerald-950 dark:text-emerald-300 px-3 py-1 rounded-full border border-emerald-200 dark:border-emerald-800">
+              Action Required
+            </span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+            {/* Tab 1: Add Subjects (if no subjects) */}
+            {noSubjects && (
+              <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 shadow-xs hover:border-blue-500 transition-all flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 flex items-center justify-center">
+                      <BookOpen className="w-4 h-4" />
+                    </div>
+                    <span className="text-[10px] font-bold text-rose-600 bg-rose-50 dark:bg-rose-950 dark:text-rose-400 px-2 py-0.5 rounded-full">
+                      No Subjects
+                    </span>
+                  </div>
+                  <h4 className="text-xs font-bold text-slate-900">Add Subjects (مضامین)</h4>
+                  <p className="text-[11px] text-slate-500 mt-1 leading-snug">
+                    No curriculum subjects or books are registered for this madrasa.
+                  </p>
+                </div>
+                <button
+                  onClick={() => onNavigateTab('classes')}
+                  className="mt-3 w-full py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <PlusCircle className="w-3.5 h-3.5" />
+                  <span>Add Subjects</span>
+                </button>
+              </div>
+            )}
+
+            {/* Tab 2: Add Classes (if no classes) */}
+            {noClasses && (
+              <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 shadow-xs hover:border-emerald-500 transition-all flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
+                      <GraduationCap className="w-4 h-4" />
+                    </div>
+                    <span className="text-[10px] font-bold text-rose-600 bg-rose-50 dark:bg-rose-950 dark:text-rose-400 px-2 py-0.5 rounded-full">
+                      No Classes
+                    </span>
+                  </div>
+                  <h4 className="text-xs font-bold text-slate-900">Add Classes (جماعتیں)</h4>
+                  <p className="text-[11px] text-slate-500 mt-1 leading-snug">
+                    No classroom sections (Hifz, Nazira, Alimiyat) exist yet.
+                  </p>
+                </div>
+                <button
+                  onClick={() => onNavigateTab('classes')}
+                  className="mt-3 w-full py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <PlusCircle className="w-3.5 h-3.5" />
+                  <span>Add Classes</span>
+                </button>
+              </div>
+            )}
+
+            {/* Tab 3: Add Schedule (if no schedule) */}
+            {noSchedule && (
+              <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 shadow-xs hover:border-amber-500 transition-all flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="w-8 h-8 rounded-lg bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center">
+                      <Clock className="w-4 h-4" />
+                    </div>
+                    <span className="text-[10px] font-bold text-rose-600 bg-rose-50 dark:bg-rose-950 dark:text-rose-400 px-2 py-0.5 rounded-full">
+                      No Schedule
+                    </span>
+                  </div>
+                  <h4 className="text-xs font-bold text-slate-900">Add Schedule (شیڈول)</h4>
+                  <p className="text-[11px] text-slate-500 mt-1 leading-snug">
+                    Daily timetable and prayer schedule are not configured.
+                  </p>
+                </div>
+                <button
+                  onClick={() => onNavigateTab('schedule')}
+                  className="mt-3 w-full py-2 px-3 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <PlusCircle className="w-3.5 h-3.5" />
+                  <span>Add Schedule</span>
+                </button>
+              </div>
+            )}
+
+            {/* Tab 4: Add Teachers (if no teachers) */}
+            {noTeachers && (
+              <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 shadow-xs hover:border-purple-500 transition-all flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="w-8 h-8 rounded-lg bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center">
+                      <UserPlus className="w-4 h-4" />
+                    </div>
+                    <span className="text-[10px] font-bold text-rose-600 bg-rose-50 dark:bg-rose-950 dark:text-rose-400 px-2 py-0.5 rounded-full">
+                      No Teachers
+                    </span>
+                  </div>
+                  <h4 className="text-xs font-bold text-slate-900">Add Teachers (اساتذہ)</h4>
+                  <p className="text-[11px] text-slate-500 mt-1 leading-snug">
+                    No faculty members or teachers enrolled in this madrasa.
+                  </p>
+                </div>
+                <button
+                  onClick={() => onNavigateTab('teachers')}
+                  className="mt-3 w-full py-2 px-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+                >
+                  <PlusCircle className="w-3.5 h-3.5" />
+                  <span>Add Teachers</span>
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* ================= ROW 1: 5 TOP KPI CARDS WITH 3D GLOSSY SQUIRCLES ================= */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
         {/* Card 1: Total Students */}
@@ -221,9 +377,9 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
           </div>
           <div className="flex-1 min-w-0">
             <span className="text-[11px] font-bold text-gray-500 block truncate">Total Students</span>
-            <div className="text-2xl font-black text-gray-900 leading-none my-1">{Math.max(totalStudents, 482)}</div>
+            <div className="text-2xl font-black text-gray-900 leading-none my-1">{totalStudents}</div>
             <div className="flex items-center gap-1 text-[10px] font-bold text-[#079669]">
-              <span>▲ +12 this month</span>
+              <span>Active Students</span>
             </div>
           </div>
         </div>
@@ -235,9 +391,9 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
           </div>
           <div className="flex-1 min-w-0">
             <span className="text-[11px] font-bold text-gray-500 block truncate">Total Classes</span>
-            <div className="text-2xl font-black text-gray-900 leading-none my-1">28</div>
+            <div className="text-2xl font-black text-gray-900 leading-none my-1">{classes.length}</div>
             <div className="text-[10px] font-bold text-[#1677D2]">
-              <span>Active Classes</span>
+              <span>Configured Classes</span>
             </div>
           </div>
         </div>
@@ -249,9 +405,9 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
           </div>
           <div className="flex-1 min-w-0">
             <span className="text-[11px] font-bold text-gray-500 block truncate">Teachers & Staff</span>
-            <div className="text-2xl font-black text-gray-900 leading-none my-1">36</div>
+            <div className="text-2xl font-black text-gray-900 leading-none my-1">{totalTeachers + staff.length}</div>
             <div className="flex items-center gap-1 text-[10px] font-bold text-[#079669]">
-              <span>▲ +2 this month</span>
+              <span>{totalTeachers} Teachers, {staff.length} Staff</span>
             </div>
           </div>
         </div>
@@ -263,9 +419,9 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
           </div>
           <div className="flex-1 min-w-0">
             <span className="text-[11px] font-bold text-gray-500 block truncate">Monthly Fee Collection</span>
-            <div className="text-xl font-black text-gray-900 leading-none my-1">₹ 2,48,500</div>
+            <div className="text-xl font-black text-gray-900 leading-none my-1">₹ {totalCollectedThisMonth.toLocaleString()}</div>
             <div className="flex items-center gap-1 text-[10px] font-bold text-[#079669]">
-              <span>▲ +18% from last month</span>
+              <span>₹ {totalPendingThisMonth.toLocaleString()} Pending</span>
             </div>
           </div>
         </div>
@@ -277,9 +433,9 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
           </div>
           <div className="flex-1 min-w-0">
             <span className="text-[11px] font-bold text-gray-500 block truncate">Total Expenses</span>
-            <div className="text-xl font-black text-gray-900 leading-none my-1">₹ 1,76,340</div>
+            <div className="text-xl font-black text-gray-900 leading-none my-1">₹ {totalExpenses.toLocaleString()}</div>
             <div className="flex items-center gap-1 text-[10px] font-bold text-[#D92D20]">
-              <span>▲ +6% from last month</span>
+              <span>Financial Outflow</span>
             </div>
           </div>
         </div>
@@ -299,27 +455,35 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
             </button>
           </div>
           <div className="space-y-3 py-2 my-auto">
-            {[
-              { time: '06:00 AM', dot: 'bg-emerald-500', title: 'Fajr & Hifz Class', dept: 'Hifz Department', hall: 'Hall - 1' },
-              { time: '08:00 AM', dot: 'bg-emerald-500', title: 'Nazira & Qaida', dept: 'Primary Department', hall: 'Hall - 2' },
-              { time: '10:00 AM', dot: 'bg-blue-500', title: 'Deeniyath Class', dept: 'Class Dars-e-Nizami', hall: 'Hall - 3' },
-              { time: '02:00 PM', dot: 'bg-amber-500', title: 'Tajweed Class', dept: 'Advanced Batch', hall: 'Hall - 1' },
-              { time: '04:00 PM', dot: 'bg-rose-500', title: 'Juzvi Exam', dept: 'Hifz Department', hall: 'Exam Hall' },
-            ].map((item, idx) => (
-              <div key={idx} className="flex items-center justify-between text-xs py-1">
-                <div className="flex items-center gap-2.5">
-                  <span className="font-mono text-[11px] text-gray-500 font-semibold w-16 shrink-0">{item.time}</span>
-                  <span className={`w-2.5 h-2.5 rounded-full ${item.dot} shrink-0 ring-2 ring-white shadow-2xs`} />
-                  <div>
-                    <span className="font-bold text-gray-800 block text-xs leading-tight">{item.title}</span>
-                    <span className="text-[10px] text-gray-400 block leading-tight">{item.dept}</span>
-                  </div>
-                </div>
-                <span className="text-[10px] font-bold text-gray-500 bg-gray-100/80 px-2 py-0.5 rounded-md shrink-0">
-                  {item.hall}
-                </span>
+            {schedule.length === 0 ? (
+              <div className="text-center py-6">
+                <Clock className="w-8 h-8 mx-auto mb-2 text-slate-400 opacity-60" />
+                <p className="text-xs font-semibold text-slate-500">No schedule items added yet</p>
+                <button
+                  onClick={() => onNavigateTab('schedule')}
+                  className="mt-2.5 inline-flex items-center gap-1 text-xs font-bold text-emerald-600 hover:text-emerald-700 underline cursor-pointer"
+                >
+                  <PlusCircle className="w-3.5 h-3.5" />
+                  <span>Configure Madrasa Schedule</span>
+                </button>
               </div>
-            ))}
+            ) : (
+              schedule.slice(0, 5).map((item, idx) => (
+                <div key={item.id || idx} className="flex items-center justify-between text-xs py-1">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <span className="font-mono text-[11px] text-gray-500 font-semibold w-20 shrink-0 truncate">{item.time}</span>
+                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0 ring-2 ring-white shadow-2xs" />
+                    <div className="min-w-0">
+                      <span className="font-bold text-gray-800 block text-xs leading-tight truncate">{item.title}</span>
+                      <span className="text-[10px] text-gray-400 block leading-tight truncate">{item.description}</span>
+                    </div>
+                  </div>
+                  <span className="text-[10px] font-bold text-gray-500 bg-gray-100/80 dark:bg-slate-700/80 px-2 py-0.5 rounded-md shrink-0">
+                    {item.category}
+                  </span>
+                </div>
+              ))
+            )}
           </div>
         </div>
 
@@ -339,13 +503,11 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
             {/* Donut Chart */}
             <div className="relative w-36 h-36 flex items-center justify-center shrink-0">
               <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-                <path className="text-slate-100" strokeWidth="3.8" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                <path className="text-emerald-500" strokeDasharray="87, 100" strokeWidth="4.2" strokeLinecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                <path className="text-rose-500" strokeDasharray="10, 100" strokeDashoffset="-87" strokeWidth="4.2" strokeLinecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                <path className="text-amber-500" strokeDasharray="3, 100" strokeDashoffset="-97" strokeWidth="4.2" strokeLinecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path className="text-slate-100 dark:text-slate-700" strokeWidth="3.8" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path className="text-emerald-500" strokeDasharray={`${attendanceRate}, 100`} strokeWidth="4.2" strokeLinecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
               </svg>
               <div className="absolute flex flex-col items-center justify-center text-center">
-                <span className="text-2xl font-black text-gray-900">87%</span>
+                <span className="text-2xl font-black text-gray-900">{attendanceRate}%</span>
                 <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Present</span>
               </div>
             </div>
@@ -355,22 +517,17 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" />
                 <span className="text-gray-600">Present</span>
-                <span className="font-bold text-gray-900 ml-auto pl-2">418</span>
+                <span className="font-bold text-gray-900 ml-auto pl-2">{presentStudentsCount}</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shrink-0" />
                 <span className="text-gray-600">Absent</span>
-                <span className="font-bold text-gray-900 ml-auto pl-2">48</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-amber-500 shrink-0" />
-                <span className="text-gray-600">Leave</span>
-                <span className="font-bold text-gray-900 ml-auto pl-2">16</span>
+                <span className="font-bold text-gray-900 ml-auto pl-2">{absentStudentsCount}</span>
               </div>
               <div className="flex items-center gap-2 pt-1 border-t border-gray-100">
                 <span className="w-2.5 h-2.5 rounded-full bg-slate-400 shrink-0" />
                 <span className="text-gray-600 font-bold">Total</span>
-                <span className="font-black text-gray-900 ml-auto pl-2">482</span>
+                <span className="font-black text-gray-900 ml-auto pl-2">{totalStudents}</span>
               </div>
             </div>
           </div>
@@ -430,26 +587,26 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
             {/* Mint: Total Income */}
             <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200/70 shadow-xs relative overflow-hidden">
               <span className="text-[10px] font-bold text-emerald-900 block truncate">Total Income</span>
-              <span className="text-base font-black text-emerald-950 block mt-0.5">₹ 3,24,850</span>
-              <span className="text-[10px] font-bold text-emerald-700 block mt-1">▲ +18%</span>
+              <span className="text-base font-black text-emerald-950 block mt-0.5">₹ {totalIncome.toLocaleString()}</span>
+              <span className="text-[10px] font-bold text-emerald-700 block mt-1">Cash & Online</span>
             </div>
             {/* Coral: Total Expenses */}
             <div className="p-3.5 rounded-2xl bg-rose-50/70 border border-rose-200/70 shadow-xs relative overflow-hidden">
               <span className="text-[10px] font-bold text-rose-900 block truncate">Total Expenses</span>
-              <span className="text-base font-black text-rose-950 block mt-0.5">₹ 1,76,340</span>
-              <span className="text-[10px] font-bold text-rose-700 block mt-1">▲ +6%</span>
+              <span className="text-base font-black text-rose-950 block mt-0.5">₹ {totalExpenses.toLocaleString()}</span>
+              <span className="text-[10px] font-bold text-rose-700 block mt-1">Operational</span>
             </div>
             {/* Sky Blue: Net Surplus */}
             <div className="p-3.5 rounded-2xl bg-sky-50/70 border border-sky-200/70 shadow-xs relative overflow-hidden">
               <span className="text-[10px] font-bold text-sky-900 block truncate">Net Surplus</span>
-              <span className="text-base font-black text-sky-950 block mt-0.5">₹ 1,48,510</span>
-              <span className="text-[10px] font-bold text-sky-700 block mt-1">▲ +22%</span>
+              <span className="text-base font-black text-sky-950 block mt-0.5">₹ {netSurplus.toLocaleString()}</span>
+              <span className="text-[10px] font-bold text-sky-700 block mt-1">{netSurplus >= 0 ? 'Surplus' : 'Deficit'}</span>
             </div>
             {/* Lavender: Cash in Hand */}
             <div className="p-3.5 rounded-2xl bg-purple-50/70 border border-purple-200/70 shadow-xs relative overflow-hidden">
-              <span className="text-[10px] font-bold text-purple-900 block truncate">Cash in Hand</span>
-              <span className="text-base font-black text-purple-950 block mt-0.5">₹ 2,86,400</span>
-              <span className="text-[10px] font-bold text-purple-600 block mt-1">Liquidity safe</span>
+              <span className="text-[10px] font-bold text-purple-900 block truncate">Treasury Balance</span>
+              <span className="text-base font-black text-purple-950 block mt-0.5">₹ {cashInHand.toLocaleString()}</span>
+              <span className="text-[10px] font-bold text-purple-600 block mt-1">Liquid reserve</span>
             </div>
           </div>
         </div>
@@ -466,21 +623,35 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
             </button>
           </div>
 
-          <div className="h-44 flex items-end justify-between gap-3 pt-4 px-2 my-auto">
-            {[
-              { name: 'Hifz', count: 120, height: '85%', color: 'bg-emerald-500' },
-              { name: 'Nazira', count: 95, height: '68%', color: 'bg-sky-500' },
-              { name: 'Deeniyath', count: 140, height: '100%', color: 'bg-purple-500' },
-              { name: 'Dars-e-Nizami', count: 85, height: '60%', color: 'bg-amber-500' },
-              { name: 'Others', count: 42, height: '30%', color: 'bg-slate-400' },
-            ].map((dept, idx) => (
-              <div key={idx} className="flex-1 flex flex-col items-center gap-1.5 h-full justify-end group">
-                <span className="text-[10px] font-mono font-bold text-gray-600">{dept.count}</span>
-                <div style={{ height: dept.height }} className={`w-full max-w-[32px] rounded-t-xl ${dept.color} shadow-xs transition-transform group-hover:scale-105`} />
-                <span className="text-[9px] font-bold text-gray-500 truncate w-full text-center">{dept.name}</span>
-              </div>
-            ))}
-          </div>
+          {students.length === 0 ? (
+            <div className="text-center py-8 my-auto text-slate-400">
+              <Users className="w-8 h-8 mx-auto mb-2 opacity-50" />
+              <p className="text-xs font-semibold text-slate-500">No students enrolled yet.</p>
+            </div>
+          ) : (
+            <div className="h-44 flex items-end justify-between gap-3 pt-4 px-2 my-auto">
+              {(() => {
+                const groups: { [key: string]: number } = {};
+                students.forEach(s => {
+                  const cls = s.class || s.category || 'General';
+                  groups[cls] = (groups[cls] || 0) + 1;
+                });
+                const entries = Object.entries(groups).slice(0, 5);
+                const maxCount = Math.max(...entries.map(e => e[1]), 1);
+                const colors = ['bg-emerald-500', 'bg-sky-500', 'bg-purple-500', 'bg-amber-500', 'bg-rose-500'];
+                return entries.map(([name, count], idx) => {
+                  const heightPercent = Math.max(22, Math.round((count / maxCount) * 100));
+                  return (
+                    <div key={idx} className="flex-1 flex flex-col items-center gap-1.5 h-full justify-end group">
+                      <span className="text-[10px] font-mono font-bold text-gray-600 dark:text-slate-300">{count}</span>
+                      <div style={{ height: `${heightPercent}%` }} className={`w-full max-w-[32px] rounded-t-xl ${colors[idx % colors.length]} shadow-xs transition-transform group-hover:scale-105`} />
+                      <span className="text-[9px] font-bold text-gray-500 dark:text-slate-400 truncate w-full text-center">{name}</span>
+                    </div>
+                  );
+                });
+              })()}
+            </div>
+          )}
         </div>
 
         {/* Recent Activities */}
@@ -496,22 +667,31 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
           </div>
 
           <div className="space-y-2.5 py-1 my-auto">
-            {[
-              { time: '10:24 AM', dot: 'bg-emerald-500', title: 'New student admission', desc: 'Ahmed Raza S/O Imran (Nazira)' },
-              { time: '09:45 AM', dot: 'bg-blue-500', title: 'Fee received', desc: 'Receipt No: F-2026-0156' },
-              { time: '09:10 AM', dot: 'bg-sky-500', title: 'Attendance marked', desc: 'Class: Hifz - Batch A' },
-              { time: '08:30 AM', dot: 'bg-rose-500', title: 'Expense added', desc: 'Vegetables Purchase - ₹ 3,250' },
-              { time: '07:15 AM', dot: 'bg-amber-500', title: 'Daily Sabaq entry', desc: 'By Maulana Salman' },
-            ].map((act, idx) => (
-              <div key={idx} className="flex items-start gap-2.5 text-xs">
-                <span className="font-mono text-[10px] text-gray-400 font-semibold w-14 shrink-0 pt-0.5">{act.time}</span>
-                <span className={`w-2 h-2 rounded-full ${act.dot} shrink-0 mt-1.5 ring-2 ring-white`} />
-                <div className="leading-tight flex-1">
-                  <span className="font-bold text-gray-800 block text-xs">{act.title}</span>
-                  <span className="text-[11px] text-gray-500 block">{act.desc}</span>
+            {students.slice(0, 3).map((st) => (
+              <div key={st.id} className="flex items-start gap-2.5 text-xs">
+                <span className="font-mono text-[10px] text-gray-400 font-semibold w-16 shrink-0 pt-0.5 truncate">{st.admissionDate || 'Recent'}</span>
+                <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0 mt-1.5 ring-2 ring-white" />
+                <div className="leading-tight flex-1 min-w-0">
+                  <span className="font-bold text-gray-800 block text-xs truncate">Enrolled Student</span>
+                  <span className="text-[11px] text-gray-500 block truncate">{st.studentName} ({st.admissionNo})</span>
                 </div>
               </div>
             ))}
+            {fees.slice(0, 2).map((f) => (
+              <div key={f.id} className="flex items-start gap-2.5 text-xs">
+                <span className="font-mono text-[10px] text-gray-400 font-semibold w-16 shrink-0 pt-0.5 truncate">{f.date}</span>
+                <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0 mt-1.5 ring-2 ring-white" />
+                <div className="leading-tight flex-1 min-w-0">
+                  <span className="font-bold text-gray-800 block text-xs truncate">Fee Collected</span>
+                  <span className="text-[11px] text-gray-500 block truncate">₹{f.amount} - {f.studentName}</span>
+                </div>
+              </div>
+            ))}
+            {students.length === 0 && fees.length === 0 && (
+              <div className="text-center py-6 text-slate-400">
+                <p className="text-xs font-semibold">No recent transactions recorded yet.</p>
+              </div>
+            )}
           </div>
         </div>
       </div>

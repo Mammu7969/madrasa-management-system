@@ -117,464 +117,42 @@ const initialMadrasas: Madrasa[] = [
 
 const initialStudents: Student[] = [
   {
-    id: 'std-1',
-    admissionNo: 'ADM-2026-001',
-    admissionDate: '2026-01-10',
-    studentName: 'Mohammad Zayd Khan',
-    studentNameUrdu: 'محمد زید خان',
-    fatherName: 'Tariq Khan',
-    motherName: 'Amina Begum',
-    guardianName: 'Tariq Khan',
-    guardianOccupation: 'Business Owner',
-    contactNumber: '+91 98490 11223',
-    address: 'H.No 12-2-417, Asif Nagar, Hyderabad',
+    id: 'std-1788982266268',
+    admissionNo: 'ZIA-21-002',
+    admissionDate: '2026-09-09',
+    studentName: 'Pathan Mohamamd Khan',
+    studentNameUrdu: 'پٹھان محمد خان',
+    fatherName: 'Pathan Jahangeer Khan',
+    motherName: '',
+    guardianName: 'Pathan Jahangeer Khan',
+    guardianOccupation: 'Business',
+    contactNumber: '+91 99000 00000',
+    address: 'Adilabad, Telangana',
     category: 'Hostel',
     sponsorship: 'Self-Sponsored',
-    kafeelName: 'Self (Tariq Khan)',
-    monthlyFees: 2500,
-    previousSchool: 'Modern Islamic High School, Hyderabad',
-    previousStudy: 'Passed 4th Standard & Completed Noorani Qaidah',
-    previousStudyCertificateUrl: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=800&q=80',
-    aadharCardUrl: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80',
-    aadharNumber: '7845 9012 3456',
-    photoUrl: 'https://images.unsplash.com/photo-1543610892-0b1f7e6d8ac1?auto=format&fit=crop&w=400&q=80',
-    class: 'Hifz Section A',
-    madrasaId: 'madrasa-1',
-    totalPresentsYearly: 215,
-    totalPresentsMonthly: 24,
-    totalAbsentsYearly: 3,
-    totalAbsentsMonthly: 0,
-    presentSabaqAt: 'Para 14 (Surah Al-Hijr, Ruku 2)',
-    username: 'Moha-2026',
-    password: 'Moha@2014',
-    dob: '2014-05-12'
-  },
-  {
-    id: 'std-2',
-    admissionNo: 'ADM-2026-002',
-    admissionDate: '2026-01-15',
-    studentName: 'Abdullah Mansoor',
-    studentNameUrdu: 'عبد اللہ منصور',
-    fatherName: 'Mansoor Ali',
-    motherName: 'Fatima Zohra',
-    guardianName: 'Mansoor Ali',
-    guardianOccupation: 'Government Teacher',
-    contactNumber: '+91 99887 76655',
-    address: 'Tolichowki, Hyderabad',
-    category: 'Day Scholar',
-    sponsorship: 'Discounted',
-    kafeelName: 'Al-Khair Welfare Trust',
+    kafeelName: 'Self',
     monthlyFees: 1500,
-    previousSchool: 'Al-Huda Model School, Nizamabad',
-    previousStudy: 'Completed 5 Paras Nazira',
-    previousStudyCertificateUrl: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?auto=format&fit=crop&w=800&q=80',
-    aadharCardUrl: 'https://images.unsplash.com/photo-1544717305-2782549b5136?auto=format&fit=crop&w=800&q=80',
-    aadharNumber: '9081 2345 6789',
-    photoUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
-    class: 'Hifz Section A',
+    previousSchool: 'Primary School',
+    previousStudy: 'Noorani Qaidah',
+    aadharNumber: '',
+    photoUrl: 'https://images.unsplash.com/photo-1543610892-0b1f7e6d8ac1?auto=format&fit=crop&w=400&q=80',
+    class: 'General',
     madrasaId: 'madrasa-1',
-    totalPresentsYearly: 210,
-    totalPresentsMonthly: 23,
-    totalAbsentsYearly: 7,
-    totalAbsentsMonthly: 1,
-    presentSabaqAt: 'Para 11 (Surah Yunus, Ruku 4)',
-    username: 'Abdu-2026',
-    password: 'Abdu@2013',
-    dob: '2013-08-20'
-  },
-  {
-    id: 'std-3',
-    admissionNo: 'ADM-2026-003',
-    admissionDate: '2026-02-01',
-    studentName: 'Ibrahim Farooqi',
-    studentNameUrdu: 'ابراہیم فاروقی',
-    fatherName: 'Umar Farooqi',
-    motherName: 'Siddiqa Begum',
-    guardianName: 'Umar Farooqi',
-    guardianOccupation: 'Tailor',
-    contactNumber: '+91 97112 33445',
-    address: 'Shaheen Nagar, Hyderabad',
-    category: 'Hostel',
-    sponsorship: 'Sponsored by',
-    kafeelName: 'Haji Abdul Sattar Sahab (Dubai)',
-    monthlyFees: 0,
-    previousSchool: 'Madrasa Taleem-ul-Quran',
-    previousStudy: 'Amma Para Nazira with Tajweed',
-    aadharNumber: '6123 4567 8901',
-    photoUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80',
-    class: 'Nazira Class 1',
-    madrasaId: 'madrasa-1',
-    totalPresentsYearly: 218,
-    totalPresentsMonthly: 24,
+    totalPresentsYearly: 0,
+    totalPresentsMonthly: 0,
     totalAbsentsYearly: 0,
     totalAbsentsMonthly: 0,
-    presentSabaqAt: 'Para 4 (Al Imran, Ayat 92)',
-    username: 'Ibra-2026',
-    password: 'Ibra@2015',
-    dob: '2015-11-04'
-  },
-  {
-    id: 'std-4',
-    admissionNo: 'ADM-2026-004',
-    admissionDate: '2026-02-10',
-    studentName: 'Salman Shareef',
-    studentNameUrdu: 'سلمان شریف',
-    fatherName: 'Abdul Shareef',
-    motherName: 'Rashida Begum',
-    guardianName: 'Abdul Shareef',
-    guardianOccupation: 'Electrician',
-    contactNumber: '+91 94411 22334',
-    address: 'Malakpet, Hyderabad',
-    category: 'Day Scholar',
-    sponsorship: 'Self-Sponsored',
-    monthlyFees: 2000,
-    previousSchool: 'Government Primary School',
-    previousStudy: '3rd Standard',
-    aadharNumber: '4455 6677 8899',
-    photoUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
-    class: 'Hifz Section B',
-    madrasaId: 'madrasa-1',
-    totalPresentsYearly: 160,
-    totalPresentsMonthly: 12,
-    totalAbsentsYearly: 35, // High absent for "Most Absent" list
-    totalAbsentsMonthly: 10,
-    presentSabaqAt: 'Para 2 (Al-Baqarah, Ayat 183)',
-    username: 'Salm-2026',
-    password: 'Salm@2014',
-    dob: '2014-02-18'
-  },
-  {
-    id: 'std-5',
-    admissionNo: 'ADM-2026-005',
-    admissionDate: '2026-02-20',
-    studentName: 'Zubair Qureshi',
-    studentNameUrdu: 'زبیر قریشی',
-    fatherName: 'Khalid Qureshi',
-    motherName: 'Shabana Khatoon',
-    guardianName: 'Khalid Qureshi',
-    guardianOccupation: 'Trader',
-    contactNumber: '+91 98877 66554',
-    address: 'Mallepally, Hyderabad',
-    category: 'Hostel',
-    sponsorship: 'Self-Sponsored',
-    monthlyFees: 2500,
-    previousSchool: 'Faizan High School',
-    previousStudy: 'Passed 5th Class',
-    aadharNumber: '3322 1144 5566',
-    photoUrl: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80',
-    class: 'Alimiyat Year 1',
-    madrasaId: 'madrasa-1',
-    totalPresentsYearly: 218,
-    totalPresentsMonthly: 24, // 100% attendance
-    totalAbsentsYearly: 0,
-    totalAbsentsMonthly: 0,
-    presentSabaqAt: 'Hidayat-un-Nahw & Qasas-un-Nabiyyeen',
-    username: 'Zuba-2026',
-    password: 'Zuba@2012',
-    dob: '2012-04-25'
+    presentSabaqAt: 'Para 1',
+    username: 'Path-2026',
+    password: 'Path@2015',
+    dob: '2015-01-01'
   }
 ];
 
-const initialTeachers: Teacher[] = [
-  {
-    id: 'tch-1',
-    teacherIdNo: 'TCH-001',
-    name: 'Qari Mohammad Huzaifa',
-    nameUrdu: 'قاری محمد حذیفہ',
-    assignedClass: 'Hifz Section A',
-    phone: '+91 98765 00111',
-    qualification: 'Fazil Deoband, Qirat Hafs & Sab’ah',
-    madrasaId: 'madrasa-1',
-    username: 'Qari-2022',
-    password: 'Qari@1988',
-    joiningDate: '2022-01-10',
-    dob: '1988-06-15',
-    isPresentToday: true
-  },
-  {
-    id: 'tch-2',
-    teacherIdNo: 'TCH-002',
-    name: 'Maulana Bilal Ahmad Nadwi',
-    nameUrdu: 'مولانا بلال احمد ندوی',
-    assignedClass: 'Alimiyat Year 1',
-    phone: '+91 98765 00222',
-    qualification: 'Alimiyat Nadwatul Ulama, M.A Arabic',
-    madrasaId: 'madrasa-1',
-    username: 'Maul-2023',
-    password: 'Maul@1991',
-    joiningDate: '2023-03-01',
-    dob: '1991-09-20',
-    isPresentToday: true
-  },
-  {
-    id: 'tch-3',
-    teacherIdNo: 'TCH-003',
-    name: 'Hafiz Saeed-ur-Rahman',
-    nameUrdu: 'حافظ سعید الرحمن',
-    assignedClass: 'Nazira Class 1',
-    phone: '+91 98765 00333',
-    qualification: 'Hafiz-e-Quran & Tajweed Specialist',
-    madrasaId: 'madrasa-1',
-    username: 'Hafi-2024',
-    password: 'Hafi@1993',
-    joiningDate: '2024-05-15',
-    dob: '1993-11-10',
-    isPresentToday: true
-  },
-  {
-    id: 'tch-4',
-    teacherIdNo: 'TCH-004',
-    name: 'Qari Rizwanullah',
-    nameUrdu: 'قاری رضوان اللہ',
-    assignedClass: 'Hifz Section B',
-    phone: '+91 98765 00444',
-    qualification: 'Fazil-e-Dars-e-Nizami',
-    madrasaId: 'madrasa-1',
-    username: 'Qari-2025',
-    password: 'Qari@1994',
-    joiningDate: '2025-02-01',
-    dob: '1994-08-14',
-    isPresentToday: false // 1 absent teacher for statistics!
-  }
-];
-
-const initialStaff: Staff[] = [
-  {
-    id: 'stf-1',
-    staffIdNo: 'STF-001',
-    name: 'Abdul Rasheed',
-    nameUrdu: 'عبد الرشید',
-    role: 'Head Chef (Bawarchi)',
-    roleUrdu: 'باورچی و ناظم مطبخ',
-    department: 'Kitchen & Dining',
-    departmentUrdu: 'شعبہ مطبخ و طعام',
-    phone: '+91 98480 55111',
-    salary: 16000,
-    status: 'Active',
-    joiningDate: '2023-04-15',
-    madrasaId: 'madrasa-1',
-    notes: 'Responsible for daily meals for 150+ resident students and faculty.'
-  },
-  {
-    id: 'stf-2',
-    staffIdNo: 'STF-002',
-    name: 'Mohammad Farooq',
-    nameUrdu: 'محمد فاروق',
-    role: 'Hostel Warden (Nazim-e-Darul Iqamah)',
-    roleUrdu: 'ناظم دار الاقامہ',
-    department: 'Hostel Administration',
-    departmentUrdu: 'انتظامیہ دار الاقامہ',
-    phone: '+91 98480 55222',
-    salary: 18500,
-    status: 'Active',
-    joiningDate: '2022-06-10',
-    madrasaId: 'madrasa-1',
-    notes: 'In charge of hostel discipline, room allocations, and student safety.'
-  },
-  {
-    id: 'stf-3',
-    staffIdNo: 'STF-003',
-    name: 'Syed Khaja',
-    nameUrdu: 'سید خواجہ',
-    role: 'Campus Security Incharge',
-    roleUrdu: 'نگراں سیکیورٹی و حفاظت',
-    department: 'Security & Facilities',
-    departmentUrdu: 'شعبہ حفاظت و سیکیورٹی',
-    phone: '+91 98480 55333',
-    salary: 14000,
-    status: 'Active',
-    joiningDate: '2024-01-05',
-    madrasaId: 'madrasa-1',
-    notes: 'Main gate entry log, night patrol, visitor registration.'
-  },
-  {
-    id: 'stf-4',
-    staffIdNo: 'STF-004',
-    name: 'Sheikh Munir',
-    nameUrdu: 'شیخ منیر',
-    role: 'Accountant & Office Clerk',
-    roleUrdu: 'محاسب و دفتر کلرک',
-    department: 'Accounts Office',
-    departmentUrdu: 'شعبہ حسابات و امورِ دفتر',
-    phone: '+91 98480 55444',
-    salary: 20000,
-    status: 'Active',
-    joiningDate: '2021-08-01',
-    madrasaId: 'madrasa-1',
-    notes: 'Manages ledger receipts, utility bills, and staff records.'
-  },
-  {
-    id: 'stf-5',
-    staffIdNo: 'STF-005',
-    name: 'Hafiz Noorullah',
-    nameUrdu: 'حافظ نور اللہ',
-    role: 'Maintenance & Facilities Caretaker',
-    roleUrdu: 'نگراں تعمیرات و صفائی',
-    department: 'Maintenance',
-    departmentUrdu: 'دیکھ بھال و صفائی',
-    phone: '+91 98480 55555',
-    salary: 15000,
-    status: 'Active',
-    joiningDate: '2023-11-20',
-    madrasaId: 'madrasa-1',
-    notes: 'Campus water filtration, electricity maintenance, and cleanliness.'
-  }
-];
-
-const initialClasses: MadrasaClass[] = [
-  { 
-    id: 'cls-1', 
-    name: 'Hifz Section A', 
-    nameUrdu: 'شعبہ حفظ (الف)', 
-    category: 'Tahfeez (حفظ)', 
-    incharge: 'Qari Mohammad Huzaifa', 
-    startTime: '08:00 AM',
-    endTime: '01:30 PM',
-    room: 'Hall A-1', 
-    capacity: 35, 
-    madrasaId: 'madrasa-1',
-    description: 'Primary Quran memorization with Tajweed and daily Sabqi revision'
-  },
-  { 
-    id: 'cls-2', 
-    name: 'Hifz Section B', 
-    nameUrdu: 'شعبہ حفظ (ب)', 
-    category: 'Tahfeez (حفظ)', 
-    incharge: 'Qari Rizwanullah', 
-    startTime: '08:00 AM',
-    endTime: '01:30 PM',
-    room: 'Hall A-2', 
-    capacity: 30, 
-    madrasaId: 'madrasa-1',
-    description: 'Advanced Hifz section for students memorizing Juz 15 to 30'
-  },
-  { 
-    id: 'cls-3', 
-    name: 'Nazira Class 1', 
-    nameUrdu: 'شعبہ ناظرہ اول', 
-    category: 'Quran Recitation (ناظرہ)', 
-    incharge: 'Hafiz Saeed-ur-Rahman', 
-    startTime: '08:30 AM',
-    endTime: '12:30 PM',
-    room: 'Room B-1', 
-    capacity: 40, 
-    madrasaId: 'madrasa-1',
-    description: 'Fluent Quranic recitation with Makharij, Tajweed rules and Tarteel'
-  },
-  { 
-    id: 'cls-4', 
-    name: 'Alimiyat Year 1', 
-    nameUrdu: 'عالمیت سال اول', 
-    category: 'Dars-e-Nizami (درس نظامی)', 
-    incharge: 'Maulana Bilal Ahmad Nadwi', 
-    startTime: '09:00 AM',
-    endTime: '02:00 PM',
-    room: 'Room C-1', 
-    capacity: 25, 
-    madrasaId: 'madrasa-1',
-    description: 'Classical Arabic grammar (Nahw/Sarf), Fiqh basics, and Hadith studies'
-  },
-  { 
-    id: 'cls-5', 
-    name: 'Noorani Qaida Group', 
-    nameUrdu: 'نورانی قاعدہ جماعت', 
-    category: 'Noorani Qaida (قاعدہ)', 
-    incharge: 'Qari Hifzur Rahman', 
-    startTime: '04:00 PM',
-    endTime: '06:30 PM',
-    room: 'Room B-2', 
-    capacity: 30, 
-    madrasaId: 'madrasa-1',
-    description: 'Foundational Arabic alphabet articulation and phonetics for beginners'
-  }
-];
-
-const initialSubjects: Subject[] = [
-  {
-    id: 'sbj-1',
-    name: 'Holy Quran',
-    nameUrdu: 'القرآن الکریم',
-    bookName: 'Mushaf Al-Madinah (30 Paras)',
-    bookNameUrdu: 'مصحف مدینہ منورہ (۳۰ پارے)',
-    className: 'Hifz Section A',
-    totalPages: 604, // 30 Paras / 604 pages
-    teacherName: 'Qari Mohammad Huzaifa',
-    category: 'Quran Memorization',
-    author: 'King Fahd Complex Madinah',
-    madrasaId: 'madrasa-1',
-    description: 'Complete 30 Paras of the Holy Quran for memorization, Sabqi and Amookhta'
-  },
-  {
-    id: 'sbj-2',
-    name: 'Noorani Qaidah',
-    nameUrdu: 'نورانی قاعدہ',
-    bookName: 'Noorani Qaidah with Tajweed Rules',
-    bookNameUrdu: 'نورانی قاعدہ مع تجوید',
-    className: 'Noorani Qaida Group',
-    totalPages: 32,
-    teacherName: 'Qari Hifzur Rahman',
-    category: 'Tajweed & Phonetics',
-    author: 'Maulana Noor Muhammad Haqqani',
-    madrasaId: 'madrasa-1',
-    description: 'Foundational Arabic phonetics, Makharij, Harkat, and Tanween rules'
-  },
-  {
-    id: 'sbj-3',
-    name: 'Nazira Quran',
-    nameUrdu: 'ناظرہ قرآن کریم',
-    bookName: 'Mushaf Tajweed Al-Quran',
-    bookNameUrdu: 'مصحف تجوید و ترتیل',
-    className: 'Nazira Class 1',
-    totalPages: 604,
-    teacherName: 'Hafiz Saeed-ur-Rahman',
-    category: 'Quran Recitation',
-    author: 'King Fahd Complex Madinah',
-    madrasaId: 'madrasa-1',
-    description: 'Fluent reading of the Quran with Tajweed rules and correct Makharij'
-  },
-  {
-    id: 'sbj-4',
-    name: 'Hidayat-un-Nahw',
-    nameUrdu: 'ہدایۃ النحو',
-    bookName: 'Hidayat-un-Nahw (Arabic Grammar)',
-    bookNameUrdu: 'ہدایۃ النحو فی علم النحو',
-    className: 'Alimiyat Year 1',
-    totalPages: 160,
-    teacherName: 'Maulana Bilal Ahmad Nadwi',
-    category: 'Arabic Syntax & Grammar',
-    author: 'Allama Siraj-ud-Din Chishti',
-    madrasaId: 'madrasa-1',
-    description: 'Classical Arabic syntax, declensions, and sentence structures'
-  },
-  {
-    id: 'sbj-5',
-    name: 'Al-Fiqh Al-Muyassar',
-    nameUrdu: 'الفقہ المیسر',
-    bookName: 'Al-Fiqh Al-Muyassar (Hanafi Jurisprudence)',
-    bookNameUrdu: 'الفقہ المیسر فی الفقہ الحنفی',
-    className: 'Alimiyat Year 1',
-    totalPages: 240,
-    teacherName: 'Maulana Bilal Ahmad Nadwi',
-    category: 'Islamic Jurisprudence',
-    author: 'Maulana Shafiq-ur-Rahman Nadwi',
-    madrasaId: 'madrasa-1',
-    description: 'Foundational Islamic jurisprudence regarding Taharah, Salah, Sawm, and Zakah'
-  },
-  {
-    id: 'sbj-6',
-    name: 'Qasas-un-Nabiyyeen',
-    nameUrdu: 'قصص النبیین',
-    bookName: 'Qasas-un-Nabiyyeen Lil-Atfal (Parts 1-4)',
-    bookNameUrdu: 'قصص النبیین للأطفال',
-    className: 'Alimiyat Year 1',
-    totalPages: 195,
-    teacherName: 'Maulana Bilal Ahmad Nadwi',
-    category: 'Arabic Literature',
-    author: 'Sayyid Abul Hasan Ali Nadwi',
-    madrasaId: 'madrasa-1',
-    description: 'Stories of the Prophets in simple and eloquent classical Arabic prose'
-  }
-];
+const initialTeachers: Teacher[] = [];
+const initialStaff: Staff[] = [];
+const initialClasses: MadrasaClass[] = [];
+const initialSubjects: Subject[] = [];
 
 const initialNamaz: MadrasaNamazTimings = {
   fajr: { azan: '05:00 AM', jamat: '05:30 AM' },
@@ -584,20 +162,7 @@ const initialNamaz: MadrasaNamazTimings = {
   isha: { azan: '08:00 PM', jamat: '08:30 PM' }
 };
 
-const initialSchedule: ScheduleItem[] = [
-  { id: 'sch-1', time: '04:30 AM', title: 'Tahajjud & Wake Up', titleUrdu: 'بیداری و نمازِ تہجد', description: 'Students wake up, perform Wudhu & Tahajjud prayers', category: 'Prayer' },
-  { id: 'sch-2', time: '05:00 AM - 05:45 AM', title: 'Fajr Prayer & Azkar', titleUrdu: 'نمازِ فجر و مسنون اذکار', description: 'Congregational prayer followed by morning Masnoon Adhkar', category: 'Prayer' },
-  { id: 'sch-3', time: '05:45 AM - 07:45 AM', title: 'Morning Sabaq Session (Dars)', titleUrdu: 'صبح کا سبق (حفظ و ناظرہ)', description: 'Primary Sabaq memorization and listening with Ustadh', category: 'Academic' },
-  { id: 'sch-4', time: '07:45 AM - 08:30 AM', title: 'Breakfast & Rest', titleUrdu: 'ناشتہ و آرام', description: 'Nutritious breakfast served in dining hall', category: 'Meals' },
-  { id: 'sch-5', time: '08:30 AM - 12:30 PM', title: 'Academic Session 1', titleUrdu: 'تعلیمی اوقات (دورِ اول)', description: 'Quran Nazira, Tajweed, Arabic Grammar, Urdu & English classes', category: 'Academic' },
-  { id: 'sch-6', time: '12:30 PM - 02:00 PM', title: 'Zohr Prayer, Lunch & Qailulah', titleUrdu: 'نمازِ ظہر، طعام و قیلولہ', description: 'Zohr Jamat, afternoon meal, and Islamic sunnah midday nap', category: 'Rest' },
-  { id: 'sch-7', time: '02:00 PM - 04:30 PM', title: 'Academic Session 2 (Sabqi Revision)', titleUrdu: 'تعلیمی اوقات (سبقی دور)', description: 'Recitation of recent memory lessons (Sabqi) in class', category: 'Academic' },
-  { id: 'sch-8', time: '04:45 PM - 05:30 PM', title: 'Asar Prayer & Physical Exercise', titleUrdu: 'نمازِ عصر و کھیل کود', description: 'Congregational Asar and outdoor sports on campus ground', category: 'Sports' },
-  { id: 'sch-9', time: '06:35 PM - 07:15 PM', title: 'Magrib Prayer & Dars-e-Hadith', titleUrdu: 'نمازِ مغرب و درسِ حدیث', description: 'Magrib in congregation followed by brief Riyad-us-Saliheen lesson', category: 'Prayer' },
-  { id: 'sch-10', time: '07:15 PM - 08:00 PM', title: 'Dinner Time', titleUrdu: 'کھانا (رات کا طعام)', description: 'Evening dinner in dining hall', category: 'Meals' },
-  { id: 'sch-11', time: '08:00 PM - 09:30 PM', title: 'Isha Prayer & Night Dour (Manzil)', titleUrdu: 'نمازِ عشاء و دورِ منزل', description: 'Isha Jamat and recitation of complete Manzil revision', category: 'Academic' },
-  { id: 'sch-12', time: '10:00 PM', title: 'Lights Out / Sleep', titleUrdu: 'خواب گاہ و استراحت', description: 'Sunnah sleeping etiquette, silence across hostels', category: 'Rest' },
-];
+const initialSchedule: ScheduleItem[] = [];
 
 const initialFinanceCategories: FinanceCategoryItem[] = [
   {
@@ -686,332 +251,23 @@ const initialFinanceCategories: FinanceCategoryItem[] = [
   }
 ];
 
-const initialFinanceTransactions: FinanceTransaction[] = [
-  {
-    id: 'ftx-1',
-    sNo: 1,
-    date: '2026-08-01',
-    particular: 'Opening Cash Balance B/F',
-    category: 'Miscellaneous / Mutafarriq',
-    subcategory: 'Opening Balance',
-    receiptNo: 'OB-2026-01',
-    type: 'Income',
-    incomeAmount: 125000,
-    expenseAmount: 0,
-    balance: 125000,
-    paymentMode: 'Cash',
-    madrasaId: 'madrasa-1',
-    notes: 'Financial year opening cash balance in treasury'
-  },
-  {
-    id: 'ftx-2',
-    sNo: 2,
-    date: '2026-08-05',
-    particular: 'Monthly Fees Collection - August Batch 1',
-    category: 'Mahana Taleemi & Hostel Fees',
-    subcategory: 'Monthly Education Fee (ماہانہ فیس)',
-    receiptNo: 'RCP-2026-081',
-    type: 'Income',
-    incomeAmount: 34500,
-    expenseAmount: 0,
-    balance: 159500,
-    paymentMode: 'Cash',
-    madrasaId: 'madrasa-1',
-    notes: 'Collected from Nazira and Hifz students'
-  },
-  {
-    id: 'ftx-3',
-    sNo: 3,
-    date: '2026-08-07',
-    particular: 'Atiyaat & Sadqaat Donation from Haji Abdul Sattar (Dubai)',
-    category: 'Chanda & Atiyaat (Donations)',
-    subcategory: 'Sadqaat-e-Jariyah (صدقات جاریہ)',
-    receiptNo: 'RCP-2026-082',
-    type: 'Income',
-    incomeAmount: 50000,
-    expenseAmount: 0,
-    balance: 209500,
-    paymentMode: 'Bank Transfer',
-    madrasaId: 'madrasa-1',
-    notes: 'Direct wire transfer to Madrasa HDFC Account'
-  },
-  {
-    id: 'ftx-4',
-    sNo: 4,
-    date: '2026-08-10',
-    particular: 'Asatizah-e-Kiram & Khadimeen Monthly Salaries',
-    category: 'Salaries & Honorariums',
-    subcategory: 'Asatizah-e-Kiram Salary (تنخواہ اساتذہ)',
-    receiptNo: 'EXP-2026-041',
-    type: 'Expense',
-    incomeAmount: 0,
-    expenseAmount: 52000,
-    balance: 157500,
-    paymentMode: 'Bank Transfer',
-    madrasaId: 'madrasa-1',
-    notes: 'Disbursed to 4 senior Asatizah and 2 Huffaz'
-  },
-  {
-    id: 'ftx-5',
-    sNo: 5,
-    date: '2026-08-12',
-    particular: 'Monthly Hostel Ration, Rice (500kg), Atta (400kg) & Pulses',
-    category: 'Kitchen & Ration Provisions',
-    subcategory: 'Rice & Pulses (چاول و دالیں)',
-    receiptNo: 'EXP-2026-042',
-    type: 'Expense',
-    incomeAmount: 0,
-    expenseAmount: 26800,
-    balance: 130700,
-    paymentMode: 'Cash',
-    madrasaId: 'madrasa-1',
-    notes: 'Purchased wholesale from Begum Bazaar grains depot'
-  },
-  {
-    id: 'ftx-6',
-    sNo: 6,
-    date: '2026-08-15',
-    particular: 'Zakat Fund from Haji Farooq Builders for Mustahiq Huffaz',
-    category: 'Zakat & Fitrah',
-    subcategory: 'Zakat for Orphan & Poor Talaba (زکوٰۃ برائے مستحق طلبہ)',
-    receiptNo: 'RCP-2026-083',
-    type: 'Income',
-    incomeAmount: 40000,
-    expenseAmount: 0,
-    balance: 170700,
-    paymentMode: 'Cheque',
-    madrasaId: 'madrasa-1',
-    notes: 'Cheque No. 448201 cleared in State Bank of India'
-  },
-  {
-    id: 'ftx-7',
-    sNo: 7,
-    date: '2026-08-18',
-    particular: 'TSSPDCL Electricity Power Bill for Academic & Hostel Blocks',
-    category: 'Utilities & Running Bills',
-    subcategory: 'Electricity / Power Bill (بجلی کا بل)',
-    receiptNo: 'EXP-2026-043',
-    type: 'Expense',
-    incomeAmount: 0,
-    expenseAmount: 6420,
-    balance: 164280,
-    paymentMode: 'UPI / Online',
-    madrasaId: 'madrasa-1',
-    notes: 'Paid online via PhonePe business portal'
-  },
-  {
-    id: 'ftx-8',
-    sNo: 8,
-    date: '2026-08-22',
-    particular: 'Madrasa Waqf Commercial Shops Monthly Rental Income',
-    category: 'Rent & Waqf Revenue',
-    subcategory: 'Madrasa Commercial Shops Rent (دکانات کا کرایہ)',
-    receiptNo: 'RCP-2026-084',
-    type: 'Income',
-    incomeAmount: 18000,
-    expenseAmount: 0,
-    balance: 182280,
-    paymentMode: 'Cash',
-    madrasaId: 'madrasa-1',
-    notes: 'Rent collected from 3 complex roadside shops'
-  },
-  {
-    id: 'ftx-9',
-    sNo: 9,
-    date: '2026-08-25',
-    particular: 'Printing Quarterly Exam Papers, Marksheets & Darsi Books',
-    category: 'Printing, Books & Stationery',
-    subcategory: 'Examination Question Papers (پرچہ جات امتحان)',
-    receiptNo: 'EXP-2026-044',
-    type: 'Expense',
-    incomeAmount: 0,
-    expenseAmount: 4850,
-    balance: 177430,
-    paymentMode: 'Cash',
-    madrasaId: 'madrasa-1',
-    notes: 'Al-Huda Offset Printing Press, Charminar'
-  },
-  {
-    id: 'ftx-10',
-    sNo: 10,
-    date: '2026-08-28',
-    particular: 'Water Motor Pump Repair & Plumbing in Darul Iqamah Wudhu Khana',
-    category: 'Building Maintenance & Repairs',
-    subcategory: 'Electrical & Plumbing Works (بجلی و پلمبنگ)',
-    receiptNo: 'EXP-2026-045',
-    type: 'Expense',
-    incomeAmount: 0,
-    expenseAmount: 3200,
-    balance: 174230,
-    paymentMode: 'Cash',
-    madrasaId: 'madrasa-1',
-    notes: 'Replaced submersible starter and pipeline brass valves'
-  },
-  {
-    id: 'ftx-11',
-    sNo: 11,
-    date: '2026-09-02',
-    particular: 'Monthly Fees Collection - September Batch 1',
-    category: 'Mahana Taleemi & Hostel Fees',
-    subcategory: 'Monthly Education Fee (ماہانہ فیس)',
-    receiptNo: 'RCP-2026-091',
-    type: 'Income',
-    incomeAmount: 22000,
-    expenseAmount: 0,
-    balance: 196230,
-    paymentMode: 'Cash',
-    madrasaId: 'madrasa-1',
-    notes: 'Collected by Accountant Office'
-  },
-  {
-    id: 'ftx-12',
-    sNo: 12,
-    date: '2026-09-04',
-    particular: 'LPG Commercial 19kg Cooking Gas Refill (3 Cylinders)',
-    category: 'Kitchen & Ration Provisions',
-    subcategory: 'LPG Commercial Cylinders (گیس سلنڈر)',
-    receiptNo: 'EXP-2026-046',
-    type: 'Expense',
-    incomeAmount: 0,
-    expenseAmount: 5850,
-    balance: 190380,
-    paymentMode: 'UPI / Online',
-    madrasaId: 'madrasa-1',
-    notes: 'HP Gas Agency delivery to Madrasa kitchen'
-  }
-];
+const initialFinanceTransactions: FinanceTransaction[] = [];
 
-const initialPeriodSchedule: PeriodScheduleItem[] = [
-  { id: 'ps-1', classId: 'cls-1', className: 'Hifz-ul-Quran (Section A)', day: 'Monday', periodNumber: 1, time: '05:45 AM - 07:30 AM', subject: 'Sabaq (Daily Memorization)', teacher: 'Qari Mohammad Rizwan', room: 'Hall A' },
-  { id: 'ps-2', classId: 'cls-1', className: 'Hifz-ul-Quran (Section A)', day: 'Monday', periodNumber: 2, time: '08:30 AM - 10:30 AM', subject: 'Sabqi (Recent Memorization)', teacher: 'Qari Mohammad Rizwan', room: 'Hall A' },
-  { id: 'ps-3', classId: 'cls-1', className: 'Hifz-ul-Quran (Section A)', day: 'Monday', periodNumber: 3, time: '10:45 AM - 12:30 PM', subject: 'Tajweed & Makharij Rules', teacher: 'Maulana Hafiz Zubair', room: 'Room 101' },
-  { id: 'ps-4', classId: 'cls-1', className: 'Hifz-ul-Quran (Section A)', day: 'Monday', periodNumber: 4, time: '02:00 PM - 04:15 PM', subject: 'Dour / Manzil Revision', teacher: 'Qari Mohammad Rizwan', room: 'Hall A' },
-  { id: 'ps-5', classId: 'cls-1', className: 'Hifz-ul-Quran (Section A)', day: 'Monday', periodNumber: 5, time: '08:00 PM - 09:30 PM', subject: 'Night Recitation & Listening', teacher: 'Maulana Hafiz Zubair', room: 'Hall A' },
-  { id: 'ps-6', classId: 'cls-2', className: 'Nazira Quran & Tajweed', day: 'Monday', periodNumber: 1, time: '08:30 AM - 09:45 AM', subject: 'Noorani Qaida & Tajweed', teacher: 'Maulana Mohammad Siddiq', room: 'Room 102' },
-  { id: 'ps-7', classId: 'cls-2', className: 'Nazira Quran & Tajweed', day: 'Monday', periodNumber: 2, time: '10:00 AM - 11:15 AM', subject: 'Para 30 Recitation', teacher: 'Maulana Mohammad Siddiq', room: 'Room 102' },
-  { id: 'ps-8', classId: 'cls-2', className: 'Nazira Quran & Tajweed', day: 'Monday', periodNumber: 3, time: '11:30 AM - 12:30 PM', subject: 'Deeniyat & Masnoon Duas', teacher: 'Maulana Mohammad Siddiq', room: 'Room 102' },
-  { id: 'ps-9', classId: 'cls-3', className: 'Alimiyat (Year 1)', day: 'Monday', periodNumber: 1, time: '08:30 AM - 09:30 AM', subject: 'Sarfe-Mir (Arabic Morphology)', teacher: 'Maulana Abdul Qadeer', room: 'Room 201' },
-  { id: 'ps-10', classId: 'cls-3', className: 'Alimiyat (Year 1)', day: 'Monday', periodNumber: 2, time: '09:30 AM - 10:30 AM', subject: 'Nahw-e-Meer (Arabic Syntax)', teacher: 'Maulana Abdul Qadeer', room: 'Room 201' },
-  { id: 'ps-11', classId: 'cls-3', className: 'Alimiyat (Year 1)', day: 'Monday', periodNumber: 3, time: '10:45 AM - 11:45 AM', subject: 'Tareeqat-ul-Asriyyah', teacher: 'Maulana Mohammad Siddiq', room: 'Room 201' },
-  { id: 'ps-12', classId: 'cls-3', className: 'Alimiyat (Year 1)', day: 'Monday', periodNumber: 4, time: '11:45 AM - 12:45 PM', subject: 'Qasas-un-Nabiyeen', teacher: 'Maulana Abdul Qadeer', room: 'Room 201' },
-];
+const initialPeriodSchedule: PeriodScheduleItem[] = [];
 
-const initialUserLogs: UserLog[] = [
-  { id: 'log-1', username: 'superadmin', role: 'Super Admin', viewedData: 'Madrasa Subscriptions & Audit Logs', submittedData: 'Renewed Jamia Darul Huda License for 1 Year', dateTime: '2026-09-04 10:15 AM', reportsAndFeedback: 'None' },
-  { id: 'log-2', username: 'principal.jdh', role: 'Admin / Principal', madrasaId: 'madrasa-1', viewedData: 'Fees Ledger & Attendance Matrix', submittedData: 'Approved Admission ADM-2026-005', dateTime: '2026-09-04 11:30 AM', reportsAndFeedback: 'Requested new sports equipment' },
-  { id: 'log-3', username: 'TCH-001', role: 'Teacher', madrasaId: 'madrasa-1', viewedData: 'Hifz Section A Student Register', submittedData: 'Submitted Morning Attendance (24 Present, 1 Absent)', dateTime: '2026-09-04 06:10 AM', reportsAndFeedback: 'Salman Shareef absent continuously' },
-  { id: 'log-4', username: 'ADM-2026-001', role: 'Student / Guardian', madrasaId: 'madrasa-1', viewedData: 'Monthly Attendance & Sabaq Roznamchah', submittedData: 'Viewed Terminal Examination Marks', dateTime: '2026-09-03 04:45 PM', reportsAndFeedback: 'Parent appreciated teacher guidance' },
-];
+const initialUserLogs: UserLog[] = [];
 
-const initialFeedbacks: FeedbackItem[] = [
-  { id: 'fb-1', madrasaId: 'madrasa-1', madrasaName: 'Jamia Darul Huda', senderName: 'Maulana Abdul Qadeer', role: 'Admin / Principal', message: 'The software works seamlessly! We request adding an automated SMS/WhatsApp gateway for attendance alerts to parents.', date: '2026-09-02', status: 'Unread' },
-  { id: 'fb-2', madrasaId: 'madrasa-2', madrasaName: 'Madrasa Anwar-ul-Uloom', senderName: 'Qari Rizwan', role: 'Teacher', message: 'Very user-friendly Roznamchah feature. Makes tracking Sabaq and Manzil effortless for our Asatizah.', date: '2026-08-28', status: 'Resolved' },
-  { id: 'fb-3', madrasaId: 'madrasa-3', madrasaName: 'Madrasa Faiz-e-Aam', senderName: 'Mufti Tariq', role: 'Admin / Principal', message: 'Please renew our cloud subscription invoice. We are eager to continue using the software for our upcoming session.', date: '2026-09-01', status: 'Unread' }
-];
+const initialFeedbacks: FeedbackItem[] = [];
 
-const initialNotices: NoticeItem[] = [
-  { id: 'ntc-1', madrasaId: 'madrasa-1', title: 'Annual Hifz & Tajweed Competition Next Week', content: 'InshaAllah, the annual inter-madrasa Quran recitation competition will take place on Saturday after Asar prayer.', date: '2026-09-03', priority: 'High', target: 'All' },
-  { id: 'ntc-2', madrasaId: 'madrasa-1', title: 'Quarterly Examination Schedule Released', content: 'Quarterly exams for Hifz, Nazira, and Alimiyat start from 15th September. Marksheets will be accessible in student portals.', date: '2026-09-01', priority: 'High', target: 'All' },
-  { id: 'ntc-3', madrasaId: 'madrasa-1', title: 'Staff Asatizah Monthly Meeting', content: 'All Asatizah-e-Kiram are requested to attend the monthly evaluation session in the Principal Office at 02:30 PM.', date: '2026-09-04', priority: 'Normal', target: 'Teachers' }
-];
+const initialNotices: NoticeItem[] = [];
 
-const initialFees: FeeTransaction[] = [
-  { id: 'fee-1', receiptNo: 'RCP-2026-101', studentId: 'std-1', studentName: 'Mohammad Zayd Khan', madrasaId: 'madrasa-1', month: 'August 2026', amount: 2500, date: '2026-08-05', mode: 'Cash', status: 'Paid' },
-  { id: 'fee-2', receiptNo: 'RCP-2026-102', studentId: 'std-2', studentName: 'Abdullah Mansoor', madrasaId: 'madrasa-1', month: 'August 2026', amount: 1500, date: '2026-08-07', mode: 'Online', status: 'Paid' },
-  { id: 'fee-3', receiptNo: 'RCP-2026-103', studentId: 'std-4', studentName: 'Salman Shareef', madrasaId: 'madrasa-1', month: 'August 2026', amount: 2000, date: '2026-08-12', mode: 'Cash', status: 'Paid' },
-  { id: 'fee-4', receiptNo: 'RCP-2026-104', studentId: 'std-5', studentName: 'Zubair Qureshi', madrasaId: 'madrasa-1', month: 'August 2026', amount: 2500, date: '2026-08-03', mode: 'Online', status: 'Paid' },
-  { id: 'fee-5', receiptNo: 'RCP-2026-105', studentId: 'std-1', studentName: 'Mohammad Zayd Khan', madrasaId: 'madrasa-1', month: 'September 2026', amount: 2500, date: '2026-09-02', mode: 'Cash', status: 'Paid' },
-];
+const initialFees: FeeTransaction[] = [];
 
-const initialGallery: GalleryItem[] = [
-  { id: 'gal-1', madrasaId: 'madrasa-1', title: 'Main Campus Courtyard & Mosque', category: 'Campus', imageUrl: 'https://images.unsplash.com/photo-1584551246679-0daf3d275d0f?auto=format&fit=crop&w=800&q=80', date: '2026-08-10' },
-  { id: 'gal-2', madrasaId: 'madrasa-1', title: 'Hifz-ul-Quran Memorization Hall', category: 'Classes', imageUrl: 'https://images.unsplash.com/photo-1609599006353-e629aaabfeae?auto=format&fit=crop&w=800&q=80', date: '2026-08-12' },
-  { id: 'gal-3', madrasaId: 'madrasa-1', title: 'Islamic Library & Maktabah', category: 'Campus', imageUrl: 'https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?auto=format&fit=crop&w=800&q=80', date: '2026-08-15' },
-];
+const initialGallery: GalleryItem[] = [];
 
-const initialRoznamchah: RoznamchahRecord[] = [
-  {
-    id: 'roz-1',
-    studentId: 'std-1',
-    madrasaId: 'madrasa-1',
-    date: '2026-09-04',
-    department: 'hifz',
-    sabaqQuantity: '1 Page (صفحہ ۱)',
-    sabaqPara: 'Para 14 (Surah Al-Hijr)',
-    sabaqMistakes: 0,
-    sabaqListener: 'Qari Bilal Ahmad',
-    amookhtaQuantity: '1/2 Para (نصف پارہ)',
-    amookhtaMistakes: 1,
-    amookhtaListener: 'Ustadh Maulana Farooq',
-    kaifiyat: 'Mumtaz (ممتاز) - روانی و تجوید عمدہ',
-    sabaq: 'Para 14 (Surah Al-Hijr)',
-    sabqi: 'Para 13 (Last 5 Pages)',
-    manzil: 'Para 12 Complete',
-    remarks: 'Recited accurately with Tajweed',
-    grade: 'Mumtaz'
-  },
-  {
-    id: 'roz-2',
-    studentId: 'std-2',
-    madrasaId: 'madrasa-1',
-    date: '2026-09-04',
-    department: 'hifz',
-    sabaqQuantity: '1/2 Page (نصف صفحہ)',
-    sabaqPara: 'Para 11 (Surah Yunus)',
-    sabaqMistakes: 1,
-    sabaqListener: 'Muhammad Anas',
-    amookhtaQuantity: '1/4 Para (پاؤ پارہ)',
-    amookhtaMistakes: 2,
-    amookhtaListener: 'Qari Bilal Ahmad',
-    kaifiyat: 'Jayyid Jiddan (جید جدا) - مشق کی ضرورت ہے',
-    sabaq: 'Para 11 (Surah Yunus)',
-    sabqi: 'Para 10 (Last 3 Pages)',
-    manzil: 'Para 9 Complete',
-    remarks: 'Good effort, revise Waqf rules',
-    grade: 'Jayyid Jiddan'
-  },
-  {
-    id: 'roz-3',
-    studentId: 'std-3',
-    madrasaId: 'madrasa-1',
-    date: '2026-09-04',
-    department: 'nazira_qaida',
-    sabaq: 'Noorani Qaida Takhti 6 (Harkat & Tanween)',
-    amookhtaQuantity: 'Takhti 4 & 5 (Previous 2 Lessons)',
-    amookhtaMistakes: 0,
-    amookhtaListener: 'Qari Hifzur Rahman',
-    kaifiyat: 'Mumtaz (ممتاز) - مخارج و تلفظ درست',
-    remarks: 'Recited with clear articulation',
-    grade: 'Mumtaz'
-  }
-];
+const initialRoznamchah: RoznamchahRecord[] = [];
 
-const initialStudentLogs: StudentUpdateLog[] = [
-  {
-    id: 'slog-1',
-    studentId: 'std-1',
-    studentName: 'Mohammad Zayd Khan',
-    madrasaId: 'madrasa-1',
-    updatedAt: '2026-09-02 10:30 AM',
-    updatedBy: 'Maulana Abdul Qadeer Qasmi (Principal / Admin)',
-    changes: [
-      { field: 'category', label: 'Accommodation Category', labelUrdu: 'شعبہ اقامتی / غیر اقامتی', oldValue: 'Day Scholar', newValue: 'Hostel' },
-      { field: 'monthlyFees', label: 'Monthly Fees', labelUrdu: 'ماہانہ فیس', oldValue: '₹2,000', newValue: '₹2,500' }
-    ]
-  },
-  {
-    id: 'slog-2',
-    studentId: 'std-2',
-    studentName: 'Abdullah Mansoor',
-    madrasaId: 'madrasa-1',
-    updatedAt: '2026-09-03 04:15 PM',
-    updatedBy: 'Admin Office (Office Clerk)',
-    changes: [
-      { field: 'contactNumber', label: 'Contact Number', labelUrdu: 'رابطہ فون نمبر', oldValue: '+91 97001 00000', newValue: '+91 98480 99887' },
-      { field: 'address', label: 'Residential Address', labelUrdu: 'رہائشی پتہ', oldValue: 'Old City, Hyderabad', newValue: 'Quarter 12, Islamic Campus Colony' }
-    ]
-  }
-];
+const initialStudentLogs: StudentUpdateLog[] = [];
 
 const safeSetItem = (key: string, data: any) => {
   try {
@@ -1040,6 +296,98 @@ const safeSetItem = (key: string, data: any) => {
     }
   }
 };
+
+const purgeDemoData = () => {
+  if (typeof window === 'undefined') return;
+  try {
+    const PURGE_FLAG = 'mms_demo_data_purged_v4';
+    if (localStorage.getItem(PURGE_FLAG)) return;
+
+    const isDemoId = (id: string, prefix: string) => {
+      return typeof id === 'string' && id.startsWith(prefix) && id.length <= 8;
+    };
+
+    // Clean Students (keep real student)
+    const rawStudents = localStorage.getItem(STORAGE_KEYS.STUDENTS);
+    if (rawStudents) {
+      const parsed: Student[] = JSON.parse(rawStudents);
+      const cleaned = parsed.filter(s => !isDemoId(s.id, 'std-'));
+      localStorage.setItem(STORAGE_KEYS.STUDENTS, JSON.stringify(cleaned.length > 0 ? cleaned : initialStudents));
+    } else {
+      localStorage.setItem(STORAGE_KEYS.STUDENTS, JSON.stringify(initialStudents));
+    }
+
+    // Clean Teachers
+    const rawTeachers = localStorage.getItem(STORAGE_KEYS.TEACHERS);
+    if (rawTeachers) {
+      const parsed = JSON.parse(rawTeachers);
+      const cleaned = parsed.filter((t: any) => !isDemoId(t.id, 'tch-'));
+      localStorage.setItem(STORAGE_KEYS.TEACHERS, JSON.stringify(cleaned));
+    }
+
+    // Clean Classes
+    const rawClasses = localStorage.getItem(STORAGE_KEYS.CLASSES);
+    if (rawClasses) {
+      const parsed = JSON.parse(rawClasses);
+      const cleaned = parsed.filter((c: any) => !isDemoId(c.id, 'cls-'));
+      localStorage.setItem(STORAGE_KEYS.CLASSES, JSON.stringify(cleaned));
+    }
+
+    // Clean Subjects
+    const rawSubjects = localStorage.getItem(STORAGE_KEYS.SUBJECTS);
+    if (rawSubjects) {
+      const parsed = JSON.parse(rawSubjects);
+      const cleaned = parsed.filter((s: any) => !isDemoId(s.id, 'sbj-') && !isDemoId(s.id, 'sub-'));
+      localStorage.setItem(STORAGE_KEYS.SUBJECTS, JSON.stringify(cleaned));
+    }
+
+    // Clean Staff
+    const rawStaff = localStorage.getItem(STORAGE_KEYS.STAFF);
+    if (rawStaff) {
+      const parsed = JSON.parse(rawStaff);
+      const cleaned = parsed.filter((s: any) => !isDemoId(s.id, 'stf-'));
+      localStorage.setItem(STORAGE_KEYS.STAFF, JSON.stringify(cleaned));
+    }
+
+    // Clean Schedule
+    const rawSchedule = localStorage.getItem(STORAGE_KEYS.SCHEDULE);
+    if (rawSchedule) {
+      const parsed = JSON.parse(rawSchedule);
+      const cleaned = parsed.filter((s: any) => !isDemoId(s.id, 'sch-'));
+      localStorage.setItem(STORAGE_KEYS.SCHEDULE, JSON.stringify(cleaned));
+    }
+
+    // Clean Period Schedule
+    const rawPeriodSchedule = localStorage.getItem(STORAGE_KEYS.PERIOD_SCHEDULE);
+    if (rawPeriodSchedule) {
+      const parsed = JSON.parse(rawPeriodSchedule);
+      const cleaned = parsed.filter((p: any) => !isDemoId(p.id, 'ps-'));
+      localStorage.setItem(STORAGE_KEYS.PERIOD_SCHEDULE, JSON.stringify(cleaned));
+    }
+
+    // Clean Fees
+    const rawFees = localStorage.getItem(STORAGE_KEYS.FEES);
+    if (rawFees) {
+      const parsed = JSON.parse(rawFees);
+      const cleaned = parsed.filter((f: any) => !isDemoId(f.id, 'fee-'));
+      localStorage.setItem(STORAGE_KEYS.FEES, JSON.stringify(cleaned));
+    }
+
+    // Clean Roznamchah
+    const rawRoz = localStorage.getItem(STORAGE_KEYS.ROZNAMCHAH);
+    if (rawRoz) {
+      const parsed = JSON.parse(rawRoz);
+      const cleaned = parsed.filter((r: any) => !isDemoId(r.id, 'roz-'));
+      localStorage.setItem(STORAGE_KEYS.ROZNAMCHAH, JSON.stringify(cleaned));
+    }
+
+    localStorage.setItem(PURGE_FLAG, 'true');
+  } catch (err) {
+    console.warn('purgeDemoData error:', err);
+  }
+};
+
+purgeDemoData();
 
 const backgroundSync = (fn: () => any) => {
   if (!isSupabaseConfigured()) return;
@@ -1089,11 +437,15 @@ export const db = {
       ]);
 
       if (madrasas && madrasas.length > 0) safeSetItem(STORAGE_KEYS.MADRASAS, madrasas);
-      if (students && students.length > 0) {
+      
+      if (students) {
+        const nonDemoRemote = students.filter(s => !(s.id.startsWith('std-') && s.id.length <= 8));
         const localData = localStorage.getItem(STORAGE_KEYS.STUDENTS);
-        const localStudents: Student[] = localData ? JSON.parse(localData) : initialStudents;
-        const remoteIds = new Set(students.map(s => s.id));
-        const mergedStudents = students.map(remoteS => {
+        const localStudents: Student[] = localData 
+          ? JSON.parse(localData).filter((s: any) => !(s.id.startsWith('std-') && s.id.length <= 8))
+          : initialStudents;
+        const remoteIds = new Set(nonDemoRemote.map(s => s.id));
+        const mergedStudents = nonDemoRemote.map(remoteS => {
           const localS = localStudents.find(ls => ls.id === remoteS.id);
           if (localS) {
             return {
@@ -1104,54 +456,52 @@ export const db = {
           }
           return remoteS;
         });
-        // Retain local students that have not yet been synced to Supabase
-        const localOnlyStudents = localStudents.filter(ls => !remoteIds.has(ls.id));
+        const localOnlyStudents = localStudents.filter(ls => !remoteIds.has(ls.id) && !(ls.id.startsWith('std-') && ls.id.length <= 8));
         const finalStudents = [...mergedStudents, ...localOnlyStudents];
-        safeSetItem(STORAGE_KEYS.STUDENTS, finalStudents);
+        safeSetItem(STORAGE_KEYS.STUDENTS, finalStudents.length > 0 ? finalStudents : initialStudents);
 
-        // Upload any local-only students to Supabase so they are permanently backed up
         if (localOnlyStudents.length > 0) {
           Promise.all(localOnlyStudents.map(ls => supabase.from('mms_students').upsert(ls)))
             .catch(err => console.warn('Syncing local-only students to Supabase notice:', err));
         }
       }
-      if (teachers && teachers.length > 0) {
-        const localData = localStorage.getItem(STORAGE_KEYS.TEACHERS);
-        const localTeachers: Teacher[] = localData ? JSON.parse(localData) : initialTeachers;
-        const remoteIds = new Set(teachers.map(t => t.id));
-        const mergedTeachers = teachers.map(remoteT => {
-          const localT = localTeachers.find(lt => lt.id === remoteT.id);
-          if (localT) {
-            return {
-              ...remoteT,
-              username: remoteT.username || localT.username,
-              password: (remoteT.password && remoteT.password !== 'password123') ? remoteT.password : (localT.password || remoteT.password),
-              joiningDate: remoteT.joiningDate || localT.joiningDate,
-              dob: remoteT.dob || localT.dob
-            };
-          }
-          return remoteT;
-        });
-        const localOnlyTeachers = localTeachers.filter(lt => !remoteIds.has(lt.id));
-        const finalTeachers = [...mergedTeachers, ...localOnlyTeachers];
-        safeSetItem(STORAGE_KEYS.TEACHERS, finalTeachers);
 
-        if (localOnlyTeachers.length > 0) {
-          Promise.all(localOnlyTeachers.map(lt => supabase.from('mms_teachers').upsert(lt)))
-            .catch(err => console.warn('Syncing local-only teachers to Supabase notice:', err));
-        }
+      if (teachers) {
+        const nonDemoTeachers = teachers.filter(t => !(t.id.startsWith('tch-') && t.id.length <= 8));
+        safeSetItem(STORAGE_KEYS.TEACHERS, nonDemoTeachers);
       }
-      if (staff && staff.length > 0) safeSetItem(STORAGE_KEYS.STAFF, staff);
-      if (classes && classes.length > 0) safeSetItem(STORAGE_KEYS.CLASSES, classes);
-      if (subjects && subjects.length > 0) safeSetItem(STORAGE_KEYS.SUBJECTS, subjects);
-      if (attendance && attendance.length > 0) safeSetItem(STORAGE_KEYS.ATTENDANCE, attendance);
-      if (roznamcha && roznamcha.length > 0) safeSetItem(STORAGE_KEYS.ROZNAMCHAH, roznamcha);
-      if (fees && fees.length > 0) safeSetItem(STORAGE_KEYS.FEES, fees);
+      if (staff) {
+        const nonDemoStaff = staff.filter(s => !(s.id.startsWith('stf-') && s.id.length <= 8));
+        safeSetItem(STORAGE_KEYS.STAFF, nonDemoStaff);
+      }
+      if (classes) {
+        const nonDemoClasses = classes.filter(c => !(c.id.startsWith('cls-') && c.id.length <= 8));
+        safeSetItem(STORAGE_KEYS.CLASSES, nonDemoClasses);
+      }
+      if (subjects) {
+        const nonDemoSubjects = subjects.filter(s => (!s.id.startsWith('sbj-') && !s.id.startsWith('sub-')) || s.id.length > 8);
+        safeSetItem(STORAGE_KEYS.SUBJECTS, nonDemoSubjects);
+      }
+      if (attendance) safeSetItem(STORAGE_KEYS.ATTENDANCE, attendance);
+      if (roznamcha) {
+        const nonDemoRoz = roznamcha.filter(r => !(r.id.startsWith('roz-') && r.id.length <= 8));
+        safeSetItem(STORAGE_KEYS.ROZNAMCHAH, nonDemoRoz);
+      }
+      if (fees) {
+        const nonDemoFees = fees.filter(f => !(f.id.startsWith('fee-') && f.id.length <= 8));
+        safeSetItem(STORAGE_KEYS.FEES, nonDemoFees);
+      }
       if (categories && categories.length > 0) safeSetItem(STORAGE_KEYS.FINANCE_CATEGORIES, categories);
-      if (transactions && transactions.length > 0) safeSetItem(STORAGE_KEYS.FINANCE_TRANSACTIONS, transactions);
-      if (periodSchedule && periodSchedule.length > 0) safeSetItem(STORAGE_KEYS.PERIOD_SCHEDULE, periodSchedule);
-      if (schedule && schedule.length > 0) safeSetItem(STORAGE_KEYS.SCHEDULE, schedule);
-      if (notices && notices.length > 0) safeSetItem(STORAGE_KEYS.NOTICES, notices);
+      if (transactions) safeSetItem(STORAGE_KEYS.FINANCE_TRANSACTIONS, transactions);
+      if (periodSchedule) {
+        const nonDemoPs = periodSchedule.filter(p => !(p.id.startsWith('ps-') && p.id.length <= 8));
+        safeSetItem(STORAGE_KEYS.PERIOD_SCHEDULE, nonDemoPs);
+      }
+      if (schedule) {
+        const nonDemoSch = schedule.filter(s => !(s.id.startsWith('sch-') && s.id.length <= 8));
+        safeSetItem(STORAGE_KEYS.SCHEDULE, nonDemoSch);
+      }
+      if (notices) safeSetItem(STORAGE_KEYS.NOTICES, notices);
 
       this.isCloudSynced = true;
       this.lastSyncTime = new Date().toLocaleTimeString();
@@ -1580,13 +930,17 @@ export const db = {
     }));
   },
 
-  getSchedule(): ScheduleItem[] {
+  getSchedule(madrasaId?: string): ScheduleItem[] {
     const data = localStorage.getItem(STORAGE_KEYS.SCHEDULE);
+    const schedule: ScheduleItem[] = data ? JSON.parse(data) : initialSchedule;
     if (!data) {
       localStorage.setItem(STORAGE_KEYS.SCHEDULE, JSON.stringify(initialSchedule));
       return initialSchedule;
     }
-    return JSON.parse(data);
+    if (madrasaId) {
+      return schedule.filter(s => !(s as any).madrasaId || (s as any).madrasaId === madrasaId);
+    }
+    return schedule;
   },
 
   saveSchedule(items: ScheduleItem[]) {

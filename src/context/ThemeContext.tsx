@@ -30,7 +30,7 @@ export const URDU_FONT_OPTIONS: FontOption[] = [
 ];
 
 export const ENGLISH_FONT_OPTIONS: FontOption[] = [
-  { id: 'Inter', name: 'Inter Display', nativeLabel: 'Inter (Clean Standard)', cssFamily: "'Inter', system-ui, sans-serif", subtext: 'Modern Material-3 default' },
+  { id: 'Inter', name: 'Inter', nativeLabel: 'Inter (Clean Standard)', cssFamily: "'Inter', system-ui, sans-serif", subtext: 'Modern Material-3 default' },
   { id: 'Montserrat', name: 'Montserrat', nativeLabel: 'Montserrat (Geometric)', cssFamily: "'Montserrat', sans-serif", subtext: 'Prestigious institutional typeface' },
   { id: 'Roboto', name: 'Roboto', nativeLabel: 'Roboto (Data Grid)', cssFamily: "'Roboto', sans-serif", subtext: 'Clean tabular figures and cards' },
   { id: 'Bebas Neue Pro', name: 'Bebas Neue Pro', nativeLabel: 'Bebas Neue (Bold Tall)', cssFamily: "'Bebas Neue Pro', 'Oswald', sans-serif", subtext: 'High-impact badge & number display' },
@@ -53,30 +53,19 @@ export interface ThemeDefinition {
 
 export const THEMES: ThemeDefinition[] = [
   {
-    id: 'shiny-white',
-    name: 'Shiny White',
-    nameUrdu: 'معیاری چمکدار سفید',
-    tagline: 'Bright premium white workspace with subtle glossy surfaces and clean contrast',
-    previewBg: '#F4F8FB',
-    previewSurface: 'rgba(255, 255, 255, 0.88)',
-    previewBorder: 'rgba(90, 120, 145, 0.18)',
+    id: 'transparent-glossy',
+    name: 'Transparent Glossy (Default)',
+    nameUrdu: 'معیاری درخشاں شفاف شیشہ',
+    tagline: 'Standard premium transparent glossy workspace with high contrast and crisp typography',
+    previewBg: '#EAF2F7',
+    previewSurface: 'rgba(255, 255, 255, 0.72)',
+    previewBorder: 'rgba(255, 255, 255, 0.85)',
     dotPrimary: '#079669',
     dotSecondary: '#123B63'
-  },
-  {
-    id: 'transparent-glossy',
-    name: 'Transparent Glossy',
-    nameUrdu: 'شفاف گلاسی شیشہ',
-    tagline: 'Glass-like translucent interface with luminous borders, soft shadows and blur',
-    previewBg: '#EAF2F7',
-    previewSurface: 'rgba(255, 255, 255, 0.58)',
-    previewBorder: 'rgba(255, 255, 255, 0.72)',
-    dotPrimary: '#079669',
-    dotSecondary: '#7655D6'
   }
 ];
 
-export type ThemePaletteId = 'emerald' | 'sapphire' | 'amethyst' | 'amber' | 'ruby';
+export type ThemePaletteId = 'emerald';
 
 export interface ThemePalette {
   id: ThemePaletteId;
@@ -91,48 +80,12 @@ export interface ThemePalette {
 export const THEME_PALETTES: ThemePalette[] = [
   {
     id: 'emerald',
-    name: 'Emerald Pearl Glass',
+    name: 'Emerald Pearl Glass (Default)',
     nameUrdu: 'زمردی درخشاں شیشہ',
     primary: '#059669',
     glow: 'rgba(16, 185, 129, 0.35)',
     dotColor: '#10b981',
     badgeClass: 'bg-emerald-600 text-white'
-  },
-  {
-    id: 'sapphire',
-    name: 'Sapphire Diamond Glass',
-    nameUrdu: 'الماسی نیلم شیشہ',
-    primary: '#0284c7',
-    glow: 'rgba(14, 165, 233, 0.35)',
-    dotColor: '#0284c7',
-    badgeClass: 'bg-sky-600 text-white'
-  },
-  {
-    id: 'amethyst',
-    name: 'Amethyst Royale Glass',
-    nameUrdu: 'شاہی یاقوت شیشہ',
-    primary: '#7c3aed',
-    glow: 'rgba(124, 58, 237, 0.35)',
-    dotColor: '#8b5cf6',
-    badgeClass: 'bg-purple-600 text-white'
-  },
-  {
-    id: 'amber',
-    name: 'Amber Topaz Gold Glass',
-    nameUrdu: 'عنبری زریں شیشہ',
-    primary: '#d97706',
-    glow: 'rgba(245, 158, 11, 0.35)',
-    dotColor: '#f59e0b',
-    badgeClass: 'bg-amber-600 text-white'
-  },
-  {
-    id: 'ruby',
-    name: 'Ruby Rose Quartz Glass',
-    nameUrdu: 'یاقوتی احمر شیشہ',
-    primary: '#e11d48',
-    glow: 'rgba(244, 63, 94, 0.35)',
-    dotColor: '#f43f5e',
-    badgeClass: 'bg-rose-600 text-white'
   }
 ];
 
@@ -145,10 +98,12 @@ interface ThemeContextType {
   toasts: Toast[];
   showToast: (message: string, type?: 'info' | 'success' | 'warning' | 'error') => void;
   removeToast: (id: string) => void;
-  // Core Theme Mode (Shiny White / Transparent Glossy)
+  // Core Theme Mode & Dark Theme
   themeMode: ThemeMode;
   setThemeMode: (mode: ThemeMode) => void;
   themes: ThemeDefinition[];
+  isDarkMode: boolean;
+  toggleDarkMode: () => void;
   // Theme Color Palette
   themePalette: ThemePaletteId;
   setThemePalette: (palette: ThemePaletteId) => void;
@@ -167,13 +122,31 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     return (localStorage.getItem('mms_language') as Language) || 'en';
   });
 
-  const [themeMode, setThemeModeState] = useState<ThemeMode>(() => {
-    return (localStorage.getItem('mms_erp_theme') as ThemeMode) || 'transparent-glossy';
+  const [themeMode, setThemeModeState] = useState<ThemeMode>('transparent-glossy');
+  const [themePalette, setThemePaletteState] = useState<ThemePaletteId>('emerald');
+
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+    return localStorage.getItem('mms_dark_mode') === 'true';
   });
 
-  const [themePalette, setThemePaletteState] = useState<ThemePaletteId>(() => {
-    return (localStorage.getItem('mms_pref_theme_palette') as ThemePaletteId) || 'emerald';
-  });
+  const toggleDarkMode = () => {
+    setIsDarkMode(prev => {
+      const next = !prev;
+      localStorage.setItem('mms_dark_mode', String(next));
+      return next;
+    });
+  };
+
+  useEffect(() => {
+    const htmlEl = document.documentElement;
+    if (isDarkMode) {
+      htmlEl.classList.add('dark');
+      htmlEl.setAttribute('data-theme', 'dark');
+    } else {
+      htmlEl.classList.remove('dark');
+      htmlEl.setAttribute('data-theme', 'transparent-glossy');
+    }
+  }, [isDarkMode]);
   
   // Font preferences
   const [urduFont, setUrduFontState] = useState<string>(() => {
@@ -300,6 +273,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       themeMode,
       setThemeMode,
       themes: THEMES,
+      isDarkMode,
+      toggleDarkMode,
       themePalette,
       setThemePalette,
       urduFont,

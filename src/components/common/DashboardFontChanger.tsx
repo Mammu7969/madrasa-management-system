@@ -170,37 +170,7 @@ export const DashboardFontChanger: React.FC<DashboardFontChangerProps> = ({ comp
                   {activeEnglish.subtext}
                 </p>
               </div>
-
             </div>
-
-            {/* Live Synchronized Render Strip */}
-            <div className="p-3.5 bg-gray-50 rounded-2xl border border-gray-200 flex flex-col md:flex-row items-center justify-between gap-3 text-xs">
-              <div className="flex items-center gap-2 text-gray-500 whitespace-nowrap">
-                <Sparkles className="w-3.5 h-3.5 text-m3-primary" />
-                <span className="font-bold text-[11px] uppercase tracking-wide">Live Preview:</span>
-              </div>
-
-              <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-3 w-full text-center md:text-left">
-                {/* Urdu Preview */}
-                <div 
-                  className="p-2 rounded-xl bg-white border text-emerald-950 font-bold"
-                  style={{ fontFamily: activeUrdu.cssFamily, direction: 'rtl' }}
-                >
-                  <span className="text-[10px] text-gray-400 block" style={{ direction: 'ltr' }}>Urdu [{activeUrdu.name}]:</span>
-                  جامعہ دارالعلوم و مدرسہ مینیجمنٹ سسٹم
-                </div>
-
-                {/* English Preview */}
-                <div 
-                  className="p-2 rounded-xl bg-white border text-amber-950 font-bold"
-                  style={{ fontFamily: activeEnglish.cssFamily }}
-                >
-                  <span className="text-[10px] text-gray-400 block">English [{activeEnglish.name}]:</span>
-                  STUDENT ID: MDS-2026 • ADM NO: 8921
-                </div>
-              </div>
-            </div>
-
           </div>
         )}
 

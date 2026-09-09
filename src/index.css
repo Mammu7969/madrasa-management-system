@@ -242,3 +242,185 @@
     page-break-before: always;
   }
 }
+
+/* ==========================================================================
+   HIGH-CONTRAST DARK MODE ENGINE (100% VISIBILITY ACROSS ALL SCREENS)
+   ========================================================================== */
+html.dark,
+[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+html.dark body,
+[data-theme="dark"] body {
+  background-color: #0B1120 !important;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(16, 185, 129, 0.14) 0px, transparent 45%),
+    radial-gradient(at 100% 0%, rgba(56, 189, 248, 0.14) 0px, transparent 45%),
+    radial-gradient(at 50% 50%, rgba(15, 23, 42, 0.82) 0px, transparent 75%),
+    radial-gradient(at 15% 90%, rgba(99, 102, 241, 0.10) 0px, transparent 45%),
+    radial-gradient(at 85% 90%, rgba(16, 185, 129, 0.12) 0px, transparent 45%) !important;
+  color: #F8FAFC !important;
+}
+
+/* 1. Core Headings & Dark Text Color Overrides */
+html.dark h1, html.dark h2, html.dark h3, html.dark h4, html.dark h5, html.dark h6,
+[data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4, [data-theme="dark"] h5, [data-theme="dark"] h6,
+html.dark .text-slate-900, html.dark .text-gray-900, html.dark .text-zinc-900, html.dark .text-neutral-900,
+html.dark .text-slate-800, html.dark .text-gray-800, html.dark .text-zinc-800, html.dark .text-neutral-800,
+html.dark [class*="text-[#123B63]"], html.dark [class*="text-[#102A43]"],
+[data-theme="dark"] .text-slate-900, [data-theme="dark"] .text-gray-900, [data-theme="dark"] .text-zinc-900, [data-theme="dark"] .text-neutral-900,
+[data-theme="dark"] .text-slate-800, [data-theme="dark"] .text-gray-800, [data-theme="dark"] .text-zinc-800, [data-theme="dark"] .text-neutral-800,
+[data-theme="dark"] [class*="text-[#123B63]"], [data-theme="dark"] [class*="text-[#102A43]"] {
+  color: #F8FAFC !important;
+}
+
+/* 2. Secondary & Body Text Overrides */
+html.dark .text-slate-700, html.dark .text-gray-700, html.dark .text-zinc-700, html.dark .text-neutral-700,
+html.dark .text-slate-600, html.dark .text-gray-600, html.dark .text-zinc-600, html.dark .text-neutral-600,
+[data-theme="dark"] .text-slate-700, [data-theme="dark"] .text-gray-700, [data-theme="dark"] .text-zinc-700, [data-theme="dark"] .text-neutral-700,
+[data-theme="dark"] .text-slate-600, [data-theme="dark"] .text-gray-600, [data-theme="dark"] .text-zinc-600, [data-theme="dark"] .text-neutral-600 {
+  color: #E2E8F0 !important;
+}
+
+/* 3. Muted & Meta Text Overrides */
+html.dark .text-slate-500, html.dark .text-gray-500, html.dark .text-zinc-500, html.dark .text-neutral-500,
+[data-theme="dark"] .text-slate-500, [data-theme="dark"] .text-gray-500, [data-theme="dark"] .text-zinc-500, [data-theme="dark"] .text-neutral-500 {
+  color: #94A3B8 !important;
+}
+
+/* 4. White / Light Backgrounds -> Slate Dark Glass */
+html.dark .bg-white,
+html.dark .bg-white\/50,
+html.dark .bg-white\/60,
+html.dark .bg-white\/65,
+html.dark .bg-white\/70,
+html.dark .bg-white\/75,
+html.dark .bg-white\/80,
+html.dark .bg-white\/85,
+html.dark .bg-white\/90,
+html.dark .bg-white\/95,
+[data-theme="dark"] .bg-white,
+[data-theme="dark"] .bg-white\/50,
+[data-theme="dark"] .bg-white\/60,
+[data-theme="dark"] .bg-white\/65,
+[data-theme="dark"] .bg-white\/70,
+[data-theme="dark"] .bg-white\/75,
+[data-theme="dark"] .bg-white\/80,
+[data-theme="dark"] .bg-white\/85,
+[data-theme="dark"] .bg-white\/90,
+[data-theme="dark"] .bg-white\/95 {
+  background-color: rgba(30, 41, 59, 0.88) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* 5. Sub-containers & Alt Row Tints */
+html.dark .bg-slate-50, html.dark .bg-gray-50, html.dark .bg-zinc-50, html.dark .bg-neutral-50,
+html.dark .bg-slate-100, html.dark .bg-gray-100, html.dark .bg-zinc-100, html.dark .bg-neutral-100,
+[data-theme="dark"] .bg-slate-50, [data-theme="dark"] .bg-gray-50, [data-theme="dark"] .bg-zinc-50, [data-theme="dark"] .bg-neutral-50,
+[data-theme="dark"] .bg-slate-100, [data-theme="dark"] .bg-gray-100, [data-theme="dark"] .bg-zinc-100, [data-theme="dark"] .bg-neutral-100 {
+  background-color: rgba(15, 23, 42, 0.82) !important;
+}
+
+/* 6. Form Inputs & Selects */
+html.dark input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="color"]),
+html.dark select,
+html.dark textarea,
+[data-theme="dark"] input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="color"]),
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+  background-color: rgba(15, 23, 42, 0.9) !important;
+  color: #F8FAFC !important;
+  border-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+html.dark input::placeholder, html.dark textarea::placeholder,
+[data-theme="dark"] input::placeholder, [data-theme="dark"] textarea::placeholder {
+  color: #64748B !important;
+}
+
+html.dark select option,
+[data-theme="dark"] select option {
+  background-color: #0F172A !important;
+  color: #F8FAFC !important;
+}
+
+/* 7. Borders & Dividers */
+html.dark .border-slate-100, html.dark .border-slate-200, html.dark .border-slate-300,
+html.dark .border-gray-100, html.dark .border-gray-200, html.dark .border-gray-300,
+html.dark .border-white\/80, html.dark .border-white\/90,
+[data-theme="dark"] .border-slate-100, [data-theme="dark"] .border-slate-200, [data-theme="dark"] .border-slate-300,
+[data-theme="dark"] .border-gray-100, [data-theme="dark"] .border-gray-200, [data-theme="dark"] .border-gray-300,
+[data-theme="dark"] .border-white\/80, [data-theme="dark"] .border-white\/90 {
+  border-color: rgba(255, 255, 255, 0.14) !important;
+}
+
+/* 8. High Contrast Semantic Status Pills */
+html.dark .bg-emerald-50, html.dark .bg-emerald-100,
+[data-theme="dark"] .bg-emerald-50, [data-theme="dark"] .bg-emerald-100 {
+  background-color: rgba(6, 78, 59, 0.45) !important;
+}
+html.dark .text-emerald-700, html.dark .text-emerald-800, html.dark .text-emerald-900,
+[data-theme="dark"] .text-emerald-700, [data-theme="dark"] .text-emerald-800, [data-theme="dark"] .text-emerald-900 {
+  color: #34D399 !important;
+}
+
+html.dark .bg-blue-50, html.dark .bg-blue-100,
+[data-theme="dark"] .bg-blue-50, [data-theme="dark"] .bg-blue-100 {
+  background-color: rgba(30, 58, 138, 0.45) !important;
+}
+html.dark .text-blue-700, html.dark .text-blue-800, html.dark .text-blue-900,
+[data-theme="dark"] .text-blue-700, [data-theme="dark"] .text-blue-800, [data-theme="dark"] .text-blue-900 {
+  color: #60A5FA !important;
+}
+
+html.dark .bg-amber-50, html.dark .bg-amber-100,
+[data-theme="dark"] .bg-amber-50, [data-theme="dark"] .bg-amber-100 {
+  background-color: rgba(120, 53, 15, 0.45) !important;
+}
+html.dark .text-amber-700, html.dark .text-amber-800, html.dark .text-amber-900,
+[data-theme="dark"] .text-amber-700, [data-theme="dark"] .text-amber-800, [data-theme="dark"] .text-amber-900 {
+  color: #FBBF24 !important;
+}
+
+html.dark .bg-rose-50, html.dark .bg-rose-100, html.dark .bg-red-50, html.dark .bg-red-100,
+[data-theme="dark"] .bg-rose-50, [data-theme="dark"] .bg-rose-100, [data-theme="dark"] .bg-red-50, [data-theme="dark"] .bg-red-100 {
+  background-color: rgba(136, 19, 55, 0.45) !important;
+}
+html.dark .text-rose-700, html.dark .text-rose-800, html.dark .text-rose-900,
+html.dark .text-red-700, html.dark .text-red-800, html.dark .text-red-900,
+[data-theme="dark"] .text-rose-700, [data-theme="dark"] .text-rose-800, [data-theme="dark"] .text-rose-900,
+[data-theme="dark"] .text-red-700, [data-theme="dark"] .text-red-800, [data-theme="dark"] .text-red-900 {
+  color: #F87171 !important;
+}
+
+html.dark .bg-purple-50, html.dark .bg-purple-100,
+[data-theme="dark"] .bg-purple-50, [data-theme="dark"] .bg-purple-100 {
+  background-color: rgba(88, 28, 135, 0.45) !important;
+}
+html.dark .text-purple-700, html.dark .text-purple-800, html.dark .text-purple-900,
+[data-theme="dark"] .text-purple-700, [data-theme="dark"] .text-purple-800, [data-theme="dark"] .text-purple-900 {
+  color: #C084FC !important;
+}
+
+/* 9. Tables */
+html.dark table,
+[data-theme="dark"] table {
+  color: #F8FAFC !important;
+}
+html.dark th,
+[data-theme="dark"] th {
+  background-color: rgba(15, 23, 42, 0.95) !important;
+  color: #CBD5E1 !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+}
+html.dark td,
+[data-theme="dark"] td {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+html.dark tr:hover,
+[data-theme="dark"] tr:hover {
+  background-color: rgba(51, 65, 85, 0.4) !important;
+}
+

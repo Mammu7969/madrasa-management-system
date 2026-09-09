@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { db } from '../../services/db';
-import { Settings, Save, Download, Database, Lock, Type, Palette, CheckCircle2 } from 'lucide-react';
+import { Settings, Save, Download, Database, Lock, Type, Palette, CheckCircle2, Moon, Sun } from 'lucide-react';
 import { DashboardFontChanger } from '../common/DashboardFontChanger';
 import { GlossyCard } from '../common/GlossyCard';
 
 export const SettingsModule: React.FC = () => {
   const { activeMadrasa } = useAuth();
-  const { showToast, themeMode, setThemeMode, themes } = useTheme();
+  const { showToast, isDarkMode, toggleDarkMode } = useTheme();
 
   const [academicYear, setAcademicYear] = useState('1447-1448 AH (2026-2027)');
   const [defaultCurrency, setDefaultCurrency] = useState('INR (₹)');
@@ -45,14 +45,14 @@ export const SettingsModule: React.FC = () => {
         </div>
       </div>
 
-      {/* Interface Theme Selector (Shiny White / Transparent Glossy) */}
+      {/* Interface Theme & Appearance (Default Transparent Glossy + Dark Theme) */}
       <GlossyCard className="p-6">
         <div className="flex items-center justify-between mb-4 pb-3 border-b border-[var(--border)]">
           <div className="flex items-center gap-2">
             <Palette className="w-5 h-5 text-[#079669]" />
             <div>
-              <h3 className="text-sm font-bold text-slate-900">ERP Interface Theme (ظاہری ہیئت اور تھیم)</h3>
-              <p className="text-xs text-[var(--text-secondary)]">Choose between bright premium white or glass-like transparent glossy interface</p>
+              <h3 className="text-sm font-bold text-slate-900">Interface Appearance & Theme (ظاہری ہیئت اور ڈارک موڈ)</h3>
+              <p className="text-xs text-[var(--text-secondary)]">Standardized Transparent Glossy theme with instant high-contrast Dark Mode</p>
             </div>
           </div>
           <span className="text-xs font-bold text-[#079669] px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200/60">
@@ -61,61 +61,52 @@ export const SettingsModule: React.FC = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {themes.map((tDef) => {
-            const isSelected = themeMode === tDef.id;
-            return (
-              <button
-                key={tDef.id}
-                type="button"
-                onClick={() => {
-                  setThemeMode(tDef.id);
-                  showToast(`Applied ${tDef.name} Theme!`, 'success');
-                }}
-                className={`p-4 rounded-2xl text-start transition-all flex items-start gap-4 border cursor-pointer ${
-                  isSelected 
-                    ? 'bg-emerald-50/70 border-emerald-500 shadow-md ring-2 ring-emerald-500/20' 
-                    : 'bg-white/60 hover:bg-white border-[var(--border)] hover:border-slate-300 shadow-xs'
-                }`}
-              >
-                {/* Visual Swatch */}
-                <div 
-                  className="w-16 h-16 rounded-xl border flex flex-col justify-between p-1.5 shrink-0 shadow-sm relative overflow-hidden"
-                  style={{
-                    backgroundColor: tDef.previewBg,
-                    borderColor: tDef.previewBorder
-                  }}
-                >
-                  <div 
-                    className="w-full h-5 rounded border flex items-center justify-end px-1.5 shadow-2xs"
-                    style={{
-                      backgroundColor: tDef.previewSurface,
-                      borderColor: tDef.previewBorder
-                    }}
-                  >
-                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: tDef.dotPrimary }} />
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: tDef.dotPrimary }} />
-                    <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: tDef.dotSecondary }} />
-                  </div>
-                </div>
+          {/* Default Theme Card */}
+          <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-500 shadow-xs flex items-center gap-4">
+            <div className="w-12 h-12 rounded-xl bg-white border border-emerald-200 flex items-center justify-center shadow-xs text-emerald-700">
+              <Palette className="w-6 h-6" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between">
+                <h4 className="text-sm font-bold text-slate-900">Transparent Glossy</h4>
+                <span className="flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-100/80 px-2 py-0.5 rounded-full">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  Default
+                </span>
+              </div>
+              <span className="text-xs text-[#079669] font-urdu font-medium block mt-0.5">شفاف چمکدار انداز (معیاری)</span>
+              <p className="text-xs text-[var(--text-secondary)] mt-0.5">Primary high-grade translucent glassmorphic interface</p>
+            </div>
+          </div>
 
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between gap-1">
-                    <h4 className="text-sm font-bold text-slate-900">{tDef.name}</h4>
-                    {isSelected && (
-                      <span className="flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-100/80 px-2 py-0.5 rounded-full">
-                        <CheckCircle2 className="w-3.5 h-3.5" />
-                        Active
-                      </span>
-                    )}
-                  </div>
-                  <span className="text-xs text-[#079669] font-urdu font-medium block mt-0.5">{tDef.nameUrdu}</span>
-                  <p className="text-xs text-[var(--text-secondary)] mt-1 leading-relaxed">{tDef.tagline}</p>
-                </div>
-              </button>
-            );
-          })}
+          {/* Dark Mode Switcher Card */}
+          <button
+            type="button"
+            onClick={toggleDarkMode}
+            className={`p-4 rounded-2xl text-start transition-all flex items-center gap-4 border cursor-pointer ${
+              isDarkMode 
+                ? 'bg-slate-900 border-amber-400/80 shadow-md text-white' 
+                : 'bg-white/70 hover:bg-white border-[var(--border)] hover:border-slate-300 shadow-xs text-slate-900'
+            }`}
+          >
+            <div className={`w-12 h-12 rounded-xl border flex items-center justify-center shadow-xs ${
+              isDarkMode ? 'bg-slate-800 border-slate-700 text-amber-400' : 'bg-slate-100 border-slate-200 text-slate-700'
+            }`}>
+              {isDarkMode ? <Sun className="w-6 h-6 animate-in spin-in-180" /> : <Moon className="w-6 h-6" />}
+            </div>
+            <div className="flex-1 min-w-0">
+              <div className="flex items-center justify-between">
+                <h4 className="text-sm font-bold">{isDarkMode ? 'Dark Theme Active' : 'Dark Theme'}</h4>
+                <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${
+                  isDarkMode ? 'bg-amber-400/20 text-amber-300 border border-amber-400/30' : 'bg-slate-200 text-slate-700'
+                }`}>
+                  {isDarkMode ? 'ON' : 'OFF'}
+                </span>
+              </div>
+              <span className="text-xs text-[#079669] dark:text-emerald-400 font-urdu font-medium block mt-0.5">تاریک انداز (ہائی کنٹراسٹ)</span>
+              <p className="text-xs opacity-75 mt-0.5">Click to toggle high-contrast comfortable dark mode</p>
+            </div>
+          </button>
         </div>
       </GlossyCard>
 
