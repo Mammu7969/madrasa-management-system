@@ -20,9 +20,12 @@ import {
   Key,
   Lock,
   User,
-  Sparkles
+  Sparkles,
+  Loader2,
+  AlertCircle
 } from 'lucide-react';
 import { generateDefaultCredentials } from '../../utils/credentialGenerator';
+import { compressImage } from '../../utils/imageCompressor';
 
 interface AddAdmissionProps {
   onBackToList: () => void;
@@ -66,6 +69,50 @@ export const AddAdmission: React.FC<AddAdmissionProps> = ({
   const [certificateUrl, setCertificateUrl] = useState<string>('');
   const [aadharCardUrl, setAadharCardUrl] = useState<string>('');
 
+  // Save and Admission No Status
+  const [isSaving, setIsSaving] = useState<boolean>(false);
+  const [admissionNoStatus, setAdmissionNoStatus] = useState<{
+    isChecking: boolean;
+    isTaken: boolean;
+    takenBy?: string;
+  }>({ isChecking: false, isTaken: false });
+
+  // Live real-time check for admission number uniqueness
+  React.useEffect(() => {
+    const trimmed = admissionNo.trim();
+    if (!trimmed) {
+      setAdmissionNoStatus({ isChecking: false, isTaken: false });
+      return;
+    }
+
+    // 1. Immediate local check
+    const localTaken = db.isAdmissionNoTaken(trimmed, undefined, activeMadrasa?.id);
+    if (localTaken) {
+      const localSt = db.getStudents().find(s => s.admissionNo.toLowerCase() === trimmed.toLowerCase());
+      setAdmissionNoStatus({ isChecking: false, isTaken: true, takenBy: localSt?.studentName });
+      return;
+    }
+
+    // 2. Query Supabase
+    let isCancelled = false;
+    setAdmissionNoStatus(prev => ({ ...prev, isChecking: true }));
+    const timer = setTimeout(async () => {
+      const res = await db.checkAdmissionNoAvailable(trimmed, undefined, activeMadrasa?.id);
+      if (!isCancelled) {
+        setAdmissionNoStatus({
+          isChecking: false,
+          isTaken: !res.available,
+          takenBy: res.existingStudentName
+        });
+      }
+    }, 350);
+
+    return () => {
+      isCancelled = true;
+      clearTimeout(timer);
+    };
+  }, [admissionNo, activeMadrasa?.id]);
+
   const handleAutoGenerateCredentials = () => {
     if (!studentName.trim()) {
       showToast('Please enter Student Name first to generate credentials', 'warning');
@@ -77,48 +124,79 @@ export const AddAdmission: React.FC<AddAdmissionProps> = ({
     showToast(`Generated credentials: ${creds.username} / ${creds.password}`, 'success');
   };
 
-  // Handle Photo File Upload
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Handle Photo File Upload with client-side compression (~25KB)
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setPhotoUrl(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      try {
+        const compressed = await compressImage(file, 500, 500, 0.75);
+        setPhotoUrl(compressed);
+        showToast('Student photo optimized and uploaded successfully!', 'success');
+      } catch {
+        const reader = new FileReader();
+        reader.onloadend = () => setPhotoUrl(reader.result as string);
+        reader.readAsDataURL(file);
+      }
     }
   };
 
-  // Handle Certificate File Upload
-  const handleCertificateUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Handle Certificate File Upload with client-side compression
+  const handleCertificateUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setCertificateUrl(reader.result as string);
+      try {
+        const compressed = await compressImage(file, 800, 800, 0.75);
+        setCertificateUrl(compressed);
         showToast('Previous Study Certificate uploaded!', 'info');
-      };
-      reader.readAsDataURL(file);
+      } catch {
+        const reader = new FileReader();
+        reader.onloadend = () => setCertificateUrl(reader.result as string);
+        reader.readAsDataURL(file);
+      }
     }
   };
 
-  // Handle Aadhar File Upload
-  const handleAadharUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  // Handle Aadhar File Upload with client-side compression
+  const handleAadharUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setAadharCardUrl(reader.result as string);
+      try {
+        const compressed = await compressImage(file, 800, 800, 0.75);
+        setAadharCardUrl(compressed);
         showToast('Aadhar Card scanned image uploaded!', 'info');
-      };
-      reader.readAsDataURL(file);
+      } catch {
+        const reader = new FileReader();
+        reader.onloadend = () => setAadharCardUrl(reader.result as string);
+        reader.readAsDataURL(file);
+      }
     }
   };
 
   // Submit Form
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!studentName.trim() || !activeMadrasa) return;
+    if (isSaving) return;
+
+    if (!studentName.trim() || !activeMadrasa) {
+      showToast('Student Name and Madrasa are required.', 'warning');
+      return;
+    }
+
+    const cleanAdmNo = admissionNo.trim();
+    if (!cleanAdmNo) {
+      showToast('Admission Number is required.', 'warning');
+      return;
+    }
+
+    // Verify Admission Number uniqueness
+    const check = await db.checkAdmissionNoAvailable(cleanAdmNo, undefined, activeMadrasa.id);
+    if (!check.available) {
+      showToast(
+        `Admission Number "${cleanAdmNo}" is already taken${check.existingStudentName ? ` by ${check.existingStudentName}` : ''}! Please specify a unique Admission Number.`,
+        'error'
+      );
+      return;
+    }
 
     const defaultCreds = generateDefaultCredentials(studentName, admissionDate, dob);
     const finalUsername = username.trim() || defaultCreds.username;
@@ -126,7 +204,7 @@ export const AddAdmission: React.FC<AddAdmissionProps> = ({
 
     const newStudent: Student = {
       id: `std-${Date.now()}`,
-      admissionNo: admissionNo.trim(),
+      admissionNo: cleanAdmNo,
       admissionDate,
       studentName: studentName.trim(),
       studentNameUrdu: studentNameUrdu.trim() || studentName.trim(),
@@ -158,9 +236,21 @@ export const AddAdmission: React.FC<AddAdmissionProps> = ({
       password: finalPassword
     };
 
-    db.addStudent(newStudent);
-    showToast(`New Admission for ${newStudent.studentName} (${newStudent.admissionNo}) saved successfully!`, 'success');
-    onStudentAdded(newStudent);
+    try {
+      setIsSaving(true);
+      const res = await db.addStudent(newStudent);
+      if (res.error) {
+        showToast(`Saved locally! Cloud sync note: ${res.error}`, 'info');
+      } else {
+        showToast(`New Admission for ${newStudent.studentName} (${newStudent.admissionNo}) saved and synchronized successfully!`, 'success');
+      }
+      onStudentAdded(newStudent);
+    } catch (err: any) {
+      console.error('Error saving admission:', err);
+      showToast(`Failed to save admission: ${err?.message || 'Error'}`, 'error');
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -187,11 +277,25 @@ export const AddAdmission: React.FC<AddAdmissionProps> = ({
 
         <button
           type="button"
+          disabled={isSaving || admissionNoStatus.isTaken}
           onClick={handleSubmit}
-          className="flex items-center gap-2 px-6 py-2.5 rounded-2xl bg-m3-primary hover:bg-m3-primary/90 text-white text-xs font-bold shadow-m3-2 transition-all active:scale-95"
+          className={`flex items-center gap-2 px-6 py-2.5 rounded-2xl text-white text-xs font-bold shadow-m3-2 transition-all ${
+            isSaving || admissionNoStatus.isTaken
+              ? 'bg-slate-400 cursor-not-allowed opacity-75'
+              : 'bg-m3-primary hover:bg-m3-primary/90 active:scale-95'
+          }`}
         >
-          <Save className="w-4 h-4" />
-          <span>Save Admission</span>
+          {isSaving ? (
+            <>
+              <Loader2 className="w-4 h-4 animate-spin" />
+              <span>Saving Admission...</span>
+            </>
+          ) : (
+            <>
+              <Save className="w-4 h-4" />
+              <span>Save Admission</span>
+            </>
+          )}
         </button>
       </div>
 
@@ -229,16 +333,44 @@ export const AddAdmission: React.FC<AddAdmissionProps> = ({
             {/* Core Fields */}
             <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-4 w-full">
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">
-                  Admission No *
-                </label>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="block text-xs font-bold text-gray-700">
+                    Admission No *
+                  </label>
+                  {admissionNoStatus.isChecking && (
+                    <span className="text-[10px] text-blue-600 flex items-center gap-1 font-medium">
+                      <Loader2 className="w-2.5 h-2.5 animate-spin" /> Checking...
+                    </span>
+                  )}
+                </div>
                 <input
                   type="text"
                   value={admissionNo}
                   onChange={(e) => setAdmissionNo(e.target.value)}
-                  className="w-full p-2.5 text-xs rounded-xl border bg-white font-mono font-bold text-m3-primary"
+                  className={`w-full p-2.5 text-xs rounded-xl border bg-white font-mono font-bold transition-all ${
+                    admissionNoStatus.isTaken
+                      ? 'border-red-500 text-red-600 focus:ring-2 focus:ring-red-200'
+                      : 'border-m3-outline-variant/30 text-m3-primary focus:ring-2 focus:ring-m3-primary/30'
+                  }`}
                   required
                 />
+                {admissionNo.trim() && (
+                  <div className="mt-1">
+                    {admissionNoStatus.isTaken ? (
+                      <p className="text-[11px] text-red-600 font-bold flex items-center gap-1 bg-red-50 px-2 py-1 rounded-lg border border-red-200">
+                        <AlertCircle className="w-3 h-3 text-red-500 shrink-0" />
+                        <span>Admission No is already taken{admissionNoStatus.takenBy ? ` (${admissionNoStatus.takenBy})` : ''}</span>
+                      </p>
+                    ) : (
+                      !admissionNoStatus.isChecking && (
+                        <p className="text-[11px] text-emerald-600 font-bold flex items-center gap-1">
+                          <CheckCircle2 className="w-3 h-3 text-emerald-500 shrink-0" />
+                          <span>Admission No available</span>
+                        </p>
+                      )
+                    )}
+                  </div>
+                )}
               </div>
 
               <div>
@@ -662,10 +794,24 @@ export const AddAdmission: React.FC<AddAdmissionProps> = ({
           </button>
           <button
             type="submit"
-            className="flex items-center gap-2 px-8 py-3 rounded-2xl bg-m3-primary hover:bg-m3-primary/90 text-white text-xs font-black shadow-m3-2 transition-all active:scale-95"
+            disabled={isSaving || admissionNoStatus.isTaken}
+            className={`flex items-center gap-2 px-8 py-3 rounded-2xl text-white text-xs font-black shadow-m3-2 transition-all ${
+              isSaving || admissionNoStatus.isTaken
+                ? 'bg-slate-400 cursor-not-allowed opacity-75'
+                : 'bg-m3-primary hover:bg-m3-primary/90 active:scale-95'
+            }`}
           >
-            <Save className="w-4 h-4" />
-            <span>Save & Register Student</span>
+            {isSaving ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span>Saving & Registering...</span>
+              </>
+            ) : (
+              <>
+                <Save className="w-4 h-4" />
+                <span>Save & Register Student</span>
+              </>
+            )}
           </button>
         </div>
       </form>

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { db } from '../../services/db';
@@ -54,8 +54,15 @@ export const StudentsList: React.FC<StudentsListProps> = ({
   const [rowsPerPage, setRowsPerPage] = useState<number>(10);
   const [gotoPageInput, setGotoPageInput] = useState<string>('1');
 
+  const [syncVersion, setSyncVersion] = useState<number>(0);
+  useEffect(() => {
+    const handleSync = () => setSyncVersion(v => v + 1);
+    window.addEventListener('mms_data_synced', handleSync);
+    return () => window.removeEventListener('mms_data_synced', handleSync);
+  }, []);
+
   // Live students list
-  const students = db.getStudents(activeMadrasa?.id);
+  const students = useMemo(() => db.getStudents(activeMadrasa?.id), [activeMadrasa?.id, syncVersion]);
 
   // Unique classes in current madrasa
   const availableClasses = useMemo(() => {

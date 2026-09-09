@@ -1013,6 +1013,34 @@ const initialStudentLogs: StudentUpdateLog[] = [
   }
 ];
 
+const safeSetItem = (key: string, data: any) => {
+  try {
+    localStorage.setItem(key, JSON.stringify(data));
+  } catch (err: any) {
+    console.warn(`[db] localStorage quota exceeded for ${key}:`, err);
+    if (Array.isArray(data)) {
+      // If large base64 image strings are present, sanitize them to prevent quota crashes
+      const sanitized = data.map(item => {
+        if (item && typeof item === 'object') {
+          const copy = { ...item };
+          for (const k of Object.keys(copy)) {
+            if (typeof copy[k] === 'string' && copy[k].startsWith('data:image') && copy[k].length > 40000) {
+              copy[k] = 'https://images.unsplash.com/photo-1543610892-0b1f7e6d8ac1?auto=format&fit=crop&w=400&q=80';
+            }
+          }
+          return copy;
+        }
+        return item;
+      });
+      try {
+        localStorage.setItem(key, JSON.stringify(sanitized));
+      } catch (innerErr) {
+        console.error(`[db] Critical quota failure for ${key}:`, innerErr);
+      }
+    }
+  }
+};
+
 const backgroundSync = (fn: () => any) => {
   if (!isSupabaseConfigured()) return;
   Promise.resolve()
@@ -1060,11 +1088,11 @@ export const db = {
         supabase.from('mms_notices').select('*')
       ]);
 
-      if (madrasas && madrasas.length > 0) localStorage.setItem(STORAGE_KEYS.MADRASAS, JSON.stringify(madrasas));
+      if (madrasas && madrasas.length > 0) safeSetItem(STORAGE_KEYS.MADRASAS, madrasas);
       if (students && students.length > 0) {
-        // Prevent remote default 'password123' from overwriting freshly generated or updated student passwords in local cache
         const localData = localStorage.getItem(STORAGE_KEYS.STUDENTS);
-        const localStudents: Student[] = localData ? JSON.parse(localData) : [];
+        const localStudents: Student[] = localData ? JSON.parse(localData) : initialStudents;
+        const remoteIds = new Set(students.map(s => s.id));
         const mergedStudents = students.map(remoteS => {
           const localS = localStudents.find(ls => ls.id === remoteS.id);
           if (localS) {
@@ -1076,11 +1104,21 @@ export const db = {
           }
           return remoteS;
         });
-        localStorage.setItem(STORAGE_KEYS.STUDENTS, JSON.stringify(mergedStudents));
+        // Retain local students that have not yet been synced to Supabase
+        const localOnlyStudents = localStudents.filter(ls => !remoteIds.has(ls.id));
+        const finalStudents = [...mergedStudents, ...localOnlyStudents];
+        safeSetItem(STORAGE_KEYS.STUDENTS, finalStudents);
+
+        // Upload any local-only students to Supabase so they are permanently backed up
+        if (localOnlyStudents.length > 0) {
+          Promise.all(localOnlyStudents.map(ls => supabase.from('mms_students').upsert(ls)))
+            .catch(err => console.warn('Syncing local-only students to Supabase notice:', err));
+        }
       }
       if (teachers && teachers.length > 0) {
         const localData = localStorage.getItem(STORAGE_KEYS.TEACHERS);
-        const localTeachers: Teacher[] = localData ? JSON.parse(localData) : [];
+        const localTeachers: Teacher[] = localData ? JSON.parse(localData) : initialTeachers;
+        const remoteIds = new Set(teachers.map(t => t.id));
         const mergedTeachers = teachers.map(remoteT => {
           const localT = localTeachers.find(lt => lt.id === remoteT.id);
           if (localT) {
@@ -1094,19 +1132,26 @@ export const db = {
           }
           return remoteT;
         });
-        localStorage.setItem(STORAGE_KEYS.TEACHERS, JSON.stringify(mergedTeachers));
+        const localOnlyTeachers = localTeachers.filter(lt => !remoteIds.has(lt.id));
+        const finalTeachers = [...mergedTeachers, ...localOnlyTeachers];
+        safeSetItem(STORAGE_KEYS.TEACHERS, finalTeachers);
+
+        if (localOnlyTeachers.length > 0) {
+          Promise.all(localOnlyTeachers.map(lt => supabase.from('mms_teachers').upsert(lt)))
+            .catch(err => console.warn('Syncing local-only teachers to Supabase notice:', err));
+        }
       }
-      if (staff && staff.length > 0) localStorage.setItem(STORAGE_KEYS.STAFF, JSON.stringify(staff));
-      if (classes && classes.length > 0) localStorage.setItem(STORAGE_KEYS.CLASSES, JSON.stringify(classes));
-      if (subjects && subjects.length > 0) localStorage.setItem(STORAGE_KEYS.SUBJECTS, JSON.stringify(subjects));
-      if (attendance && attendance.length > 0) localStorage.setItem(STORAGE_KEYS.ATTENDANCE, JSON.stringify(attendance));
-      if (roznamcha && roznamcha.length > 0) localStorage.setItem(STORAGE_KEYS.ROZNAMCHAH, JSON.stringify(roznamcha));
-      if (fees && fees.length > 0) localStorage.setItem(STORAGE_KEYS.FEES, JSON.stringify(fees));
-      if (categories && categories.length > 0) localStorage.setItem(STORAGE_KEYS.FINANCE_CATEGORIES, JSON.stringify(categories));
-      if (transactions && transactions.length > 0) localStorage.setItem(STORAGE_KEYS.FINANCE_TRANSACTIONS, JSON.stringify(transactions));
-      if (periodSchedule && periodSchedule.length > 0) localStorage.setItem(STORAGE_KEYS.PERIOD_SCHEDULE, JSON.stringify(periodSchedule));
-      if (schedule && schedule.length > 0) localStorage.setItem(STORAGE_KEYS.SCHEDULE, JSON.stringify(schedule));
-      if (notices && notices.length > 0) localStorage.setItem(STORAGE_KEYS.NOTICES, JSON.stringify(notices));
+      if (staff && staff.length > 0) safeSetItem(STORAGE_KEYS.STAFF, staff);
+      if (classes && classes.length > 0) safeSetItem(STORAGE_KEYS.CLASSES, classes);
+      if (subjects && subjects.length > 0) safeSetItem(STORAGE_KEYS.SUBJECTS, subjects);
+      if (attendance && attendance.length > 0) safeSetItem(STORAGE_KEYS.ATTENDANCE, attendance);
+      if (roznamcha && roznamcha.length > 0) safeSetItem(STORAGE_KEYS.ROZNAMCHAH, roznamcha);
+      if (fees && fees.length > 0) safeSetItem(STORAGE_KEYS.FEES, fees);
+      if (categories && categories.length > 0) safeSetItem(STORAGE_KEYS.FINANCE_CATEGORIES, categories);
+      if (transactions && transactions.length > 0) safeSetItem(STORAGE_KEYS.FINANCE_TRANSACTIONS, transactions);
+      if (periodSchedule && periodSchedule.length > 0) safeSetItem(STORAGE_KEYS.PERIOD_SCHEDULE, periodSchedule);
+      if (schedule && schedule.length > 0) safeSetItem(STORAGE_KEYS.SCHEDULE, schedule);
+      if (notices && notices.length > 0) safeSetItem(STORAGE_KEYS.NOTICES, notices);
 
       this.isCloudSynced = true;
       this.lastSyncTime = new Date().toLocaleTimeString();
@@ -1177,7 +1222,7 @@ export const db = {
   getStudents(madrasaId?: string): Student[] {
     const data = localStorage.getItem(STORAGE_KEYS.STUDENTS);
     const students: Student[] = data ? JSON.parse(data) : initialStudents;
-    if (!data) localStorage.setItem(STORAGE_KEYS.STUDENTS, JSON.stringify(initialStudents));
+    if (!data) safeSetItem(STORAGE_KEYS.STUDENTS, initialStudents);
     if (madrasaId) {
       return students.filter(s => s.madrasaId === madrasaId);
     }
@@ -1185,24 +1230,141 @@ export const db = {
   },
 
   saveStudents(students: Student[]) {
-    localStorage.setItem(STORAGE_KEYS.STUDENTS, JSON.stringify(students));
+    safeSetItem(STORAGE_KEYS.STUDENTS, students);
   },
 
-  addStudent(student: Student) {
+  isAdmissionNoTaken(admissionNo: string, excludeStudentId?: string, madrasaId?: string): boolean {
+    if (!admissionNo || !admissionNo.trim()) return false;
+    const cleanNo = admissionNo.trim().toLowerCase();
     const students = this.getStudents();
-    students.unshift(student);
-    this.saveStudents(students);
-    backgroundSync(() => supabase.from('mms_students').upsert(student));
+    return students.some(s => {
+      if (excludeStudentId && s.id === excludeStudentId) return false;
+      if (madrasaId && s.madrasaId && s.madrasaId !== madrasaId) return false;
+      return s.admissionNo.trim().toLowerCase() === cleanNo;
+    });
   },
 
-  updateStudent(student: Student) {
+  async checkAdmissionNoAvailable(
+    admissionNo: string,
+    excludeStudentId?: string,
+    madrasaId?: string
+  ): Promise<{ available: boolean; existingStudentName?: string }> {
+    const cleanNo = admissionNo.trim();
+    if (!cleanNo) return { available: true };
+
+    // 1. Synchronously check local storage
+    const localStudents = this.getStudents();
+    const localMatch = localStudents.find(s =>
+      s.admissionNo.trim().toLowerCase() === cleanNo.toLowerCase() &&
+      (!excludeStudentId || s.id !== excludeStudentId) &&
+      (!madrasaId || !s.madrasaId || s.madrasaId === madrasaId)
+    );
+    if (localMatch) {
+      return { available: false, existingStudentName: localMatch.studentName };
+    }
+
+    // 2. Query Supabase for remote check
+    if (isSupabaseConfigured()) {
+      try {
+        let query = supabase
+          .from('mms_students')
+          .select('id, studentName, admissionNo, madrasaId')
+          .ilike('admissionNo', cleanNo);
+        if (excludeStudentId) {
+          query = query.neq('id', excludeStudentId);
+        }
+        if (madrasaId) {
+          query = query.eq('madrasaId', madrasaId);
+        }
+        const { data, error } = await query;
+        if (!error && data && data.length > 0) {
+          return { available: false, existingStudentName: data[0].studentName };
+        }
+      } catch (err) {
+        console.warn('Admission No check error from Supabase:', err);
+      }
+    }
+    return { available: true };
+  },
+
+  async addStudent(student: Student): Promise<{ success: boolean; error?: string }> {
+    const students = this.getStudents();
+    const existingIndex = students.findIndex(s => s.id === student.id);
+    if (existingIndex >= 0) {
+      students[existingIndex] = student;
+    } else {
+      students.unshift(student);
+    }
+    this.saveStudents(students);
+
+    if (isSupabaseConfigured()) {
+      try {
+        const payload = {
+          ...student,
+          village: student.village || null,
+          kafeelName: student.kafeelName || null,
+          previousStudyCertificateUrl: student.previousStudyCertificateUrl || null,
+          aadharCardUrl: student.aadharCardUrl || null,
+          aadharNumber: student.aadharNumber || null,
+          motherName: student.motherName || null,
+          guardianName: student.guardianName || null,
+          guardianOccupation: student.guardianOccupation || null,
+          previousSchool: student.previousSchool || null,
+          previousStudy: student.previousStudy || null,
+          photoUrl: student.photoUrl || null,
+          username: student.username || null,
+          password: student.password || null
+        };
+        const { error } = await supabase.from('mms_students').upsert(payload);
+        if (error) {
+          console.error('[db] Supabase addStudent error:', error);
+          return { success: false, error: error.message };
+        }
+      } catch (err: any) {
+        console.error('[db] Supabase addStudent exception:', err);
+        return { success: false, error: err?.message || 'Network error' };
+      }
+    }
+    return { success: true };
+  },
+
+  async updateStudent(student: Student): Promise<{ success: boolean; error?: string }> {
     const students = this.getStudents();
     const index = students.findIndex(s => s.id === student.id);
     if (index >= 0) {
       students[index] = student;
       this.saveStudents(students);
-      backgroundSync(() => supabase.from('mms_students').upsert(student));
     }
+
+    if (isSupabaseConfigured()) {
+      try {
+        const payload = {
+          ...student,
+          village: student.village || null,
+          kafeelName: student.kafeelName || null,
+          previousStudyCertificateUrl: student.previousStudyCertificateUrl || null,
+          aadharCardUrl: student.aadharCardUrl || null,
+          aadharNumber: student.aadharNumber || null,
+          motherName: student.motherName || null,
+          guardianName: student.guardianName || null,
+          guardianOccupation: student.guardianOccupation || null,
+          previousSchool: student.previousSchool || null,
+          previousStudy: student.previousStudy || null,
+          photoUrl: student.photoUrl || null,
+          username: student.username || null,
+          password: student.password || null
+        };
+        const { error } = await supabase.from('mms_students').upsert(payload);
+        if (error) {
+          console.error('[db] Supabase updateStudent error:', error);
+          return { success: false, error: error.message };
+        }
+      } catch (err: any) {
+        console.error('[db] Supabase updateStudent exception:', err);
+        return { success: false, error: err?.message || 'Network error' };
+      }
+    }
+    return { success: true };
   },
 
   deleteStudent(studentId: string) {

@@ -47,6 +47,7 @@ import {
 import { PrintDocModal } from '../common/PrintDocModal';
 import { Modal } from '../common/Modal';
 import { generateDefaultCredentials } from '../../utils/credentialGenerator';
+import { compressImage } from '../../utils/imageCompressor';
 
 interface StudentProfileProps {
   student: Student;
@@ -172,39 +173,57 @@ export const StudentProfile: React.FC<StudentProfileProps> = ({
   };
 
   // Upload Handlers
-  const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setEditPhotoUrl(reader.result as string);
-        showToast('Student photo updated for preview!', 'info');
-      };
-      reader.readAsDataURL(file);
+      try {
+        const compressed = await compressImage(file, 500, 500, 0.75);
+        setEditPhotoUrl(compressed);
+        showToast('Student photo optimized and updated for preview!', 'success');
+      } catch {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setEditPhotoUrl(reader.result as string);
+          showToast('Student photo updated for preview!', 'info');
+        };
+        reader.readAsDataURL(file);
+      }
     }
   };
 
-  const handleCertificateUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCertificateUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setEditCertificateUrl(reader.result as string);
+      try {
+        const compressed = await compressImage(file, 800, 800, 0.75);
+        setEditCertificateUrl(compressed);
         showToast('Previous Study Certificate attached!', 'info');
-      };
-      reader.readAsDataURL(file);
+      } catch {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setEditCertificateUrl(reader.result as string);
+          showToast('Previous Study Certificate attached!', 'info');
+        };
+        reader.readAsDataURL(file);
+      }
     }
   };
 
-  const handleAadharUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAadharUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setEditAadharCardUrl(reader.result as string);
+      try {
+        const compressed = await compressImage(file, 800, 800, 0.75);
+        setEditAadharCardUrl(compressed);
         showToast('Aadhar card image attached!', 'info');
-      };
-      reader.readAsDataURL(file);
+      } catch {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setEditAadharCardUrl(reader.result as string);
+          showToast('Aadhar card image attached!', 'info');
+        };
+        reader.readAsDataURL(file);
+      }
     }
   };
 
@@ -290,9 +309,27 @@ export const StudentProfile: React.FC<StudentProfileProps> = ({
   };
 
   // Save Edit Student with Complete Audit Logging
-  const handleSaveStudentEdit = (e: React.FormEvent) => {
+  const handleSaveStudentEdit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!editStudentName.trim()) return;
+
+    const cleanAdmNo = editAdmissionNo.trim();
+    if (!cleanAdmNo) {
+      showToast('Admission Number cannot be empty.', 'error');
+      return;
+    }
+
+    // Ensure admission number is unique if modified
+    if (cleanAdmNo.toLowerCase() !== student.admissionNo.toLowerCase()) {
+      const check = await db.checkAdmissionNoAvailable(cleanAdmNo, student.id, student.madrasaId);
+      if (!check.available) {
+        showToast(
+          `Admission Number "${cleanAdmNo}" is already taken${check.existingStudentName ? ` by ${check.existingStudentName}` : ''}! Please specify a unique Admission Number.`,
+          'error'
+        );
+        return;
+      }
+    }
 
     // Detect all modified fields for audit log
     const changes: StudentUpdateChange[] = [];
@@ -303,8 +340,8 @@ export const StudentProfile: React.FC<StudentProfileProps> = ({
     if (editStudentNameUrdu.trim() !== student.studentNameUrdu) {
       changes.push({ field: 'studentNameUrdu', label: 'Student Name (Urdu)', labelUrdu: 'طالب علم کا نام (اردو)', oldValue: student.studentNameUrdu, newValue: editStudentNameUrdu.trim() });
     }
-    if (editAdmissionNo.trim() !== student.admissionNo) {
-      changes.push({ field: 'admissionNo', label: 'Admission Number', labelUrdu: 'داخلہ نمبر', oldValue: student.admissionNo, newValue: editAdmissionNo.trim() });
+    if (cleanAdmNo !== student.admissionNo) {
+      changes.push({ field: 'admissionNo', label: 'Admission Number', labelUrdu: 'داخلہ نمبر', oldValue: student.admissionNo, newValue: cleanAdmNo });
     }
     if (editAdmissionDate !== student.admissionDate) {
       changes.push({ field: 'admissionDate', label: 'Admission Date', labelUrdu: 'تاریخِ داخلہ', oldValue: student.admissionDate, newValue: editAdmissionDate });
