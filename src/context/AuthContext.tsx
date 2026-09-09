@@ -22,6 +22,7 @@ interface AuthContextType {
   setActiveMadrasa: (m: Madrasa) => void;
   refreshMadrasas: () => void;
   updateActiveMadrasa: (updated: Madrasa) => void;
+  deleteMadrasa: (madrasaId: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -73,6 +74,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     refreshMadrasas();
   };
 
+  const deleteMadrasa = (madrasaId: string) => {
+    db.deleteMadrasa(madrasaId);
+    const updated = refreshMadrasas();
+    if (activeMadrasa?.id === madrasaId) {
+      setActiveMadrasaState(updated[0] || null);
+    }
+  };
+
   const login = (
     madrasaId: string, 
     role: Role, 
@@ -83,14 +92,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const cleanId = idOrUsername.trim();
     const cleanPass = passwordOrDob.trim();
 
-    // 1. Super Admin Authentication (can login without specific madrasa check or with any)
+    // 1. Super Admin Authentication (Supports Mia-5919 / Mia@5919)
     if (role === 'super_admin') {
-      if ((cleanId.toLowerCase() === 'superadmin' || cleanId.toLowerCase() === 'admin') && cleanPass === 'password123') {
+      const isSuperAdminUser = cleanId.toLowerCase() === 'mia-5919' || cleanId.toLowerCase() === 'superadmin' || cleanId.toLowerCase() === 'admin';
+      const isSuperAdminPass = cleanPass === 'Mia@5919' || cleanPass === 'password123';
+
+      if (isSuperAdminUser && isSuperAdminPass) {
         const superUser: AuthUser = {
           id: 'usr-superadmin',
           username: cleanId,
           role: 'super_admin',
-          name: 'Chief Super Admin',
+          name: 'Chief Super Admin (MMS)',
           nameUrdu: 'چیف سپر ایڈمن',
           avatarUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80',
           madrasaId: madrasaId || (list[0] ? list[0].id : undefined)
@@ -114,7 +126,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
       return { 
         success: false, 
-        error: 'Please Select Your Madrasa from Dropdown-1 and Select Your Roll From Dropdown-2(Admin/Principal, Teacher or Guardian/Student)' 
+        error: 'Invalid Super Admin username or password. Please verify credentials.' 
       };
     }
 
@@ -179,15 +191,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // 3. Teacher Authentication
     if (role === 'teacher') {
       const teachers = db.getTeachers(targetMadrasa.id);
-      const teacherMatch = teachers.find(
-        t => (t.teacherIdNo.toLowerCase() === cleanId.toLowerCase() || t.id.toLowerCase() === cleanId.toLowerCase()) && 
-             (t.password === cleanPass || cleanPass === 'password123')
-      );
+      const teacherMatch = teachers.find(t => {
+        const matchesId = (t.username && t.username.toLowerCase() === cleanId.toLowerCase()) ||
+                          t.teacherIdNo.toLowerCase() === cleanId.toLowerCase() ||
+                          t.id.toLowerCase() === cleanId.toLowerCase();
+        const matchesPass = (t.password && t.password === cleanPass) ||
+                            cleanPass === 'password123';
+        return matchesId && matchesPass;
+      });
 
       if (teacherMatch) {
         const teacherUser: AuthUser = {
           id: teacherMatch.id,
-          username: teacherMatch.teacherIdNo,
+          username: teacherMatch.username || teacherMatch.teacherIdNo,
           role: 'teacher',
           name: teacherMatch.name,
           nameUrdu: teacherMatch.nameUrdu,
@@ -199,7 +215,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setActiveMadrasa(targetMadrasa);
         localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(teacherUser));
         db.addUserLog({
-          username: teacherMatch.teacherIdNo,
+          username: teacherMatch.username || teacherMatch.teacherIdNo,
           role: 'Teacher',
           madrasaId: targetMadrasa.id,
           viewedData: `Teacher Portal - Class: ${teacherMatch.assignedClass}`,
@@ -211,22 +227,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       return {
         success: false,
-        error: 'Please Select Your Madrasa from Dropdown-1 and Select Your Roll From Dropdown-2(Admin/Principal, Teacher or Guardian/Student)'
+        error: 'Invalid Teacher Username or Password. Please contact your Madrasa Principal / Admin.'
       };
     }
 
     // 4. Student / Guardian Authentication
     if (role === 'student') {
       const students = db.getStudents(targetMadrasa.id);
-      const studentMatch = students.find(
-        s => (s.admissionNo.toLowerCase() === cleanId.toLowerCase() || s.id.toLowerCase() === cleanId.toLowerCase()) &&
-             (s.password === cleanPass || s.dob === cleanPass || cleanPass === 'password123')
-      );
+      const studentMatch = students.find(s => {
+        const matchesId = (s.username && s.username.toLowerCase() === cleanId.toLowerCase()) ||
+                          s.admissionNo.toLowerCase() === cleanId.toLowerCase() ||
+                          s.id.toLowerCase() === cleanId.toLowerCase();
+        const matchesPass = (s.password && s.password === cleanPass) ||
+                            s.dob === cleanPass ||
+                            cleanPass === 'password123';
+        return matchesId && matchesPass;
+      });
 
       if (studentMatch) {
         const studentUser: AuthUser = {
           id: studentMatch.id,
-          username: studentMatch.admissionNo,
+          username: studentMatch.username || studentMatch.admissionNo,
           role: 'student',
           name: studentMatch.studentName,
           nameUrdu: studentMatch.studentNameUrdu,
@@ -238,7 +259,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setActiveMadrasa(targetMadrasa);
         localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(studentUser));
         db.addUserLog({
-          username: studentMatch.admissionNo,
+          username: studentMatch.username || studentMatch.admissionNo,
           role: 'Student / Guardian',
           madrasaId: targetMadrasa.id,
           viewedData: 'Student Progress & Roznamchah Portal',
@@ -250,7 +271,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       return {
         success: false,
-        error: 'Please Select Your Madrasa from Dropdown-1 and Select Your Roll From Dropdown-2(Admin/Principal, Teacher or Guardian/Student)'
+        error: 'Invalid Student Username, Admission No, or Password. Please contact Madrasa Administration.'
       };
     }
 
@@ -284,7 +305,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       logout,
       setActiveMadrasa,
       refreshMadrasas,
-      updateActiveMadrasa
+      updateActiveMadrasa,
+      deleteMadrasa
     }}>
       {children}
     </AuthContext.Provider>

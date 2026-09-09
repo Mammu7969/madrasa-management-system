@@ -16,8 +16,13 @@ import {
   Phone,
   Home,
   Wallet,
-  ShieldCheck
+  ShieldCheck,
+  Key,
+  Lock,
+  User,
+  Sparkles
 } from 'lucide-react';
+import { generateDefaultCredentials } from '../../utils/credentialGenerator';
 
 interface AddAdmissionProps {
   onBackToList: () => void;
@@ -52,11 +57,25 @@ export const AddAdmission: React.FC<AddAdmissionProps> = ({
   const [previousSchool, setPreviousSchool] = useState<string>('');
   const [previousStudy, setPreviousStudy] = useState<string>('');
   const [aadharNumber, setAadharNumber] = useState<string>('');
+  const [dob, setDob] = useState<string>('2015-05-15');
+  const [username, setUsername] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   
   // Image and Document States
   const [photoUrl, setPhotoUrl] = useState<string>('https://images.unsplash.com/photo-1543610892-0b1f7e6d8ac1?auto=format&fit=crop&w=400&q=80');
   const [certificateUrl, setCertificateUrl] = useState<string>('');
   const [aadharCardUrl, setAadharCardUrl] = useState<string>('');
+
+  const handleAutoGenerateCredentials = () => {
+    if (!studentName.trim()) {
+      showToast('Please enter Student Name first to generate credentials', 'warning');
+      return;
+    }
+    const creds = generateDefaultCredentials(studentName, admissionDate, dob);
+    setUsername(creds.username);
+    setPassword(creds.password);
+    showToast(`Generated credentials: ${creds.username} / ${creds.password}`, 'success');
+  };
 
   // Handle Photo File Upload
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,6 +120,10 @@ export const AddAdmission: React.FC<AddAdmissionProps> = ({
     e.preventDefault();
     if (!studentName.trim() || !activeMadrasa) return;
 
+    const defaultCreds = generateDefaultCredentials(studentName, admissionDate, dob);
+    const finalUsername = username.trim() || defaultCreds.username;
+    const finalPassword = password.trim() || defaultCreds.password;
+
     const newStudent: Student = {
       id: `std-${Date.now()}`,
       admissionNo: admissionNo.trim(),
@@ -130,8 +153,9 @@ export const AddAdmission: React.FC<AddAdmissionProps> = ({
       totalAbsentsYearly: 0,
       totalAbsentsMonthly: 0,
       presentSabaqAt: 'Para 1 (Initial Sabaq)',
-      dob: '2015-01-01',
-      password: 'password123'
+      dob,
+      username: finalUsername,
+      password: finalPassword
     };
 
     db.addStudent(newStudent);
@@ -232,6 +256,19 @@ export const AddAdmission: React.FC<AddAdmissionProps> = ({
 
               <div>
                 <label className="block text-xs font-bold text-gray-700 mb-1">
+                  Date of Birth (تاریخِ پیدائش) *
+                </label>
+                <input
+                  type="date"
+                  value={dob}
+                  onChange={(e) => setDob(e.target.value)}
+                  className="w-full p-2.5 text-xs rounded-xl border bg-white font-mono"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-700 mb-1">
                   Assigned Class / Department *
                 </label>
                 <select
@@ -249,7 +286,7 @@ export const AddAdmission: React.FC<AddAdmissionProps> = ({
                 </select>
               </div>
 
-              <div className="sm:col-span-2">
+              <div>
                 <label className="block text-xs font-bold text-gray-700 mb-1">
                   Student Name (English) *
                 </label>
@@ -537,6 +574,79 @@ export const AddAdmission: React.FC<AddAdmissionProps> = ({
                   <span>Aadhar File Attached</span>
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+
+        {/* Section 5: Student & Guardian Portal Login Credentials */}
+        <div className="bg-white p-6 rounded-3xl border border-m3-outline-variant/30 shadow-m3-1 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-m3-outline-variant/20 pb-3">
+            <div>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-m3-primary flex items-center gap-1.5">
+                <Key className="w-4 h-4 text-m3-primary" />
+                <span>5. Student & Guardian Portal Login Credentials</span>
+              </h3>
+              <p className="text-[11px] text-gray-500 mt-0.5">
+                Admin / Principal can set or auto-generate login credentials for this student & guardian portal access.
+              </p>
+            </div>
+            <button
+              type="button"
+              onClick={handleAutoGenerateCredentials}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-amber-100 hover:bg-amber-200 text-amber-900 text-xs font-bold transition-all shadow-xs cursor-pointer self-start sm:self-auto"
+            >
+              <Sparkles className="w-3.5 h-3.5 text-amber-700" />
+              <span>Auto-Generate Default Credentials</span>
+            </button>
+          </div>
+
+          <div className="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200 text-xs space-y-1">
+            <span className="font-bold text-amber-950 block text-[11px]">
+              Standard Default Formula:
+            </span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-[11px] text-amber-900">
+              <div>
+                <span className="font-semibold">Username:</span> Name's First 4 Letters + <code className="bg-white px-1.5 py-0.5 rounded font-mono font-bold text-amber-950">(-)</code> + Year of Admission (e.g., <code className="bg-white px-1.5 py-0.5 rounded font-mono font-bold text-emerald-800">Abdu-2026</code>)
+              </div>
+              <div>
+                <span className="font-semibold">Password:</span> Name's First 4 Letters + <code className="bg-white px-1.5 py-0.5 rounded font-mono font-bold text-amber-950">(@)</code> + Year of Date of Birth (e.g., <code className="bg-white px-1.5 py-0.5 rounded font-mono font-bold text-emerald-800">Abdu@2015</code>)
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label className="block text-xs font-bold text-gray-700 mb-1">
+                Portal Username (لاگ ان نام)
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  placeholder="Auto-generated if blank (e.g. Abdu-2026)"
+                  className="w-full p-2.5 pr-8 text-xs rounded-xl border bg-white font-mono font-bold text-gray-900 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+                />
+                <User className="w-3.5 h-3.5 text-gray-400 absolute right-3 top-3" />
+              </div>
+              <span className="text-[10px] text-gray-500 mt-0.5 block">Used by student/guardian to log into the portal.</span>
+            </div>
+
+            <div>
+              <label className="block text-xs font-bold text-gray-700 mb-1">
+                Portal Password (پاس ورڈ)
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Auto-generated if blank (e.g. Abdu@2015)"
+                  className="w-full p-2.5 pr-8 text-xs rounded-xl border bg-white font-mono font-bold text-gray-900 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+                />
+                <Lock className="w-3.5 h-3.5 text-gray-400 absolute right-3 top-3" />
+              </div>
+              <span className="text-[10px] text-gray-500 mt-0.5 block">Leave blank to automatically apply the formula password.</span>
             </div>
           </div>
         </div>

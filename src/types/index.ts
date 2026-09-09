@@ -54,6 +54,7 @@ export interface Student {
   totalAbsentsYearly: number;
   totalAbsentsMonthly: number;
   presentSabaqAt: string;
+  username?: string;
   password?: string;
   dob: string;
 }
@@ -97,7 +98,10 @@ export interface Teacher {
   phone: string;
   qualification: string;
   madrasaId: string;
+  username?: string;
   password?: string;
+  dob?: string;
+  joiningDate?: string;
   isPresentToday: boolean;
   designation?: string;
   salary?: number;

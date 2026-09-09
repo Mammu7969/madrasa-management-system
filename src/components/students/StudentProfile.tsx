@@ -39,10 +39,14 @@ import {
   GraduationCap,
   HeartPulse,
   BadgeCheck,
-  ArrowRight
+  ArrowRight,
+  Key,
+  Lock,
+  Check
 } from 'lucide-react';
 import { PrintDocModal } from '../common/PrintDocModal';
 import { Modal } from '../common/Modal';
+import { generateDefaultCredentials } from '../../utils/credentialGenerator';
 
 interface StudentProfileProps {
   student: Student;
@@ -91,6 +95,36 @@ export const StudentProfile: React.FC<StudentProfileProps> = ({
   const [editCertificateUrl, setEditCertificateUrl] = useState<string>(student.previousStudyCertificateUrl || '');
   const [editAadharCardUrl, setEditAadharCardUrl] = useState<string>(student.aadharCardUrl || '');
 
+  // Student Portal Access Credentials State
+  const initialStudentCreds = generateDefaultCredentials(student.studentName, student.admissionDate, student.dob);
+  const [studentUsername, setStudentUsername] = useState<string>(student.username || initialStudentCreds.username);
+  const [studentPassword, setStudentPassword] = useState<string>(student.password || initialStudentCreds.password);
+
+  const [editUsername, setEditUsername] = useState<string>(student.username || initialStudentCreds.username);
+  const [editPassword, setEditPassword] = useState<string>(student.password || initialStudentCreds.password);
+
+  const handleAutoGenerateStudentCreds = () => {
+    const creds = generateDefaultCredentials(student.studentName, student.admissionDate, student.dob);
+    setStudentUsername(creds.username);
+    setStudentPassword(creds.password);
+    showToast(`Default credentials generated: ${creds.username} / ${creds.password}`, 'info');
+  };
+
+  const handleSaveStudentCreds = () => {
+    if (!studentUsername.trim() || !studentPassword.trim()) {
+      showToast('Username and Password cannot be empty', 'error');
+      return;
+    }
+    const updated: Student = {
+      ...student,
+      username: studentUsername.trim(),
+      password: studentPassword.trim()
+    };
+    db.updateStudent(updated);
+    onUpdateStudent(updated);
+    showToast(`Login credentials for ${updated.studentName} updated successfully!`, 'success');
+  };
+
   // Student Update Logs
   const [studentLogs, setStudentLogs] = useState<StudentUpdateLog[]>(() => db.getStudentLogs(student.id));
 
@@ -123,6 +157,9 @@ export const StudentProfile: React.FC<StudentProfileProps> = ({
     setEditPhotoUrl(student.photoUrl);
     setEditCertificateUrl(student.previousStudyCertificateUrl || '');
     setEditAadharCardUrl(student.aadharCardUrl || '');
+    const creds = generateDefaultCredentials(student.studentName, student.admissionDate, student.dob);
+    setEditUsername(student.username || creds.username);
+    setEditPassword(student.password || creds.password);
     setShowEditStudentModal(true);
   };
 
@@ -346,10 +383,15 @@ export const StudentProfile: React.FC<StudentProfileProps> = ({
       photoUrl: editPhotoUrl,
       previousStudyCertificateUrl: editCertificateUrl || undefined,
       aadharCardUrl: editAadharCardUrl || undefined,
-      aadharNumber: editAadharNumber.trim()
+      aadharNumber: editAadharNumber.trim(),
+      username: editUsername.trim(),
+      password: editPassword.trim()
     };
 
     db.updateStudent(updated);
+    setStudentUsername(editUsername.trim());
+    setStudentPassword(editPassword.trim());
+    onUpdateStudent(updated);
 
     if (changes.length > 0) {
       const now = new Date();
@@ -852,6 +894,85 @@ export const StudentProfile: React.FC<StudentProfileProps> = ({
                   <span className="text-slate-700 font-medium italic">Disciplined and regular in classes</span>
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* Student Portal Login Credentials (Admin Controlled) */}
+          <div className="bg-white/70 backdrop-blur-2xl p-6 rounded-3xl border border-white/80 shadow-[0_4px_20px_-2px_rgba(18,59,99,0.05)] space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-amber-500 text-amber-950 flex items-center justify-center font-bold">
+                  <Key className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900">
+                    Student &amp; Guardian Portal Access Credentials (لاگ ان معلومات برائے طالب علم)
+                  </h3>
+                  <p className="text-[11px] text-slate-500">
+                    Admin / Principal can review, generate, and update student &amp; guardian login details
+                  </p>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleAutoGenerateStudentCreds}
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-200/90 hover:bg-amber-300 text-amber-950 text-xs font-bold transition-all cursor-pointer shadow-2xs self-start sm:self-auto"
+                title="Generate using First 4 Letters + Admission Year & DOB Year"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-amber-800" />
+                <span>Auto-Generate Default</span>
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  Portal Username (لاگ ان نام) *
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={studentUsername}
+                    onChange={(e) => setStudentUsername(e.target.value)}
+                    placeholder="e.g. Moha-2026"
+                    className="w-full p-2.5 pr-8 rounded-xl bg-white border border-amber-300 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+                  />
+                  <User className="w-3.5 h-3.5 text-slate-400 absolute right-3 top-3" />
+                </div>
+                <span className="text-[10px] text-slate-500 mt-0.5 block">Formula: First 4 Letters - Admission Year (e.g. Abdu-2026)</span>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-slate-700 mb-1">
+                  Portal Password (پاس ورڈ) *
+                </label>
+                <div className="relative">
+                  <input
+                    type="text"
+                    value={studentPassword}
+                    onChange={(e) => setStudentPassword(e.target.value)}
+                    placeholder="e.g. Moha@2014"
+                    className="w-full p-2.5 pr-8 rounded-xl bg-white border border-amber-300 text-xs font-semibold text-slate-900 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+                  />
+                  <Lock className="w-3.5 h-3.5 text-slate-400 absolute right-3 top-3" />
+                </div>
+                <span className="text-[10px] text-slate-500 mt-0.5 block">Formula: First 4 Letters @ DOB Year (e.g. Abdu@2014)</span>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-2 border-t border-slate-100">
+              <span className="text-xs text-slate-500">
+                Student or guardian logs in with this Username and Password (or Admission No &amp; DOB).
+              </span>
+              <button
+                type="button"
+                onClick={handleSaveStudentCreds}
+                className="px-5 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs cursor-pointer transition-all active:scale-95"
+              >
+                <Check className="w-3.5 h-3.5" />
+                <span>Save Credentials</span>
+              </button>
             </div>
           </div>
 
@@ -2140,6 +2261,60 @@ export const StudentProfile: React.FC<StudentProfileProps> = ({
                     <span>Document Attached</span>
                   </div>
                 )}
+              </div>
+            </div>
+          </div>
+
+          {/* Section 5: Portal Access Credentials */}
+          <div className="bg-amber-50/70 p-5 rounded-2xl border border-amber-200 space-y-3">
+            <div className="flex items-center justify-between border-b border-amber-200 pb-2">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-amber-950 flex items-center gap-1.5">
+                <Key className="w-3.5 h-3.5 text-amber-700" />
+                5. Student &amp; Guardian Portal Access Credentials
+              </h4>
+              <button
+                type="button"
+                onClick={() => {
+                  const c = generateDefaultCredentials(editStudentName, editAdmissionDate, editDob);
+                  setEditUsername(c.username);
+                  setEditPassword(c.password);
+                }}
+                className="text-[11px] font-bold text-amber-900 bg-amber-200/80 hover:bg-amber-300 px-2.5 py-1 rounded-xl transition-all cursor-pointer flex items-center gap-1"
+              >
+                <Sparkles className="w-3 h-3 text-amber-800" />
+                <span>Auto-Generate Default</span>
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-bold text-gray-700 mb-1">
+                  Portal Username *
+                </label>
+                <input
+                  type="text"
+                  value={editUsername}
+                  onChange={(e) => setEditUsername(e.target.value)}
+                  placeholder="e.g. Moha-2026"
+                  className="w-full p-2 text-xs rounded-xl border border-amber-300 bg-white font-mono font-bold"
+                  required
+                />
+                <span className="text-[9px] text-gray-500 mt-0.5 block">Format: First 4 Letters - Year (e.g. Abdu-2026)</span>
+              </div>
+
+              <div>
+                <label className="block text-xs font-bold text-gray-700 mb-1">
+                  Portal Password *
+                </label>
+                <input
+                  type="text"
+                  value={editPassword}
+                  onChange={(e) => setEditPassword(e.target.value)}
+                  placeholder="e.g. Moha@2014"
+                  className="w-full p-2 text-xs rounded-xl border border-amber-300 bg-white font-mono font-bold"
+                  required
+                />
+                <span className="text-[9px] text-gray-500 mt-0.5 block">Format: First 4 Letters @ DOB Year (e.g. Abdu@2014)</span>
               </div>
             </div>
           </div>

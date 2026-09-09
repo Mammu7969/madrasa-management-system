@@ -15,7 +15,8 @@ import {
   ExternalLink,
   ChevronRight,
   Sparkles,
-  Users
+  Users,
+  Trash2
 } from 'lucide-react';
 import { Modal } from '../common/Modal';
 
@@ -28,10 +29,11 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
   onOpenMadrasaDashboard,
   onOpenMMSSettings
 }) => {
-  const { availableMadrasas, refreshMadrasas, setActiveMadrasa, activeMadrasa } = useAuth();
+  const { availableMadrasas, refreshMadrasas, setActiveMadrasa, activeMadrasa, deleteMadrasa } = useAuth();
   const { t, showToast } = useTheme();
 
   const [showAddMadrasaModal, setShowAddMadrasaModal] = useState<boolean>(false);
+  const [madrasaToDelete, setMadrasaToDelete] = useState<Madrasa | null>(null);
   const [newMadrasaName, setNewMadrasaName] = useState<string>('');
   const [newMadrasaUrdu, setNewMadrasaUrdu] = useState<string>('');
   const [newAddress, setNewAddress] = useState<string>('');
@@ -86,6 +88,14 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
     setNewPrincipal('');
     setNewContact('');
     setShowAddMadrasaModal(false);
+  };
+
+  const handleConfirmDeleteMadrasa = () => {
+    if (!madrasaToDelete) return;
+    const name = madrasaToDelete.name;
+    deleteMadrasa(madrasaToDelete.id);
+    showToast(`Madrasa "${name}" removed successfully!`, 'success');
+    setMadrasaToDelete(null);
   };
 
   return (
@@ -208,13 +218,22 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
                   </div>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between">
-                  <span className="text-[11px] text-gray-500">
-                    {madrasa.admins.filter(a => a.isActive).length} Active Admins
-                  </span>
+                <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between gap-2">
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setMadrasaToDelete(madrasa);
+                    }}
+                    className="flex items-center gap-1 text-[11px] font-bold text-rose-700 hover:text-rose-900 bg-rose-50 hover:bg-rose-100 px-2.5 py-1.5 rounded-xl border border-rose-200 transition-all cursor-pointer"
+                    title={`Remove ${madrasa.name}`}
+                  >
+                    <Trash2 className="w-3.5 h-3.5 text-rose-600" />
+                    <span>Remove</span>
+                  </button>
                   <button
                     onClick={() => handleMadrasaSelect(madrasa.id)}
-                    className="flex items-center gap-1 text-xs font-bold text-m3-primary hover:text-m3-primary/80 transition-colors"
+                    className="flex items-center gap-1 text-xs font-bold text-m3-primary hover:text-m3-primary/80 transition-colors cursor-pointer"
                   >
                     <span>Open Dashboard</span>
                     <ChevronRight className="w-3.5 h-3.5" />
@@ -389,6 +408,48 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
           </div>
         </form>
       </Modal>
+
+      {/* Remove Madrasa Confirmation Modal */}
+      {madrasaToDelete && (
+        <Modal
+          isOpen={Boolean(madrasaToDelete)}
+          onClose={() => setMadrasaToDelete(null)}
+          title="Remove Madrasa Account (مدرسہ اکاؤنٹ حذف کریں)"
+          subtitle="Super Admin Master Administrative Action"
+          maxWidth="sm"
+          footer={
+            <div className="flex gap-2 justify-end">
+              <button
+                type="button"
+                onClick={() => setMadrasaToDelete(null)}
+                className="px-4 py-2 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmDeleteMadrasa}
+                className="px-4 py-2 text-xs font-bold bg-rose-600 hover:bg-rose-700 text-white rounded-xl shadow-xs flex items-center gap-1.5 cursor-pointer"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Confirm & Remove Account</span>
+              </button>
+            </div>
+          }
+        >
+          <div className="space-y-3 text-xs text-gray-700">
+            <div className="p-3 bg-rose-50 border border-rose-200 rounded-2xl flex items-start gap-2.5 text-rose-950">
+              <AlertTriangle className="w-5 h-5 text-rose-600 shrink-0 mt-0.5" />
+              <div>
+                <strong className="block font-bold">Warning: Permanent Deletion</strong>
+                <p className="mt-1 leading-relaxed text-rose-900">
+                  Are you sure you want to remove <strong>{madrasaToDelete.name}</strong> ({madrasaToDelete.code})? This will delete this demo/institutional account from the system.
+                </p>
+              </div>
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
 };

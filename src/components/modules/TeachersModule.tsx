@@ -27,9 +27,15 @@ import {
   Clock,
   Briefcase,
   Check,
-  X
+  X,
+  Key,
+  Lock,
+  User,
+  Sparkles,
+  RefreshCw
 } from 'lucide-react';
 import { Modal } from '../common/Modal';
+import { generateDefaultCredentials } from '../../utils/credentialGenerator';
 
 // High-fidelity portrait avatars matching the scholarly reference images
 const TEACHER_PORTRAITS: Record<string, string> = {
@@ -59,6 +65,10 @@ export const TeachersModule: React.FC = () => {
   const [selectedTeacherForProfile, setSelectedTeacherForProfile] = useState<Teacher | null>(null);
   const [selectedTeacherForContact, setSelectedTeacherForContact] = useState<Teacher | null>(null);
 
+  // Credentials Management State for Teacher Profile Modal
+  const [profileUsername, setProfileUsername] = useState<string>('');
+  const [profilePassword, setProfilePassword] = useState<string>('');
+
   // New Teacher Form State
   const [name, setName] = useState<string>('');
   const [nameUrdu, setNameUrdu] = useState<string>('');
@@ -68,6 +78,53 @@ export const TeachersModule: React.FC = () => {
   const [qualification, setQualification] = useState<string>('Fazil Dars-e-Nizami');
   const [salary, setSalary] = useState<number>(0);
   const [isPresentToday, setIsPresentToday] = useState<boolean>(true);
+  const [newJoiningDate, setNewJoiningDate] = useState<string>(new Date().toISOString().split('T')[0]);
+  const [newDob, setNewDob] = useState<string>('1990-01-01');
+  const [newUsername, setNewUsername] = useState<string>('');
+  const [newPassword, setNewPassword] = useState<string>('');
+
+  const handleOpenTeacherProfile = (teacher: Teacher) => {
+    const creds = generateDefaultCredentials(teacher.name, teacher.joiningDate, teacher.dob);
+    setProfileUsername(teacher.username || creds.username);
+    setProfilePassword(teacher.password || creds.password);
+    setSelectedTeacherForProfile(teacher);
+  };
+
+  const handleAutoGenerateProfileCreds = () => {
+    if (!selectedTeacherForProfile) return;
+    const creds = generateDefaultCredentials(
+      selectedTeacherForProfile.name, 
+      selectedTeacherForProfile.joiningDate, 
+      selectedTeacherForProfile.dob
+    );
+    setProfileUsername(creds.username);
+    setProfilePassword(creds.password);
+    showToast(`Default credentials generated: ${creds.username} / ${creds.password}`, 'info');
+  };
+
+  const handleSaveTeacherCredentials = () => {
+    if (!selectedTeacherForProfile) return;
+    if (!profileUsername.trim() || !profilePassword.trim()) {
+      showToast('Username and Password cannot be empty', 'error');
+      return;
+    }
+    const updatedTeacher: Teacher = {
+      ...selectedTeacherForProfile,
+      username: profileUsername.trim(),
+      password: profilePassword.trim()
+    };
+    db.updateTeacher(updatedTeacher);
+    const updatedList = db.getTeachers(activeMadrasa?.id);
+    setTeachers(updatedList);
+    setSelectedTeacherForProfile(updatedTeacher);
+    showToast(`Login credentials for Ustadh ${updatedTeacher.name} saved successfully!`, 'success');
+  };
+
+  const handleAutoGenerateNewCreds = (teacherName: string, joinDate: string, birthDate: string) => {
+    const creds = generateDefaultCredentials(teacherName || 'Teacher', joinDate, birthDate);
+    setNewUsername(creds.username);
+    setNewPassword(creds.password);
+  };
 
   // Handle Add Teacher
   const handleAdd = (e: React.FormEvent) => {
@@ -76,6 +133,10 @@ export const TeachersModule: React.FC = () => {
       showToast('Please provide the teacher name', 'error');
       return;
     }
+
+    const creds = (newUsername.trim() && newPassword.trim())
+      ? { username: newUsername.trim(), password: newPassword.trim() }
+      : generateDefaultCredentials(name.trim(), newJoiningDate, newDob);
 
     const nextIdNum = teachers.length + 1;
     const newTeacher: Teacher = {
@@ -89,20 +150,25 @@ export const TeachersModule: React.FC = () => {
       qualification: qualification.trim() || 'Fazil Dars-e-Nizami',
       salary: Number(salary) || 0,
       madrasaId: activeMadrasa.id,
-      password: 'password123',
+      username: creds.username,
+      password: creds.password,
+      joiningDate: newJoiningDate,
+      dob: newDob,
       isPresentToday: isPresentToday
     };
 
     db.addTeacher(newTeacher);
     const updated = db.getTeachers(activeMadrasa.id);
     setTeachers(updated);
-    showToast(`Ustadh ${newTeacher.name} registered successfully!`, 'success');
+    showToast(`Ustadh ${newTeacher.name} registered with username ${creds.username}!`, 'success');
 
     // Reset
     setName('');
     setNameUrdu('');
     setPhone('');
     setSalary(0);
+    setNewUsername('');
+    setNewPassword('');
     setShowNewTeacherModal(false);
   };
 
@@ -507,7 +573,7 @@ export const TeachersModule: React.FC = () => {
                 <div className="pt-3 border-t border-gray-100 flex items-center justify-between gap-2">
                   <button
                     type="button"
-                    onClick={() => setSelectedTeacherForProfile(t)}
+                    onClick={() => handleOpenTeacherProfile(t)}
                     className="flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-xl bg-gray-50 hover:bg-emerald-50 text-gray-700 hover:text-emerald-800 border border-gray-200 text-xs font-bold transition-all shadow-xs"
                   >
                     <Eye className="w-3.5 h-3.5" />
@@ -584,7 +650,7 @@ export const TeachersModule: React.FC = () => {
                       <div className="inline-flex items-center gap-1">
                         <button
                           type="button"
-                          onClick={() => setSelectedTeacherForProfile(t)}
+                          onClick={() => handleOpenTeacherProfile(t)}
                           className="p-1.5 rounded-lg bg-gray-100 hover:bg-emerald-100 text-gray-700 hover:text-emerald-800"
                           title="View Profile"
                         >
@@ -692,6 +758,84 @@ export const TeachersModule: React.FC = () => {
                   <span className="text-gray-400">Status:</span>
                   <span className="font-bold text-emerald-700">Active Faculty</span>
                 </div>
+              </div>
+            </div>
+
+            {/* Teacher Login Credentials (Admin Controlled) */}
+            <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200 space-y-3">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-7 h-7 rounded-xl bg-amber-500 text-amber-950 flex items-center justify-center font-bold">
+                    <Key className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <span className="font-bold text-xs text-amber-950 block">
+                      Teacher Portal Login Access (لاگ ان معلومات برائے استاد)
+                    </span>
+                    <span className="text-[10px] text-amber-800">
+                      Admin / Principal can review, generate, and update this teacher's credentials
+                    </span>
+                  </div>
+                </div>
+                <button
+                  type="button"
+                  onClick={handleAutoGenerateProfileCreds}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-200/90 hover:bg-amber-300 text-amber-950 text-xs font-bold transition-all cursor-pointer shadow-2xs self-start sm:self-auto"
+                  title="Generate using First 4 Letters + Joining Year & DOB Year"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-amber-800" />
+                  <span>Auto-Generate Default</span>
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs pt-1">
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 mb-1">
+                    Username (لاگ ان نام) *
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={profileUsername}
+                      onChange={(e) => setProfileUsername(e.target.value)}
+                      placeholder="e.g. Moha-2022"
+                      className="w-full p-2.5 pr-8 rounded-xl bg-white border border-amber-300 text-xs font-semibold text-gray-900 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+                    />
+                    <User className="w-3.5 h-3.5 text-gray-400 absolute right-3 top-3" />
+                  </div>
+                  <span className="text-[10px] text-gray-500 mt-0.5 block">Formula: First 4 Letters - Year (e.g. Abdu-2026)</span>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 mb-1">
+                    Password (پاس ورڈ) *
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={profilePassword}
+                      onChange={(e) => setProfilePassword(e.target.value)}
+                      placeholder="e.g. Moha@1988"
+                      className="w-full p-2.5 pr-8 rounded-xl bg-white border border-amber-300 text-xs font-semibold text-gray-900 focus:ring-2 focus:ring-amber-500 focus:outline-none"
+                    />
+                    <Lock className="w-3.5 h-3.5 text-gray-400 absolute right-3 top-3" />
+                  </div>
+                  <span className="text-[10px] text-gray-500 mt-0.5 block">Formula: First 4 Letters @ DOB Year (e.g. Abdu@1990)</span>
+                </div>
+              </div>
+
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pt-1 border-t border-amber-200/60">
+                <span className="text-[11px] text-amber-900 font-medium">
+                  Teacher logs in with this Username and Password on the login portal.
+                </span>
+                <button
+                  type="button"
+                  onClick={handleSaveTeacherCredentials}
+                  className="px-4 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs flex items-center justify-center gap-1.5 shadow-xs cursor-pointer transition-all active:scale-95"
+                >
+                  <Check className="w-3.5 h-3.5" />
+                  <span>Update & Save Credentials</span>
+                </button>
               </div>
             </div>
 
@@ -902,6 +1046,86 @@ export const TeachersModule: React.FC = () => {
                   onChange={(e) => setSalary(Number(e.target.value))}
                   className="w-full p-2.5 text-xs rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-emerald-500/20 focus:outline-none font-mono"
                 />
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-gray-700 block mb-1">
+                  Joining / Appointment Date *
+                </label>
+                <input
+                  type="date"
+                  value={newJoiningDate}
+                  onChange={(e) => {
+                    setNewJoiningDate(e.target.value);
+                    if (!newUsername || newUsername.includes('-')) {
+                      handleAutoGenerateNewCreds(name, e.target.value, newDob);
+                    }
+                  }}
+                  className="w-full p-2.5 text-xs rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-emerald-500/20 focus:outline-none font-mono"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-gray-700 block mb-1">
+                  Date of Birth (DOB) *
+                </label>
+                <input
+                  type="date"
+                  value={newDob}
+                  onChange={(e) => {
+                    setNewDob(e.target.value);
+                    if (!newPassword || newPassword.includes('@')) {
+                      handleAutoGenerateNewCreds(name, newJoiningDate, e.target.value);
+                    }
+                  }}
+                  className="w-full p-2.5 text-xs rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-emerald-500/20 focus:outline-none font-mono"
+                  required
+                />
+              </div>
+
+              {/* Login Credentials Allocation */}
+              <div className="sm:col-span-2 p-3.5 bg-amber-50/60 rounded-2xl border border-amber-200 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-amber-950 flex items-center gap-1.5">
+                    <Key className="w-3.5 h-3.5 text-amber-700" />
+                    Teacher Portal Login Credentials (پورٹل لاگ ان معلومات)
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => handleAutoGenerateNewCreds(name, newJoiningDate, newDob)}
+                    className="text-[11px] font-bold text-amber-900 bg-amber-200/80 hover:bg-amber-300 px-2.5 py-1 rounded-xl transition-all cursor-pointer flex items-center gap-1"
+                  >
+                    <Sparkles className="w-3 h-3 text-amber-800" />
+                    <span>Auto-Generate</span>
+                  </button>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <label className="text-[11px] font-bold text-gray-700 block mb-0.5">Username *</label>
+                    <input
+                      type="text"
+                      value={newUsername || generateDefaultCredentials(name || 'Teacher', newJoiningDate, newDob).username}
+                      onChange={(e) => setNewUsername(e.target.value)}
+                      placeholder="e.g. Moha-2026"
+                      className="w-full p-2 text-xs rounded-xl border border-amber-300 bg-white font-mono"
+                      required
+                    />
+                    <span className="text-[9px] text-gray-500 block mt-0.5">First 4 letters + (-) + Joining Year</span>
+                  </div>
+                  <div>
+                    <label className="text-[11px] font-bold text-gray-700 block mb-0.5">Password *</label>
+                    <input
+                      type="text"
+                      value={newPassword || generateDefaultCredentials(name || 'Teacher', newJoiningDate, newDob).password}
+                      onChange={(e) => setNewPassword(e.target.value)}
+                      placeholder="e.g. Moha@1990"
+                      className="w-full p-2 text-xs rounded-xl border border-amber-300 bg-white font-mono"
+                      required
+                    />
+                    <span className="text-[9px] text-gray-500 block mt-0.5">First 4 letters + (@) + DOB Year</span>
+                  </div>
+                </div>
               </div>
 
               <div>

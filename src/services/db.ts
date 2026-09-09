@@ -144,7 +144,8 @@ const initialStudents: Student[] = [
     totalAbsentsYearly: 3,
     totalAbsentsMonthly: 0,
     presentSabaqAt: 'Para 14 (Surah Al-Hijr, Ruku 2)',
-    password: 'password123',
+    username: 'Moha-2026',
+    password: 'Moha@2014',
     dob: '2014-05-12'
   },
   {
@@ -176,7 +177,8 @@ const initialStudents: Student[] = [
     totalAbsentsYearly: 7,
     totalAbsentsMonthly: 1,
     presentSabaqAt: 'Para 11 (Surah Yunus, Ruku 4)',
-    password: 'password123',
+    username: 'Abdu-2026',
+    password: 'Abdu@2013',
     dob: '2013-08-20'
   },
   {
@@ -206,7 +208,8 @@ const initialStudents: Student[] = [
     totalAbsentsYearly: 0,
     totalAbsentsMonthly: 0,
     presentSabaqAt: 'Para 4 (Al Imran, Ayat 92)',
-    password: 'password123',
+    username: 'Ibra-2026',
+    password: 'Ibra@2015',
     dob: '2015-11-04'
   },
   {
@@ -235,7 +238,8 @@ const initialStudents: Student[] = [
     totalAbsentsYearly: 35, // High absent for "Most Absent" list
     totalAbsentsMonthly: 10,
     presentSabaqAt: 'Para 2 (Al-Baqarah, Ayat 183)',
-    password: 'password123',
+    username: 'Salm-2026',
+    password: 'Salm@2014',
     dob: '2014-02-18'
   },
   {
@@ -264,7 +268,8 @@ const initialStudents: Student[] = [
     totalAbsentsYearly: 0,
     totalAbsentsMonthly: 0,
     presentSabaqAt: 'Hidayat-un-Nahw & Qasas-un-Nabiyyeen',
-    password: 'password123',
+    username: 'Zuba-2026',
+    password: 'Zuba@2012',
     dob: '2012-04-25'
   }
 ];
@@ -279,7 +284,10 @@ const initialTeachers: Teacher[] = [
     phone: '+91 98765 00111',
     qualification: 'Fazil Deoband, Qirat Hafs & Sab’ah',
     madrasaId: 'madrasa-1',
-    password: 'password123',
+    username: 'Qari-2022',
+    password: 'Qari@1988',
+    joiningDate: '2022-01-10',
+    dob: '1988-06-15',
     isPresentToday: true
   },
   {
@@ -291,7 +299,10 @@ const initialTeachers: Teacher[] = [
     phone: '+91 98765 00222',
     qualification: 'Alimiyat Nadwatul Ulama, M.A Arabic',
     madrasaId: 'madrasa-1',
-    password: 'password123',
+    username: 'Maul-2023',
+    password: 'Maul@1991',
+    joiningDate: '2023-03-01',
+    dob: '1991-09-20',
     isPresentToday: true
   },
   {
@@ -303,7 +314,10 @@ const initialTeachers: Teacher[] = [
     phone: '+91 98765 00333',
     qualification: 'Hafiz-e-Quran & Tajweed Specialist',
     madrasaId: 'madrasa-1',
-    password: 'password123',
+    username: 'Hafi-2024',
+    password: 'Hafi@1993',
+    joiningDate: '2024-05-15',
+    dob: '1993-11-10',
     isPresentToday: true
   },
   {
@@ -315,7 +329,10 @@ const initialTeachers: Teacher[] = [
     phone: '+91 98765 00444',
     qualification: 'Fazil-e-Dars-e-Nizami',
     madrasaId: 'madrasa-1',
-    password: 'password123',
+    username: 'Qari-2025',
+    password: 'Qari@1994',
+    joiningDate: '2025-02-01',
+    dob: '1994-08-14',
     isPresentToday: false // 1 absent teacher for statistics!
   }
 ];
@@ -1099,6 +1116,12 @@ export const db = {
     backgroundSync(() => supabase.from('mms_madrasas').upsert(madrasa));
   },
 
+  deleteMadrasa(madrasaId: string) {
+    const list = this.getMadrasas().filter(m => m.id !== madrasaId);
+    this.saveMadrasas(list);
+    backgroundSync(() => supabase.from('mms_madrasas').delete().eq('id', madrasaId));
+  },
+
   getStudents(madrasaId?: string): Student[] {
     const data = localStorage.getItem(STORAGE_KEYS.STUDENTS);
     const students: Student[] = data ? JSON.parse(data) : initialStudents;
@@ -1177,6 +1200,19 @@ export const db = {
     const teachers = this.getTeachers();
     const updated = [teacher, ...teachers.filter(t => t.id !== teacher.id)];
     this.saveTeachers(updated);
+    backgroundSync(() => supabase.from('mms_teachers').upsert(teacher));
+    return teacher;
+  },
+
+  updateTeacher(teacher: Teacher) {
+    const teachers = this.getTeachers();
+    const index = teachers.findIndex(t => t.id === teacher.id);
+    if (index >= 0) {
+      teachers[index] = teacher;
+    } else {
+      teachers.unshift(teacher);
+    }
+    this.saveTeachers(teachers);
     backgroundSync(() => supabase.from('mms_teachers').upsert(teacher));
     return teacher;
   },
