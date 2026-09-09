@@ -26,7 +26,12 @@ import {
   Sparkles,
   Type,
   Palette,
-  Cloud
+  Cloud,
+  Key,
+  Lock,
+  Eye,
+  EyeOff,
+  ShieldCheck
 } from 'lucide-react';
 import { THEME_PALETTES } from '../../context/ThemeContext';
 import { Modal } from '../common/Modal';
@@ -41,7 +46,7 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({
   onNavigateHome,
   onOpenCommandPalette 
 }) => {
-  const { user, activeMadrasa, logout } = useAuth();
+  const { user, activeMadrasa, logout, updateSuperAdminCredentials, getSuperAdminCredentials } = useAuth();
   const { language, setLanguage, t, isFullscreen, toggleFullscreen, showToast, themeMode, setThemeMode, themes } = useTheme();
 
   // Time & Dates
@@ -58,6 +63,31 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({
   const [showAnnouncementsModal, setShowAnnouncementsModal] = useState<boolean>(false);
   const [showIssueReportModal, setShowIssueReportModal] = useState<boolean>(false);
   const [showProfileChangesModal, setShowProfileChangesModal] = useState<boolean>(false);
+  
+  // Super Admin Credentials Modal State
+  const [showSuperAdminCredsModal, setShowSuperAdminCredsModal] = useState<boolean>(false);
+  const [saUsername, setSaUsername] = useState<string>('');
+  const [saPassword, setSaPassword] = useState<string>('');
+  const [saShowPassword, setSaShowPassword] = useState<boolean>(false);
+
+  const handleOpenSuperAdminCreds = () => {
+    const creds = getSuperAdminCredentials();
+    setSaUsername(creds.username);
+    setSaPassword(creds.password);
+    setSaShowPassword(false);
+    setShowSuperAdminCredsModal(true);
+  };
+
+  const handleSaveSuperAdminCreds = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!saUsername.trim() || !saPassword.trim()) {
+      showToast('Username and Password cannot be empty', 'warning');
+      return;
+    }
+    updateSuperAdminCredentials(saUsername.trim(), saPassword.trim());
+    showToast('Super Admin Username and Password updated successfully!', 'success');
+    setShowSuperAdminCredsModal(false);
+  };
   const [showFontModal, setShowFontModal] = useState<boolean>(false);
 
   // Form states
@@ -406,16 +436,29 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({
 
                 {/* Dropdown Action Links */}
                 <div className="space-y-0.5">
-                  <button
-                    onClick={() => {
-                      setShowProfileMenu(false);
-                      setShowProfileChangesModal(true);
-                    }}
-                    className="w-full text-start px-3 py-2 rounded-xl text-xs font-semibold text-gray-700 hover:bg-gray-100 flex items-center gap-2.5 transition-colors"
-                  >
-                    <Edit3 className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>{t('applyForProfileChanges')}</span>
-                  </button>
+                  {user?.role === 'super_admin' ? (
+                    <button
+                      onClick={() => {
+                        setShowProfileMenu(false);
+                        handleOpenSuperAdminCreds();
+                      }}
+                      className="w-full text-start px-3 py-2 rounded-xl text-xs font-semibold text-amber-900 hover:bg-amber-50 flex items-center gap-2.5 transition-colors cursor-pointer"
+                    >
+                      <Key className="w-4 h-4 text-amber-600 shrink-0" />
+                      <span>Change Username & Password</span>
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        setShowProfileMenu(false);
+                        setShowProfileChangesModal(true);
+                      }}
+                      className="w-full text-start px-3 py-2 rounded-xl text-xs font-semibold text-gray-700 hover:bg-gray-100 flex items-center gap-2.5 transition-colors cursor-pointer"
+                    >
+                      <Edit3 className="w-4 h-4 text-emerald-600 shrink-0" />
+                      <span>{t('applyForProfileChanges')}</span>
+                    </button>
+                  )}
 
                   <button
                     onClick={() => {
@@ -482,6 +525,93 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({
             className="w-full p-3 text-sm rounded-2xl bg-m3-surface-container-low border border-m3-outline-variant/60 focus:outline-none focus:ring-2 focus:ring-m3-primary"
             required
           />
+        </form>
+      </Modal>
+
+      {/* Super Admin Change Credentials Modal */}
+      <Modal
+        isOpen={showSuperAdminCredsModal}
+        onClose={() => setShowSuperAdminCredsModal(false)}
+        title="Change Super Admin Credentials (سپر ایڈمن لاگ ان تبدیل کریں)"
+        subtitle="Update master username and password for Chief Super Admin access"
+        maxWidth="md"
+        footer={
+          <div className="flex gap-2">
+            <button
+              type="button"
+              onClick={() => setShowSuperAdminCredsModal(false)}
+              className="px-4 py-2 text-xs font-medium text-gray-600 rounded-full hover:bg-gray-100"
+            >
+              {t('cancel')}
+            </button>
+            <button
+              type="button"
+              onClick={handleSaveSuperAdminCreds}
+              className="px-5 py-2 text-xs font-bold bg-amber-600 hover:bg-amber-700 text-white rounded-full transition-all shadow-xs"
+            >
+              Save Credentials
+            </button>
+          </div>
+        }
+      >
+        <form onSubmit={handleSaveSuperAdminCreds} className="space-y-4">
+          <div className="p-3.5 rounded-2xl bg-amber-50/80 border border-amber-200 text-xs text-amber-950 space-y-1">
+            <div className="flex items-center gap-2 font-bold text-amber-900">
+              <ShieldCheck className="w-4 h-4 text-amber-600 shrink-0" />
+              <span>Master Super Admin Access Control</span>
+            </div>
+            <p className="text-[11px] text-amber-800 leading-relaxed">
+              Updating these credentials immediately applies across your active session and future logins for the Super Admin role.
+            </p>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-gray-700 mb-1">
+              Super Admin Username (لاگ ان نام) *
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                value={saUsername}
+                onChange={(e) => setSaUsername(e.target.value)}
+                placeholder="e.g. Mia-5919"
+                className="w-full p-2.5 pr-8 rounded-xl border border-gray-300 font-mono font-bold text-xs text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                required
+              />
+              <User className="w-3.5 h-3.5 text-gray-400 absolute right-3 top-3" />
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-gray-700 mb-1">
+              Super Admin Password (پاس ورڈ) *
+            </label>
+            <div className="relative">
+              <input
+                type={saShowPassword ? 'text' : 'password'}
+                value={saPassword}
+                onChange={(e) => setSaPassword(e.target.value)}
+                placeholder="e.g. Mia@5919"
+                className="w-full p-2.5 pr-10 rounded-xl border border-gray-300 font-mono font-bold text-xs text-gray-900 focus:outline-none focus:ring-2 focus:ring-amber-500"
+                required
+              />
+              <button
+                type="button"
+                onMouseDown={() => setSaShowPassword(true)}
+                onMouseUp={() => setSaShowPassword(false)}
+                onMouseLeave={() => setSaShowPassword(false)}
+                onTouchStart={() => setSaShowPassword(true)}
+                onTouchEnd={() => setSaShowPassword(false)}
+                onTouchCancel={() => setSaShowPassword(false)}
+                onContextMenu={(e) => e.preventDefault()}
+                className="absolute right-3 top-2.5 p-1 rounded-lg text-slate-400 hover:text-amber-700 active:text-amber-800 cursor-pointer select-none"
+                title="Hold to view password"
+              >
+                {saShowPassword ? <EyeOff className="w-4 h-4 text-amber-700" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
+            <span className="text-[10px] text-gray-500 mt-0.5 block">Hold eye icon to review password before saving.</span>
+          </div>
         </form>
       </Modal>
 

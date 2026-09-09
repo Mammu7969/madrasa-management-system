@@ -23,6 +23,8 @@ interface AuthContextType {
   refreshMadrasas: () => void;
   updateActiveMadrasa: (updated: Madrasa) => void;
   deleteMadrasa: (madrasaId: string) => void;
+  getSuperAdminCredentials: () => { username: string; password: string };
+  updateSuperAdminCredentials: (username: string, password: string) => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -82,6 +84,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const getSuperAdminCredentials = () => {
+    return db.getSuperAdminCredentials();
+  };
+
+  const updateSuperAdminCredentials = (username: string, password: string) => {
+    const creds = { username: username.trim(), password: password.trim() };
+    db.saveSuperAdminCredentials(creds);
+    if (user && user.role === 'super_admin') {
+      const updatedUser: AuthUser = { ...user, username: creds.username };
+      setUser(updatedUser);
+      localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(updatedUser));
+    }
+    db.addUserLog({
+      username: creds.username,
+      role: 'Super Admin',
+      viewedData: 'Super Admin Security Settings',
+      submittedData: 'Updated Super Admin Username and Password',
+      dateTime: new Date().toLocaleString()
+    });
+  };
+
   const login = (
     madrasaId: string, 
     role: Role, 
@@ -92,15 +115,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const cleanId = idOrUsername.trim();
     const cleanPass = passwordOrDob.trim();
 
-    // 1. Super Admin Authentication (Supports Mia-5919 / Mia@5919)
+    // 1. Super Admin Authentication (Supports dynamic Super Admin creds + Mia-5919)
     if (role === 'super_admin') {
-      const isSuperAdminUser = cleanId.toLowerCase() === 'mia-5919' || cleanId.toLowerCase() === 'superadmin' || cleanId.toLowerCase() === 'admin';
-      const isSuperAdminPass = cleanPass === 'Mia@5919' || cleanPass === 'password123';
+      const currentCreds = db.getSuperAdminCredentials();
+      const isSuperAdminUser = cleanId.toLowerCase() === currentCreds.username.toLowerCase() ||
+                               cleanId.toLowerCase() === 'mia-5919' ||
+                               cleanId.toLowerCase() === 'superadmin' ||
+                               cleanId.toLowerCase() === 'admin';
+      const isSuperAdminPass = cleanPass === currentCreds.password ||
+                               cleanPass === 'Mia@5919';
 
       if (isSuperAdminUser && isSuperAdminPass) {
         const superUser: AuthUser = {
           id: 'usr-superadmin',
-          username: cleanId,
+          username: currentCreds.username,
           role: 'super_admin',
           name: 'Chief Super Admin (MMS)',
           nameUrdu: 'چیف سپر ایڈمن',
@@ -116,7 +144,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           setActiveMadrasa(list[0]);
         }
         db.addUserLog({
-          username: cleanId,
+          username: currentCreds.username,
           role: 'Super Admin',
           viewedData: 'Super Admin Dashboard & MMS Core Settings',
           submittedData: 'Logged into system',
@@ -238,9 +266,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const matchesId = (s.username && s.username.toLowerCase() === cleanId.toLowerCase()) ||
                           s.admissionNo.toLowerCase() === cleanId.toLowerCase() ||
                           s.id.toLowerCase() === cleanId.toLowerCase();
-        const matchesPass = (s.password && s.password === cleanPass) ||
-                            s.dob === cleanPass ||
-                            cleanPass === 'password123';
+        const matchesPass = (s.password ? s.password === cleanPass : cleanPass === 'password123') ||
+                            s.dob === cleanPass;
         return matchesId && matchesPass;
       });
 
@@ -306,7 +333,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setActiveMadrasa,
       refreshMadrasas,
       updateActiveMadrasa,
-      deleteMadrasa
+      deleteMadrasa,
+      getSuperAdminCredentials,
+      updateSuperAdminCredentials
     }}>
       {children}
     </AuthContext.Provider>

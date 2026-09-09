@@ -103,6 +103,12 @@ export const StudentProfile: React.FC<StudentProfileProps> = ({
   const [editUsername, setEditUsername] = useState<string>(student.username || initialStudentCreds.username);
   const [editPassword, setEditPassword] = useState<string>(student.password || initialStudentCreds.password);
 
+  useEffect(() => {
+    const creds = generateDefaultCredentials(student.studentName, student.admissionDate, student.dob);
+    setStudentUsername(student.username || creds.username);
+    setStudentPassword(student.password || creds.password);
+  }, [student.id, student.username, student.password, student.studentName, student.admissionDate, student.dob]);
+
   const handleAutoGenerateStudentCreds = () => {
     const creds = generateDefaultCredentials(student.studentName, student.admissionDate, student.dob);
     setStudentUsername(creds.username);
@@ -121,8 +127,10 @@ export const StudentProfile: React.FC<StudentProfileProps> = ({
       password: studentPassword.trim()
     };
     db.updateStudent(updated);
+    setStudentUsername(updated.username!);
+    setStudentPassword(updated.password!);
     onUpdateStudent(updated);
-    showToast(`Login credentials for ${updated.studentName} updated successfully!`, 'success');
+    showToast(`Login credentials for ${updated.studentName} updated & saved permanently!`, 'success');
   };
 
   // Student Update Logs

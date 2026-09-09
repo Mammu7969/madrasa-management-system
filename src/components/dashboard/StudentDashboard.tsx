@@ -13,7 +13,8 @@ import {
   Printer,
   ChevronLeft,
   ChevronRight,
-  Type
+  Type,
+  AlertCircle
 } from 'lucide-react';
 import { QuranModule } from '../modules/QuranModule';
 import { FontShowcaseModal } from '../Fonts/FontShowcaseModal';
@@ -23,9 +24,18 @@ export const StudentDashboard: React.FC = () => {
   const { t } = useTheme();
   const [showFontModal, setShowFontModal] = useState<boolean>(false);
 
-  // Find matching student record
+  // Find matching student record strictly for this authenticated student account
   const students = db.getStudents(activeMadrasa?.id);
-  const currentStudent = students.find(s => s.admissionNo === user?.username) || students[0];
+  const currentStudent = useMemo(() => {
+    if (!user) return null;
+    return students.find(s => 
+      s.id === user.id ||
+      (s.username && user.username && s.username.toLowerCase() === user.username.toLowerCase()) ||
+      (s.admissionNo && user.username && s.admissionNo.toLowerCase() === user.username.toLowerCase()) ||
+      (s.admissionNo && user.id && s.admissionNo.toLowerCase() === user.id.toLowerCase())
+    ) || null;
+  }, [students, user]);
+
   const notices = db.getNotices(activeMadrasa?.id);
   const schedule = db.getSchedule();
 
@@ -78,6 +88,18 @@ export const StudentDashboard: React.FC = () => {
   const attendancePercentage = currentStudent
     ? Math.round((currentStudent.totalPresentsYearly / (currentStudent.totalPresentsYearly + currentStudent.totalAbsentsYearly || 1)) * 100)
     : 95;
+
+  if (!currentStudent) {
+    return (
+      <div className="p-8 bg-white/90 backdrop-blur-md rounded-3xl border border-m3-outline-variant/30 text-center space-y-3 my-8 shadow-m3-2">
+        <AlertCircle className="w-12 h-12 text-amber-500 mx-auto" />
+        <h3 className="text-base font-bold text-gray-800">Student Profile Not Linked</h3>
+        <p className="text-xs text-gray-500 max-w-md mx-auto">
+          We could not find an active student record corresponding to login account <strong className="text-m3-primary">{user?.username}</strong>. Please verify your admission registration with the Madrasa administration office.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">

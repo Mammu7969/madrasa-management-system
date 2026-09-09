@@ -28,6 +28,7 @@ const STORAGE_KEYS = {
   PROFILE_REQUESTS: 'mms_profile_requests_v1',
   NOTICES: 'mms_notices_v1',
   GALLERY: 'mms_gallery_v1',
+  SUPER_ADMIN_CREDS: 'mms_super_admin_creds_v1',
 };
 
 // Default Seed Data
@@ -1060,8 +1061,41 @@ export const db = {
       ]);
 
       if (madrasas && madrasas.length > 0) localStorage.setItem(STORAGE_KEYS.MADRASAS, JSON.stringify(madrasas));
-      if (students && students.length > 0) localStorage.setItem(STORAGE_KEYS.STUDENTS, JSON.stringify(students));
-      if (teachers && teachers.length > 0) localStorage.setItem(STORAGE_KEYS.TEACHERS, JSON.stringify(teachers));
+      if (students && students.length > 0) {
+        // Prevent remote default 'password123' from overwriting freshly generated or updated student passwords in local cache
+        const localData = localStorage.getItem(STORAGE_KEYS.STUDENTS);
+        const localStudents: Student[] = localData ? JSON.parse(localData) : [];
+        const mergedStudents = students.map(remoteS => {
+          const localS = localStudents.find(ls => ls.id === remoteS.id);
+          if (localS) {
+            return {
+              ...remoteS,
+              username: remoteS.username || localS.username,
+              password: (remoteS.password && remoteS.password !== 'password123') ? remoteS.password : (localS.password || remoteS.password)
+            };
+          }
+          return remoteS;
+        });
+        localStorage.setItem(STORAGE_KEYS.STUDENTS, JSON.stringify(mergedStudents));
+      }
+      if (teachers && teachers.length > 0) {
+        const localData = localStorage.getItem(STORAGE_KEYS.TEACHERS);
+        const localTeachers: Teacher[] = localData ? JSON.parse(localData) : [];
+        const mergedTeachers = teachers.map(remoteT => {
+          const localT = localTeachers.find(lt => lt.id === remoteT.id);
+          if (localT) {
+            return {
+              ...remoteT,
+              username: remoteT.username || localT.username,
+              password: (remoteT.password && remoteT.password !== 'password123') ? remoteT.password : (localT.password || remoteT.password),
+              joiningDate: remoteT.joiningDate || localT.joiningDate,
+              dob: remoteT.dob || localT.dob
+            };
+          }
+          return remoteT;
+        });
+        localStorage.setItem(STORAGE_KEYS.TEACHERS, JSON.stringify(mergedTeachers));
+      }
       if (staff && staff.length > 0) localStorage.setItem(STORAGE_KEYS.STAFF, JSON.stringify(staff));
       if (classes && classes.length > 0) localStorage.setItem(STORAGE_KEYS.CLASSES, JSON.stringify(classes));
       if (subjects && subjects.length > 0) localStorage.setItem(STORAGE_KEYS.SUBJECTS, JSON.stringify(subjects));
@@ -1084,6 +1118,24 @@ export const db = {
       console.warn('Sync from Supabase failed, fallback to local cache:', err);
       return false;
     }
+  },
+
+  getSuperAdminCredentials(): { username: string; password: string } {
+    const data = localStorage.getItem(STORAGE_KEYS.SUPER_ADMIN_CREDS);
+    if (!data) {
+      const defaults = { username: 'Mia-5919', password: 'Mia@5919' };
+      localStorage.setItem(STORAGE_KEYS.SUPER_ADMIN_CREDS, JSON.stringify(defaults));
+      return defaults;
+    }
+    try {
+      return JSON.parse(data);
+    } catch {
+      return { username: 'Mia-5919', password: 'Mia@5919' };
+    }
+  },
+
+  saveSuperAdminCredentials(creds: { username: string; password: string }) {
+    localStorage.setItem(STORAGE_KEYS.SUPER_ADMIN_CREDS, JSON.stringify(creds));
   },
 
   getMadrasas(): Madrasa[] {
