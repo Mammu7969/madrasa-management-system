@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en" data-theme="transparent-glossy">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230B664B'><path d='M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z'/></svg>" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Madrasa Management System</title>
+    <!-- Google Fonts for English and Arabic/Urdu -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800&family=Noto+Nastaliq+Urdu:wght@400;600;700&display=swap" rel="stylesheet">
+    <script>
+      (function() {
+        try {
+          var t = localStorage.getItem('mms_erp_theme') || 'transparent-glossy';
+          document.documentElement.setAttribute('data-theme', t);
+          var u = localStorage.getItem('mms_pref_urdu_font');
+          var e = localStorage.getItem('mms_pref_english_font');
+          var uMap = {
+            'Jameel Noori Nastaleeq': "'Jameel Noori Nastaleeq', 'Noto Nastaliq Urdu', serif",
+            'Traditional Arabic': "'Traditional Arabic', 'Amiri', serif",
+            'Alyamama': "'Alyamama', 'Traditional Arabic', sans-serif",
+            'QuranFont-Original': "'QuranFont-Original', '_PDMS_Saleem_QuranFont', 'QuranFont', 'Traditional Arabic', serif",
+            'QuranFont': "'QuranFont-Original', '_PDMS_Saleem_QuranFont', 'QuranFont', 'Traditional Arabic', serif",
+            'Jameel Noori Kasheeda': "'Jameel Noori Kasheeda', 'Jameel Noori Nastaleeq', serif",
+            'AA Sameer Sagar': "'AA Sameer Sagar', 'Jameel Noori Nastaleeq', serif",
+            'AlQalam Taj': "'AlQalam Taj', 'Jameel Noori Nastaleeq', serif",
+            'Faiz Lahori': "'Faiz Lahori', 'Jameel Noori Nastaleeq', serif"
+          };
+          if (u && uMap[u]) document.documentElement.style.setProperty('--font-urdu-family', uMap[u]);
+          var eMap = {
+            'Inter': "'Inter', system-ui, sans-serif",
+            'Montserrat': "'Montserrat', sans-serif",
+            'Roboto': "'Roboto', sans-serif",
+            'Bebas Neue Pro': "'Bebas Neue Pro', 'Oswald', sans-serif",
+            'Oswald': "'Oswald', sans-serif"
+          };
+          if (e && eMap[e]) document.documentElement.style.setProperty('--font-english-family', eMap[e]);
+        } catch(err) {}
+      })();
+    </script>
+  </head>
+  <body class="bg-m3-surface text-m3-on-surface antialiased selection:bg-m3-primary selection:text-m3-on-primary">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

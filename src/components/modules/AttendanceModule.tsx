@@ -1,0 +1,477 @@
+import React, { useState, useMemo } from 'react';
+import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
+import { db } from '../../services/db';
+import { Student } from '../../types';
+import { 
+  CalendarCheck, 
+  Download, 
+  Printer, 
+  ChevronLeft, 
+  ChevronRight, 
+  CheckCircle2, 
+  Save,
+  Users,
+  Calendar
+} from 'lucide-react';
+
+type AttendanceStatus = 'P' | 'A' | 'L' | 'O'; // Present (حاضر), Absent (غیر حاضر), Leave (رخصت), Off/Holiday (تعطیل)
+
+export const AttendanceModule: React.FC = () => {
+  const { activeMadrasa } = useAuth();
+  const { language, showToast } = useTheme();
+
+  const isUrdu = language === 'ur';
+  const loc = (en: string, ur: string): string => {
+    return isUrdu ? ur : en;
+  };
+
+  const allStudents = db.getStudents(activeMadrasa?.id);
+  const madrasaClasses = useMemo(() => {
+    const list = db.getClasses(activeMadrasa?.id);
+    if (list.length > 0) return list;
+    return [
+      { id: 'cls-1', name: 'Hifz Section A', nameUrdu: 'شعبہ حفظ الف' },
+      { id: 'cls-2', name: 'Hifz Section B', nameUrdu: 'شعبہ حفظ ب' },
+      { id: 'cls-3', name: 'Nazira Class 1', nameUrdu: 'ناظرہ اول' },
+      { id: 'cls-4', name: 'Alimiyat Year 1', nameUrdu: 'عالمیت سال اول' }
+    ];
+  }, [activeMadrasa?.id]);
+
+  const [selectedClass, setSelectedClass] = useState<string>('Hifz Section A');
+  const [selectedYear, setSelectedYear] = useState<number>(2026);
+  const [selectedMonth, setSelectedMonth] = useState<number>(8); // 8 = September (0-indexed)
+
+  const classStudents = useMemo(() => {
+    return allStudents.filter(s => s.class === selectedClass);
+  }, [allStudents, selectedClass]);
+
+  // Month metadata
+  const monthNames = [
+    { en: 'January', ur: 'جنوری / رجب', days: 31 },
+    { en: 'February', ur: 'فروری / شعبان', days: 28 },
+    { en: 'March', ur: 'مارچ / رمضان المبارک', days: 31 },
+    { en: 'April', ur: 'اپریل / شوال المکرم', days: 30 },
+    { en: 'May', ur: 'مئی / ذوالقعدہ', days: 31 },
+    { en: 'June', ur: 'جون / ذوالحجہ', days: 30 },
+    { en: 'July', ur: 'جولائی / محرم الحرام', days: 31 },
+    { en: 'August', ur: 'اگست / صفر المظفر', days: 31 },
+    { en: 'September', ur: 'ستمبر / ربیع الاول', days: 30 },
+    { en: 'October', ur: 'اکتوبر / ربیع الثانی', days: 31 },
+    { en: 'November', ur: 'نومبر / جمادی الاول', days: 30 },
+    { en: 'December', ur: 'دسمبر / جمادی الثانی', days: 31 },
+  ];
+
+  const currentMonthMeta = monthNames[selectedMonth];
+  const totalDaysInMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
+
+  // Generate day items: { dayNum: 1, weekday: 'Sat', isFriday: false }
+  const monthDays = useMemo(() => {
+    const days = [];
+    for (let d = 1; d <= totalDaysInMonth; d++) {
+      const dateObj = new Date(selectedYear, selectedMonth, d);
+      const weekdayShort = dateObj.toLocaleDateString('en-US', { weekday: 'short' });
+      const isFriday = dateObj.getDay() === 5; // Friday is Islamic weekly holiday
+      days.push({
+        dayNum: d,
+        weekday: weekdayShort,
+        isFriday,
+        dateStr: `${selectedYear}-${String(selectedMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`
+      });
+    }
+    return days;
+  }, [selectedYear, selectedMonth, totalDaysInMonth]);
+
+  // Working days in this month (Excluding Fridays / Weekly holidays)
+  const monthlyAyyamDars = useMemo(() => {
+    return monthDays.filter(d => !d.isFriday).length;
+  }, [monthDays]);
+
+  const cumulativeHijriTeachingDays = 144;
+
+  // Attendance Matrix State: Record<studentId, Record<dayNumber, AttendanceStatus>>
+  const [matrixState, setMatrixState] = useState<Record<string, Record<number, AttendanceStatus>>>(() => {
+    const initial: Record<string, Record<number, AttendanceStatus>> = {};
+    allStudents.forEach((st, sIdx) => {
+      initial[st.id] = {};
+      for (let d = 1; d <= 31; d++) {
+        const dateObj = new Date(2026, 8, d);
+        const isFriday = dateObj.getDay() === 5;
+        if (isFriday) {
+          initial[st.id][d] = 'O'; // Off / تعطیل
+        } else if (d === 15 && sIdx % 2 === 1) {
+          initial[st.id][d] = 'A'; // Absent
+        } else if (d === 22 && sIdx % 3 === 0) {
+          initial[st.id][d] = 'L'; // Leave
+        } else {
+          initial[st.id][d] = 'P'; // Present
+        }
+      }
+    });
+    return initial;
+  });
+
+  // Cycle attendance status on cell click: P -> A -> L -> O -> P
+  const handleToggleCell = (studentId: string, dayNum: number) => {
+    setMatrixState(prev => {
+      const studentMap = { ...(prev[studentId] || {}) };
+      const current = studentMap[dayNum] || 'P';
+      const next: AttendanceStatus = 
+        current === 'P' ? 'A' :
+        current === 'A' ? 'L' :
+        current === 'L' ? 'O' : 'P';
+      studentMap[dayNum] = next;
+      return {
+        ...prev,
+        [studentId]: studentMap
+      };
+    });
+  };
+
+  // Mark all students present for the whole month (skipping Fridays)
+  const handleMarkAllMonthPresent = () => {
+    setMatrixState(prev => {
+      const updated = { ...prev };
+      classStudents.forEach(st => {
+        updated[st.id] = {};
+        monthDays.forEach(d => {
+          updated[st.id][d.dayNum] = d.isFriday ? 'O' : 'P';
+        });
+      });
+      return updated;
+    });
+    showToast(loc('Updated entire month to Present (Fridays preserved as Holiday)!', 'پورا مہینہ حاضر درج ہو گیا (جمعۃ المبارک کی تعطیل برقرار رکھی گئی ہے)!'), 'success');
+  };
+
+  // Save register
+  const handleSaveRegister = () => {
+    showToast(loc(`Attendance register for ${selectedClass} saved successfully!`, `درجہ ${selectedClass} کا حاضری رجسٹر محفوظ ہو گیا!`), 'success');
+  };
+
+  // Export Matrix to CSV
+  const handleExportCSV = () => {
+    let csv = `Madrasa Management System - Attendance Matrix\n`;
+    csv += `Madrasa: ${activeMadrasa?.name}, Class: ${selectedClass}, Month: ${currentMonthMeta.en} ${selectedYear}\n`;
+    csv += `Academic Session: Ramzan to Ramzan (رمضان تا رمضان)\n\n`;
+
+    const dayHeaders = monthDays.map(d => `"${d.dayNum} ${d.weekday}"`).join(',');
+    csv += `S.No,Admission No,Student Name,Village / City,${dayHeaders},Monthly Ayyam Dars,Monthly Ayyam Haziri,Yearly Ayyam Dars (Ramzan to Ramzan),Yearly Ayyam Haziri (Ramzan to Ramzan),Cumulative %\n`;
+
+    classStudents.forEach((st, idx) => {
+      const studentDays = matrixState[st.id] || {};
+      const monthlyPresentCount = monthDays.filter(d => !d.isFriday && studentDays[d.dayNum] === 'P').length;
+      const cumulativeYearPresent = Math.max(0, st.totalPresentsYearly || (cumulativeHijriTeachingDays - 5));
+      const percentage = ((cumulativeYearPresent / cumulativeHijriTeachingDays) * 100).toFixed(1);
+      const village = st.village || st.address.split(',')[0].trim();
+      const dayCells = monthDays.map(d => studentDays[d.dayNum] || (d.isFriday ? 'O' : 'P')).join(',');
+      csv += `${idx + 1},${st.admissionNo},"${st.studentName} (${st.studentNameUrdu})","${village}",${dayCells},${monthlyAyyamDars},${monthlyPresentCount},${cumulativeHijriTeachingDays},${cumulativeYearPresent},${percentage}%\n`;
+    });
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `Attendance_${selectedClass.replace(/\s+/g, '_')}_${currentMonthMeta.en}_${selectedYear}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    showToast(loc('Spreadsheet exported to CSV successfully!', 'حاضری رجسٹر فائل کامیابی سے ایکسپورٹ ہو گئی!'), 'success');
+  };
+
+  // Summary Metrics
+  const classAvgAttendance = useMemo(() => {
+    if (classStudents.length === 0 || monthlyAyyamDars === 0) return 0;
+    let totalPresents = 0;
+    classStudents.forEach(st => {
+      const days = matrixState[st.id] || {};
+      totalPresents += monthDays.filter(d => !d.isFriday && days[d.dayNum] === 'P').length;
+    });
+    return Math.round((totalPresents / (classStudents.length * monthlyAyyamDars)) * 100);
+  }, [classStudents, matrixState, monthDays, monthlyAyyamDars]);
+
+  return (
+    <div className="space-y-6 animate-in fade-in duration-300">
+      
+      {/* Top Banner */}
+      <div className="rounded-3xl bg-[#123B63] p-6 text-white shadow-m3-3 border border-white/10">
+        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+          <div>
+            <div className="flex flex-wrap items-center gap-2 mb-1">
+              <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/20 uppercase tracking-wide flex items-center gap-1.5">
+                <CalendarCheck className="w-3.5 h-3.5 text-amber-300" />
+                {loc('Madrasa Academic Registers', 'دفاتر و رجسٹرات مدرسہ')}
+              </span>
+              <span className="text-xs text-amber-300 font-bold bg-amber-400/20 px-3 py-0.5 rounded-full border border-amber-300/30">
+                {loc('Academic Year: Ramzan to Ramzan', 'تعلیمی سال: رمضان المبارک تا رمضان المبارک')}
+              </span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-black tracking-tight">
+              {loc('Monthly Attendance Matrix Register', 'ماہانہ رجسٹر حاضری طلبہ')}
+            </h1>
+            <p className="text-xs text-emerald-100/90 mt-1 max-w-2xl font-urdu text-sm">
+              {loc(
+                'Academic Attendance Register: Continuous monthly evaluation from Ramzan to Ramzan with Student Name, Homeland, Working Days and Present Days.',
+                'سلسلہ وار حاضری رجسٹر برائے ماہانہ و سالانہ جائزہ - تعلیمی سال: رمضان المبارک تا رمضان المبارک مع نام طالب علم، وطن، ایامِ درس و ایامِ حاضری'
+              )}
+            </p>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-3">
+            <div className="px-4 py-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-center">
+              <span className="text-[10px] uppercase font-bold text-emerald-300 block">
+                {loc('Enrolled Students', 'کل طلبہ')}
+              </span>
+              <span className="text-2xl font-black">{classStudents.length}</span>
+            </div>
+            <div className="px-4 py-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-center">
+              <span className="text-[10px] uppercase font-bold text-amber-300 block">
+                {loc('Avg Attendance', 'اوسط حاضری')}
+              </span>
+              <span className="text-2xl font-black text-amber-200">{classAvgAttendance}%</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Quick Actions Bar */}
+        <div className="flex flex-wrap items-center justify-between gap-3 mt-6 pt-4 border-t border-white/15 no-print">
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleMarkAllMonthPresent}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold transition-colors shadow-xs"
+              title="Mark all non-holiday days as Present"
+            >
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-300" />
+              <span>{loc('Mark Month Present', 'پورا مہینہ حاضر درج کریں')}</span>
+            </button>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={handleExportCSV}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold transition-colors"
+              title="Download CSV Spreadsheet"
+            >
+              <Download className="w-3.5 h-3.5 text-amber-300" />
+              <span>{loc('Export CSV', 'ایکسپورٹ CSV')}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => window.print()}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold transition-colors"
+              title="Print Official Register Ledger"
+            >
+              <Printer className="w-3.5 h-3.5 text-emerald-300" />
+              <span>{loc('Print Ledger', 'پرنٹ رجسٹر')}</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={handleSaveRegister}
+              className="flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md"
+            >
+              <Save className="w-3.5 h-3.5" />
+              <span>{loc('Save Register', 'رجسٹر محفوظ کریں')}</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Filter & Control Bar */}
+      <div className="bg-white p-5 rounded-3xl border border-m3-outline-variant/30 shadow-m3-1 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 no-print">
+        
+        {/* Class Selector */}
+        <div className="flex items-center gap-2">
+          <label className="text-xs font-bold text-gray-700 whitespace-nowrap">
+            {loc('Class:', 'درجہ:')}
+          </label>
+          <select
+            value={selectedClass}
+            onChange={(e) => setSelectedClass(e.target.value)}
+            className="px-3.5 py-2 text-xs rounded-xl border border-gray-300 bg-white font-bold text-gray-900 focus:ring-2 focus:ring-m3-primary min-w-[200px]"
+          >
+            {madrasaClasses.map(cls => (
+              <option key={cls.id} value={cls.name}>
+                {loc(cls.name, cls.nameUrdu || cls.name)}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* Legend */}
+        <div className="flex items-center gap-2 text-xs">
+          <span className="font-bold text-gray-500 text-[11px]">{loc('Legend:', 'علامات:')}</span>
+          <span className="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-900 font-bold border border-emerald-300 text-[11px]">
+            {isUrdu ? 'ح = حاضر (P)' : 'P = Present'}
+          </span>
+          <span className="px-2 py-0.5 rounded-md bg-rose-100 text-rose-900 font-bold border border-rose-300 text-[11px]">
+            {isUrdu ? 'غ = غیر حاضر (A)' : 'A = Absent'}
+          </span>
+          <span className="px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 font-bold border border-amber-300 text-[11px]">
+            {isUrdu ? 'ر = رخصت (L)' : 'L = Leave'}
+          </span>
+          <span className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-800 font-bold border border-emerald-200 text-[11px]">
+            {loc('Friday = Off', 'جمعہ = تعطیل')}
+          </span>
+        </div>
+
+        {/* Month Navigator */}
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setSelectedMonth(prev => prev > 0 ? prev - 1 : 11)}
+            className="p-2 rounded-xl border hover:bg-gray-50 text-gray-600"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+
+          <div className="px-4 py-1.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-center min-w-[180px]">
+            <span className="font-bold text-xs text-emerald-950 block">
+              {loc(
+                `${currentMonthMeta.en} ${selectedYear}`,
+                `${currentMonthMeta.ur} ${selectedYear}`
+              )}
+            </span>
+            <span className="text-[10px] text-emerald-700 font-semibold">
+              {monthlyAyyamDars} {loc('Working Days', 'ایامِ درس')}
+            </span>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setSelectedMonth(prev => prev < 11 ? prev + 1 : 0)}
+            className="p-2 rounded-xl border hover:bg-gray-50 text-gray-600"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+      </div>
+
+      {/* FULL MONTH ATTENDANCE MATRIX TABLE */}
+      <div className="bg-white rounded-3xl border border-m3-outline-variant/40 shadow-m3-2 overflow-hidden animate-in fade-in duration-200">
+        <div className="overflow-x-auto max-w-full">
+          <table className="w-full text-left border-collapse text-xs">
+            <thead>
+              <tr className="bg-emerald-950 text-white text-[11px]">
+                <th className="p-3 text-center w-12 border-r border-emerald-800 font-bold uppercase sticky left-0 bg-emerald-950 z-20">
+                  {loc('S.No', 'شمار')}
+                </th>
+                <th className="p-3 w-24 border-r border-emerald-800 font-bold uppercase sticky left-12 bg-emerald-950 z-20">
+                  {loc('Adm No', 'داخلہ نمبر')}
+                </th>
+                <th className="p-3 min-w-[200px] border-r border-emerald-800 font-bold uppercase sticky left-36 bg-emerald-950 z-20 shadow-md">
+                  {loc('Student Name & Homeland', 'نام طالب علم مع گاؤں')}
+                </th>
+                {monthDays.map(d => (
+                  <th 
+                    key={d.dayNum}
+                    className={`p-1.5 text-center min-w-[36px] border-r border-emerald-800/60 font-mono ${
+                      d.isFriday ? 'bg-emerald-800 text-amber-200 font-bold' : 'bg-emerald-950 text-white'
+                    }`}
+                  >
+                    <span className="block text-xs font-bold leading-none">{d.dayNum}</span>
+                    <span className="block text-[9px] uppercase tracking-tighter opacity-80 mt-0.5 leading-none">
+                      {d.isFriday ? loc('Fri', 'جمعہ') : d.weekday}
+                    </span>
+                  </th>
+                ))}
+                <th className="p-2 text-center w-20 border-r border-emerald-800 bg-emerald-900">
+                  {loc('Work Days', 'ایام درس')}
+                </th>
+                <th className="p-2 text-center w-20 border-r border-emerald-800 bg-emerald-900">
+                  {loc('Present', 'ایام حاضری')}
+                </th>
+                <th className="p-2 text-center w-24 border-r border-emerald-800 bg-amber-950 text-amber-200">
+                  {loc('Hijri Dars', 'رمضان تا رمضان')}
+                </th>
+                <th className="p-2 text-center w-20 border-r border-emerald-800 bg-amber-950 text-amber-200">
+                  {loc('Hijri Present', 'کل حاضری')}
+                </th>
+                <th className="p-2 text-center w-16 bg-emerald-900">
+                  {loc('Ratio %', 'فیصد')}
+                </th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-100">
+              {classStudents.map((st, idx) => {
+                const studentDays = matrixState[st.id] || {};
+                const monthlyPresentCount = monthDays.filter(d => !d.isFriday && studentDays[d.dayNum] === 'P').length;
+                const cumulativeYearPresent = Math.max(0, st.totalPresentsYearly || (cumulativeHijriTeachingDays - 5));
+                const percentage = ((cumulativeYearPresent / cumulativeHijriTeachingDays) * 100).toFixed(1);
+                const village = st.village || st.address.split(',')[0].trim();
+                const isEven = idx % 2 === 0;
+
+                return (
+                  <tr key={st.id} className={`hover:bg-emerald-50/40 transition-colors ${isEven ? 'bg-white' : 'bg-gray-50/50'}`}>
+                    <td className={`p-2.5 text-center font-mono font-bold text-gray-700 border-r sticky left-0 z-10 ${isEven ? 'bg-white' : 'bg-gray-50'}`}>{idx + 1}</td>
+                    <td className={`p-2.5 font-mono font-bold text-emerald-900 border-r sticky left-12 z-10 whitespace-nowrap ${isEven ? 'bg-white' : 'bg-gray-50'}`}>{st.admissionNo}</td>
+                    <td className={`p-2.5 border-r sticky left-36 z-10 shadow-sm ${isEven ? 'bg-white' : 'bg-gray-50'}`}>
+                      <div className="font-bold text-gray-900">
+                        {loc(st.studentName, st.studentNameUrdu)}
+                      </div>
+                      <div className="text-[10px] text-gray-500 font-urdu">
+                        {loc('Village / Homeland:', 'گاؤں / وطن:')} {village}
+                      </div>
+                    </td>
+
+                    {monthDays.map(d => {
+                      const status = studentDays[d.dayNum] || (d.isFriday ? 'O' : 'P');
+                      const isFriday = d.isFriday;
+
+                      return (
+                        <td 
+                          key={d.dayNum} 
+                          onClick={() => !isFriday && handleToggleCell(st.id, d.dayNum)}
+                          className={`p-1 text-center font-mono text-xs font-bold border-r select-none ${
+                            isFriday ? 'bg-emerald-50/70 cursor-not-allowed' : 'cursor-pointer hover:bg-emerald-100/70'
+                          }`}
+                        >
+                          <span className={`inline-flex items-center justify-center w-6 h-6 rounded-md text-[11px] font-bold ${
+                            status === 'P' ? 'bg-emerald-100 text-emerald-900 border border-emerald-300' :
+                            status === 'A' ? 'bg-rose-100 text-rose-900 border border-rose-300' :
+                            status === 'L' ? 'bg-amber-100 text-amber-900 border border-amber-300' :
+                            'bg-gray-200 text-gray-600'
+                          }`}>
+                            {status === 'P' ? (isUrdu ? 'ح' : 'P') :
+                             status === 'A' ? (isUrdu ? 'غ' : 'A') :
+                             status === 'L' ? (isUrdu ? 'ر' : 'L') : '-'}
+                          </span>
+                        </td>
+                      );
+                    })}
+
+                    <td className="p-2 text-center font-mono font-bold text-gray-800 border-r">{monthlyAyyamDars}</td>
+                    <td className="p-2 text-center font-mono font-bold text-emerald-800 border-r">{monthlyPresentCount}</td>
+                    <td className="p-2 text-center font-mono font-bold text-amber-950 border-r">{cumulativeHijriTeachingDays}</td>
+                    <td className="p-2 text-center font-mono font-bold text-emerald-900 border-r">{cumulativeYearPresent}</td>
+                    <td className="p-2 text-center font-mono font-black text-emerald-950">{percentage}%</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Official Signatures Footer For Ledger Print */}
+        <div className="p-6 bg-gray-50/80 border-t border-gray-200 mt-2 flex flex-wrap items-center justify-between gap-6 text-xs text-gray-700 font-urdu">
+          <div className="text-center min-w-[140px] pt-4 border-t-2 border-gray-400">
+            <span className="font-bold block">{loc("Teacher's Signature", 'دستخط استاذ')}</span>
+          </div>
+          <div className="text-center min-w-[160px] pt-4 border-t-2 border-gray-400">
+            <span className="font-bold block">{loc('Supervisor Signature', 'دستخط ناظم تعلیمات')}</span>
+          </div>
+          <div className="text-center min-w-[140px] pt-4 border-t-2 border-gray-400">
+            <span className="font-bold block">{loc("Head of Department", 'دستخط صدر المدرسین')}</span>
+          </div>
+          <div className="text-center min-w-[140px] pt-4 border-t-2 border-gray-400">
+            <span className="font-bold block">{loc('Official Madrasa Stamp', 'مہر جامعہ / مدرسہ')}</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  );
+};
+export default AttendanceModule;

@@ -1,0 +1,122 @@
+/* ==========================================================================
+   MADRASA & JAMIA ERP — CENTRALIZED DESIGN TOKENS
+   Theme definitions for:
+     1. Shiny White (DEFAULT) — Bright, clean, subtle translucent surfaces
+     2. Transparent Glossy — Glass-like premium interface with high readability
+   CRITICAL: ZERO CSS GRADIENTS (solid colors + transparency + blur + borders + shadows)
+   ========================================================================== */
+
+:root,
+[data-theme=transparent-glossy] {
+  /* Surface & Background — Transparent Glossy (DEFAULT) */
+  --app-bg: #EBF4F6;
+  --surface: rgba(255, 255, 255, 0.72);
+  --surface-strong: rgba(255, 255, 255, 0.88);
+  --surface-glass: rgba(255, 255, 255, 0.55);
+  --topbar-bg: rgba(255, 255, 255, 0.78);
+  --sidebar-bg: rgba(255, 255, 255, 0.72);
+  --modal-bg: rgba(255, 255, 255, 0.92);
+
+  /* Typography */
+  --text-primary: #0F172A;
+  --text-secondary: #475569;
+  --text-muted: #64748B;
+
+  /* Brand & Semantic Accents */
+  --primary: #079669;
+  --primary-strong: #057A57;
+  --secondary: #123B63;
+  --blue: #1677D2;
+  --accent: #C69A3A;
+  --purple: #7655D6;
+  --success: #079669;
+  --warning: #D99000;
+  --danger: #D92D20;
+
+  /* Active Navigation */
+  --active-nav-bg: #079669;
+  --active-nav-text: #FFFFFF;
+
+  /* Borders & Dividers */
+  --border: rgba(255, 255, 255, 0.85);
+  --border-strong: rgba(255, 255, 255, 0.95);
+  --border-luminous: #FFFFFF;
+
+  /* Shadows (Glass Glow) */
+  --shadow: 0 8px 30px rgba(18, 59, 99, 0.05);
+  --shadow-gloss: 0 10px 32px 0 rgba(18, 59, 99, 0.06), inset 0 1px 1px 0 rgba(255, 255, 255, 1);
+  --shadow-elevated: 0 16px 40px 0 rgba(18, 59, 99, 0.08), inset 0 1px 1px 0 rgba(255, 255, 255, 1);
+  --shadow-btn: 0 4px 14px rgba(7, 150, 105, 0.3), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+
+  /* Radii */
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+  --radius-pill: 9999px;
+
+  /* Backdrop Blur */
+  --blur: 20px;
+
+  /* Transitions */
+  --transition-hover: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-press: 100ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-theme: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+[data-theme=shiny-white] {
+  /* Surface & Background */
+  --app-bg: #F4F8FB;
+  --surface: rgba(255, 255, 255, 0.88);
+  --surface-strong: #FFFFFF;
+  --surface-glass: rgba(255, 255, 255, 0.75);
+  --topbar-bg: rgba(255, 255, 255, 0.92);
+  --sidebar-bg: rgba(255, 255, 255, 0.88);
+  --modal-bg: rgba(255, 255, 255, 0.94);
+
+  /* Typography */
+  --text-primary: #102A43;
+  --text-secondary: #60758A;
+  --text-muted: #829AB1;
+
+  /* Brand & Semantic Accents */
+  --primary: #079669;
+  --primary-strong: #057A57;
+  --secondary: #123B63;
+  --blue: #1677D2;
+  --accent: #C69A3A;
+  --purple: #7655D6;
+  --success: #079669;
+  --warning: #D99000;
+  --danger: #D92D20;
+
+  /* Active Navigation */
+  --active-nav-bg: #079669;
+  --active-nav-text: #FFFFFF;
+
+  /* Borders & Dividers */
+  --border: rgba(90, 120, 145, 0.18);
+  --border-strong: rgba(90, 120, 145, 0.32);
+  --border-luminous: rgba(255, 255, 255, 0.95);
+
+  /* Shadows */
+  --shadow: 0 4px 20px -2px rgba(18, 59, 99, 0.06);
+  --shadow-gloss: 0 8px 30px -4px rgba(18, 59, 99, 0.08), inset 0 1px 1px 0 rgba(255, 255, 255, 0.95);
+  --shadow-elevated: 0 14px 40px -6px rgba(18, 59, 99, 0.12), inset 0 1px 1px 0 rgba(255, 255, 255, 1);
+  --shadow-btn: 0 4px 12px rgba(7, 150, 105, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+
+  /* Radii */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 22px;
+  --radius-pill: 9999px;
+
+  /* Backdrop Blur */
+  --blur: 16px;
+
+  /* Transitions */
+  --transition-hover: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-press: 100ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-theme: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+}

@@ -1,0 +1,351 @@
+/* Local Offline Typography Configuration for Madrasa Management System */
+
+/* ==========================================================================
+   1. URDU NASTALEEQ FONTS
+   ========================================================================== */
+
+/* Jameel Noori Nastaleeq - The standard elegant Urdu font */
+@font-face {
+  font-family: 'Jameel Noori Nastaleeq';
+  src: url('./Jameel Noori Nastaleeq.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Jameel Noori Kasheeda - Extended calligraphic Urdu */
+@font-face {
+  font-family: 'Jameel Noori Kasheeda';
+  src: url('./Jameel Noori Kasheeda .ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* AA Sameer Sagar Nastaleeq Bold - For striking Urdu headlines */
+@font-face {
+  font-family: 'AA Sameer Sagar';
+  src: url('./AA Sameer Sagar Nastaleeq Bold - [UrduFonts.com].ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* AlQalam Taj Nastaleeq */
+@font-face {
+  font-family: 'AlQalam Taj';
+  src: url('./AlQalam Taj Nastaleeq-Regular1(shipped).ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Faiz Lahori Nastaleeq */
+@font-face {
+  font-family: 'Faiz Lahori';
+  src: url('./Faiz Lahori Nastaleeq Regular - [UrduFonts.com].ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ==========================================================================
+   2. QURAN & ARABIC FONTS
+   ========================================================================== */
+
+/* Al Qalam Quran Publisher - Premium Indopak Calligraphic Font for Holy Quran */
+@font-face {
+  font-family: 'Al Qalam Quran Publisher';
+  src: local('Al Qalam Quran Publisher'), local('AlQalamQuranPublisher'), url('./Al Qalam Quran Publisher.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Al Qalam Quran Publisher';
+  src: local('Al Qalam Quran Publisher'), local('AlQalamQuranPublisher'), url('./Al Qalam Quran Publisher.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Al Qalam Quran Publisher';
+  src: local('Al Qalam Quran Publisher'), local('AlQalamQuranPublisher'), url('./Al Qalam Quran Publisher.ttf') format('truetype');
+  font-weight: 500 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'AlQalam Quran Publisher';
+  src: local('Al Qalam Quran Publisher'), local('AlQalamQuranPublisher'), url('./Al Qalam Quran Publisher.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'AlQalam Quran Publisher';
+  src: local('Al Qalam Quran Publisher'), local('AlQalamQuranPublisher'), url('./Al Qalam Quran Publisher.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* QuranFont-Original - Saleem Quran Font for Holy Quran Verses, Sabaq & Ayahs */
+@font-face {
+  font-family: 'QuranFont-Original';
+  src: local('QuranFont-Original'), local('_PDMS_Saleem_QuranFont'), local('QuranFont'), url('./QuranFont-Original.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'QuranFont';
+  src: local('QuranFont-Original'), local('_PDMS_Saleem_QuranFont'), local('QuranFont'), url('./QuranFont-Original.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: '_PDMS_Saleem_QuranFont';
+  src: local('_PDMS_Saleem_QuranFont'), local('QuranFont-Original'), local('QuranFont'), url('./QuranFont-Original.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Muhammadi Quranic Font */
+@font-face {
+  font-family: '1 MUHAMMADI QURANIC';
+  src: local('1 MUHAMMADI QURANIC'), url('./Muhammadi-Quranic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Muhammadi Quranic';
+  src: local('1 MUHAMMADI QURANIC'), url('./Muhammadi-Quranic.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Traditional Arabic Bold */
+@font-face {
+  font-family: 'Traditional Arabic';
+  src: url('./Trad Arabic Bold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Alyamama Font Family - Modern Arabic Display */
+@font-face {
+  font-family: 'Alyamama';
+  src: url('./Alyamama-Light.ttf') format('truetype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Alyamama';
+  src: url('./Alyamama-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Alyamama';
+  src: url('./Alyamama-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Alyamama';
+  src: url('./Alyamama-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Alyamama';
+  src: url('./Alyamama-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Alyamama';
+  src: url('./Alyamama-Black.ttf') format('truetype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ==========================================================================
+   3. ENGLISH / MODERN DISPLAY & CERTIFICATE FONTS
+   ========================================================================== */
+
+/* Montserrat Family */
+@font-face {
+  font-family: 'Montserrat';
+  src: url('./Montserrat-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('./Montserrat-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('./Montserrat-SemiBold.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('./Montserrat-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Bebas Neue Pro - Condensed Headline & Number Badges */
+@font-face {
+  font-family: 'Bebas Neue Pro';
+  src: url('./Bebas Neue Pro Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Bebas Neue Pro';
+  src: url('./Bebas Neue Pro Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Oswald Family */
+@font-face {
+  font-family: 'Oswald';
+  src: url('./Oswald-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Oswald';
+  src: url('./Oswald-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Oswald';
+  src: url('./Oswald-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Roboto Family */
+@font-face {
+  font-family: 'Roboto';
+  src: url('./Roboto-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('./Roboto-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('./Roboto-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ==========================================================================
+   5. REUSABLE UTILITY CLASSES
+   ========================================================================== */
+
+.font-jameel {
+  font-family: 'Jameel Noori Nastaleeq', 'Noto Nastaliq Urdu', serif;
+  line-height: 2.2;
+}
+
+.font-kasheeda {
+  font-family: 'Jameel Noori Kasheeda', 'Jameel Noori Nastaleeq', serif;
+  line-height: 2.3;
+}
+
+.font-sameer {
+  font-family: 'AA Sameer Sagar', 'Jameel Noori Nastaleeq', serif;
+  line-height: 2.0;
+}
+
+.font-alqalam {
+  font-family: 'AlQalam Taj', 'Jameel Noori Nastaleeq', serif;
+  line-height: 2.2;
+}
+
+.font-quran {
+  font-family: 'QuranFont-Original', '_PDMS_Saleem_QuranFont', 'QuranFont', 'Traditional Arabic', 'Amiri', '1 MUHAMMADI QURANIC', 'Muhammadi Quranic', 'Alyamama', serif;
+  font-feature-settings: "liga" 1, "calt" 1;
+  letter-spacing: 0;
+}
+
+.font-alyamama {
+  font-family: 'Alyamama', 'Traditional Arabic', sans-serif;
+}
+
+.font-trad-arabic {
+  font-family: 'Traditional Arabic', 'Amiri', serif;
+}
+
+.font-bebas {
+  font-family: 'Bebas Neue Pro', 'Oswald', sans-serif;
+  letter-spacing: 0.05em;
+}
+
+.font-oswald {
+  font-family: 'Oswald', sans-serif;
+  letter-spacing: 0.03em;
+}
+
+.font-montserrat {
+  font-family: 'Montserrat', sans-serif;
+}
