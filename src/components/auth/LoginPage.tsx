@@ -13,7 +13,9 @@ import {
   ShieldCheck, 
   Info,
   Calendar,
-  Globe
+  Globe,
+  Eye,
+  EyeOff
 } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
@@ -24,9 +26,20 @@ export const LoginPage: React.FC = () => {
   const [selectedRole, setSelectedRole] = useState<Role>('admin');
   const [idOrUsername, setIdOrUsername] = useState<string>('');
   const [passwordOrDob, setPasswordOrDob] = useState<string>('');
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   
   const [errorMessage, setErrorMessage] = useState<string>('');
   const [subscriptionWarning, setSubscriptionWarning] = useState<string>('');
+
+  const handleRevealPasswordStart = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    setShowPassword(true);
+  };
+
+  const handleRevealPasswordEnd = (e: React.SyntheticEvent) => {
+    e.preventDefault();
+    setShowPassword(false);
+  };
 
   const currentSelectedMadrasa = availableMadrasas.find(m => m.id === selectedMadrasaId);
 
@@ -208,14 +221,28 @@ export const LoginPage: React.FC = () => {
                 </label>
                 <div className="relative">
                   <input
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     value={passwordOrDob}
                     onChange={(e) => setPasswordOrDob(e.target.value)}
                     placeholder="Password or DOB (e.g. 2014-05-12)"
-                    className="w-full p-3 rounded-2xl bg-white/60 backdrop-blur-md border border-white/90 text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-600 shadow-2xs"
+                    className="w-full p-3 pr-11 rounded-2xl bg-white/60 backdrop-blur-md border border-white/90 text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-600 shadow-2xs"
                     required
                   />
-                  <Lock className="w-4 h-4 text-emerald-700/60 absolute right-3.5 top-3.5" />
+                  <button
+                    type="button"
+                    onMouseDown={handleRevealPasswordStart}
+                    onMouseUp={handleRevealPasswordEnd}
+                    onMouseLeave={handleRevealPasswordEnd}
+                    onTouchStart={handleRevealPasswordStart}
+                    onTouchEnd={handleRevealPasswordEnd}
+                    onTouchCancel={handleRevealPasswordEnd}
+                    onContextMenu={(e) => e.preventDefault()}
+                    className="absolute right-3 top-3 p-1 rounded-xl text-slate-400 hover:text-emerald-700 active:text-emerald-800 hover:bg-emerald-50/60 transition-all cursor-pointer select-none focus:outline-none"
+                    title="Hold to view password"
+                    aria-label="Hold to view password"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4 text-emerald-700" /> : <Eye className="w-4 h-4" />}
+                  </button>
                 </div>
               </div>
             </div>
@@ -247,14 +274,28 @@ export const LoginPage: React.FC = () => {
                 </label>
                 <div className="relative">
                   <input
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     value={passwordOrDob}
                     onChange={(e) => setPasswordOrDob(e.target.value)}
                     placeholder="Enter teacher password"
-                    className="w-full p-3 rounded-2xl bg-white/60 backdrop-blur-md border border-white/90 text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-600 shadow-2xs"
+                    className="w-full p-3 pr-11 rounded-2xl bg-white/60 backdrop-blur-md border border-white/90 text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-600 shadow-2xs"
                     required
                   />
-                  <Lock className="w-4 h-4 text-emerald-700/60 absolute right-3.5 top-3.5" />
+                  <button
+                    type="button"
+                    onMouseDown={handleRevealPasswordStart}
+                    onMouseUp={handleRevealPasswordEnd}
+                    onMouseLeave={handleRevealPasswordEnd}
+                    onTouchStart={handleRevealPasswordStart}
+                    onTouchEnd={handleRevealPasswordEnd}
+                    onTouchCancel={handleRevealPasswordEnd}
+                    onContextMenu={(e) => e.preventDefault()}
+                    className="absolute right-3 top-3 p-1 rounded-xl text-slate-400 hover:text-emerald-700 active:text-emerald-800 hover:bg-emerald-50/60 transition-all cursor-pointer select-none focus:outline-none"
+                    title="Hold to view password"
+                    aria-label="Hold to view password"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4 text-emerald-700" /> : <Eye className="w-4 h-4" />}
+                  </button>
                 </div>
               </div>
             </div>
@@ -286,14 +327,28 @@ export const LoginPage: React.FC = () => {
                 </label>
                 <div className="relative">
                   <input
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     value={passwordOrDob}
                     onChange={(e) => setPasswordOrDob(e.target.value)}
                     placeholder="Enter admin password"
-                    className="w-full p-3 rounded-2xl bg-white/60 backdrop-blur-md border border-white/90 text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-600 shadow-2xs"
+                    className="w-full p-3 pr-11 rounded-2xl bg-white/60 backdrop-blur-md border border-white/90 text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-600 shadow-2xs"
                     required
                   />
-                  <Lock className="w-4 h-4 text-emerald-700/60 absolute right-3.5 top-3.5" />
+                  <button
+                    type="button"
+                    onMouseDown={handleRevealPasswordStart}
+                    onMouseUp={handleRevealPasswordEnd}
+                    onMouseLeave={handleRevealPasswordEnd}
+                    onTouchStart={handleRevealPasswordStart}
+                    onTouchEnd={handleRevealPasswordEnd}
+                    onTouchCancel={handleRevealPasswordEnd}
+                    onContextMenu={(e) => e.preventDefault()}
+                    className="absolute right-3 top-3 p-1 rounded-xl text-slate-400 hover:text-emerald-700 active:text-emerald-800 hover:bg-emerald-50/60 transition-all cursor-pointer select-none focus:outline-none"
+                    title="Hold to view password"
+                    aria-label="Hold to view password"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4 text-emerald-700" /> : <Eye className="w-4 h-4" />}
+                  </button>
                 </div>
               </div>
             </div>
@@ -325,14 +380,28 @@ export const LoginPage: React.FC = () => {
                 </label>
                 <div className="relative">
                   <input
-                    type="password"
+                    type={showPassword ? 'text' : 'password'}
                     value={passwordOrDob}
                     onChange={(e) => setPasswordOrDob(e.target.value)}
                     placeholder="Enter super admin password"
-                    className="w-full p-3 rounded-2xl bg-white/60 backdrop-blur-md border border-white/90 text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-600 shadow-2xs"
+                    className="w-full p-3 pr-11 rounded-2xl bg-white/60 backdrop-blur-md border border-white/90 text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-600 shadow-2xs"
                     required
                   />
-                  <Lock className="w-4 h-4 text-emerald-700/60 absolute right-3.5 top-3.5" />
+                  <button
+                    type="button"
+                    onMouseDown={handleRevealPasswordStart}
+                    onMouseUp={handleRevealPasswordEnd}
+                    onMouseLeave={handleRevealPasswordEnd}
+                    onTouchStart={handleRevealPasswordStart}
+                    onTouchEnd={handleRevealPasswordEnd}
+                    onTouchCancel={handleRevealPasswordEnd}
+                    onContextMenu={(e) => e.preventDefault()}
+                    className="absolute right-3 top-3 p-1 rounded-xl text-slate-400 hover:text-amber-700 active:text-amber-800 hover:bg-amber-50/60 transition-all cursor-pointer select-none focus:outline-none"
+                    title="Hold to view password"
+                    aria-label="Hold to view password"
+                  >
+                    {showPassword ? <EyeOff className="w-4 h-4 text-amber-700" /> : <Eye className="w-4 h-4" />}
+                  </button>
                 </div>
               </div>
             </div>
