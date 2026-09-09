@@ -1570,28 +1570,53 @@ export async function getFullQuran(): Promise<Surah[]> {
   if (quranFetchPromise) return quranFetchPromise;
 
   quranFetchPromise = (async () => {
-    // Generate intelligent URL candidates supporting root domain, repository subpath, and base url
-    const origin = typeof window !== 'undefined' ? window.location.origin : '';
-    const pathname = typeof window !== 'undefined' ? window.location.pathname : '';
-    const directoryPath = pathname.substring(0, pathname.lastIndexOf('/') + 1);
-    const absoluteDirectoryUrl = origin && directoryPath ? `${origin}${directoryPath}` : '';
+    const candidates: string[] = [];
 
-    const candidates = [
-      absoluteDirectoryUrl ? `${absoluteDirectoryUrl}data/quran.json` : null,
+    if (typeof window !== 'undefined') {
+      const origin = window.location.origin;
+      const pathname = window.location.pathname;
+
+      // 1. If running under GitHub Pages repository subpath
+      if (pathname.includes('/madrasa-management-system')) {
+        candidates.push(`${origin}/madrasa-management-system/data/quran.json`);
+        candidates.push('/madrasa-management-system/data/quran.json');
+      }
+
+      // 2. Exact directory path whether pathname has trailing slash or not
+      let cleanDir = pathname;
+      if (!cleanDir.endsWith('/')) {
+        cleanDir = cleanDir.substring(0, cleanDir.lastIndexOf('/') + 1);
+      }
+      if (cleanDir && cleanDir !== '/') {
+        candidates.push(`${origin}${cleanDir}data/quran.json`);
+      }
+
+      // 3. Document baseURI or current URL resolution
+      try {
+        const base = document.baseURI || window.location.href;
+        candidates.push(new URL('data/quran.json', base).href);
+      } catch {}
+    }
+
+    // 4. Standard relative & static fallback paths
+    candidates.push(
       './data/quran.json',
       'data/quran.json',
       `${import.meta.env.BASE_URL || ''}data/quran.json`.replace(/\/\//g, '/'),
       '/madrasa-management-system/data/quran.json',
       '/data/quran.json'
-    ].filter(Boolean) as string[];
+    );
 
-    for (const url of candidates) {
+    // Deduplicate candidates
+    const uniqueCandidates = Array.from(new Set(candidates.filter(Boolean)));
+
+    for (const url of uniqueCandidates) {
       try {
         const res = await fetch(url);
         if (res.ok) {
           const contentType = res.headers.get('content-type') || '';
           if (contentType.includes('text/html')) {
-            continue; // Skip HTML 404 response pages
+            continue; // Skip SPA HTML 404 response pages
           }
           const data = await res.json();
           if (Array.isArray(data) && data.length > 0) {

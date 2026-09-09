@@ -53,10 +53,11 @@ export const QuranModule: React.FC = () => {
   const { activeMadrasa } = useAuth();
   const { showToast } = useTheme();
 
-  // Navigation tabs: 'juz' (30 Parahs Dashboard), 'surahs' (114 Surahs), 'mushaf' (Mushaf Flow), 'cards' (Verse Cards)
-  const [activeNavTab, setActiveNavTab] = useState<'juz' | 'surahs' | 'mushaf' | 'cards'>('juz');
+  // Navigation tabs: 'mushaf' (15-Line Mushaf - default), 'juz' (30 Parahs), 'surahs' (114 Surahs), 'cards' (Verse Cards)
+  const [activeNavTab, setActiveNavTab] = useState<'juz' | 'surahs' | 'mushaf' | 'cards'>('mushaf');
   const [selectedJuzNumber, setSelectedJuzNumber] = useState<number>(1);
   const [selectedSurahNumber, setSelectedSurahNumber] = useState<number>(1);
+  const [targetMushafPage, setTargetMushafPage] = useState<number>(1);
 
   // Appearance & Reader Controls
   const [fontSize, setFontSize] = useState<number>(28);
@@ -82,11 +83,8 @@ export const QuranModule: React.FC = () => {
 
   // Exact page calculation for Indopak 15-Line Mushaf using authoritative page mappings
   const initialMushafPage = useMemo(() => {
-    if (activeNavTab === 'surahs' || selectedSurahNumber > 1) {
-      return getPageForSurah(selectedSurahNumber);
-    }
-    return getPageForJuz(selectedJuzNumber);
-  }, [selectedSurahNumber, selectedJuzNumber, activeNavTab]);
+    return targetMushafPage;
+  }, [targetMushafPage]);
 
   // Load Holy Quran JSON on mount
   useEffect(() => {
@@ -245,11 +243,13 @@ export const QuranModule: React.FC = () => {
   // Switch to Reader Mode for a specific Surah
   const handleReadSurah = (surahNumber: number) => {
     setSelectedSurahNumber(surahNumber);
+    setTargetMushafPage(getPageForSurah(surahNumber));
     setActiveNavTab('mushaf');
   };
 
   // Switch to Reader Mode for selected Parah
   const handleOpenFullParah = () => {
+    setTargetMushafPage(getPageForJuz(selectedJuzNumber));
     setActiveNavTab('mushaf');
   };
 
@@ -524,7 +524,15 @@ export const QuranModule: React.FC = () => {
                   return (
                     <div
                       key={juz.number}
-                      onClick={() => setSelectedJuzNumber(juz.number)}
+                      onClick={() => {
+                        setSelectedJuzNumber(juz.number);
+                        setTargetMushafPage(getPageForJuz(juz.number));
+                      }}
+                      onDoubleClick={() => {
+                        setSelectedJuzNumber(juz.number);
+                        setTargetMushafPage(getPageForJuz(juz.number));
+                        setActiveNavTab('mushaf');
+                      }}
                       className={`min-w-[105px] sm:min-w-[115px] p-3.5 rounded-2xl flex flex-col items-center justify-between text-center transition-all cursor-pointer select-none shrink-0 ${
                         isSelected
                           ? 'bg-emerald-700 text-white shadow-md border border-emerald-600 transform scale-102'
