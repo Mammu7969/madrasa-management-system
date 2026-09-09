@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { db } from '../../services/db';
@@ -57,6 +57,59 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
   const subjects = db.getSubjects(activeMadrasa?.id);
   const staff = db.getStaff(activeMadrasa?.id);
   const transactions = db.getFinanceTransactions(activeMadrasa?.id);
+  const examinations = useMemo(() => db.getExaminations(activeMadrasa?.id), [activeMadrasa?.id]);
+  const inventory = useMemo(() => db.getInventory(activeMadrasa?.id), [activeMadrasa?.id]);
+  const roznamchah = useMemo(() => db.getRoznamchah(undefined, activeMadrasa?.id), [activeMadrasa?.id]);
+
+  // Live real fee defaulters
+  const liveFeeDefaulters = useMemo(() => {
+    return students
+      .filter(s => (s.monthlyFees || 0) > 0)
+      .map(s => {
+        const studentPaid = fees
+          .filter(f => f.studentId === s.id && f.status === 'Paid')
+          .reduce((sum, f) => sum + f.amount, 0);
+        const expectedDue = (s.monthlyFees || 0) * 2;
+        const pendingAmount = Math.max(0, expectedDue - studentPaid);
+        const pendingMonths = Math.max(1, Math.ceil(pendingAmount / (s.monthlyFees || 1)));
+        return {
+          id: s.id,
+          name: s.studentName,
+          nameUrdu: s.studentNameUrdu,
+          class: s.class,
+          pending: pendingAmount,
+          months: pendingMonths,
+          contact: s.contactNumber
+        };
+      })
+      .filter(d => d.pending > 0)
+      .slice(0, 5);
+  }, [students, fees]);
+
+  // Live low stock inventory alerts
+  const lowStockInventory = useMemo(() => {
+    return inventory
+      .filter(i => (i.quantity || 0) <= (i.minThreshold || 20))
+      .slice(0, 5);
+  }, [inventory]);
+
+  // Live upcoming events from exams & notices
+  const dynamicUpcomingEvents = useMemo(() => {
+    const list: { date: string; title: string; category: string }[] = [];
+    examinations.forEach(e => {
+      list.push({ date: e.startDate, title: e.title, category: 'Exam' });
+    });
+    notices.slice(0, 3).forEach(n => {
+      list.push({ date: n.date, title: n.title, category: 'Notice' });
+    });
+    if (list.length === 0) {
+      list.push(
+        { date: '15 Sep 2026', title: 'Quarterly Tajweed & Hifz Assessment', category: 'Exam' },
+        { date: '01 Oct 2026', title: 'Parent-Teacher Council Consultation', category: 'Notice' }
+      );
+    }
+    return list.slice(0, 5);
+  }, [examinations, notices]);
 
   // Setup Detection Tabs (if no subjects, no classes, no schedule, no teachers)
   const noSubjects = subjects.length === 0;
@@ -710,104 +763,120 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
             </button>
           </div>
           <div className="overflow-x-auto py-2">
-            <table className="w-full text-[11px] text-left">
-              <thead>
-                <tr className="text-gray-400 text-[10px] uppercase border-b border-gray-100">
-                  <th className="pb-1.5">#</th>
-                  <th className="pb-1.5">Student Name</th>
-                  <th className="pb-1.5">Pending (₹)</th>
-                  <th className="pb-1.5 text-center">Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {[
-                  { id: 1, name: 'Mohd. Arslan', class: 'Nazira', pending: '4,800', months: 2 },
-                  { id: 2, name: 'Zaid Khan', class: 'Deeniyath', pending: '3,500', months: 2 },
-                  { id: 3, name: 'Umar Farooq', class: 'Hifz', pending: '7,200', months: 3 },
-                  { id: 4, name: 'Rehan Ali', class: 'Primary', pending: '2,400', months: 1 },
-                ].map((st) => (
-                  <tr key={st.id} className="hover:bg-rose-50/30 transition-colors">
-                    <td className="py-2 text-gray-400">{st.id}</td>
-                    <td className="py-2 font-bold text-gray-800">{st.name} <span className="text-[9px] text-gray-400 font-normal">({st.class})</span></td>
-                    <td className="py-2 font-black text-rose-600">₹{st.pending}</td>
-                    <td className="py-2 text-center">
-                      <button onClick={() => showToast(`Payment reminder dispatched to ${st.name}!`, 'info')} className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-sky-50 text-sky-700 hover:bg-sky-100 border border-sky-200 cursor-pointer">
-                        Remind
-                      </button>
-                    </td>
+            {liveFeeDefaulters.length === 0 ? (
+              <div className="py-6 text-center text-slate-500">
+                <CheckCircle2 className="w-7 h-7 text-emerald-600 mx-auto mb-1.5" />
+                <p className="text-xs font-bold text-slate-700 dark:text-slate-200">No Pending Dues</p>
+                <p className="text-[10px] text-slate-400 font-urdu">تمام طلبہ کی فیس مکمل وصول ہے (الحمد للہ)</p>
+              </div>
+            ) : (
+              <table className="w-full text-[11px] text-left">
+                <thead>
+                  <tr className="text-gray-400 text-[10px] uppercase border-b border-gray-100 dark:border-slate-800">
+                    <th className="pb-1.5">#</th>
+                    <th className="pb-1.5">Student Name</th>
+                    <th className="pb-1.5">Pending (₹)</th>
+                    <th className="pb-1.5 text-center">Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-gray-50 dark:divide-slate-800">
+                  {liveFeeDefaulters.map((st, idx) => (
+                    <tr key={st.id} className="hover:bg-rose-50/30 dark:hover:bg-rose-950/20 transition-colors">
+                      <td className="py-2 text-gray-400">{idx + 1}</td>
+                      <td className="py-2 font-bold text-gray-800 dark:text-slate-200">
+                        {st.name} <span className="text-[9px] text-gray-400 font-normal">({st.class})</span>
+                      </td>
+                      <td className="py-2 font-black text-rose-600 dark:text-rose-400">₹{st.pending.toLocaleString()}</td>
+                      <td className="py-2 text-center">
+                        <button 
+                          onClick={() => showToast(`Payment reminder dispatched to ${st.name}!`, 'info')} 
+                          className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-sky-50 dark:bg-sky-950 text-sky-700 dark:text-sky-300 hover:bg-sky-100 border border-sky-200 dark:border-sky-800 cursor-pointer"
+                        >
+                          Remind
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
 
-        {/* Low Stock Alerts (Mess) */}
+        {/* Low Stock Alerts (Mess & Campus Assets) */}
         <div className="lg:col-span-4 glossy-card p-5 flex flex-col justify-between">
-          <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+          <div className="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-slate-800">
             <div className="flex items-center gap-2">
               <Boxes className="w-4 h-4 text-amber-600" />
-              <h3 className="text-xs font-bold text-gray-900">Low Stock Alerts (Mess)</h3>
+              <h3 className="text-xs font-bold text-gray-900 dark:text-slate-100">Low Stock Alerts (Assets & Mess)</h3>
             </div>
             <button onClick={() => onNavigateTab('inventory')} className="text-[10px] font-bold text-sky-600 hover:text-sky-700 hover:underline flex items-center gap-1 cursor-pointer">
               <span>View All</span> &rarr;
             </button>
           </div>
           <div className="overflow-x-auto py-2">
-            <table className="w-full text-[11px] text-left">
-              <thead>
-                <tr className="text-gray-400 text-[10px] uppercase border-b border-gray-100">
-                  <th className="pb-1.5">Item</th>
-                  <th className="pb-1.5">Current</th>
-                  <th className="pb-1.5">Status</th>
-                  <th className="pb-1.5 text-center">Action</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-50">
-                {[
-                  { item: 'Rice', current: '25 Kg', status: 'Low' },
-                  { item: 'Cooking Oil', current: '8 Ltr', status: 'Low' },
-                  { item: 'Sugar', current: '5 Kg', status: 'Low' },
-                  { item: 'Wheat Flour', current: '20 Kg', status: 'Low' },
-                ].map((it, idx) => (
-                  <tr key={idx} className="hover:bg-amber-50/30 transition-colors">
-                    <td className="py-2 font-bold text-gray-800">{it.item}</td>
-                    <td className="py-2 font-mono text-gray-600">{it.current}</td>
-                    <td className="py-2"><span className="text-[10px] font-bold text-rose-700 bg-rose-50 px-1.5 py-0.5 rounded border border-rose-200">⚠ {it.status}</span></td>
-                    <td className="py-2 text-center">
-                      <button onClick={() => showToast(`Re-order drafted for ${it.item}!`, 'success')} className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-50 text-amber-800 hover:bg-amber-100 border border-amber-200 cursor-pointer">
-                        Order
-                      </button>
-                    </td>
+            {lowStockInventory.length === 0 ? (
+              <div className="py-6 text-center text-slate-500">
+                <CheckCircle2 className="w-7 h-7 text-emerald-600 mx-auto mb-1.5" />
+                <p className="text-xs font-bold text-slate-700 dark:text-slate-200">Adequate Stock Levels</p>
+                <p className="text-[10px] text-slate-400">All supplies within optimal inventory threshold.</p>
+              </div>
+            ) : (
+              <table className="w-full text-[11px] text-left">
+                <thead>
+                  <tr className="text-gray-400 text-[10px] uppercase border-b border-gray-100 dark:border-slate-800">
+                    <th className="pb-1.5">Item</th>
+                    <th className="pb-1.5">Quantity</th>
+                    <th className="pb-1.5">Status</th>
+                    <th className="pb-1.5 text-center">Action</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-gray-50 dark:divide-slate-800">
+                  {lowStockInventory.map((it) => (
+                    <tr key={it.id} className="hover:bg-amber-50/30 dark:hover:bg-amber-950/20 transition-colors">
+                      <td className="py-2 font-bold text-gray-800 dark:text-slate-200">{it.item}</td>
+                      <td className="py-2 font-mono text-gray-600 dark:text-slate-400">{it.quantity} {it.unit || ''}</td>
+                      <td className="py-2">
+                        <span className="text-[10px] font-bold text-rose-700 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/60 px-1.5 py-0.5 rounded border border-rose-200 dark:border-rose-800">
+                          ⚠ {it.status}
+                        </span>
+                      </td>
+                      <td className="py-2 text-center">
+                        <button 
+                          onClick={() => showToast(`Re-order requisition drafted for ${it.item}!`, 'success')} 
+                          className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-50 dark:bg-amber-950 text-amber-800 dark:text-amber-300 hover:bg-amber-100 border border-amber-200 dark:border-amber-800 cursor-pointer"
+                        >
+                          Order
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
         </div>
 
-        {/* Upcoming Events */}
+        {/* Upcoming Events & Examinations */}
         <div className="lg:col-span-4 glossy-card p-5 flex flex-col justify-between">
-          <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+          <div className="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-slate-800">
             <div className="flex items-center gap-2">
               <Calendar className="w-4 h-4 text-emerald-600" />
-              <h3 className="text-xs font-bold text-gray-900">Upcoming Events</h3>
+              <h3 className="text-xs font-bold text-gray-900 dark:text-slate-100">Upcoming Events & Exams</h3>
             </div>
             <button onClick={() => onNavigateTab('examinations')} className="text-[10px] font-bold text-sky-600 hover:text-sky-700 hover:underline flex items-center gap-1 cursor-pointer">
               <span>View All</span> &rarr;
             </button>
           </div>
           <div className="space-y-2 py-2">
-            {[
-              { date: '12 Sep 2026', event: 'Quarterly Exam Begins' },
-              { date: '25 Sep 2026', event: 'Parents Meeting' },
-              { date: '02 Oct 2026', event: 'Sanad Distribution' },
-              { date: '15 Oct 2026', event: 'Half Yearly Exam' },
-              { date: '01 Nov 2026', event: 'Annual Function' },
-            ].map((ev, idx) => (
-              <div key={idx} className="flex items-center justify-between py-1.5 px-2.5 rounded-xl bg-white/60 hover:bg-white transition-all border border-gray-100 text-xs">
-                <span className="font-mono text-[10px] text-emerald-700 font-bold bg-emerald-50 px-2 py-0.5 rounded-md">{ev.date}</span>
-                <span className="font-bold text-gray-800">{ev.event}</span>
+            {dynamicUpcomingEvents.map((ev, idx) => (
+              <div key={idx} className="flex items-center justify-between py-1.5 px-2.5 rounded-xl bg-white/70 dark:bg-slate-800/80 hover:bg-white dark:hover:bg-slate-800 transition-all border border-gray-100 dark:border-slate-700 text-xs">
+                <span className="font-mono text-[10px] text-emerald-700 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-md">
+                  {ev.date}
+                </span>
+                <span className="font-bold text-gray-800 dark:text-slate-200 truncate ml-2">
+                  {ev.title}
+                </span>
               </div>
             ))}
           </div>

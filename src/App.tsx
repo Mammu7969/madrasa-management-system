@@ -110,6 +110,7 @@ const AppContent: React.FC = () => {
         <TopAppBar 
           onNavigateHome={() => setCurrentTab('dashboard')} 
           onOpenCommandPalette={() => setShowCommandPalette(true)}
+          currentTab={currentTab}
         />
         <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
           <TeacherDashboard />
@@ -132,6 +133,7 @@ const AppContent: React.FC = () => {
       <TopAppBar 
         onNavigateHome={() => setCurrentTab('dashboard')} 
         onOpenCommandPalette={() => setShowCommandPalette(true)}
+        currentTab={currentTab}
       />
 
       <div className="flex-1 flex overflow-hidden">

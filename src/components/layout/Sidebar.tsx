@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import { db } from '../../services/db';
 import { 
   Users, 
   GraduationCap, 
@@ -23,7 +24,6 @@ import {
   Upload,
   ChevronRight,
   ChevronDown,
-  Sparkles,
   Building2,
   LayoutDashboard,
   Layers,
@@ -60,13 +60,36 @@ interface SidebarProps {
   onSelectTab: (tab: NavigationTab) => void;
 }
 
+interface NavItem {
+  id: NavigationTab;
+  label: string;
+  labelUrdu: string;
+  icon: React.ComponentType<{ className?: string }>;
+  badge?: number | string;
+}
+
+interface NavGroup {
+  id: string;
+  groupName: string;
+  groupNameUrdu: string;
+  items: NavItem[];
+}
+
 export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => {
   const { user, activeMadrasa, updateActiveMadrasa } = useAuth();
   const { language, t, showToast } = useTheme();
 
+  const isUrdu = language === 'ur';
+
   const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const [showLogoModal, setShowLogoModal] = useState<boolean>(false);
   const [logoInputUrl, setLogoInputUrl] = useState<string>(activeMadrasa?.logoUrl || '');
+
+  // Live entity counts for badges
+  const studentsCount = useMemo(() => db.getStudents(activeMadrasa?.id).length, [activeMadrasa?.id]);
+  const teachersCount = useMemo(() => db.getTeachers(activeMadrasa?.id).length, [activeMadrasa?.id]);
+  const classesCount = useMemo(() => db.getClasses(activeMadrasa?.id).length, [activeMadrasa?.id]);
+  const staffCount = useMemo(() => db.getStaff(activeMadrasa?.id).length, [activeMadrasa?.id]);
 
   const handleUploadLogoFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -94,24 +117,68 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
     }
   };
 
-  const menuItems = [
-    { id: 'dashboard' as NavigationTab, label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'quran' as NavigationTab, label: 'Holy Quran', icon: BookOpen },
-    { id: 'students' as NavigationTab, label: 'Students', icon: Users },
-    { id: 'teachers' as NavigationTab, label: 'Teachers', icon: GraduationCap },
-    { id: 'classes' as NavigationTab, label: 'Classes & Subjects', icon: Layers },
-    { id: 'staff' as NavigationTab, label: 'Staff', icon: UserCheck },
-    { id: 'attendance' as NavigationTab, label: 'Attendance', icon: CalendarCheck },
-    { id: 'roznamcha' as NavigationTab, label: 'Daily Roznamcha', icon: BookMarked },
-    { id: 'fees' as NavigationTab, label: 'Fees Management', icon: Receipt },
-    { id: 'examinations' as NavigationTab, label: 'Examinations', icon: FileText },
-    { id: 'inventory' as NavigationTab, label: 'Madrasa Inventory', icon: Package },
-    { id: 'schedule' as NavigationTab, label: 'Madrasa Schedule', icon: Clock },
-    { id: 'income_expenses' as NavigationTab, label: 'Income & Expenses', icon: TrendingUp },
-    { id: 'certificates' as NavigationTab, label: 'Certificates & ID Cards', icon: Award },
-    { id: 'reports' as NavigationTab, label: 'Reports', icon: BarChart3 },
-    { id: 'notices' as NavigationTab, label: 'Notice Board', icon: Bell },
-    { id: 'settings' as NavigationTab, label: 'Settings', icon: Settings },
+  // Grouped Navigation Structure for Commercial Enterprise ERP
+  const navGroups: NavGroup[] = [
+    {
+      id: 'core',
+      groupName: 'Core & Overview',
+      groupNameUrdu: 'مرکزی و جائزہ',
+      items: [
+        { id: 'dashboard', label: 'Executive Dashboard', labelUrdu: 'مرکزی ڈیش بورڈ', icon: LayoutDashboard },
+        { id: 'quran', label: 'Holy Quran Mushaf', labelUrdu: 'قرآن کریم مصحف', icon: BookOpen },
+        { id: 'schedule', label: 'Madrasa Schedule & Namaz', labelUrdu: 'اوقات نماز و نظام الاوقات', icon: Clock },
+      ]
+    },
+    {
+      id: 'academics',
+      groupName: 'Academic Operations',
+      groupNameUrdu: 'تعلیمی و تدریسی شعبہ',
+      items: [
+        { id: 'classes', label: 'Classes & Syllabus', labelUrdu: 'درجات و کتب نصاب', icon: Layers, badge: classesCount },
+        { id: 'teachers', label: 'Teachers Directory', labelUrdu: 'اساتذہ و مدرسین', icon: GraduationCap, badge: teachersCount },
+        { id: 'roznamcha', label: 'Daily Roznamcha (Sabaq)', labelUrdu: 'روزنامچہ تدریس و سبق', icon: BookMarked },
+        { id: 'attendance', label: 'Dual-Session Attendance', labelUrdu: 'حاضری رجسٹر (صبح و شام)', icon: CalendarCheck },
+      ]
+    },
+    {
+      id: 'students',
+      groupName: 'Student Affairs',
+      groupNameUrdu: 'شعبہ طلبہ و داخلہ',
+      items: [
+        { id: 'students', label: 'Students Roster', labelUrdu: 'رجسٹر طلبہ و کوائف', icon: Users, badge: studentsCount },
+      ]
+    },
+    {
+      id: 'finance',
+      groupName: 'Finance & Accounts',
+      groupNameUrdu: 'مالیات و عملہ',
+      items: [
+        { id: 'fees', label: 'Fees & Collections', labelUrdu: 'فیس وصولی و بقایا جات', icon: Receipt },
+        { id: 'income_expenses', label: 'Cashbook & Expenses', labelUrdu: 'آمدنی و اخراجات کیش بک', icon: TrendingUp },
+        { id: 'staff', label: 'Staff Management', labelUrdu: 'ملازمین و عملہ', icon: UserCheck, badge: staffCount },
+      ]
+    },
+    {
+      id: 'evaluations',
+      groupName: 'Records & Studio',
+      groupNameUrdu: 'امتحانات و اسناد',
+      items: [
+        { id: 'examinations', label: 'Examinations & Results', labelUrdu: 'امتحانات و نتائج گزٹ', icon: FileText },
+        { id: 'certificates', label: 'Certificates & ID Studio', labelUrdu: 'اسناد و شناختی کارڈز', icon: Award },
+        { id: 'reports', label: 'Comprehensive Reports', labelUrdu: 'جامع رپورٹس و گوشوارے', icon: BarChart3 },
+      ]
+    },
+    {
+      id: 'campus',
+      groupName: 'Campus & System',
+      groupNameUrdu: 'کیمپس و ترتیبات',
+      items: [
+        { id: 'notices', label: 'Notice Board', labelUrdu: 'اطلاع نامہ و اعلانات', icon: Bell },
+        { id: 'inventory', label: 'Inventory & Gallery', labelUrdu: 'سامان مدرسہ و تصاویر', icon: Package },
+        { id: 'settings', label: 'Madrasa Settings', labelUrdu: 'سیٹنگز و ترتیبات', icon: Settings },
+        { id: 'support', label: 'Support & Guidance', labelUrdu: 'مدد و رہنمائی', icon: HelpCircle },
+      ]
+    }
   ];
 
   return (
@@ -119,17 +186,17 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
       <aside 
         className={`${
           isCollapsed ? 'w-20' : 'w-64'
-        } bg-white/70 backdrop-blur-2xl border border-white/80 shadow-[0_8px_32px_0_rgba(18,59,99,0.06)] rounded-3xl m-2.5 flex flex-col h-[calc(100vh-1.25rem)] sticky top-2.5 select-none shrink-0 transition-all duration-300 no-print overflow-hidden`}
+        } bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 shadow-sm rounded-2xl m-2.5 flex flex-col h-[calc(100vh-1.25rem)] sticky top-2.5 select-none shrink-0 transition-all duration-300 no-print overflow-hidden z-20`}
       >
-        {/* Top Header: Mosque Emblem / Madrasa Logo + Enterprise Suite */}
-        <div className="p-3.5 pb-2 flex items-center justify-between">
+        {/* Top Header: Madrasa Logo / Emblem + Title */}
+        <div className="p-3 pb-2 flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
           <div className="flex items-center gap-2.5 min-w-0">
             <div 
               onClick={() => {
                 setLogoInputUrl(activeMadrasa?.logoUrl || '');
                 setShowLogoModal(true);
               }}
-              className="w-10 h-10 rounded-2xl bg-[#079669] text-white flex items-center justify-center shadow-[0_4px_14px_rgba(7,150,105,0.3)] border border-white/30 shrink-0 overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
+              className="w-10 h-10 rounded-xl bg-emerald-700 text-white flex items-center justify-center shadow-sm shrink-0 overflow-hidden cursor-pointer hover:opacity-90 transition-opacity border border-emerald-600/30"
               title="Click to view/change Madrasa Logo (3x4 inches)"
             >
               {activeMadrasa?.logoUrl ? (
@@ -140,11 +207,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
             </div>
             {!isCollapsed && (
               <div className="min-w-0">
-                <h2 className="text-xs font-black text-slate-900 truncate">
-                  {activeMadrasa?.name || 'Jamia Darul Huda Islamic ...'}
+                <h2 className="text-xs font-bold text-slate-900 dark:text-slate-100 truncate">
+                  {activeMadrasa?.name || 'Jamia Darul Huda'}
                 </h2>
-                <span className="text-[10px] font-extrabold text-[#079669] tracking-wider uppercase block">
-                  ENTERPRISE SUITE
+                <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 tracking-wider uppercase block">
+                  COMMERCIAL ERP
                 </span>
               </div>
             )}
@@ -152,125 +219,133 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
             title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
-            className="p-1 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-white/80 transition-colors shadow-2xs cursor-pointer"
+            className="p-1 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
           >
             {isCollapsed ? <PanelLeftOpen className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
           </button>
         </div>
 
-        {/* Institution Switcher Card */}
+        {/* Institution Badge Card */}
         {!isCollapsed && (
-          <div className="mx-3 my-1.5 p-3 rounded-2xl bg-white/60 border border-white/80 shadow-2xs relative group">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2.5 min-w-0">
-                <div 
-                  onClick={() => {
-                    setLogoInputUrl(activeMadrasa?.logoUrl || '');
-                    setShowLogoModal(true);
-                  }}
-                  className="w-9 h-9 rounded-xl bg-emerald-50 text-[#079669] flex items-center justify-center border border-emerald-200/60 shrink-0 overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
-                  title="Click to view/change Madrasa Logo (3x4 inches)"
-                >
-                  {activeMadrasa?.logoUrl ? (
-                    <img src={activeMadrasa.logoUrl} alt="Madrasa Logo" className="w-full h-full object-cover" />
-                  ) : (
-                    <Building2 className="w-5 h-5" />
-                  )}
-                </div>
-                <div className="min-w-0">
-                  <h3 className="text-xs font-bold text-slate-900 truncate max-w-[130px]">
-                    {activeMadrasa?.name || 'Jamia Darul Huda Islamic ...'}
-                  </h3>
-                  <p className="text-[10px] text-slate-500 font-mono truncate">
-                    {activeMadrasa?.code || 'JDH-01'} • {activeMadrasa?.address?.split(',')[0] || 'Mehdipatnam'}
-                  </p>
-                </div>
-              </div>
-              <button
-                onClick={() => {
-                  setLogoInputUrl(activeMadrasa?.logoUrl || '');
-                  setShowLogoModal(true);
-                }}
-                title="View & Edit Madrasa Logo (3x4 inches)"
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-white/80 transition-colors shrink-0 cursor-pointer"
-              >
-                <Camera className="w-3.5 h-3.5 text-emerald-700" />
-              </button>
+          <div className="mx-2.5 my-2 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60 flex items-center justify-between">
+            <div className="min-w-0">
+              <span className="text-[10px] font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/80 px-2 py-0.5 rounded-md inline-block">
+                {activeMadrasa?.code || 'JAMIA-01'}
+              </span>
+              <p className="text-[11px] font-medium text-slate-600 dark:text-slate-400 truncate mt-1">
+                {activeMadrasa?.address?.split(',')[0] || 'Central Campus'}
+              </p>
             </div>
+            <button
+              onClick={() => {
+                setLogoInputUrl(activeMadrasa?.logoUrl || '');
+                setShowLogoModal(true);
+              }}
+              title="Official 3x4 Logo"
+              className="p-1.5 rounded-lg text-slate-500 hover:text-emerald-700 hover:bg-white dark:hover:bg-slate-700 transition-colors cursor-pointer"
+            >
+              <Camera className="w-3.5 h-3.5" />
+            </button>
           </div>
         )}
 
-        {/* 17 Menu Items Navigation List */}
-        <div className="flex-1 overflow-y-auto px-2.5 py-2 space-y-1">
-          {menuItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = currentTab === item.id;
-            return (
+        {/* Grouped Navigation List */}
+        <div className="flex-1 overflow-y-auto px-2 py-1.5 space-y-3">
+          {navGroups.map((group) => (
+            <div key={group.id} className="space-y-0.5">
+              {!isCollapsed && (
+                <div className="px-2.5 pt-1.5 pb-1 flex items-center justify-between text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+                  <span>{isUrdu ? group.groupNameUrdu : group.groupName}</span>
+                </div>
+              )}
+              {group.items.map((item) => {
+                const Icon = item.icon;
+                const isActive = currentTab === item.id;
+                const label = isUrdu ? item.labelUrdu : item.label;
+
+                return (
+                  <button
+                    key={item.id}
+                    onClick={() => onSelectTab(item.id)}
+                    title={`${label} (${group.groupName})`}
+                    className={`w-full flex items-center ${isCollapsed ? 'justify-center py-2.5' : 'justify-between px-3 py-2'} rounded-xl text-xs transition-all relative group cursor-pointer ${
+                      isActive
+                        ? 'bg-emerald-700 text-white font-bold shadow-xs'
+                        : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white font-medium'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5 truncate">
+                      <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-slate-500 dark:text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400'}`} />
+                      {!isCollapsed && <span className="truncate">{label}</span>}
+                    </div>
+
+                    {!isCollapsed && (
+                      <div className="flex items-center gap-1.5 shrink-0 ml-2">
+                        {item.badge !== undefined && typeof item.badge === 'number' && item.badge > 0 && (
+                          <span className={`text-[10px] font-mono font-bold px-1.5 py-0.2 rounded-full ${
+                            isActive 
+                              ? 'bg-emerald-800 text-emerald-100' 
+                              : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700'
+                          }`}>
+                            {item.badge}
+                          </span>
+                        )}
+                        {isActive && <ChevronRight className="w-3.5 h-3.5 text-white/90 shrink-0" />}
+                      </div>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          ))}
+
+          {/* Super Admin MMS Settings Link */}
+          {user?.role === 'super_admin' && (
+            <div className="pt-2 border-t border-slate-200 dark:border-slate-800">
               <button
-                key={item.id}
-                onClick={() => onSelectTab(item.id)}
-                title={item.label}
-                className={`w-full flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'} px-3.5 py-2.5 rounded-2xl text-xs transition-all relative overflow-hidden group ${
-                  isActive
-                    ? 'bg-[#079669] text-white font-bold shadow-[0_6px_20px_rgba(7,150,105,0.35)] border border-white/25'
-                    : 'text-slate-600 hover:bg-white/60 hover:text-slate-900 font-medium'
+                onClick={() => onSelectTab('mms_settings')}
+                title="MMS Settings (Super Admin)"
+                className={`w-full flex items-center ${isCollapsed ? 'justify-center py-2.5' : 'justify-between px-3 py-2'} rounded-xl text-xs font-bold transition-all border cursor-pointer ${
+                  currentTab === 'mms_settings'
+                    ? 'bg-amber-600 text-white border-amber-500 shadow-xs'
+                    : 'bg-amber-50/70 dark:bg-amber-950/30 text-amber-900 dark:text-amber-300 border-amber-200 dark:border-amber-800/50 hover:bg-amber-100'
                 }`}
               >
-                <div className="flex items-center gap-3 truncate">
-                  <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-slate-500 group-hover:text-[#079669]'}`} />
-                  {!isCollapsed && <span className="truncate">{item.label}</span>}
+                <div className="flex items-center gap-2.5">
+                  <ShieldAlert className="w-4 h-4 shrink-0" />
+                  {!isCollapsed && <span>MMS Multi-Tenant</span>}
                 </div>
-                {!isCollapsed && isActive && <ChevronRight className="w-3.5 h-3.5 text-white/90 shrink-0" />}
+                {!isCollapsed && (
+                  <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-amber-800 text-white uppercase font-black">
+                    Super
+                  </span>
+                )}
               </button>
-            );
-          })}
-
-          {/* Super Admin ONLY */}
-          {user?.role === 'super_admin' && (
-            <button
-              onClick={() => onSelectTab('mms_settings')}
-              title="MMS Settings"
-              className={`w-full flex items-center ${isCollapsed ? 'justify-center' : 'justify-between'} px-3.5 py-2.5 rounded-2xl text-xs font-bold transition-all border ${
-                currentTab === 'mms_settings'
-                  ? 'bg-amber-600 text-white border-amber-500 shadow-md'
-                  : 'bg-amber-50/70 text-amber-900 border-amber-200/60 hover:bg-amber-100/70'
-              }`}
-            >
-              <div className="flex items-center gap-3">
-                <ShieldAlert className="w-4 h-4 shrink-0" />
-                {!isCollapsed && <span className="truncate">MMS Settings</span>}
-              </div>
-              {!isCollapsed && (
-                <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-amber-800 text-white uppercase font-black">
-                  Super
-                </span>
-              )}
-            </button>
+            </div>
           )}
         </div>
 
-        {/* Footer User Profile Capsule */}
-        <div className="p-3 border-t border-white/60 bg-white/40">
-          <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'gap-2.5'} p-2 rounded-2xl bg-white/70 border border-white/80 shadow-2xs`}>
-            <div className="w-8 h-8 rounded-full bg-[#079669] text-white flex items-center justify-center font-black text-xs shadow-xs shrink-0 border border-white/20">
-              {user?.name?.[0] || 'M'}
+        {/* Footer User Capsule */}
+        <div className="p-2.5 border-t border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/60">
+          <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'gap-2.5'} p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700 shadow-2xs`}>
+            <div className="w-8 h-8 rounded-full bg-emerald-700 text-white flex items-center justify-center font-bold text-xs shrink-0">
+              {user?.name?.[0] || 'A'}
             </div>
             {!isCollapsed && (
               <div className="overflow-hidden leading-tight flex-1">
-                <span className="text-xs font-black text-slate-900 block truncate">
-                  {user?.name || 'Maulana Abdul Qadeer Qas...'}
+                <span className="text-xs font-bold text-slate-900 dark:text-slate-100 block truncate">
+                  {user?.name || 'Administrator'}
                 </span>
-                <span className="text-[10px] text-slate-500 capitalize block truncate">
-                  {user?.role === 'admin' ? 'Admin' : user?.role || 'Principal'}
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 capitalize block truncate">
+                  {user?.role === 'admin' ? 'Principal / Nazim' : user?.role || 'Staff'}
                 </span>
               </div>
             )}
-            {!isCollapsed && <ChevronDown className="w-3.5 h-3.5 text-slate-400 shrink-0" />}
           </div>
         </div>
       </aside>
 
-      {/* Madrasa Logo Modal: 3x4 Inches Inspection & Upload */}
+      {/* Madrasa Logo Modal: Standard 3x4 Inches Inspection & Upload */}
       <Modal
         isOpen={showLogoModal}
         onClose={() => setShowLogoModal(false)}
@@ -283,7 +358,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
                 <button
                   type="button"
                   onClick={() => setLogoInputUrl('')}
-                  className="px-3.5 py-1.5 text-xs font-bold text-rose-600 hover:bg-rose-50 rounded-xl transition-all cursor-pointer"
+                  className="px-3.5 py-1.5 text-xs font-bold text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-xl transition-all cursor-pointer"
                 >
                   Remove Logo
                 </button>
@@ -293,7 +368,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
               <button
                 type="button"
                 onClick={() => setShowLogoModal(false)}
-                className="px-4 py-2 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl cursor-pointer"
+                className="px-4 py-2 text-xs font-bold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl cursor-pointer"
               >
                 Cancel
               </button>
@@ -309,15 +384,15 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
         }
       >
         <div className="space-y-4">
-          <div className="flex flex-col md:flex-row items-center gap-6 p-4 bg-gray-50 rounded-2xl border border-gray-200">
-            {/* 3x4 Inches Display Inspection Frame (Exact 3:4 aspect ratio / 288x384px) */}
+          <div className="flex flex-col md:flex-row items-center gap-6 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-200 dark:border-slate-700">
+            {/* 3x4 Inches Display Frame */}
             <div className="flex flex-col items-center gap-2 shrink-0">
-              <div className="relative w-[216px] h-[288px] sm:w-[288px] sm:h-[384px] bg-white rounded-2xl border-2 border-dashed border-emerald-400 overflow-hidden shadow-md flex items-center justify-center group">
+              <div className="relative w-[216px] h-[288px] sm:w-[288px] sm:h-[384px] bg-white dark:bg-slate-900 rounded-2xl border-2 border-dashed border-emerald-400 overflow-hidden shadow-sm flex items-center justify-center group">
                 {logoInputUrl ? (
                   <>
                     <img
                       src={logoInputUrl}
-                      alt="Madrasa Logo 3x4 Inches Preview"
+                      alt="Madrasa Logo 3x4 Preview"
                       className="w-full h-full object-contain p-2"
                     />
                     <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -328,9 +403,9 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
                   </>
                 ) : (
                   <div className="text-center p-4 space-y-2">
-                    <Building2 className="w-12 h-12 text-gray-300 mx-auto" />
-                    <span className="text-xs font-bold text-gray-400 block">No Logo Uploaded</span>
-                    <span className="text-[10px] text-gray-400 block">Standard 3x4 Inches Frame</span>
+                    <Building2 className="w-12 h-12 text-slate-300 dark:text-slate-600 mx-auto" />
+                    <span className="text-xs font-bold text-slate-400 block">No Logo Uploaded</span>
+                    <span className="text-[10px] text-slate-400 block">Official 3x4 Inches Ratio</span>
                   </div>
                 )}
                 {/* Physical Dimension Badge */}
@@ -338,18 +413,18 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
                   3" × 4" (288×384px)
                 </div>
               </div>
-              <span className="text-[11px] font-mono font-bold text-gray-500">Aspect Ratio: 3:4 (Portrait)</span>
+              <span className="text-[11px] font-mono font-bold text-slate-500">Aspect Ratio: 3:4 (Portrait)</span>
             </div>
 
             {/* Upload Controls & URL */}
             <div className="flex-1 space-y-4 w-full">
-              <div className="p-4 bg-white rounded-2xl border border-gray-200 space-y-3">
-                <h4 className="text-xs font-bold text-gray-900 flex items-center gap-1.5">
-                  <Upload className="w-4 h-4 text-emerald-700" />
+              <div className="p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-3">
+                <h4 className="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+                  <Upload className="w-4 h-4 text-emerald-700 dark:text-emerald-400" />
                   <span>Upload Logo Image File (تصویر اپلوڈ کریں)</span>
                 </h4>
-                <p className="text-[11px] text-gray-500">
-                  Select your Madrasa emblem or logo. The image is automatically compressed and fitted into the official 3x4 inches frame.
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                  Select your Madrasa emblem or logo. The image is compressed and optimized for official print documents.
                 </p>
                 <label className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl cursor-pointer shadow-xs transition-all">
                   <Upload className="w-3.5 h-3.5" />
@@ -363,19 +438,19 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
                 </label>
               </div>
 
-              <div className="p-4 bg-white rounded-2xl border border-gray-200 space-y-2">
-                <label className="text-xs font-bold text-gray-900 block">Or Paste Web Logo URL</label>
+              <div className="p-4 bg-white dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 space-y-2">
+                <label className="text-xs font-bold text-slate-900 dark:text-slate-100 block">Or Paste Web Logo URL</label>
                 <input
                   type="url"
                   value={logoInputUrl}
                   onChange={(e) => setLogoInputUrl(e.target.value)}
-                  className="w-full p-2.5 text-xs rounded-xl border border-gray-300 bg-white font-mono"
+                  className="w-full p-2.5 text-xs rounded-xl border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-900 font-mono"
                   placeholder="https://example.com/madrasa-logo.png"
                 />
               </div>
 
-              <div className="p-3 bg-emerald-50 rounded-2xl border border-emerald-200 text-[11px] text-emerald-900">
-                💡 <strong>Notice:</strong> This logo will appear across official Certificates, Student ID Cards, Examination Admit Cards, Receipts, and the main Sidebar.
+              <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 rounded-xl border border-emerald-200 dark:border-emerald-800 text-[11px] text-emerald-900 dark:text-emerald-300">
+                💡 <strong>Commercial ERP Notice:</strong> This emblem renders across official Certificates, Student ID Cards, Examination Admit Cards, Receipts, and Reports.
               </div>
             </div>
           </div>

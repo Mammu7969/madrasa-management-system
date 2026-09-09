@@ -38,6 +38,7 @@ export const PrintDocModal: React.FC<PrintDocModalProps> = ({
       title={title}
       subtitle={`Student: ${studentName} (${admissionNo})`}
       maxWidth="3xl"
+      allowPrint={true}
       footer={
         <div className="flex items-center justify-between w-full">
           <span className="text-xs text-m3-on-surface-variant">

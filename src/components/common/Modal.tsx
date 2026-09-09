@@ -9,6 +9,7 @@ interface ModalProps {
   children: React.ReactNode;
   footer?: React.ReactNode;
   maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl' | '5xl';
+  allowPrint?: boolean;
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -18,7 +19,8 @@ export const Modal: React.FC<ModalProps> = ({
   subtitle,
   children,
   footer,
-  maxWidth = '2xl'
+  maxWidth = '2xl',
+  allowPrint = false
 }) => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -44,28 +46,29 @@ export const Modal: React.FC<ModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto no-print">
+    <div className={`fixed inset-0 z-50 overflow-y-auto ${!allowPrint ? 'no-print' : ''}`}>
       {/* Backdrop */}
       <div 
-        className="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
+        className="fixed inset-0 bg-black/50 backdrop-blur-xs transition-opacity no-print"
         onClick={onClose}
       />
 
       <div className="flex min-h-full items-center justify-center p-4 text-center">
         <div 
-          className={`w-full ${maxWidthClasses[maxWidth]} transform overflow-hidden rounded-3xl bg-white/90 backdrop-blur-2xl text-left align-middle shadow-[0_20px_60px_-15px_rgba(15,23,42,0.25)] transition-all border border-white/90 animate-in zoom-in-95 duration-200 ring-1 ring-black/5`}
+          className={`w-full ${maxWidthClasses[maxWidth]} transform overflow-hidden rounded-3xl bg-white dark:bg-m3-surface-container text-left align-middle shadow-m3-3 transition-all border border-m3-outline-variant/30 animate-in zoom-in-95 duration-200`}
         >
           {/* Header */}
-          <div className="flex items-center justify-between border-b border-white/60 px-6 py-4.5 bg-white/40 backdrop-blur-md">
+          <div className="flex items-center justify-between border-b border-m3-outline-variant/20 px-6 py-4.5 bg-m3-surface-container-low dark:bg-m3-surface-container-high/50">
             <div>
-              <h3 className="text-lg font-bold text-slate-800 tracking-tight">{title}</h3>
+              <h3 className="text-lg font-bold text-m3-on-surface tracking-tight">{title}</h3>
               {subtitle && (
-                <p className="text-xs text-slate-500 mt-0.5">{subtitle}</p>
+                <p className="text-xs text-m3-on-surface-variant mt-0.5">{subtitle}</p>
               )}
             </div>
             <button
+              type="button"
               onClick={onClose}
-              className="rounded-full p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100/60 transition-all active:scale-95"
+              className="rounded-full p-2 text-m3-on-surface-variant hover:text-m3-on-surface hover:bg-m3-surface-container-high transition-all active:scale-95 no-print"
             >
               <X className="w-5 h-5" />
             </button>
@@ -78,7 +81,7 @@ export const Modal: React.FC<ModalProps> = ({
 
           {/* Footer */}
           {footer && (
-            <div className="flex items-center justify-end gap-3 border-t border-white/60 px-6 py-4 bg-slate-50/40 backdrop-blur-md">
+            <div className="flex items-center justify-end gap-3 border-t border-m3-outline-variant/20 px-6 py-4 bg-m3-surface-container-low dark:bg-m3-surface-container-high/30 no-print">
               {footer}
             </div>
           )}

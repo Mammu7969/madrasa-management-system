@@ -4,7 +4,7 @@ import {
   FeedbackItem, ProfileChangeRequest, NoticeItem, GalleryItem,
   MadrasaClass, Subject, Staff, StudentUpdateLog,
   FinanceTransaction, FinanceCategoryItem, PeriodScheduleItem,
-  Department, ManualHoliday
+  Department, ManualHoliday, Examination, ExamStudentResult, InventoryItem
 } from '../types';
 import { supabase, isSupabaseConfigured } from './supabaseClient';
 
@@ -19,6 +19,8 @@ const STORAGE_KEYS = {
   SUBJECTS: 'mms_subjects_v1',
   ATTENDANCE: 'mms_attendance_v1',
   MANUAL_HOLIDAYS: 'mms_manual_holidays_v1',
+  EXAMINATIONS: 'mms_examinations_v1',
+  INVENTORY: 'mms_inventory_v1',
   ROZNAMCHAH: 'mms_roznamchah_v1',
   FEES: 'mms_fees_v1',
   FINANCE_TRANSACTIONS: 'mms_finance_transactions_v1',
@@ -1416,6 +1418,141 @@ export const db = {
     localStorage.setItem(STORAGE_KEYS.ROZNAMCHAH, JSON.stringify(records));
     backgroundSync(() => supabase.from('mms_roznamcha').upsert(newRecord));
     return newRecord;
+  },
+
+  // ==========================================
+  // EXAMINATIONS & RESULTS CRUD
+  // ==========================================
+  getExaminations(madrasaId?: string): Examination[] {
+    const raw = localStorage.getItem(STORAGE_KEYS.EXAMINATIONS);
+    let list: Examination[] = raw ? JSON.parse(raw) : [];
+    if (!raw || list.length === 0) {
+      list = [
+        {
+          id: 'exam-1',
+          madrasaId: madrasaId || 'madrasa-1',
+          title: 'Quarterly Tajweed & Hifz Assessment',
+          titleUrdu: 'سہ ماہی امتحانِ تجوید و حفظ قرآن',
+          term: 'Quarterly',
+          academicYear: '1447-1448 H / 2026',
+          classId: 'cls-1',
+          className: 'Hifz Section A',
+          startDate: '2026-09-15',
+          endDate: '2026-09-20',
+          status: 'Ongoing',
+          subjects: [
+            { id: 'sbj-1', name: 'Hifz Revision (Manzil)', nameUrdu: 'حفظ منزل', maxMarks: 100, passMarks: 40 },
+            { id: 'sbj-2', name: 'Makharij & Tajweed Rules', nameUrdu: 'مخارج و قواعد تجوید', maxMarks: 50, passMarks: 20 },
+            { id: 'sbj-3', name: 'Islamic Adab & Sunan', nameUrdu: 'اسلامی آداب و مسنون دعائیں', maxMarks: 50, passMarks: 20 },
+          ],
+          results: []
+        },
+        {
+          id: 'exam-2',
+          madrasaId: madrasaId || 'madrasa-1',
+          title: 'Half-Yearly Dars-e-Nizami Examination',
+          titleUrdu: 'شش ماہی امتحانِ درسِ نظامی',
+          term: 'Half-Yearly',
+          academicYear: '1447-1448 H / 2026',
+          classId: 'cls-4',
+          className: 'Alimiyat Year 1',
+          startDate: '2026-11-10',
+          endDate: '2026-11-20',
+          status: 'Upcoming',
+          subjects: [
+            { id: 'sbj-4', name: 'Arabic Grammar (Nahw & Sarf)', nameUrdu: 'نحو و صرف', maxMarks: 100, passMarks: 40 },
+            { id: 'sbj-5', name: 'Fiqh (Nur al-Idah)', nameUrdu: 'فقہ (نور الایضاح)', maxMarks: 100, passMarks: 40 },
+            { id: 'sbj-6', name: 'Hadith (Zad al-Talibin)', nameUrdu: 'حدیث (زاد الطالبین)', maxMarks: 100, passMarks: 40 },
+          ],
+          results: []
+        }
+      ];
+      localStorage.setItem(STORAGE_KEYS.EXAMINATIONS, JSON.stringify(list));
+    }
+    if (madrasaId) {
+      return list.filter(e => !e.madrasaId || e.madrasaId === madrasaId);
+    }
+    return list;
+  },
+
+  saveExamination(exam: Examination): Examination {
+    const list = this.getExaminations();
+    const index = list.findIndex(e => e.id === exam.id);
+    if (index >= 0) {
+      list[index] = exam;
+    } else {
+      list.unshift(exam);
+    }
+    localStorage.setItem(STORAGE_KEYS.EXAMINATIONS, JSON.stringify(list));
+    backgroundSync(() => supabase.from('mms_examinations').upsert(exam));
+    return exam;
+  },
+
+  deleteExamination(id: string): boolean {
+    const list = this.getExaminations().filter(e => e.id !== id);
+    localStorage.setItem(STORAGE_KEYS.EXAMINATIONS, JSON.stringify(list));
+    backgroundSync(() => supabase.from('mms_examinations').delete().eq('id', id));
+    return true;
+  },
+
+  recordExamResult(examId: string, result: ExamStudentResult): Examination | null {
+    const list = this.getExaminations();
+    const exam = list.find(e => e.id === examId);
+    if (!exam) return null;
+
+    exam.results = exam.results || [];
+    const rIndex = exam.results.findIndex(r => r.studentId === result.studentId);
+    if (rIndex >= 0) {
+      exam.results[rIndex] = result;
+    } else {
+      exam.results.push(result);
+    }
+    this.saveExamination(exam);
+    return exam;
+  },
+
+  // ==========================================
+  // INVENTORY ASSETS CRUD
+  // ==========================================
+  getInventory(madrasaId?: string): InventoryItem[] {
+    const raw = localStorage.getItem(STORAGE_KEYS.INVENTORY);
+    let list: InventoryItem[] = raw ? JSON.parse(raw) : [];
+    if (!raw || list.length === 0) {
+      list = [
+        { id: 'inv-1', madrasaId: madrasaId || 'madrasa-1', item: 'Quran Majeed (Tajweed 16 Lines)', itemUrdu: 'قرآن مجید ۱۶ سطری', quantity: 250, category: 'Kitabs', status: 'Available', minThreshold: 50, location: 'Central Maktabah' },
+        { id: 'inv-2', madrasaId: madrasaId || 'madrasa-1', item: 'Rihal (Wooden Bookstands)', itemUrdu: 'لکڑی کی رحل', quantity: 180, category: 'Furniture', status: 'In Use', minThreshold: 20, location: 'Hifz Classrooms' },
+        { id: 'inv-3', madrasaId: madrasaId || 'madrasa-1', item: 'Hostel Bedding & Blankets', itemUrdu: 'ہاسٹل بستر و کمبل', quantity: 95, category: 'Hostel', status: 'Available', minThreshold: 30, location: 'Hostel Block A' },
+        { id: 'inv-4', madrasaId: madrasaId || 'madrasa-1', item: 'Whiteboards & Markers', itemUrdu: 'وائٹ بورڈ و مارکرز', quantity: 12, category: 'Classroom', status: 'Available', minThreshold: 5, location: 'Staff Room' },
+        { id: 'inv-5', madrasaId: madrasaId || 'madrasa-1', item: 'Public Address & Azan Speaker System', itemUrdu: 'لاؤڈ اسپیکر و مائک', quantity: 4, category: 'Audio', status: 'Available', minThreshold: 2, location: 'Masjid Hall' },
+        { id: 'inv-6', madrasaId: madrasaId || 'madrasa-1', item: 'Cooking Rice & Grains', itemUrdu: 'چاول و اناج راشن', quantity: 40, category: 'Kitchen / Mess', status: 'Low', minThreshold: 50, unit: 'Kg', location: 'Matbakh (Mess)' },
+        { id: 'inv-7', madrasaId: madrasaId || 'madrasa-1', item: 'Cooking Oil', itemUrdu: 'تیل و گھی', quantity: 8, category: 'Kitchen / Mess', status: 'Low', minThreshold: 25, unit: 'Liters', location: 'Matbakh (Mess)' }
+      ];
+      localStorage.setItem(STORAGE_KEYS.INVENTORY, JSON.stringify(list));
+    }
+    if (madrasaId) {
+      return list.filter(i => !i.madrasaId || i.madrasaId === madrasaId);
+    }
+    return list;
+  },
+
+  saveInventoryItem(item: InventoryItem): InventoryItem {
+    const list = this.getInventory();
+    const index = list.findIndex(i => i.id === item.id);
+    if (index >= 0) {
+      list[index] = item;
+    } else {
+      list.unshift(item);
+    }
+    localStorage.setItem(STORAGE_KEYS.INVENTORY, JSON.stringify(list));
+    backgroundSync(() => supabase.from('mms_inventory').upsert(item));
+    return item;
+  },
+
+  deleteInventoryItem(id: string): boolean {
+    const list = this.getInventory().filter(i => i.id !== id);
+    localStorage.setItem(STORAGE_KEYS.INVENTORY, JSON.stringify(list));
+    backgroundSync(() => supabase.from('mms_inventory').delete().eq('id', id));
+    return true;
   },
 
   exportDatabaseJSON(): string {

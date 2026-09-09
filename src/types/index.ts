@@ -391,3 +391,72 @@ export interface StudentUpdateLog {
   updatedBy: string; // e.g. "Maulana Abdul Qadeer Qasmi (Principal / Admin)"
   changes: StudentUpdateChange[];
 }
+
+// ==========================================
+// EXAMINATION & RESULT MODELS
+// ==========================================
+export type ExamGrade = 'Mumtaz' | 'Jayyid Jiddan' | 'Jayyid' | 'Hasan' | 'Maqbool' | 'Rasib';
+
+export interface ExamSubjectMark {
+  subjectId: string;
+  subjectName: string;
+  subjectNameUrdu?: string;
+  maxMarks: number;
+  obtainedMarks: number;
+}
+
+export interface ExamStudentResult {
+  studentId: string;
+  studentName: string;
+  studentNameUrdu?: string;
+  admissionNo: string;
+  className: string;
+  marks: ExamSubjectMark[];
+  totalMaxMarks: number;
+  totalObtainedMarks: number;
+  percentage: number;
+  grade: ExamGrade;
+  position?: number;
+  remarks?: string;
+}
+
+export interface Examination {
+  id: string;
+  madrasaId: string;
+  title: string;
+  titleUrdu?: string;
+  term: 'Quarterly' | 'Half-Yearly' | 'Annual' | 'Sanad' | 'Monthly';
+  academicYear: string;
+  classId: string;
+  className: string;
+  startDate: string;
+  endDate: string;
+  status: 'Upcoming' | 'Ongoing' | 'Completed';
+  subjects: {
+    id: string;
+    name: string;
+    nameUrdu?: string;
+    maxMarks: number;
+    passMarks: number;
+  }[];
+  results: ExamStudentResult[];
+  createdAt?: string;
+}
+
+// ==========================================
+// INVENTORY ASSETS MODEL
+// ==========================================
+export interface InventoryItem {
+  id: string;
+  madrasaId: string;
+  item: string;
+  itemUrdu?: string;
+  quantity: number;
+  category: 'Kitabs' | 'Furniture' | 'Hostel' | 'Classroom' | 'Audio' | 'Kitchen / Mess' | 'Library';
+  status: 'Available' | 'In Use' | 'Low' | 'Needs Repair';
+  minThreshold?: number;
+  unit?: string;
+  location?: string;
+  lastUpdated?: string;
+}
+

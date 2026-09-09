@@ -40,11 +40,13 @@ import { FontShowcaseModal } from '../Fonts/FontShowcaseModal';
 interface TopAppBarProps {
   onNavigateHome: () => void;
   onOpenCommandPalette: () => void;
+  currentTab?: string;
 }
 
 export const TopAppBar: React.FC<TopAppBarProps> = ({ 
   onNavigateHome,
-  onOpenCommandPalette 
+  onOpenCommandPalette,
+  currentTab = 'dashboard'
 }) => {
   const { user, activeMadrasa, logout, updateSuperAdminCredentials, getSuperAdminCredentials } = useAuth();
   const { language, setLanguage, t, isFullscreen, toggleFullscreen, showToast, isDarkMode, toggleDarkMode } = useTheme();
@@ -168,33 +170,76 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({
     }
   };
 
+  const getTabTitle = (tab: string): { en: string; ur: string } => {
+    switch (tab) {
+      case 'dashboard': return { en: 'Dashboard', ur: 'ڈیش بورڈ' };
+      case 'quran': return { en: 'Holy Quran', ur: 'قرآن کریم' };
+      case 'students': return { en: 'Students Roster', ur: 'رجسٹر طلبہ' };
+      case 'students_add': return { en: 'New Admission', ur: 'نیا داخلہ' };
+      case 'students_profile': return { en: 'Student Profile', ur: 'کوائف طالب علم' };
+      case 'teachers': return { en: 'Teachers', ur: 'اساتذہ' };
+      case 'classes': return { en: 'Classes & Syllabus', ur: 'درجات و نصاب' };
+      case 'staff': return { en: 'Staff & Employees', ur: 'ملازمین' };
+      case 'attendance': return { en: 'Attendance Register', ur: 'حاضری رجسٹر' };
+      case 'roznamcha': return { en: 'Daily Roznamcha', ur: 'روزنامچہ سبق' };
+      case 'fees': return { en: 'Fees & Collections', ur: 'فیس وصولی' };
+      case 'examinations': return { en: 'Examinations & Results', ur: 'امتحانات و نتائج' };
+      case 'inventory': return { en: 'Inventory & Gallery', ur: 'سامان و تصاویر' };
+      case 'schedule': return { en: 'Schedule & Namaz', ur: 'نظام الاوقات' };
+      case 'income_expenses': return { en: 'Cashbook Ledger', ur: 'کیش بک' };
+      case 'certificates': return { en: 'Certificates Studio', ur: 'اسناد و کارڈز' };
+      case 'reports': return { en: 'Reports & Exports', ur: 'رپورٹس' };
+      case 'notices': return { en: 'Notice Board', ur: 'اعلانات' };
+      case 'settings': return { en: 'Settings', ur: 'سیٹنگز' };
+      case 'mms_settings': return { en: 'MMS Settings', ur: 'ایم ایم ایس' };
+      case 'support': return { en: 'Support', ur: 'رہنمائی' };
+      default: return { en: 'Overview', ur: 'جائزہ' };
+    }
+  };
+
+  const activeTitle = getTabTitle(currentTab);
+
   return (
     <>
-      <header className="h-16 bg-white/70 backdrop-blur-2xl border-b border-white/80 sticky top-0 z-30 px-3 sm:px-4 lg:px-6 flex items-center justify-between gap-2 sm:gap-3 shadow-[0_4px_20px_-2px_rgba(18,59,99,0.05)] no-print select-none transition-colors duration-200">
+      <header className="h-16 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-slate-200/80 dark:border-slate-800 sticky top-0 z-30 px-3 sm:px-4 lg:px-6 flex items-center justify-between gap-2 sm:gap-3 shadow-xs no-print select-none transition-colors duration-200">
         
-        {/* ================= LEFT SECTION: MENU & SEARCH ================= */}
+        {/* ================= LEFT SECTION: MENU, BREADCRUMB & SEARCH ================= */}
         <div className="flex items-center gap-2 sm:gap-3 shrink-0">
           {/* Menu / Hamburger Button */}
           <button
             onClick={onOpenCommandPalette}
             title="Global Navigation (Ctrl + K)"
-            className="p-2 rounded-2xl bg-white/70 hover:bg-white text-slate-600 hover:text-slate-900 border border-white/90 shadow-2xs transition-all active:scale-95"
+            className="p-2 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition-all cursor-pointer"
           >
             <Menu className="w-4 h-4" />
           </button>
 
+          {/* Module Breadcrumb Indicator */}
+          <div className="hidden md:flex items-center gap-2 text-xs">
+            <button
+              onClick={onNavigateHome}
+              className="text-slate-500 dark:text-slate-400 hover:text-emerald-700 dark:hover:text-emerald-400 font-semibold cursor-pointer transition-colors"
+            >
+              ERP
+            </button>
+            <span className="text-slate-300 dark:text-slate-600 font-bold">/</span>
+            <span className="font-bold text-slate-900 dark:text-slate-100 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-lg">
+              {language === 'ur' ? activeTitle.ur : activeTitle.en}
+            </span>
+          </div>
+
           {/* Search Box */}
-          <div className="w-56 sm:w-72 md:w-80">
+          <div className="w-44 sm:w-60 md:w-72">
             <button
               onClick={onOpenCommandPalette}
-              className="w-full flex items-center justify-between px-3 py-1.5 rounded-2xl bg-white/60 hover:bg-white/90 border border-slate-200/70 text-xs text-slate-400 hover:text-slate-700 transition-all group shadow-2xs"
+              className="w-full flex items-center justify-between px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-white dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200/80 dark:border-slate-700 text-xs text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-all group cursor-pointer"
             >
               <div className="flex items-center gap-2 truncate">
-                <Search className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#079669] transition-colors shrink-0" />
-                <span className="truncate text-[11px] text-slate-500">Search students, staff, receipts, etc...</span>
+                <Search className="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-600 transition-colors shrink-0" />
+                <span className="truncate text-[11px] text-slate-500 dark:text-slate-400">Search talaba, ustadh, fee...</span>
               </div>
-              <kbd className="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono font-bold text-slate-400 bg-white/90 rounded border border-slate-200/80 shadow-2xs">
-                Ctrl + K
+              <kbd className="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono font-bold text-slate-400 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-700">
+                ⌘K
               </kbd>
             </button>
           </div>
