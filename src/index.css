@@ -266,9 +266,11 @@ html.dark body,
 /* 1. Core Headings & Dark Text Color Overrides */
 html.dark h1, html.dark h2, html.dark h3, html.dark h4, html.dark h5, html.dark h6,
 [data-theme="dark"] h1, [data-theme="dark"] h2, [data-theme="dark"] h3, [data-theme="dark"] h4, [data-theme="dark"] h5, [data-theme="dark"] h6,
+html.dark .text-slate-950, html.dark .text-gray-950, html.dark .text-zinc-950, html.dark .text-neutral-950,
 html.dark .text-slate-900, html.dark .text-gray-900, html.dark .text-zinc-900, html.dark .text-neutral-900,
 html.dark .text-slate-800, html.dark .text-gray-800, html.dark .text-zinc-800, html.dark .text-neutral-800,
 html.dark [class*="text-[#123B63]"], html.dark [class*="text-[#102A43]"],
+[data-theme="dark"] .text-slate-950, [data-theme="dark"] .text-gray-950, [data-theme="dark"] .text-zinc-950, [data-theme="dark"] .text-neutral-950,
 [data-theme="dark"] .text-slate-900, [data-theme="dark"] .text-gray-900, [data-theme="dark"] .text-zinc-900, [data-theme="dark"] .text-neutral-900,
 [data-theme="dark"] .text-slate-800, [data-theme="dark"] .text-gray-800, [data-theme="dark"] .text-zinc-800, [data-theme="dark"] .text-neutral-800,
 [data-theme="dark"] [class*="text-[#123B63]"], [data-theme="dark"] [class*="text-[#102A43]"] {
@@ -283,10 +285,12 @@ html.dark .text-slate-600, html.dark .text-gray-600, html.dark .text-zinc-600, h
   color: #E2E8F0 !important;
 }
 
-/* 3. Muted & Meta Text Overrides */
+/* 3. Muted & Meta Text Overrides (High Visibility) */
 html.dark .text-slate-500, html.dark .text-gray-500, html.dark .text-zinc-500, html.dark .text-neutral-500,
-[data-theme="dark"] .text-slate-500, [data-theme="dark"] .text-gray-500, [data-theme="dark"] .text-zinc-500, [data-theme="dark"] .text-neutral-500 {
-  color: #94A3B8 !important;
+html.dark .text-slate-400, html.dark .text-gray-400, html.dark .text-zinc-400, html.dark .text-neutral-400,
+[data-theme="dark"] .text-slate-500, [data-theme="dark"] .text-gray-500, [data-theme="dark"] .text-zinc-500, [data-theme="dark"] .text-neutral-500,
+[data-theme="dark"] .text-slate-400, [data-theme="dark"] .text-gray-400, [data-theme="dark"] .text-zinc-400, [data-theme="dark"] .text-neutral-400 {
+  color: #CBD5E1 !important;
 }
 
 /* 4. White / Light Backgrounds -> Slate Dark Glass */
@@ -357,54 +361,89 @@ html.dark .border-white\/80, html.dark .border-white\/90,
 }
 
 /* 8. High Contrast Semantic Status Pills */
+/* 8. High Contrast Semantic Status Pills & Text Overrides */
 html.dark .bg-emerald-50, html.dark .bg-emerald-100,
 [data-theme="dark"] .bg-emerald-50, [data-theme="dark"] .bg-emerald-100 {
   background-color: rgba(6, 78, 59, 0.45) !important;
 }
-html.dark .text-emerald-700, html.dark .text-emerald-800, html.dark .text-emerald-900,
-[data-theme="dark"] .text-emerald-700, [data-theme="dark"] .text-emerald-800, [data-theme="dark"] .text-emerald-900 {
-  color: #34D399 !important;
+html.dark .text-emerald-950, [data-theme="dark"] .text-emerald-950,
+html.dark .text-emerald-900, [data-theme="dark"] .text-emerald-900,
+html.dark .text-emerald-800, [data-theme="dark"] .text-emerald-800,
+html.dark .text-emerald-700, [data-theme="dark"] .text-emerald-700 {
+  color: #6EE7B7 !important;
 }
 
 html.dark .bg-blue-50, html.dark .bg-blue-100,
 [data-theme="dark"] .bg-blue-50, [data-theme="dark"] .bg-blue-100 {
   background-color: rgba(30, 58, 138, 0.45) !important;
 }
-html.dark .text-blue-700, html.dark .text-blue-800, html.dark .text-blue-900,
-[data-theme="dark"] .text-blue-700, [data-theme="dark"] .text-blue-800, [data-theme="dark"] .text-blue-900 {
-  color: #60A5FA !important;
+html.dark .text-blue-950, [data-theme="dark"] .text-blue-950,
+html.dark .text-blue-900, [data-theme="dark"] .text-blue-900,
+html.dark .text-blue-800, [data-theme="dark"] .text-blue-800,
+html.dark .text-blue-700, [data-theme="dark"] .text-blue-700 {
+  color: #93C5FD !important;
 }
 
 html.dark .bg-amber-50, html.dark .bg-amber-100,
 [data-theme="dark"] .bg-amber-50, [data-theme="dark"] .bg-amber-100 {
   background-color: rgba(120, 53, 15, 0.45) !important;
 }
-html.dark .text-amber-700, html.dark .text-amber-800, html.dark .text-amber-900,
-[data-theme="dark"] .text-amber-700, [data-theme="dark"] .text-amber-800, [data-theme="dark"] .text-amber-900 {
-  color: #FBBF24 !important;
+html.dark .text-amber-950, [data-theme="dark"] .text-amber-950,
+html.dark .text-amber-900, [data-theme="dark"] .text-amber-900,
+html.dark .text-amber-800, [data-theme="dark"] .text-amber-800,
+html.dark .text-amber-700, [data-theme="dark"] .text-amber-700 {
+  color: #FDE68A !important;
 }
 
 html.dark .bg-rose-50, html.dark .bg-rose-100, html.dark .bg-red-50, html.dark .bg-red-100,
 [data-theme="dark"] .bg-rose-50, [data-theme="dark"] .bg-rose-100, [data-theme="dark"] .bg-red-50, [data-theme="dark"] .bg-red-100 {
   background-color: rgba(136, 19, 55, 0.45) !important;
 }
-html.dark .text-rose-700, html.dark .text-rose-800, html.dark .text-rose-900,
-html.dark .text-red-700, html.dark .text-red-800, html.dark .text-red-900,
-[data-theme="dark"] .text-rose-700, [data-theme="dark"] .text-rose-800, [data-theme="dark"] .text-rose-900,
-[data-theme="dark"] .text-red-700, [data-theme="dark"] .text-red-800, [data-theme="dark"] .text-red-900 {
-  color: #F87171 !important;
+html.dark .text-rose-950, [data-theme="dark"] .text-rose-950,
+html.dark .text-rose-900, [data-theme="dark"] .text-rose-900,
+html.dark .text-rose-800, [data-theme="dark"] .text-rose-800,
+html.dark .text-rose-700, [data-theme="dark"] .text-rose-700,
+html.dark .text-red-950, [data-theme="dark"] .text-red-950,
+html.dark .text-red-900, [data-theme="dark"] .text-red-900,
+html.dark .text-red-800, [data-theme="dark"] .text-red-800,
+html.dark .text-red-700, [data-theme="dark"] .text-red-700 {
+  color: #FCA5A5 !important;
 }
 
 html.dark .bg-purple-50, html.dark .bg-purple-100,
 [data-theme="dark"] .bg-purple-50, [data-theme="dark"] .bg-purple-100 {
   background-color: rgba(88, 28, 135, 0.45) !important;
 }
-html.dark .text-purple-700, html.dark .text-purple-800, html.dark .text-purple-900,
-[data-theme="dark"] .text-purple-700, [data-theme="dark"] .text-purple-800, [data-theme="dark"] .text-purple-900 {
-  color: #C084FC !important;
+html.dark .text-purple-950, [data-theme="dark"] .text-purple-950,
+html.dark .text-purple-900, [data-theme="dark"] .text-purple-900,
+html.dark .text-purple-800, [data-theme="dark"] .text-purple-800,
+html.dark .text-purple-700, [data-theme="dark"] .text-purple-700 {
+  color: #D8B4FE !important;
 }
 
-/* 9. Tables */
+html.dark .bg-sky-50, html.dark .bg-sky-100,
+[data-theme="dark"] .bg-sky-50, [data-theme="dark"] .bg-sky-100 {
+  background-color: rgba(12, 74, 110, 0.45) !important;
+}
+html.dark .text-sky-950, [data-theme="dark"] .text-sky-950,
+html.dark .text-sky-900, [data-theme="dark"] .text-sky-900,
+html.dark .text-sky-800, [data-theme="dark"] .text-sky-800,
+html.dark .text-sky-700, [data-theme="dark"] .text-sky-700 {
+  color: #7DD3FC !important;
+}
+
+html.dark .bg-teal-50, html.dark .bg-teal-100,
+[data-theme="dark"] .bg-teal-50, [data-theme="dark"] .bg-teal-100 {
+  background-color: rgba(19, 78, 74, 0.45) !important;
+}
+html.dark .text-teal-950, [data-theme="dark"] .text-teal-950,
+html.dark .text-teal-900, [data-theme="dark"] .text-teal-900,
+html.dark .text-teal-800, [data-theme="dark"] .text-teal-800,
+html.dark .text-teal-700, [data-theme="dark"] .text-teal-700 {
+  color: #5EEAD4 !important;
+}
+
+/* 9. Tables & Sticky Columns */
 html.dark table,
 [data-theme="dark"] table {
   color: #F8FAFC !important;
@@ -412,7 +451,7 @@ html.dark table,
 html.dark th,
 [data-theme="dark"] th {
   background-color: rgba(15, 23, 42, 0.95) !important;
-  color: #CBD5E1 !important;
+  color: #E2E8F0 !important;
   border-color: rgba(255, 255, 255, 0.12) !important;
 }
 html.dark td,
@@ -422,5 +461,25 @@ html.dark td,
 html.dark tr:hover,
 [data-theme="dark"] tr:hover {
   background-color: rgba(51, 65, 85, 0.4) !important;
+}
+
+html.dark .sticky,
+[data-theme="dark"] .sticky {
+  background-color: #0F172A !important;
+  color: #F8FAFC !important;
+}
+html.dark th.sticky,
+[data-theme="dark"] th.sticky {
+  background-color: #090D16 !important;
+  color: #F8FAFC !important;
+}
+
+/* 10. Buttons & Controls in Dark Mode */
+html.dark button.bg-gray-100,
+[data-theme="dark"] button.bg-gray-100,
+html.dark button.bg-slate-100,
+[data-theme="dark"] button.bg-slate-100 {
+  background-color: rgba(51, 65, 85, 0.7) !important;
+  color: #F1F5F9 !important;
 }
 

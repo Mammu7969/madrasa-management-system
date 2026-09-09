@@ -32,10 +32,14 @@ import {
   Lock,
   User,
   Sparkles,
-  RefreshCw
+  RefreshCw,
+  Camera,
+  Upload,
+  Edit3
 } from 'lucide-react';
 import { Modal } from '../common/Modal';
 import { generateDefaultCredentials } from '../../utils/credentialGenerator';
+import { compressImage } from '../../utils/imageCompressor';
 
 // High-fidelity portrait avatars matching the scholarly reference images
 const TEACHER_PORTRAITS: Record<string, string> = {
@@ -83,6 +87,90 @@ export const TeachersModule: React.FC = () => {
   const [newDob, setNewDob] = useState<string>('1990-01-01');
   const [newUsername, setNewUsername] = useState<string>('');
   const [newPassword, setNewPassword] = useState<string>('');
+  const [newPhotoUrl, setNewPhotoUrl] = useState<string>('');
+
+  // Edit Teacher Form State
+  const [showEditTeacherModal, setShowEditTeacherModal] = useState<boolean>(false);
+  const [editingTeacher, setEditingTeacher] = useState<Teacher | null>(null);
+  const [editName, setEditName] = useState<string>('');
+  const [editNameUrdu, setEditNameUrdu] = useState<string>('');
+  const [editDesignation, setEditDesignation] = useState<string>('Quran Teacher');
+  const [editAssignedClass, setEditAssignedClass] = useState<string>('General');
+  const [editPhone, setEditPhone] = useState<string>('');
+  const [editEmail, setEditEmail] = useState<string>('');
+  const [editQualification, setEditQualification] = useState<string>('Fazil Dars-e-Nizami');
+  const [editSalary, setEditSalary] = useState<number>(0);
+  const [editJoiningDate, setEditJoiningDate] = useState<string>('');
+  const [editDob, setEditDob] = useState<string>('');
+  const [editPhotoUrl, setEditPhotoUrl] = useState<string>('');
+  const [editIsActive, setEditIsActive] = useState<boolean>(true);
+
+  // Photo Upload Handler with Compression
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>, isEditing = false) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const compressed = await compressImage(file, 450, 600, 0.75);
+      if (isEditing) {
+        setEditPhotoUrl(compressed);
+      } else {
+        setNewPhotoUrl(compressed);
+      }
+      showToast('Passport photo processed successfully!', 'success');
+    } catch {
+      showToast('Failed to process image file. Please try another photo.', 'error');
+    }
+  };
+
+  const handleOpenEditTeacher = (teacher: Teacher) => {
+    setEditingTeacher(teacher);
+    setEditName(teacher.name);
+    setEditNameUrdu(teacher.nameUrdu || teacher.name);
+    setEditDesignation(teacher.designation || 'Quran Teacher');
+    setEditAssignedClass(teacher.assignedClass || 'General');
+    setEditPhone(teacher.phone || '');
+    setEditEmail(teacher.email || '');
+    setEditQualification(teacher.qualification || 'Fazil Dars-e-Nizami');
+    setEditSalary(teacher.salary || 0);
+    setEditJoiningDate(teacher.joiningDate || new Date().toISOString().split('T')[0]);
+    setEditDob(teacher.dob || '1990-01-01');
+    setEditPhotoUrl(teacher.photoUrl || '');
+    setEditIsActive(teacher.isActive !== false);
+    setShowEditTeacherModal(true);
+  };
+
+  const handleUpdateTeacher = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingTeacher || !editName.trim() || !activeMadrasa) {
+      showToast('Please provide teacher name', 'error');
+      return;
+    }
+
+    const updated: Teacher = {
+      ...editingTeacher,
+      name: editName.trim(),
+      nameUrdu: editNameUrdu.trim() || editName.trim(),
+      designation: editDesignation.trim(),
+      assignedClass: editAssignedClass.trim() || 'General',
+      phone: editPhone.trim() || '+91 98765 00000',
+      email: editEmail.trim() || undefined,
+      qualification: editQualification.trim() || 'Fazil Dars-e-Nizami',
+      salary: Number(editSalary) || 0,
+      joiningDate: editJoiningDate,
+      dob: editDob,
+      photoUrl: editPhotoUrl.trim() || undefined,
+      isActive: editIsActive
+    };
+
+    db.updateTeacher(updated);
+    const updatedList = db.getTeachers(activeMadrasa.id);
+    setTeachers(updatedList);
+    if (selectedTeacherForProfile && selectedTeacherForProfile.id === updated.id) {
+      setSelectedTeacherForProfile(updated);
+    }
+    showToast(`Ustadh ${updated.name} updated successfully!`, 'success');
+    setShowEditTeacherModal(false);
+  };
 
   const handleOpenTeacherProfile = (teacher: Teacher) => {
     const creds = generateDefaultCredentials(teacher.name, teacher.joiningDate, teacher.dob);
@@ -155,7 +243,9 @@ export const TeachersModule: React.FC = () => {
       password: creds.password,
       joiningDate: newJoiningDate,
       dob: newDob,
-      isPresentToday: isPresentToday
+      photoUrl: newPhotoUrl.trim() || undefined,
+      isPresentToday: isPresentToday,
+      isActive: true
     };
 
     db.addTeacher(newTeacher);
@@ -170,6 +260,7 @@ export const TeachersModule: React.FC = () => {
     setSalary(0);
     setNewUsername('');
     setNewPassword('');
+    setNewPhotoUrl('');
     setShowNewTeacherModal(false);
   };
 
@@ -516,7 +607,7 @@ export const TeachersModule: React.FC = () => {
       {viewMode === 'grid' ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {filteredTeachers.map(t => {
-            const avatar = TEACHER_PORTRAITS[t.teacherIdNo] || TEACHER_PORTRAITS['TCH-001'];
+            const avatar = t.photoUrl || TEACHER_PORTRAITS[t.teacherIdNo] || TEACHER_PORTRAITS['TCH-001'];
 
             return (
               <div
@@ -619,31 +710,42 @@ export const TeachersModule: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Bottom 3 Action Buttons */}
-                <div className="pt-3 border-t border-gray-100 flex items-center justify-between gap-2">
+                {/* Bottom Action Buttons */}
+                <div className="pt-3 border-t border-gray-100 flex items-center justify-between gap-1.5">
                   <button
                     type="button"
                     onClick={() => handleOpenTeacherProfile(t)}
-                    className="flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-xl bg-gray-50 hover:bg-emerald-50 text-gray-700 hover:text-emerald-800 border border-gray-200 text-xs font-bold transition-all shadow-xs"
+                    className="flex-1 flex items-center justify-center gap-1 py-1.5 px-2.5 rounded-xl bg-gray-50 hover:bg-emerald-50 text-gray-700 hover:text-emerald-800 border border-gray-200 text-xs font-bold transition-all shadow-xs"
+                    title="View Profile Dossier"
                   >
                     <Eye className="w-3.5 h-3.5" />
-                    <span>View Profile</span>
+                    <span>View</span>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleOpenEditTeacher(t)}
+                    className="flex-1 flex items-center justify-center gap-1 py-1.5 px-2.5 rounded-xl bg-gray-50 hover:bg-emerald-50 text-gray-700 hover:text-emerald-800 border border-gray-200 text-xs font-bold transition-all shadow-xs"
+                    title="Edit Ustadh Profile & Photo"
+                  >
+                    <Edit3 className="w-3.5 h-3.5 text-emerald-700" />
+                    <span>Edit</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={() => setSelectedTeacherForContact(t)}
-                    className="flex-1 flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-xl bg-gray-50 hover:bg-emerald-50 text-gray-700 hover:text-emerald-800 border border-gray-200 text-xs font-bold transition-all shadow-xs"
+                    className="p-1.5 rounded-xl bg-gray-50 hover:bg-emerald-50 text-gray-700 hover:text-emerald-800 border border-gray-200 text-xs font-bold transition-all shadow-xs"
+                    title="Contact Ustadh"
                   >
                     <MessageSquare className="w-3.5 h-3.5" />
-                    <span>Contact</span>
                   </button>
 
                   <button
                     type="button"
                     onClick={() => handleToggleAttendance(t)}
-                    className="p-2 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-500 border border-gray-200 transition-all"
-                    title="Toggle Attendance / More"
+                    className="p-1.5 rounded-xl bg-gray-50 hover:bg-gray-100 text-gray-500 border border-gray-200 transition-all"
+                    title="Toggle Attendance Status"
                   >
                     <MoreVertical className="w-3.5 h-3.5" />
                   </button>
@@ -677,9 +779,18 @@ export const TeachersModule: React.FC = () => {
                       {t.teacherIdNo}
                     </td>
                     <td className="py-3 px-4 font-bold text-gray-900">
-                      <div className="flex items-center gap-2">
-                        <span>{t.name}</span>
-                        <span className="text-gray-400 font-urdu">({t.nameUrdu})</span>
+                      <div className="flex items-center gap-2.5">
+                        <img
+                          src={t.photoUrl || TEACHER_PORTRAITS[t.teacherIdNo] || TEACHER_PORTRAITS['TCH-001']}
+                          alt={t.name}
+                          className="w-8 h-8 rounded-xl object-cover border border-emerald-200 shrink-0"
+                        />
+                        <div>
+                          <div className="flex items-center gap-1.5">
+                            <span>{t.name}</span>
+                            <span className="text-gray-400 font-urdu text-xs">({t.nameUrdu})</span>
+                          </div>
+                        </div>
                       </div>
                     </td>
                     <td className="py-3 px-4 text-gray-600">{t.designation || 'Teacher'}</td>
@@ -724,6 +835,14 @@ export const TeachersModule: React.FC = () => {
                         </button>
                         <button
                           type="button"
+                          onClick={() => handleOpenEditTeacher(t)}
+                          className="p-1.5 rounded-lg bg-gray-100 hover:bg-emerald-100 text-gray-700 hover:text-emerald-800"
+                          title="Edit Ustadh Profile & Photo"
+                        >
+                          <Edit3 className="w-3.5 h-3.5 text-emerald-700" />
+                        </button>
+                        <button
+                          type="button"
                           onClick={() => setSelectedTeacherForContact(t)}
                           className="p-1.5 rounded-lg bg-gray-100 hover:bg-emerald-100 text-gray-700 hover:text-emerald-800"
                           title="Contact"
@@ -764,7 +883,7 @@ export const TeachersModule: React.FC = () => {
             <div className="p-4 rounded-2xl bg-emerald-50/70 border border-emerald-200 flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <img
-                  src={TEACHER_PORTRAITS[selectedTeacherForProfile.teacherIdNo] || TEACHER_PORTRAITS['TCH-001']}
+                  src={selectedTeacherForProfile.photoUrl || TEACHER_PORTRAITS[selectedTeacherForProfile.teacherIdNo] || TEACHER_PORTRAITS['TCH-001']}
                   alt={selectedTeacherForProfile.name}
                   className="w-14 h-14 rounded-2xl object-cover border-2 border-white shadow-xs"
                 />
@@ -782,6 +901,14 @@ export const TeachersModule: React.FC = () => {
               </div>
 
               <div className="flex items-center gap-2 flex-wrap justify-end">
+                <button
+                  type="button"
+                  onClick={() => handleOpenEditTeacher(selectedTeacherForProfile)}
+                  className="px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5 bg-white text-emerald-800 border border-emerald-300 hover:bg-emerald-50 transition-all shadow-xs cursor-pointer"
+                >
+                  <Edit3 className="w-3.5 h-3.5 text-emerald-700" />
+                  <span>Edit Ustadh</span>
+                </button>
                 <button
                   type="button"
                   onClick={() => handleToggleActive(selectedTeacherForProfile.id)}
@@ -1037,6 +1164,68 @@ export const TeachersModule: React.FC = () => {
         >
           <form onSubmit={handleAdd} className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Passport-Size Photo Upload Card (3:4 ratio) */}
+              <div className="sm:col-span-2 p-3.5 bg-gray-50/80 rounded-2xl border border-gray-200 flex flex-col sm:flex-row items-center gap-4">
+                <div className="relative w-24 h-32 rounded-xl overflow-hidden border-2 border-dashed border-emerald-300 bg-white flex flex-col items-center justify-center shrink-0 shadow-2xs group">
+                  {newPhotoUrl ? (
+                    <>
+                      <img
+                        src={newPhotoUrl}
+                        alt="Passport Preview"
+                        className="w-full h-full object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setNewPhotoUrl('')}
+                        className="absolute top-1 right-1 p-1 bg-rose-600 hover:bg-rose-700 text-white rounded-full shadow-xs"
+                        title="Remove Photo"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </>
+                  ) : (
+                    <div className="text-center p-2">
+                      <Camera className="w-6 h-6 text-emerald-600 mx-auto mb-1" />
+                      <span className="text-[10px] font-bold text-gray-400 block leading-tight">Passport Photo<br />(3:4 ratio)</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex-1 space-y-2 text-center sm:text-left">
+                  <div>
+                    <h4 className="text-xs font-bold text-gray-900 flex items-center justify-center sm:justify-start gap-1.5">
+                      <Upload className="w-3.5 h-3.5 text-emerald-700" />
+                      <span>Ustadh Passport Size Photo (پاسپورٹ سائز تصویر)</span>
+                    </h4>
+                    <p className="text-[11px] text-gray-500 mt-0.5">
+                      Standard 3:4 portrait ratio. Photo is automatically compressed & optimized for ID cards and dossier.
+                    </p>
+                  </div>
+
+                  <div className="flex items-center justify-center sm:justify-start gap-2">
+                    <label className="px-3.5 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs cursor-pointer inline-flex items-center gap-1.5 transition-all shadow-2xs">
+                      <Upload className="w-3.5 h-3.5" />
+                      <span>{newPhotoUrl ? 'Change Photo' : 'Upload Passport Photo'}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handlePhotoUpload(e, false)}
+                        className="hidden"
+                      />
+                    </label>
+                    {newPhotoUrl && (
+                      <button
+                        type="button"
+                        onClick={() => setNewPhotoUrl('')}
+                        className="px-3 py-1.5 rounded-xl bg-gray-100 hover:bg-rose-50 text-rose-700 text-xs font-bold transition-all border border-gray-200"
+                      >
+                        Remove
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+
               <div>
                 <label className="text-xs font-bold text-gray-700 block mb-1">
                   Full Name in English *
@@ -1246,6 +1435,259 @@ export const TeachersModule: React.FC = () => {
               </div>
             </div>
           </form>
+        </Modal>
+      )}
+
+      {/* =========================================================================
+          8. EDIT TEACHER PROFILE & PASSPORT PHOTO MODAL
+          ========================================================================= */}
+      {showEditTeacherModal && editingTeacher && (
+        <Modal
+          isOpen={showEditTeacherModal}
+          onClose={() => setShowEditTeacherModal(false)}
+          title={`Edit Ustadh Profile: ${editingTeacher.name} (استاد محترم کی تفصیلات میں ترمیم)`}
+          maxWidth="lg"
+          footer={
+            <div className="flex justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setShowEditTeacherModal(false)}
+                className="px-4 py-2 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleUpdateTeacher}
+                className="px-6 py-2 text-xs font-bold bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl shadow-xs flex items-center gap-1.5 cursor-pointer"
+              >
+                <Check className="w-4 h-4 stroke-[2.5]" />
+                <span>Save Changes</span>
+              </button>
+            </div>
+          }
+        >
+          <div className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              {/* Passport-Size Photo Upload Card (3:4 ratio) */}
+              <div className="sm:col-span-2 p-3.5 bg-gray-50/80 rounded-2xl border border-gray-200 flex flex-col sm:flex-row items-center gap-4">
+                <div className="relative w-24 h-32 rounded-xl overflow-hidden border-2 border-dashed border-emerald-300 bg-white flex flex-col items-center justify-center shrink-0 shadow-2xs group">
+                  {editPhotoUrl ? (
+                    <>
+                      <img
+                        src={editPhotoUrl}
+                        alt="Passport Preview"
+                        className="w-full h-full object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setEditPhotoUrl('')}
+                        className="absolute top-1 right-1 p-1 bg-rose-600 hover:bg-rose-700 text-white rounded-full shadow-xs"
+                        title="Remove Photo"
+                      >
+                        <X className="w-3 h-3" />
+                      </button>
+                    </>
+                  ) : (
+                    <div className="text-center p-2">
+                      <Camera className="w-6 h-6 text-emerald-600 mx-auto mb-1" />
+                      <span className="text-[10px] font-bold text-gray-400 block leading-tight">Passport Photo<br />(3:4 ratio)</span>
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex-1 space-y-2 text-center sm:text-left">
+                  <div>
+                    <h4 className="text-xs font-bold text-gray-900 flex items-center justify-center sm:justify-start gap-1.5">
+                      <Upload className="w-3.5 h-3.5 text-emerald-700" />
+                      <span>Update Passport Size Photo (پاسپورٹ سائز تصویر تبدیل کریں)</span>
+                    </h4>
+                    <p className="text-[11px] text-gray-500 mt-0.5">
+                      Standard 3:4 portrait ratio. Photo is automatically compressed & optimized for ID cards and dossier.
+                    </p>
+                  </div>
+
+                  <div className="flex items-center justify-center sm:justify-start gap-2">
+                    <label className="px-3.5 py-1.5 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white font-bold text-xs cursor-pointer inline-flex items-center gap-1.5 transition-all shadow-2xs">
+                      <Upload className="w-3.5 h-3.5" />
+                      <span>{editPhotoUrl ? 'Change Photo' : 'Upload Passport Photo'}</span>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handlePhotoUpload(e, true)}
+                        className="hidden"
+                      />
+                    </label>
+                    {editPhotoUrl && (
+                      <button
+                        type="button"
+                        onClick={() => setEditPhotoUrl('')}
+                        className="px-3 py-1.5 rounded-xl bg-gray-100 hover:bg-rose-50 text-rose-700 text-xs font-bold transition-all border border-gray-200"
+                      >
+                        Remove
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-gray-700 block mb-1">
+                  Full Name in English *
+                </label>
+                <input
+                  type="text"
+                  value={editName}
+                  onChange={(e) => setEditName(e.target.value)}
+                  className="w-full p-2.5 text-xs rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-gray-700 block mb-1">
+                  Name in Urdu (اردو نام مع القاب)
+                </label>
+                <input
+                  type="text"
+                  dir="rtl"
+                  value={editNameUrdu}
+                  onChange={(e) => setEditNameUrdu(e.target.value)}
+                  className="w-full p-2.5 text-xs rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-emerald-500/20 focus:outline-none font-urdu"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-gray-700 block mb-1">
+                  Faculty Role / Designation *
+                </label>
+                <select
+                  value={editDesignation}
+                  onChange={(e) => setEditDesignation(e.target.value)}
+                  className="w-full p-2.5 text-xs rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-emerald-500/20 focus:outline-none font-bold"
+                >
+                  <option value="Quran Teacher">Quran Teacher (استاد قرآن)</option>
+                  <option value="Senior Teacher">Senior Teacher (سینئر استاد)</option>
+                  <option value="Quran & Tajweed Teacher">Quran & Tajweed Teacher (استاد تجوید)</option>
+                  <option value="Nazim-e-Taleemat">Nazim-e-Taleemat (ناظم تعلیمات)</option>
+                  <option value="Dars-e-Nizami Faculty">Dars-e-Nizami Faculty (استاد درس نظامی)</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-gray-700 block mb-1">
+                  Assigned Class *
+                </label>
+                <select
+                  value={editAssignedClass}
+                  onChange={(e) => setEditAssignedClass(e.target.value)}
+                  className="w-full p-2.5 text-xs rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-emerald-500/20 focus:outline-none font-bold"
+                >
+                  {classes.map(c => (
+                    <option key={c.id} value={c.name}>{c.name}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-gray-700 block mb-1">
+                  Contact Phone *
+                </label>
+                <input
+                  type="tel"
+                  value={editPhone}
+                  onChange={(e) => setEditPhone(e.target.value)}
+                  className="w-full p-2.5 text-xs rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-emerald-500/20 focus:outline-none font-mono"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-gray-700 block mb-1">
+                  Email Address
+                </label>
+                <input
+                  type="email"
+                  value={editEmail}
+                  onChange={(e) => setEditEmail(e.target.value)}
+                  placeholder="teacher@madrasa.org"
+                  className="w-full p-2.5 text-xs rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-emerald-500/20 focus:outline-none font-mono"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-gray-700 block mb-1">
+                  Academic Qualification / Sanad *
+                </label>
+                <input
+                  type="text"
+                  value={editQualification}
+                  onChange={(e) => setEditQualification(e.target.value)}
+                  className="w-full p-2.5 text-xs rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-emerald-500/20 focus:outline-none"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-gray-700 block mb-1">
+                  Monthly Allowance / Salary (₹)
+                </label>
+                <input
+                  type="number"
+                  value={editSalary}
+                  onChange={(e) => setEditSalary(Number(e.target.value))}
+                  className="w-full p-2.5 text-xs rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-emerald-500/20 focus:outline-none font-mono"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-gray-700 block mb-1">
+                  Joining / Appointment Date *
+                </label>
+                <input
+                  type="date"
+                  value={editJoiningDate}
+                  onChange={(e) => setEditJoiningDate(e.target.value)}
+                  className="w-full p-2.5 text-xs rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-emerald-500/20 focus:outline-none font-mono"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-gray-700 block mb-1">
+                  Date of Birth (DOB) *
+                </label>
+                <input
+                  type="date"
+                  value={editDob}
+                  onChange={(e) => setEditDob(e.target.value)}
+                  className="w-full p-2.5 text-xs rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-emerald-500/20 focus:outline-none font-mono"
+                  required
+                />
+              </div>
+
+              {/* Employment Status Toggle */}
+              <div className="sm:col-span-2 p-3.5 bg-gray-50 rounded-2xl border border-gray-200 flex items-center justify-between">
+                <div>
+                  <h4 className="text-xs font-bold text-gray-900">Employment Status (فعال / غیر فعال حیثیت)</h4>
+                  <p className="text-[11px] text-gray-500">
+                    Set whether this ustadh is currently active on the teaching faculty or inactive.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setEditIsActive(!editIsActive)}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5 border cursor-pointer transition-all shadow-xs ${
+                    editIsActive
+                      ? 'bg-emerald-100 text-emerald-800 border-emerald-300 hover:bg-emerald-200'
+                      : 'bg-amber-100 text-amber-900 border-amber-300 hover:bg-amber-200'
+                  }`}
+                >
+                  <span className={`w-2 h-2 rounded-full ${editIsActive ? 'bg-emerald-600' : 'bg-amber-600'}`} />
+                  <span>{editIsActive ? 'Active Faculty' : 'Inactive Faculty'}</span>
+                </button>
+              </div>
+            </div>
+          </div>
         </Modal>
       )}
 

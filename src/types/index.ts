@@ -156,6 +156,7 @@ export interface Teacher {
   designation?: string;
   salary?: number;
   email?: string;
+  photoUrl?: string;
 }
 
 export interface Staff {
@@ -178,6 +179,13 @@ export interface Staff {
   notes?: string;
 }
 
+export type SessionTimeSlot = 'morning' | 'evening';
+
+export interface DailyAttendanceSlot {
+  morning: 'P' | 'A' | 'L' | 'O';
+  evening: 'P' | 'A' | 'L' | 'O';
+}
+
 export interface AttendanceRecord {
   id: string;
   studentId: string;
@@ -185,6 +193,7 @@ export interface AttendanceRecord {
   class: string;
   date: string;
   status: 'Present' | 'Absent' | 'Leave' | 'Late';
+  session?: SessionTimeSlot;
   markedBy: string;
 }
 

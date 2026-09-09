@@ -20,6 +20,12 @@ import {
 import { Modal } from '../common/Modal';
 
 type AttendanceStatus = 'P' | 'A' | 'L' | 'O'; // Present (حاضر), Absent (غیر حاضر), Leave (رخصت), Off/Holiday (تعطیل)
+type AttendanceSessionView = 'both' | 'morning' | 'evening';
+
+interface DaySessionAttendance {
+  morning: AttendanceStatus;
+  evening: AttendanceStatus;
+}
 
 export const AttendanceModule: React.FC = () => {
   const { activeMadrasa } = useAuth();
@@ -45,6 +51,7 @@ export const AttendanceModule: React.FC = () => {
   const [selectedClass, setSelectedClass] = useState<string>('Hifz Section A');
   const [selectedYear, setSelectedYear] = useState<number>(2026);
   const [selectedMonth, setSelectedMonth] = useState<number>(8); // 8 = September (0-indexed)
+  const [sessionView, setSessionView] = useState<AttendanceSessionView>('both');
 
   // Manual Holidays State
   const [manualHolidays, setManualHolidays] = useState<ManualHoliday[]>(() => db.getManualHolidays(activeMadrasa?.id));
@@ -103,37 +110,42 @@ export const AttendanceModule: React.FC = () => {
 
   const cumulativeHijriTeachingDays = 144;
 
-  // Attendance Matrix State: Record<studentId, Record<dayNumber, AttendanceStatus>>
-  const [matrixState, setMatrixState] = useState<Record<string, Record<number, AttendanceStatus>>>(() => {
-    const initial: Record<string, Record<number, AttendanceStatus>> = {};
+  // Attendance Matrix State: Record<studentId, Record<dayNumber, DaySessionAttendance>>
+  // 2 Times Attendance per Day: Morning to Noon and Afternoon to Evening
+  const [matrixState, setMatrixState] = useState<Record<string, Record<number, DaySessionAttendance>>>(() => {
+    const initial: Record<string, Record<number, DaySessionAttendance>> = {};
     allStudents.forEach((st, sIdx) => {
       initial[st.id] = {};
       for (let d = 1; d <= 31; d++) {
         const dateObj = new Date(2026, 8, d);
         const isFriday = dateObj.getDay() === 5;
         if (isFriday) {
-          initial[st.id][d] = 'O'; // Off / تعطیل
+          initial[st.id][d] = { morning: 'O', evening: 'O' }; // Off / تعطیل
         } else if (d === 15 && sIdx % 2 === 1) {
-          initial[st.id][d] = 'A'; // Absent
+          initial[st.id][d] = { morning: 'A', evening: 'P' }; // Morning absent, evening present
         } else if (d === 22 && sIdx % 3 === 0) {
-          initial[st.id][d] = 'L'; // Leave
+          initial[st.id][d] = { morning: 'L', evening: 'L' }; // Leave
         } else {
-          initial[st.id][d] = 'P'; // Present
+          initial[st.id][d] = { morning: 'P', evening: 'P' }; // Present both sessions
         }
       }
     });
     return initial;
   });
 
-  // Cycle attendance status on cell click: P -> A -> L -> P
-  const handleToggleCell = (studentId: string, dayNum: number) => {
+  // Cycle session attendance status on cell click: P -> A -> L -> P
+  const handleToggleCellSession = (studentId: string, dayNum: number, session: 'morning' | 'evening') => {
     setMatrixState(prev => {
       const studentMap = { ...(prev[studentId] || {}) };
-      const current = studentMap[dayNum] || 'P';
+      const currentDay = studentMap[dayNum] || { morning: 'P', evening: 'P' };
+      const current = currentDay[session] || 'P';
       const next: AttendanceStatus = 
         current === 'P' ? 'A' :
         current === 'A' ? 'L' : 'P';
-      studentMap[dayNum] = next;
+      studentMap[dayNum] = {
+        ...currentDay,
+        [session]: next
+      };
       return {
         ...prev,
         [studentId]: studentMap
@@ -141,7 +153,7 @@ export const AttendanceModule: React.FC = () => {
     });
   };
 
-  // Mark all students present for the whole month (skipping Fridays, holidays, and pre-admission days)
+  // Mark all students present for the whole month for both sessions (skipping Fridays, holidays, and pre-admission days)
   const handleMarkAllMonthPresent = () => {
     setMatrixState(prev => {
       const updated = { ...prev };
@@ -150,15 +162,15 @@ export const AttendanceModule: React.FC = () => {
         monthDays.forEach(d => {
           const isBeforeAdm = st.admissionDate && d.dateStr < st.admissionDate;
           if (d.isFriday || d.manualHoliday || isBeforeAdm) {
-            updated[st.id][d.dayNum] = 'O';
+            updated[st.id][d.dayNum] = { morning: 'O', evening: 'O' };
           } else {
-            updated[st.id][d.dayNum] = 'P';
+            updated[st.id][d.dayNum] = { morning: 'P', evening: 'P' };
           }
         });
       });
       return updated;
     });
-    showToast(loc('Updated entire month to Present (Fridays & Holidays preserved)!', 'پورا مہینہ حاضر درج ہو گیا (تعطیلات برقرار ہیں)!'), 'success');
+    showToast(loc('Updated entire month to Present (Morning & Evening sessions)!', 'پورا مہینہ صبح و شام دونوں اوقات حاضر درج ہو گیا!'), 'success');
   };
 
   // Save register
@@ -195,14 +207,14 @@ export const AttendanceModule: React.FC = () => {
     showToast(loc('Declared Holiday removed.', 'تعطیل حذف کر دی گئی'), 'info');
   };
 
-  // Export Matrix to CSV
+  // Export Matrix to CSV (Dual Sessions: Morning & Evening)
   const handleExportCSV = () => {
-    let csv = `Madrasa Management System - Attendance Matrix\n`;
+    let csv = `Madrasa Management System - Attendance Matrix (Per-Day 2-Times Sessions)\n`;
     csv += `Madrasa: ${activeMadrasa?.name}, Class: ${selectedClass}, Month: ${currentMonthMeta.en} ${selectedYear}\n`;
     csv += `Academic Session: Ramzan to Ramzan (رمضان تا رمضان)\n\n`;
 
-    const dayHeaders = monthDays.map(d => `"${d.dayNum} ${d.weekday}"`).join(',');
-    csv += `S.No,Admission No,Student Name,Village / City,${dayHeaders},Monthly Ayyam Dars,Monthly Ayyam Haziri,Yearly Ayyam Dars (Ramzan to Ramzan),Yearly Ayyam Haziri (Ramzan to Ramzan),Cumulative %\n`;
+    const dayHeaders = monthDays.map(d => `"${d.dayNum} ${d.weekday} (M: Morning)","${d.dayNum} ${d.weekday} (E: Evening)"`).join(',');
+    csv += `S.No,Admission No,Student Name,Village / City,${dayHeaders},Monthly Working Days,Monthly Total Sessions,Present Sessions,Yearly Days (Ramzan to Ramzan),Yearly Sessions,Cumulative %\n`;
 
     classStudents.forEach((st, idx) => {
       const studentDays = matrixState[st.id] || {};
@@ -213,39 +225,44 @@ export const AttendanceModule: React.FC = () => {
         if (st.admissionDate && d.dateStr < st.admissionDate) return false;
         return true;
       }).length;
+      const totalSessions = studentWorkingDays * 2;
 
-      const monthlyPresentCount = monthDays.filter(d => {
-        if (d.isFriday || d.manualHoliday) return false;
-        if (st.admissionDate && d.dateStr < st.admissionDate) return false;
-        return studentDays[d.dayNum] === 'P';
-      }).length;
+      let presentSessions = 0;
+      monthDays.forEach(d => {
+        if (d.isFriday || d.manualHoliday) return;
+        if (st.admissionDate && d.dateStr < st.admissionDate) return;
+        const sDay = studentDays[d.dayNum] || { morning: 'P', evening: 'P' };
+        if (sDay.morning === 'P') presentSessions++;
+        if (sDay.evening === 'P') presentSessions++;
+      });
 
       const cumulativeYearPresent = Math.max(0, st.totalPresentsYearly || (cumulativeHijriTeachingDays - 5));
-      const percentage = studentWorkingDays > 0 ? ((monthlyPresentCount / studentWorkingDays) * 100).toFixed(1) : '100.0';
+      const percentage = totalSessions > 0 ? ((presentSessions / totalSessions) * 100).toFixed(1) : '100.0';
       const village = st.village || st.address.split(',')[0].trim();
 
       const dayCells = monthDays.map(d => {
-        if (st.admissionDate && d.dateStr < st.admissionDate) return '-';
-        if (d.manualHoliday) return `Holiday (${d.manualHoliday.reason})`;
-        if (d.isFriday) return 'Friday';
-        return studentDays[d.dayNum] || 'P';
+        if (st.admissionDate && d.dateStr < st.admissionDate) return '"-","-"';
+        if (d.manualHoliday) return `"Holiday (${d.manualHoliday.reason})","Holiday (${d.manualHoliday.reason})"`;
+        if (d.isFriday) return '"Friday Off","Friday Off"';
+        const sDay = studentDays[d.dayNum] || { morning: 'P', evening: 'P' };
+        return `"${sDay.morning}","${sDay.evening}"`;
       }).join(',');
 
-      csv += `${idx + 1},${st.admissionNo},"${st.studentName} (${st.studentNameUrdu})","${village}",${dayCells},${studentWorkingDays},${monthlyPresentCount},${cumulativeHijriTeachingDays},${cumulativeYearPresent},${percentage}%\n`;
+      csv += `${idx + 1},${st.admissionNo},"${st.studentName} (${st.studentNameUrdu})","${village}",${dayCells},${studentWorkingDays},${totalSessions},${presentSessions},${cumulativeHijriTeachingDays},${cumulativeHijriTeachingDays * 2},${percentage}%\n`;
     });
 
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
     link.href = url;
-    link.setAttribute('download', `Attendance_${selectedClass.replace(/\s+/g, '_')}_${currentMonthMeta.en}_${selectedYear}.csv`);
+    link.setAttribute('download', `Attendance_DualSessions_${selectedClass.replace(/\s+/g, '_')}_${currentMonthMeta.en}_${selectedYear}.csv`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    showToast(loc('Spreadsheet exported to CSV successfully!', 'حاضری رجسٹر فائل کامیابی سے ایکسپورٹ ہو گئی!'), 'success');
+    showToast(loc('Dual-session attendance exported to CSV successfully!', 'صبح و شام دونوں اوقات کا حاضری رجسٹر CSV میں ایکسپورٹ ہو گیا!'), 'success');
   };
 
-  // Summary Metrics
+  // Summary Metrics (Computed across sessions)
   const classAvgAttendance = useMemo(() => {
     if (classStudents.length === 0 || monthlyAyyamDars === 0) return 0;
     let totalPresents = 0;
@@ -256,14 +273,24 @@ export const AttendanceModule: React.FC = () => {
       monthDays.forEach(d => {
         if (d.isFriday || d.manualHoliday) return;
         if (st.admissionDate && d.dateStr < st.admissionDate) return;
-        totalPossible++;
-        if (days[d.dayNum] === 'P') totalPresents++;
+        const sDay = days[d.dayNum] || { morning: 'P', evening: 'P' };
+        if (sessionView === 'both') {
+          totalPossible += 2;
+          if (sDay.morning === 'P') totalPresents++;
+          if (sDay.evening === 'P') totalPresents++;
+        } else if (sessionView === 'morning') {
+          totalPossible += 1;
+          if (sDay.morning === 'P') totalPresents++;
+        } else {
+          totalPossible += 1;
+          if (sDay.evening === 'P') totalPresents++;
+        }
       });
     });
 
     if (totalPossible === 0) return 100;
     return Math.round((totalPresents / totalPossible) * 100);
-  }, [classStudents, matrixState, monthDays, monthlyAyyamDars]);
+  }, [classStudents, matrixState, monthDays, monthlyAyyamDars, sessionView]);
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
@@ -372,24 +399,63 @@ export const AttendanceModule: React.FC = () => {
       </div>
 
       {/* Filter & Control Bar */}
-      <div className="bg-white p-5 rounded-3xl border border-gray-200 shadow-sm flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-4 no-print">
+      <div className="bg-white p-5 rounded-3xl border border-gray-200 shadow-sm flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-4 no-print">
         
-        {/* Class Selector */}
-        <div className="flex items-center gap-2">
-          <label className="text-xs font-bold text-gray-700 whitespace-nowrap">
-            {loc('Class:', 'درجہ:')}
-          </label>
-          <select
-            value={selectedClass}
-            onChange={(e) => setSelectedClass(e.target.value)}
-            className="px-3.5 py-2 text-xs rounded-xl border border-gray-300 bg-white font-bold text-gray-900 focus:ring-2 focus:ring-emerald-500 min-w-[200px]"
-          >
-            {madrasaClasses.map(cls => (
-              <option key={cls.id} value={cls.name}>
-                {loc(cls.name, cls.nameUrdu || cls.name)} {cls.priority ? `(P#${cls.priority})` : ''}
-              </option>
-            ))}
-          </select>
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Class Selector */}
+          <div className="flex items-center gap-2">
+            <label className="text-xs font-bold text-gray-700 whitespace-nowrap">
+              {loc('Class:', 'درجہ:')}
+            </label>
+            <select
+              value={selectedClass}
+              onChange={(e) => setSelectedClass(e.target.value)}
+              className="px-3.5 py-2 text-xs rounded-xl border border-gray-300 bg-white font-bold text-gray-900 focus:ring-2 focus:ring-emerald-500 min-w-[180px]"
+            >
+              {madrasaClasses.map(cls => (
+                <option key={cls.id} value={cls.name}>
+                  {loc(cls.name, cls.nameUrdu || cls.name)} {cls.priority ? `(P#${cls.priority})` : ''}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Session Selector (Per-day 2 Times Attendance) */}
+          <div className="flex items-center bg-gray-100 p-1 rounded-2xl border border-gray-200">
+            <button
+              type="button"
+              onClick={() => setSessionView('both')}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                sessionView === 'both'
+                  ? 'bg-emerald-700 text-white shadow-xs'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              {loc('Both Sessions (2x Daily)', 'دونوں اوقات (صبح و شام)')}
+            </button>
+            <button
+              type="button"
+              onClick={() => setSessionView('morning')}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                sessionView === 'morning'
+                  ? 'bg-emerald-700 text-white shadow-xs'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              {loc('Morning to Noon', 'صبح تا دوپہر')}
+            </button>
+            <button
+              type="button"
+              onClick={() => setSessionView('evening')}
+              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                sessionView === 'evening'
+                  ? 'bg-emerald-700 text-white shadow-xs'
+                  : 'text-gray-600 hover:text-gray-900'
+              }`}
+            >
+              {loc('Afternoon to Evening', 'دوپہر تا شام')}
+            </button>
+          </div>
         </div>
 
         {/* Legend */}
@@ -404,8 +470,11 @@ export const AttendanceModule: React.FC = () => {
           <span className="px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 font-bold border border-amber-300 text-[11px]">
             {isUrdu ? 'ر = رخصت (L)' : 'L = Leave'}
           </span>
-          <span className="px-2 py-0.5 rounded-md bg-gray-100 text-gray-500 font-bold border border-gray-300 text-[11px]">
-            - = {loc('Empty (Pre-Admission / Holiday)', 'خالی (قبل از داخلہ / تعطیل)')}
+          <span className="px-2 py-0.5 rounded-md bg-blue-50 text-blue-900 font-bold border border-blue-200 text-[11px]">
+            {loc('M = Morning (صبح)', 'صبح')}
+          </span>
+          <span className="px-2 py-0.5 rounded-md bg-teal-50 text-teal-900 font-bold border border-teal-200 text-[11px]">
+            {loc('E = Evening (شام)', 'شام')}
           </span>
         </div>
 
@@ -419,7 +488,7 @@ export const AttendanceModule: React.FC = () => {
             <ChevronLeft className="w-4 h-4" />
           </button>
 
-          <div className="px-4 py-1.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-center min-w-[180px]">
+          <div className="px-4 py-1.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-center min-w-[170px]">
             <span className="font-bold text-xs text-emerald-950 block">
               {loc(
                 `${currentMonthMeta.en} ${selectedYear}`,
@@ -427,7 +496,7 @@ export const AttendanceModule: React.FC = () => {
               )}
             </span>
             <span className="text-[10px] text-emerald-700 font-semibold">
-              {monthlyAyyamDars} {loc('Working Days', 'ایامِ درس')}
+              {monthlyAyyamDars} {loc('Days', 'ایام')} &bull; {monthlyAyyamDars * 2} {loc('Sessions', 'اوقات')}
             </span>
           </div>
 
@@ -461,8 +530,8 @@ export const AttendanceModule: React.FC = () => {
                   return (
                     <th 
                       key={d.dayNum}
-                      title={d.manualHoliday ? `Holiday: ${d.manualHoliday.reason}` : d.isFriday ? 'Friday Weekly Holiday' : d.dateStr}
-                      className={`p-1 text-center min-w-[34px] border-r border-emerald-800/60 font-mono ${
+                      title={d.manualHoliday ? `Holiday: ${d.manualHoliday.reason}` : d.isFriday ? 'Friday Weekly Holiday' : `${d.dateStr} (Per-day 2 Sessions)`}
+                      className={`p-1 text-center ${sessionView === 'both' ? 'min-w-[48px]' : 'min-w-[34px]'} border-r border-emerald-800/60 font-mono ${
                         isManualHol ? 'bg-amber-700 text-amber-100 font-black' :
                         d.isFriday ? 'bg-emerald-800 text-amber-200 font-bold' : 'bg-emerald-950 text-white'
                       }`}
@@ -471,11 +540,18 @@ export const AttendanceModule: React.FC = () => {
                       <span className="block text-[9px] uppercase tracking-tighter opacity-80 mt-0.5 leading-none">
                         {isManualHol ? loc('Hol', 'تعطیل') : d.isFriday ? loc('Fri', 'جمعہ') : d.weekday}
                       </span>
+                      {sessionView === 'both' && !d.isFriday && !isManualHol && (
+                        <div className="flex justify-center gap-1 text-[8px] font-mono text-emerald-300 font-black mt-0.5 leading-none">
+                          <span>M</span>
+                          <span>|</span>
+                          <span>E</span>
+                        </div>
+                      )}
                     </th>
                   );
                 })}
-                <th className="p-2 text-center w-20 border-r border-emerald-800 bg-emerald-900 font-bold">
-                  {loc('Work Days', 'ایام درس')}
+                <th className="p-2 text-center w-24 border-r border-emerald-800 bg-emerald-900 font-bold">
+                  {sessionView === 'both' ? loc('Days / Sess', 'ایام / اوقات') : loc('Work Days', 'ایام درس')}
                 </th>
                 <th className="p-2 text-center w-20 border-r border-emerald-800 bg-emerald-900 font-bold">
                   {loc('Present', 'ایام حاضری')}
@@ -495,21 +571,31 @@ export const AttendanceModule: React.FC = () => {
               {classStudents.map((st, idx) => {
                 const studentDays = matrixState[st.id] || {};
                 
-                // Student-specific working days and presents (excludes pre-admission and manual holidays)
+                // Student-specific working days and sessions
                 const studentWorkingDays = monthDays.filter(d => {
                   if (d.isFriday || d.manualHoliday) return false;
                   if (st.admissionDate && d.dateStr < st.admissionDate) return false;
                   return true;
                 }).length;
 
-                const monthlyPresentCount = monthDays.filter(d => {
-                  if (d.isFriday || d.manualHoliday) return false;
-                  if (st.admissionDate && d.dateStr < st.admissionDate) return false;
-                  return studentDays[d.dayNum] === 'P';
-                }).length;
+                let studentPresentSessions = 0;
+                monthDays.forEach(d => {
+                  if (d.isFriday || d.manualHoliday) return;
+                  if (st.admissionDate && d.dateStr < st.admissionDate) return;
+                  const sDay = studentDays[d.dayNum] || { morning: 'P', evening: 'P' };
+                  if (sessionView === 'both') {
+                    if (sDay.morning === 'P') studentPresentSessions++;
+                    if (sDay.evening === 'P') studentPresentSessions++;
+                  } else if (sessionView === 'morning') {
+                    if (sDay.morning === 'P') studentPresentSessions++;
+                  } else {
+                    if (sDay.evening === 'P') studentPresentSessions++;
+                  }
+                });
 
+                const maxPossibleSessions = sessionView === 'both' ? studentWorkingDays * 2 : studentWorkingDays;
                 const cumulativeYearPresent = Math.max(0, st.totalPresentsYearly || (cumulativeHijriTeachingDays - 5));
-                const percentage = studentWorkingDays > 0 ? ((monthlyPresentCount / studentWorkingDays) * 100).toFixed(1) : '100.0';
+                const percentage = maxPossibleSessions > 0 ? ((studentPresentSessions / maxPossibleSessions) * 100).toFixed(1) : '100.0';
                 const village = st.village || st.address.split(',')[0].trim();
                 const isEven = idx % 2 === 0;
 
@@ -530,7 +616,7 @@ export const AttendanceModule: React.FC = () => {
                       const isBeforeAdmission = Boolean(st.admissionDate && d.dateStr < st.admissionDate);
                       const isManualHoliday = Boolean(d.manualHoliday);
                       const isFriday = d.isFriday;
-                      const status = studentDays[d.dayNum] || (isFriday ? 'O' : 'P');
+                      const sDay = studentDays[d.dayNum] || (isFriday ? { morning: 'O', evening: 'O' } : { morning: 'P', evening: 'P' });
 
                       // 1. If student joined after this date, render empty cell
                       if (isBeforeAdmission) {
@@ -577,27 +663,74 @@ export const AttendanceModule: React.FC = () => {
                         );
                       }
 
-                      // 4. Normal Working Day (Click to toggle P -> A -> L)
+                      // 4. Normal Working Day
+                      if (sessionView === 'both') {
+                        return (
+                          <td 
+                            key={d.dayNum} 
+                            className="p-1 text-center font-mono text-xs font-bold border-r select-none"
+                          >
+                            <div className="flex items-center justify-center gap-0.5">
+                              {/* Morning Session Toggle */}
+                              <button
+                                type="button"
+                                onClick={() => handleToggleCellSession(st.id, d.dayNum, 'morning')}
+                                title={`Day ${d.dayNum} Morning: ${sDay.morning} (Click to toggle)`}
+                                className={`w-5 h-6 rounded-l text-[10px] font-black transition-all flex items-center justify-center cursor-pointer ${
+                                  sDay.morning === 'P' ? 'bg-emerald-100 text-emerald-900 hover:bg-emerald-200 border border-emerald-300' :
+                                  sDay.morning === 'A' ? 'bg-rose-100 text-rose-900 hover:bg-rose-200 border border-rose-300' :
+                                  'bg-amber-100 text-amber-900 hover:bg-amber-200 border border-amber-300'
+                                }`}
+                              >
+                                {sDay.morning === 'P' ? (isUrdu ? 'ح' : 'P') : sDay.morning === 'A' ? (isUrdu ? 'غ' : 'A') : (isUrdu ? 'ر' : 'L')}
+                              </button>
+
+                              {/* Evening Session Toggle */}
+                              <button
+                                type="button"
+                                onClick={() => handleToggleCellSession(st.id, d.dayNum, 'evening')}
+                                title={`Day ${d.dayNum} Evening: ${sDay.evening} (Click to toggle)`}
+                                className={`w-5 h-6 rounded-r text-[10px] font-black transition-all flex items-center justify-center cursor-pointer ${
+                                  sDay.evening === 'P' ? 'bg-teal-100 text-teal-900 hover:bg-teal-200 border border-teal-300' :
+                                  sDay.evening === 'A' ? 'bg-rose-100 text-rose-900 hover:bg-rose-200 border border-rose-300' :
+                                  'bg-amber-100 text-amber-900 hover:bg-amber-200 border border-amber-300'
+                                }`}
+                              >
+                                {sDay.evening === 'P' ? (isUrdu ? 'ح' : 'P') : sDay.evening === 'A' ? (isUrdu ? 'غ' : 'A') : (isUrdu ? 'ر' : 'L')}
+                              </button>
+                            </div>
+                          </td>
+                        );
+                      }
+
+                      // Single Session Mode (Morning or Evening)
+                      const currentStatus = sessionView === 'morning' ? sDay.morning : sDay.evening;
+                      const activeSession = sessionView === 'morning' ? 'morning' : 'evening';
+
                       return (
                         <td 
                           key={d.dayNum} 
-                          onClick={() => handleToggleCell(st.id, d.dayNum)}
+                          onClick={() => handleToggleCellSession(st.id, d.dayNum, activeSession)}
                           className="p-1 text-center font-mono text-xs font-bold border-r select-none cursor-pointer hover:bg-emerald-100/70"
                         >
                           <span className={`inline-flex items-center justify-center w-6 h-6 rounded-md text-[11px] font-bold ${
-                            status === 'P' ? 'bg-emerald-100 text-emerald-900 border border-emerald-300' :
-                            status === 'A' ? 'bg-rose-100 text-rose-900 border border-rose-300' :
+                            currentStatus === 'P' ? 'bg-emerald-100 text-emerald-900 border border-emerald-300' :
+                            currentStatus === 'A' ? 'bg-rose-100 text-rose-900 border border-rose-300' :
                             'bg-amber-100 text-amber-900 border border-amber-300'
                           }`}>
-                            {status === 'P' ? (isUrdu ? 'ح' : 'P') :
-                             status === 'A' ? (isUrdu ? 'غ' : 'A') : (isUrdu ? 'ر' : 'L')}
+                            {currentStatus === 'P' ? (isUrdu ? 'ح' : 'P') :
+                             currentStatus === 'A' ? (isUrdu ? 'غ' : 'A') : (isUrdu ? 'ر' : 'L')}
                           </span>
                         </td>
                       );
                     })}
 
-                    <td className="p-2 text-center font-mono font-bold text-gray-800 border-r">{studentWorkingDays}</td>
-                    <td className="p-2 text-center font-mono font-bold text-emerald-800 border-r">{monthlyPresentCount}</td>
+                    <td className="p-2 text-center font-mono font-bold text-gray-800 border-r">
+                      {sessionView === 'both' ? `${studentWorkingDays}d (${maxPossibleSessions}s)` : studentWorkingDays}
+                    </td>
+                    <td className="p-2 text-center font-mono font-bold text-emerald-800 border-r">
+                      {studentPresentSessions}
+                    </td>
                     <td className="p-2 text-center font-mono font-bold text-amber-950 border-r">{cumulativeHijriTeachingDays}</td>
                     <td className="p-2 text-center font-mono font-bold text-emerald-900 border-r">{cumulativeYearPresent}</td>
                     <td className="p-2 text-center font-mono font-black text-emerald-950">{percentage}%</td>

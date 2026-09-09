@@ -28,9 +28,11 @@ import {
   LayoutDashboard,
   Layers,
   PanelLeftClose,
-  PanelLeftOpen
+  PanelLeftOpen,
+  X
 } from 'lucide-react';
 import { Modal } from '../common/Modal';
+import { compressImage } from '../../utils/imageCompressor';
 
 export type NavigationTab = 
   | 'dashboard'
@@ -66,8 +68,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
   const [showLogoModal, setShowLogoModal] = useState<boolean>(false);
   const [logoInputUrl, setLogoInputUrl] = useState<string>(activeMadrasa?.logoUrl || '');
 
-  const handleSaveLogo = (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleUploadLogoFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    try {
+      const compressed = await compressImage(file, 600, 800, 0.8);
+      setLogoInputUrl(compressed);
+      showToast('Logo uploaded and optimized for 3x4 inches frame!', 'success');
+    } catch (err) {
+      console.error(err);
+      showToast('Failed to load image file', 'error');
+    }
+  };
+
+  const handleSaveLogo = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     if (activeMadrasa) {
       const updated = {
         ...activeMadrasa,
@@ -106,11 +121,22 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
           isCollapsed ? 'w-20' : 'w-64'
         } bg-white/70 backdrop-blur-2xl border border-white/80 shadow-[0_8px_32px_0_rgba(18,59,99,0.06)] rounded-3xl m-2.5 flex flex-col h-[calc(100vh-1.25rem)] sticky top-2.5 select-none shrink-0 transition-all duration-300 no-print overflow-hidden`}
       >
-        {/* Top Header: Mosque Emblem + Enterprise Suite */}
+        {/* Top Header: Mosque Emblem / Madrasa Logo + Enterprise Suite */}
         <div className="p-3.5 pb-2 flex items-center justify-between">
           <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-10 h-10 rounded-2xl bg-[#079669] text-white flex items-center justify-center shadow-[0_4px_14px_rgba(7,150,105,0.3)] border border-white/30 shrink-0">
-              <Building2 className="w-5 h-5 text-white" />
+            <div 
+              onClick={() => {
+                setLogoInputUrl(activeMadrasa?.logoUrl || '');
+                setShowLogoModal(true);
+              }}
+              className="w-10 h-10 rounded-2xl bg-[#079669] text-white flex items-center justify-center shadow-[0_4px_14px_rgba(7,150,105,0.3)] border border-white/30 shrink-0 overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
+              title="Click to view/change Madrasa Logo (3x4 inches)"
+            >
+              {activeMadrasa?.logoUrl ? (
+                <img src={activeMadrasa.logoUrl} alt="Madrasa Logo" className="w-full h-full object-cover" />
+              ) : (
+                <Building2 className="w-5 h-5 text-white" />
+              )}
             </div>
             {!isCollapsed && (
               <div className="min-w-0">
@@ -126,7 +152,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
             title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
-            className="p-1 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-white/80 transition-colors shadow-2xs"
+            className="p-1 rounded-xl text-slate-400 hover:text-slate-700 hover:bg-white/80 transition-colors shadow-2xs cursor-pointer"
           >
             {isCollapsed ? <PanelLeftOpen className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
           </button>
@@ -137,8 +163,19 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
           <div className="mx-3 my-1.5 p-3 rounded-2xl bg-white/60 border border-white/80 shadow-2xs relative group">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5 min-w-0">
-                <div className="w-9 h-9 rounded-xl bg-emerald-50 text-[#079669] flex items-center justify-center border border-emerald-200/60 shrink-0">
-                  <Building2 className="w-5 h-5" />
+                <div 
+                  onClick={() => {
+                    setLogoInputUrl(activeMadrasa?.logoUrl || '');
+                    setShowLogoModal(true);
+                  }}
+                  className="w-9 h-9 rounded-xl bg-emerald-50 text-[#079669] flex items-center justify-center border border-emerald-200/60 shrink-0 overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
+                  title="Click to view/change Madrasa Logo (3x4 inches)"
+                >
+                  {activeMadrasa?.logoUrl ? (
+                    <img src={activeMadrasa.logoUrl} alt="Madrasa Logo" className="w-full h-full object-cover" />
+                  ) : (
+                    <Building2 className="w-5 h-5" />
+                  )}
                 </div>
                 <div className="min-w-0">
                   <h3 className="text-xs font-bold text-slate-900 truncate max-w-[130px]">
@@ -150,11 +187,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
                 </div>
               </div>
               <button
-                onClick={() => setShowLogoModal(true)}
-                title="Edit Details"
-                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-white/80 transition-colors shrink-0"
+                onClick={() => {
+                  setLogoInputUrl(activeMadrasa?.logoUrl || '');
+                  setShowLogoModal(true);
+                }}
+                title="View & Edit Madrasa Logo (3x4 inches)"
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-white/80 transition-colors shrink-0 cursor-pointer"
               >
-                <PanelLeftOpen className="w-3.5 h-3.5" />
+                <Camera className="w-3.5 h-3.5 text-emerald-700" />
               </button>
             </div>
           </div>
@@ -230,29 +270,116 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
         </div>
       </aside>
 
-      {/* Logo Modal */}
+      {/* Madrasa Logo Modal: 3x4 Inches Inspection & Upload */}
       <Modal
         isOpen={showLogoModal}
         onClose={() => setShowLogoModal(false)}
-        title="Edit Madrasa Logo"
-        maxWidth="md"
+        title="Official Madrasa Logo & Emblem (3x4 Inches Standard)"
+        maxWidth="lg"
         footer={
-          <div className="flex gap-2">
-            <button onClick={() => setShowLogoModal(false)} className="px-4 py-2 text-xs text-gray-600">Cancel</button>
-            <button onClick={handleSaveLogo} className="px-5 py-2 text-xs font-bold bg-m3-primary text-white rounded-full">Save</button>
+          <div className="flex justify-between items-center w-full">
+            <div>
+              {logoInputUrl && (
+                <button
+                  type="button"
+                  onClick={() => setLogoInputUrl('')}
+                  className="px-3.5 py-1.5 text-xs font-bold text-rose-600 hover:bg-rose-50 rounded-xl transition-all cursor-pointer"
+                >
+                  Remove Logo
+                </button>
+              )}
+            </div>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setShowLogoModal(false)}
+                className="px-4 py-2 text-xs font-bold text-gray-600 hover:bg-gray-100 rounded-xl cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => handleSaveLogo()}
+                className="px-6 py-2 text-xs font-bold bg-emerald-700 hover:bg-emerald-800 text-white rounded-xl shadow-xs transition-all cursor-pointer"
+              >
+                Save Logo
+              </button>
+            </div>
           </div>
         }
       >
-        <form onSubmit={handleSaveLogo} className="space-y-3">
-          <label className="text-xs font-bold block mb-1">Logo URL</label>
-          <input
-            type="url"
-            value={logoInputUrl}
-            onChange={(e) => setLogoInputUrl(e.target.value)}
-            className="w-full p-2 text-xs rounded-xl border bg-white"
-            placeholder="https://..."
-          />
-        </form>
+        <div className="space-y-4">
+          <div className="flex flex-col md:flex-row items-center gap-6 p-4 bg-gray-50 rounded-2xl border border-gray-200">
+            {/* 3x4 Inches Display Inspection Frame (Exact 3:4 aspect ratio / 288x384px) */}
+            <div className="flex flex-col items-center gap-2 shrink-0">
+              <div className="relative w-[216px] h-[288px] sm:w-[288px] sm:h-[384px] bg-white rounded-2xl border-2 border-dashed border-emerald-400 overflow-hidden shadow-md flex items-center justify-center group">
+                {logoInputUrl ? (
+                  <>
+                    <img
+                      src={logoInputUrl}
+                      alt="Madrasa Logo 3x4 Inches Preview"
+                      className="w-full h-full object-contain p-2"
+                    />
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <span className="text-white text-xs font-bold bg-black/60 px-3 py-1 rounded-full">
+                        3.0" × 4.0" (76 × 102 mm)
+                      </span>
+                    </div>
+                  </>
+                ) : (
+                  <div className="text-center p-4 space-y-2">
+                    <Building2 className="w-12 h-12 text-gray-300 mx-auto" />
+                    <span className="text-xs font-bold text-gray-400 block">No Logo Uploaded</span>
+                    <span className="text-[10px] text-gray-400 block">Standard 3x4 Inches Frame</span>
+                  </div>
+                )}
+                {/* Physical Dimension Badge */}
+                <div className="absolute bottom-2 right-2 bg-emerald-800/90 text-white text-[10px] font-mono px-2 py-0.5 rounded-md shadow-xs">
+                  3" × 4" (288×384px)
+                </div>
+              </div>
+              <span className="text-[11px] font-mono font-bold text-gray-500">Aspect Ratio: 3:4 (Portrait)</span>
+            </div>
+
+            {/* Upload Controls & URL */}
+            <div className="flex-1 space-y-4 w-full">
+              <div className="p-4 bg-white rounded-2xl border border-gray-200 space-y-3">
+                <h4 className="text-xs font-bold text-gray-900 flex items-center gap-1.5">
+                  <Upload className="w-4 h-4 text-emerald-700" />
+                  <span>Upload Logo Image File (تصویر اپلوڈ کریں)</span>
+                </h4>
+                <p className="text-[11px] text-gray-500">
+                  Select your Madrasa emblem or logo. The image is automatically compressed and fitted into the official 3x4 inches frame.
+                </p>
+                <label className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold rounded-xl cursor-pointer shadow-xs transition-all">
+                  <Upload className="w-3.5 h-3.5" />
+                  <span>Choose Image File...</span>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleUploadLogoFile}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+
+              <div className="p-4 bg-white rounded-2xl border border-gray-200 space-y-2">
+                <label className="text-xs font-bold text-gray-900 block">Or Paste Web Logo URL</label>
+                <input
+                  type="url"
+                  value={logoInputUrl}
+                  onChange={(e) => setLogoInputUrl(e.target.value)}
+                  className="w-full p-2.5 text-xs rounded-xl border border-gray-300 bg-white font-mono"
+                  placeholder="https://example.com/madrasa-logo.png"
+                />
+              </div>
+
+              <div className="p-3 bg-emerald-50 rounded-2xl border border-emerald-200 text-[11px] text-emerald-900">
+                💡 <strong>Notice:</strong> This logo will appear across official Certificates, Student ID Cards, Examination Admit Cards, Receipts, and the main Sidebar.
+              </div>
+            </div>
+          </div>
+        </div>
       </Modal>
     </>
   );
