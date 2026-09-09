@@ -305,17 +305,17 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({
             )}
           </div>
 
-          {/* Dark / Light Mode Toggle Button */}
+          {/* Full Screen Toggle Button */}
           <button
-            onClick={toggleDarkMode}
-            title={isDarkMode ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
-            aria-label="Toggle Dark Mode"
-            className="p-2 rounded-2xl bg-white/65 hover:bg-white border border-white/80 text-slate-700 hover:text-emerald-700 shadow-2xs transition-all cursor-pointer flex items-center justify-center shrink-0"
+            onClick={toggleFullscreen}
+            title={isFullscreen ? 'Exit Full Screen' : 'Enter Full Screen'}
+            aria-label="Toggle Full Screen"
+            className="p-2 rounded-2xl bg-white/65 hover:bg-white dark:bg-slate-800/80 dark:hover:bg-slate-700 border border-white/80 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:text-emerald-700 shadow-2xs transition-all cursor-pointer flex items-center justify-center shrink-0 active:scale-95"
           >
-            {isDarkMode ? (
-              <Sun className="w-4 h-4 text-amber-500 hover:rotate-45 transition-transform" />
+            {isFullscreen ? (
+              <Minimize className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
             ) : (
-              <Moon className="w-4 h-4 text-slate-700 hover:-rotate-12 transition-transform" />
+              <Maximize className="w-4 h-4 text-slate-700 dark:text-slate-200" />
             )}
           </button>
 

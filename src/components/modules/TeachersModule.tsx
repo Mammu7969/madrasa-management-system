@@ -56,6 +56,7 @@ export const TeachersModule: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedClassFilter, setSelectedClassFilter] = useState<string>('all');
   const [selectedStatusFilter, setSelectedStatusFilter] = useState<string>('all');
+  const [selectedActiveFilter, setSelectedActiveFilter] = useState<'all' | 'active' | 'inactive'>('all');
   const [selectedDeptFilter, setSelectedDeptFilter] = useState<string>('all');
   const [activeTabFilter, setActiveTabFilter] = useState<'all' | 'present' | 'absent'>('all');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -182,6 +183,17 @@ export const TeachersModule: React.FC = () => {
     showToast(`${teacher.name} marked ${!teacher.isPresentToday ? 'Present (حاضر)' : 'On Leave (غیر حاضر)'}`, 'info');
   };
 
+  // Toggle Active / Inactive
+  const handleToggleActive = (teacherId: string) => {
+    const newStatus = db.toggleTeacherActive(teacherId);
+    const updated = db.getTeachers(activeMadrasa?.id);
+    setTeachers(updated);
+    if (selectedTeacherForProfile && selectedTeacherForProfile.id === teacherId) {
+      setSelectedTeacherForProfile(prev => prev ? { ...prev, isActive: newStatus } : null);
+    }
+    showToast(`Teacher status changed to ${newStatus ? 'Active' : 'Inactive'}`, 'info');
+  };
+
   // Delete Teacher
   const handleDeleteTeacher = (teacherId: string, teacherName: string) => {
     if (window.confirm(`Are you sure you want to remove Ustadh ${teacherName}?`)) {
@@ -215,6 +227,12 @@ export const TeachersModule: React.FC = () => {
         selectedStatusFilter === 'present' ? t.isPresentToday :
         !t.isPresentToday;
 
+      // Active / Inactive filter
+      const matchesActive = 
+        selectedActiveFilter === 'all' ? true :
+        selectedActiveFilter === 'active' ? (t.isActive !== false) :
+        (t.isActive === false);
+
       // Pill tab filter
       const matchesPillTab = 
         activeTabFilter === 'all' ? true :
@@ -229,9 +247,9 @@ export const TeachersModule: React.FC = () => {
         selectedDeptFilter === 'alimiyat' ? t.assignedClass.toLowerCase().includes('alimiyat') :
         true;
 
-      return matchesSearch && matchesClass && matchesStatusDropdown && matchesPillTab && matchesDept;
+      return matchesSearch && matchesClass && matchesStatusDropdown && matchesActive && matchesPillTab && matchesDept;
     });
-  }, [teachers, searchQuery, selectedClassFilter, selectedStatusFilter, selectedDeptFilter, activeTabFilter]);
+  }, [teachers, searchQuery, selectedClassFilter, selectedStatusFilter, selectedActiveFilter, selectedDeptFilter, activeTabFilter]);
 
   // Statistics
   const presentCount = teachers.filter(t => t.isPresentToday).length;
@@ -375,16 +393,29 @@ export const TeachersModule: React.FC = () => {
           </select>
         </div>
 
-        {/* Dropdown 2: All Status */}
+        {/* Dropdown 2: Daily Attendance Status */}
         <div className="relative">
           <select
             value={selectedStatusFilter}
             onChange={(e) => setSelectedStatusFilter(e.target.value)}
             className="px-3 py-2 text-xs font-bold text-gray-700 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-emerald-600 cursor-pointer"
           >
-            <option value="all">All Status</option>
+            <option value="all">All Attendance</option>
             <option value="present">Present</option>
             <option value="absent">On Leave</option>
+          </select>
+        </div>
+
+        {/* Dropdown: Employment Active Status */}
+        <div className="relative">
+          <select
+            value={selectedActiveFilter}
+            onChange={(e) => setSelectedActiveFilter(e.target.value as any)}
+            className="px-3 py-2 text-xs font-bold text-gray-700 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-1 focus:ring-emerald-600 cursor-pointer"
+          >
+            <option value="all">All Employment</option>
+            <option value="active">Active Only</option>
+            <option value="inactive">Inactive Only</option>
           </select>
         </div>
 
@@ -428,6 +459,7 @@ export const TeachersModule: React.FC = () => {
           onClick={() => {
             setSelectedClassFilter('all');
             setSelectedStatusFilter('all');
+            setSelectedActiveFilter('all');
             setSelectedDeptFilter('all');
             setSearchQuery('');
           }}
@@ -492,11 +524,29 @@ export const TeachersModule: React.FC = () => {
                 className="bg-white/90 backdrop-blur-md rounded-3xl p-5 border border-gray-200/80 shadow-xs hover:shadow-md transition-all flex flex-col justify-between space-y-4 group"
               >
                 <div className="space-y-3.5">
-                  {/* Top Badges: TCH-001 & Present / On Leave */}
-                  <div className="flex items-center justify-between">
-                    <span className="font-mono text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200">
-                      {t.teacherIdNo}
-                    </span>
+                  {/* Top Badges: TCH-001 & Active Toggle & Present / On Leave */}
+                  <div className="flex items-center justify-between gap-1">
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-mono text-[11px] font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                        {t.teacherIdNo}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleToggleActive(t.id);
+                        }}
+                        title="Click to toggle Active / Inactive"
+                        className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full border cursor-pointer transition-all shadow-2xs ${
+                          t.isActive !== false
+                            ? 'bg-emerald-50 text-emerald-800 border-emerald-300 hover:bg-emerald-100'
+                            : 'bg-amber-50 text-amber-900 border-amber-300 hover:bg-amber-100'
+                        }`}
+                      >
+                        <span className={`w-1.5 h-1.5 rounded-full ${t.isActive !== false ? 'bg-emerald-600' : 'bg-amber-600'}`} />
+                        <span>{t.isActive !== false ? 'Active' : 'Inactive'}</span>
+                      </button>
+                    </div>
 
                     {t.isPresentToday ? (
                       <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full border border-emerald-200">
@@ -615,7 +665,8 @@ export const TeachersModule: React.FC = () => {
                   <th className="py-3.5 px-4">Assigned Class</th>
                   <th className="py-3.5 px-4">Qualification</th>
                   <th className="py-3.5 px-4">Contact Phone</th>
-                  <th className="py-3.5 px-4 text-center">Status</th>
+                  <th className="py-3.5 px-4 text-center">Daily Attendance</th>
+                  <th className="py-3.5 px-4 text-center">Active Status</th>
                   <th className="py-3.5 px-4 text-center">Actions</th>
                 </tr>
               </thead>
@@ -644,6 +695,21 @@ export const TeachersModule: React.FC = () => {
                         }`}
                       >
                         {t.isPresentToday ? '✔ Present' : '🔴 On Leave'}
+                      </button>
+                    </td>
+                    <td className="py-3 px-4 text-center">
+                      <button
+                        type="button"
+                        onClick={() => handleToggleActive(t.id)}
+                        title="Click to toggle Active / Inactive"
+                        className={`px-2.5 py-1 rounded-full text-[10px] font-bold inline-flex items-center gap-1 border cursor-pointer transition-all ${
+                          t.isActive !== false
+                            ? 'bg-emerald-50 text-emerald-800 border-emerald-300 hover:bg-emerald-100'
+                            : 'bg-amber-50 text-amber-900 border-amber-300 hover:bg-amber-100'
+                        }`}
+                      >
+                        <span className={`w-1.5 h-1.5 rounded-full ${t.isActive !== false ? 'bg-emerald-600' : 'bg-amber-600'}`} />
+                        <span>{t.isActive !== false ? 'Active' : 'Inactive'}</span>
                       </button>
                     </td>
                     <td className="py-3 px-4 text-center">
@@ -715,7 +781,20 @@ export const TeachersModule: React.FC = () => {
                 </div>
               </div>
 
-              <div className="text-right">
+              <div className="flex items-center gap-2 flex-wrap justify-end">
+                <button
+                  type="button"
+                  onClick={() => handleToggleActive(selectedTeacherForProfile.id)}
+                  title="Click to toggle Active / Inactive"
+                  className={`px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1.5 border cursor-pointer transition-all ${
+                    selectedTeacherForProfile.isActive !== false
+                      ? 'bg-emerald-100 text-emerald-800 border-emerald-300 hover:bg-emerald-200'
+                      : 'bg-amber-100 text-amber-900 border-amber-300 hover:bg-amber-200'
+                  }`}
+                >
+                  <span className={`w-2 h-2 rounded-full ${selectedTeacherForProfile.isActive !== false ? 'bg-emerald-600' : 'bg-amber-600'}`} />
+                  <span>{selectedTeacherForProfile.isActive !== false ? 'Active Faculty' : 'Inactive'}</span>
+                </button>
                 <span className={`px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1 ${
                   selectedTeacherForProfile.isPresentToday ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
                 }`}>
@@ -754,9 +833,19 @@ export const TeachersModule: React.FC = () => {
                   <span className="text-gray-400">Monthly Allowance:</span>
                   <span className="font-bold text-gray-900 font-mono">₹{Number(selectedTeacherForProfile.salary || 0).toLocaleString()} / month</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Status:</span>
-                  <span className="font-bold text-emerald-700">Active Faculty</span>
+                <div className="flex justify-between items-center">
+                  <span className="text-gray-400">Employment Status:</span>
+                  <button
+                    type="button"
+                    onClick={() => handleToggleActive(selectedTeacherForProfile.id)}
+                    className={`px-2.5 py-0.5 rounded-full text-[11px] font-bold border transition-all cursor-pointer ${
+                      selectedTeacherForProfile.isActive !== false
+                        ? 'bg-emerald-50 text-emerald-800 border-emerald-300 hover:bg-emerald-100'
+                        : 'bg-amber-50 text-amber-900 border-amber-300 hover:bg-amber-100'
+                    }`}
+                  >
+                    {selectedTeacherForProfile.isActive !== false ? 'Active' : 'Inactive'}
+                  </button>
                 </div>
               </div>
             </div>

@@ -24,7 +24,8 @@ import {
   ChevronLeft,
   ChevronRight,
   X,
-  SlidersHorizontal
+  SlidersHorizontal,
+  ArrowRightLeft
 } from 'lucide-react';
 
 interface StudentsListProps {
@@ -43,6 +44,7 @@ export const StudentsList: React.FC<StudentsListProps> = ({
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [selectedClass, setSelectedClass] = useState<string>('all');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedStatusFilter, setSelectedStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
   const [sortField, setSortField] = useState<'name' | 'admissionNo' | 'class' | 'category'>('admissionNo');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
 
@@ -83,8 +85,12 @@ export const StudentsList: React.FC<StudentsListProps> = ({
 
         const matchesClass = selectedClass === 'all' || s.class === selectedClass;
         const matchesCategory = selectedCategory === 'all' || s.category === selectedCategory;
+        const matchesStatus = 
+          selectedStatusFilter === 'all' ||
+          (selectedStatusFilter === 'active' && s.isActive !== false) ||
+          (selectedStatusFilter === 'inactive' && s.isActive === false);
 
-        return matchesSearch && matchesClass && matchesCategory;
+        return matchesSearch && matchesClass && matchesCategory && matchesStatus;
       })
       .sort((a, b) => {
         let comp = 0;
@@ -138,6 +144,7 @@ export const StudentsList: React.FC<StudentsListProps> = ({
     setSearchQuery('');
     setSelectedClass('all');
     setSelectedCategory('all');
+    setSelectedStatusFilter('all');
     setCurrentPage(1);
     setGotoPageInput('1');
     showToast('Filters reset to default', 'info');
@@ -154,7 +161,7 @@ export const StudentsList: React.FC<StudentsListProps> = ({
 
   // Export to CSV
   const handleExportCSV = () => {
-    const headers = ['Admission No', 'Student Name', 'Name (Urdu)', 'Father Name', 'Class', 'Category', 'Contact', 'Monthly Fees', 'Sabaq'];
+    const headers = ['Admission No', 'Student Name', 'Name (Urdu)', 'Father Name', 'Class', 'Category', 'Status', 'Contact', 'Monthly Fees', 'Sabaq'];
     const rows = filteredStudents.map(s => [
       `"${s.admissionNo}"`,
       `"${s.studentName}"`,
@@ -162,6 +169,7 @@ export const StudentsList: React.FC<StudentsListProps> = ({
       `"${s.fatherName}"`,
       `"${s.class}"`,
       `"${s.category}"`,
+      s.isActive !== false ? 'Active' : 'Inactive',
       `"${s.contactNumber}"`,
       s.monthlyFees,
       `"${s.presentSabaqAt}"`
@@ -218,57 +226,49 @@ export const StudentsList: React.FC<StudentsListProps> = ({
               {t('allStudents')}
             </h1>
             <p className="text-xs text-slate-500 font-medium mt-0.5">
-              Comprehensive registry of enrolled students for {activeMadrasa?.name || 'Jamia Darul Huda Islamic Academy'}
+              Comprehensive student database, academic progression, and profiles
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2.5">
+        {/* Action Buttons: Export & New Admission */}
+        <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap">
           <button
             type="button"
             onClick={handleExportCSV}
-            className="glossy-btn px-4 py-2.5 rounded-2xl bg-white/70 hover:bg-white/90 border border-white/90 text-xs font-bold text-slate-700 shadow-xs transition-all active:scale-95 gap-2 cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-white/70 hover:bg-white border border-white/90 text-xs font-bold text-slate-700 shadow-2xs transition-all active:scale-95 cursor-pointer"
           >
-            <Download className="w-4 h-4 text-emerald-700" />
+            <Download className="w-4 h-4 text-[#079669]" />
             <span>Export CSV</span>
           </button>
           <button
             type="button"
             onClick={onAddNewAdmission}
-            className="glossy-btn glossy-btn-emerald px-5 py-2.5 rounded-2xl text-white text-xs font-bold shadow-[0_4px_14px_rgba(7,150,105,0.3)] transition-all active:scale-95 gap-2 cursor-pointer"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-[#079669] hover:bg-[#057A57] text-white text-xs font-bold shadow-[0_4px_14px_rgba(7,150,105,0.3)] transition-all active:scale-95 cursor-pointer"
           >
-            <PlusCircle className="w-4 h-4" />
-            <span>{t('addNewAdmission')}</span>
+            <UserPlus className="w-4 h-4" />
+            <span>New Admission (نیا داخلہ)</span>
           </button>
         </div>
       </div>
 
       {/* =========================================================================
-          2. SEARCH & FILTER CONTROLS (Matching media_1788721593765.png)
+          2. SEARCH AND FILTER STRIP
           ========================================================================= */}
-      <div className="glossy-card p-4 flex flex-col md:flex-row items-stretch md:items-center gap-3">
+      <div className="glossy-card p-4 flex flex-col md:flex-row items-center justify-between gap-3">
         {/* Search Bar */}
-        <div className="relative flex-1">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+        <div className="relative flex-1 w-full">
+          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
+            placeholder="Search by student name, admission no, father name, contact..."
             value={searchQuery}
             onChange={(e) => {
               setSearchQuery(e.target.value);
               setCurrentPage(1);
             }}
-            placeholder="Search by Name or Admission No..."
-            className="w-full pl-10 pr-9 py-2.5 text-xs rounded-2xl bg-white/60 backdrop-blur-md border border-white/90 text-slate-800 placeholder:text-slate-400 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-600 font-medium transition-all shadow-2xs"
+            className="w-full pl-10 pr-4 py-2.5 text-xs rounded-2xl bg-white/60 backdrop-blur-md border border-white/90 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-600 transition-all shadow-2xs font-medium text-slate-800 placeholder:text-slate-400"
           />
-          {searchQuery && (
-            <button
-              type="button"
-              onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
-            >
-              <X className="w-3.5 h-3.5" />
-            </button>
-          )}
         </div>
 
         {/* Filter by Class */}
@@ -289,7 +289,7 @@ export const StudentsList: React.FC<StudentsListProps> = ({
         </div>
 
         {/* Filter by Hostel / Day Scholar */}
-        <div className="w-full md:w-52">
+        <div className="w-full md:w-44">
           <select
             value={selectedCategory}
             onChange={(e) => {
@@ -298,9 +298,25 @@ export const StudentsList: React.FC<StudentsListProps> = ({
             }}
             className="w-full px-3.5 py-2.5 text-xs rounded-2xl bg-white/60 backdrop-blur-md border border-white/90 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-600 font-semibold text-slate-700 cursor-pointer transition-all shadow-2xs"
           >
-            <option value="all">Hostel / Day Scholar</option>
+            <option value="all">All Categories</option>
             <option value="Hostel">Hostel (اقامتی)</option>
             <option value="Day Scholar">Day Scholar (غیر اقامتی)</option>
+          </select>
+        </div>
+
+        {/* Filter by Status: All | Active | Inactive */}
+        <div className="w-full md:w-40">
+          <select
+            value={selectedStatusFilter}
+            onChange={(e) => {
+              setSelectedStatusFilter(e.target.value as any);
+              setCurrentPage(1);
+            }}
+            className="w-full px-3.5 py-2.5 text-xs rounded-2xl bg-white/60 backdrop-blur-md border border-white/90 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-600 font-semibold text-slate-700 cursor-pointer transition-all shadow-2xs"
+          >
+            <option value="all">All Status ({students.length})</option>
+            <option value="active">Active ({students.filter(s => s.isActive !== false).length})</option>
+            <option value="inactive">Inactive ({students.filter(s => s.isActive === false).length})</option>
           </select>
         </div>
 
@@ -373,13 +389,14 @@ export const StudentsList: React.FC<StudentsListProps> = ({
                 </th>
                 <th className="p-4">GUARDIAN CELL NO</th>
                 <th className="p-4">SABAQ PROGRESS</th>
+                <th className="p-4 text-center">STATUS</th>
                 <th className="p-4 text-center">ACTIONS</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 font-medium">
               {paginatedStudents.length === 0 ? (
                 <tr>
-                  <td colSpan={10} className="p-12 text-center text-gray-500">
+                  <td colSpan={11} className="p-12 text-center text-gray-500">
                     <div className="w-12 h-12 rounded-2xl bg-gray-100 text-gray-400 flex items-center justify-center mx-auto mb-3">
                       <Users className="w-6 h-6" />
                     </div>
@@ -444,9 +461,20 @@ export const StudentsList: React.FC<StudentsListProps> = ({
 
                       {/* Class */}
                       <td className="p-4">
-                        <span className="px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200/80 whitespace-nowrap">
-                          {st.class}
-                        </span>
+                        <div className="flex items-center gap-1.5 flex-wrap">
+                          <span className="px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200/80 whitespace-nowrap">
+                            {st.class}
+                          </span>
+                          {st.classHistory && st.classHistory.length > 0 && (
+                            <span 
+                              title={`Class Transfer History (${st.classHistory.length} transfers/promotions)`}
+                              className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200"
+                            >
+                              <ArrowRightLeft className="w-2.5 h-2.5" />
+                              <span>{st.classHistory.length}</span>
+                            </span>
+                          )}
+                        </div>
                       </td>
 
                       {/* Category */}
@@ -486,6 +514,27 @@ export const StudentsList: React.FC<StudentsListProps> = ({
                             />
                           </div>
                         </div>
+                      </td>
+
+                      {/* Active / Inactive Status Toggle */}
+                      <td className="p-4 whitespace-nowrap text-center" onClick={(e) => e.stopPropagation()}>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newStatus = db.toggleStudentActive(st.id);
+                            setSyncVersion(v => v + 1);
+                            showToast(`Student "${st.studentName}" marked ${newStatus ? 'Active' : 'Inactive'}`, 'info');
+                          }}
+                          title="Click to toggle Active / Inactive status"
+                          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold transition-all shadow-2xs cursor-pointer ${
+                            st.isActive !== false 
+                              ? 'bg-emerald-100 text-emerald-800 border border-emerald-300 hover:bg-emerald-200' 
+                              : 'bg-amber-100 text-amber-900 border border-amber-300 hover:bg-amber-200'
+                          }`}
+                        >
+                          <span className={`w-2 h-2 rounded-full ${st.isActive !== false ? 'bg-emerald-600' : 'bg-amber-600'}`} />
+                          <span>{st.isActive !== false ? 'Active' : 'Inactive'}</span>
+                        </button>
                       </td>
 
                       {/* Actions */}

@@ -40,6 +40,7 @@ import {
   HeartPulse,
   BadgeCheck,
   ArrowRight,
+  ArrowRightLeft,
   Key,
   Lock,
   Check
@@ -659,10 +660,24 @@ export const StudentProfile: React.FC<StudentProfileProps> = ({
                 <Phone className="w-3.5 h-3.5 text-[#079669]" />
                 <span>Contact <strong className="text-slate-900">{student.contactNumber}</strong></span>
               </span>
-              <span className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white/70 border border-white/80 text-slate-700 shadow-2xs font-bold">
-                <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />
-                <span>Status <strong className="text-emerald-700">Active</strong></span>
-              </span>
+              <button
+                type="button"
+                onClick={() => {
+                  const newStatus = db.toggleStudentActive(student.id);
+                  const updatedStudent = { ...student, isActive: newStatus };
+                  onUpdateStudent(updatedStudent);
+                  showToast(`Student status changed to ${newStatus ? 'Active' : 'Inactive'}`, 'info');
+                }}
+                className={`flex items-center gap-1.5 px-3 py-1 rounded-xl border shadow-2xs font-bold cursor-pointer transition-all active:scale-95 ${
+                  student.isActive !== false
+                    ? 'bg-emerald-50 border-emerald-300 text-emerald-800 hover:bg-emerald-100'
+                    : 'bg-amber-50 border-amber-300 text-amber-900 hover:bg-amber-100'
+                }`}
+                title="Click to toggle Active / Inactive"
+              >
+                <span className={`w-2 h-2 rounded-full ${student.isActive !== false ? 'bg-emerald-600' : 'bg-amber-600'}`} />
+                <span>Status <strong className={student.isActive !== false ? 'text-emerald-700' : 'text-amber-800'}>{student.isActive !== false ? 'Active' : 'Inactive'}</strong></span>
+              </button>
             </div>
           </div>
         </div>
@@ -677,7 +692,7 @@ export const StudentProfile: React.FC<StudentProfileProps> = ({
           <div className="w-full h-2 bg-slate-200/80 rounded-full overflow-hidden">
             <div 
               style={{ width: `${quranProgress.percentage}%` }}
-              className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-500"
+              className="h-full bg-emerald-600 rounded-full transition-all duration-500"
             />
           </div>
 
@@ -1206,6 +1221,83 @@ export const StudentProfile: React.FC<StudentProfileProps> = ({
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Class Promotion & Transfer History Card */}
+          <div className="bg-white/70 backdrop-blur-2xl p-6 rounded-3xl border border-white/80 shadow-[0_4px_20px_-2px_rgba(18,59,99,0.05)] space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-xl bg-blue-100 text-blue-900 flex items-center justify-center font-bold">
+                  <ArrowRightLeft className="w-4 h-4" />
+                </div>
+                <div>
+                  <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
+                    <span>Class Promotion &amp; Transfer History</span>
+                    <span className="font-urdu urdu-font text-xs text-blue-900 font-normal">
+                      (کلاس کی تبدیلی اور ترقی کا ریکارڈ)
+                    </span>
+                  </h3>
+                  <p className="text-[11px] text-slate-500">
+                    Track all class transitions, promotions, and academic movements for this student
+                  </p>
+                </div>
+              </div>
+              <span className="px-3 py-1 rounded-full text-xs font-bold bg-blue-50 text-blue-800 border border-blue-200 self-start sm:self-auto">
+                Current Class: {student.class}
+              </span>
+            </div>
+
+            {(!student.classHistory || student.classHistory.length === 0) ? (
+              <div className="p-6 text-center text-xs text-slate-400 border border-dashed border-slate-200 rounded-2xl bg-slate-50/50">
+                <ArrowRightLeft className="w-6 h-6 mx-auto mb-2 text-slate-300" />
+                <p className="font-semibold text-slate-600">No class transfers recorded yet</p>
+                <p className="text-[11px] text-slate-400 mt-0.5">
+                  Initial enrollment in class: <strong className="text-slate-700">{student.class}</strong> on admission date ({student.admissionDate}).
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {student.classHistory.map((item, idx) => (
+                  <div 
+                    key={item.id || idx}
+                    className="p-3.5 rounded-2xl bg-white border border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs hover:border-blue-300 transition-colors"
+                  >
+                    <div className="flex items-start sm:items-center gap-3">
+                      <div className="w-7 h-7 rounded-xl bg-blue-50 text-blue-800 border border-blue-200 flex items-center justify-center font-mono font-bold text-xs shrink-0">
+                        #{idx + 1}
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <span className="px-2.5 py-0.5 rounded-lg text-xs font-bold bg-slate-100 text-slate-700 border border-slate-200">
+                            {item.fromClass}
+                          </span>
+                          <ArrowRight className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                          <span className="px-2.5 py-0.5 rounded-lg text-xs font-bold bg-emerald-50 text-emerald-800 border border-emerald-300">
+                            {item.toClass}
+                          </span>
+                          <span className="text-[11px] text-slate-500 font-medium">
+                            • {item.reason || 'Class change / academic promotion'}
+                          </span>
+                        </div>
+                        {item.promotedBy && (
+                          <span className="text-[10px] text-slate-400 block mt-0.5">
+                            Authorized by: {item.promotedBy}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <div className="text-left sm:text-right shrink-0">
+                      <span className="text-xs font-mono font-bold text-slate-700 block">
+                        {item.date}
+                      </span>
+                      <span className="text-[10px] text-blue-700 font-bold uppercase tracking-wider">
+                        Class Transfer
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}

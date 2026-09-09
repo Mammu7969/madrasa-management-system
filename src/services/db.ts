@@ -3,7 +3,8 @@ import {
   FeeTransaction, MadrasaNamazTimings, ScheduleItem, UserLog, 
   FeedbackItem, ProfileChangeRequest, NoticeItem, GalleryItem,
   MadrasaClass, Subject, Staff, StudentUpdateLog,
-  FinanceTransaction, FinanceCategoryItem, PeriodScheduleItem
+  FinanceTransaction, FinanceCategoryItem, PeriodScheduleItem,
+  Department, ManualHoliday
 } from '../types';
 import { supabase, isSupabaseConfigured } from './supabaseClient';
 
@@ -13,9 +14,11 @@ const STORAGE_KEYS = {
   STUDENT_LOGS: 'mms_student_logs_v1',
   TEACHERS: 'mms_teachers_v1',
   STAFF: 'mms_staff_v1',
+  DEPARTMENTS: 'mms_departments_v1',
   CLASSES: 'mms_classes_v1',
   SUBJECTS: 'mms_subjects_v1',
   ATTENDANCE: 'mms_attendance_v1',
+  MANUAL_HOLIDAYS: 'mms_manual_holidays_v1',
   ROZNAMCHAH: 'mms_roznamchah_v1',
   FEES: 'mms_fees_v1',
   FINANCE_TRANSACTIONS: 'mms_finance_transactions_v1',
@@ -151,8 +154,16 @@ const initialStudents: Student[] = [
 
 const initialTeachers: Teacher[] = [];
 const initialStaff: Staff[] = [];
+const initialDepartments: Department[] = [
+  { id: 'dept-1', name: 'Tahfeez-ul-Quran', nameUrdu: 'شعبہ حفظِ قرآن کریم', code: 'HQ', description: 'Quran Memorization & Revision Department' },
+  { id: 'dept-2', name: 'Nazira & Tajweed', nameUrdu: 'شعبہ ناظرہ و تجوید', code: 'NT', description: 'Quran Recitation & Phonetics' },
+  { id: 'dept-3', name: 'Noorani Qaida', nameUrdu: 'شعبہ نورانی قاعدہ', code: 'NQ', description: 'Foundational Arabic Phonetics & Alphabet' },
+  { id: 'dept-4', name: 'Dars-e-Nizami (Alimiyat)', nameUrdu: 'درسِ نظامی (عالمیت)', code: 'DN', description: 'Classical Islamic Sciences & Theology' },
+  { id: 'dept-5', name: 'Primary Maktab', nameUrdu: 'پرائمری مکتب', code: 'PM', description: 'Primary Religious & Basic Secular Education' }
+];
 const initialClasses: MadrasaClass[] = [];
 const initialSubjects: Subject[] = [];
+const initialManualHolidays: ManualHoliday[] = [];
 
 const initialNamaz: MadrasaNamazTimings = {
   fajr: { azan: '05:00 AM', jamat: '05:30 AM' },
@@ -682,6 +693,20 @@ export const db = {
     const students = this.getStudents();
     const index = students.findIndex(s => s.id === student.id);
     if (index >= 0) {
+      const old = students[index];
+      // Check if class changed (promoted or transferred)
+      if (old.class && student.class && old.class !== student.class) {
+        const history = student.classHistory || old.classHistory || [];
+        const entry = {
+          id: `tf-${Date.now()}`,
+          fromClass: old.class,
+          toClass: student.class,
+          date: new Date().toISOString().split('T')[0],
+          reason: 'Class Promotion / Transfer',
+          by: 'Administrator'
+        };
+        student.classHistory = [entry, ...history];
+      }
       students[index] = student;
       this.saveStudents(students);
     }
@@ -715,6 +740,18 @@ export const db = {
       }
     }
     return { success: true };
+  },
+
+  toggleStudentActive(studentId: string): boolean {
+    const students = this.getStudents();
+    const s = students.find(item => item.id === studentId);
+    if (s) {
+      s.isActive = s.isActive === false ? true : false;
+      this.saveStudents(students);
+      backgroundSync(() => supabase.from('mms_students').update({ isActive: s.isActive }).eq('id', studentId));
+      return s.isActive;
+    }
+    return true;
   },
 
   deleteStudent(studentId: string) {
@@ -787,6 +824,18 @@ export const db = {
     backgroundSync(() => supabase.from('mms_teachers').delete().eq('id', teacherId));
   },
 
+  toggleTeacherActive(teacherId: string): boolean {
+    const teachers = this.getTeachers();
+    const t = teachers.find(item => item.id === teacherId);
+    if (t) {
+      t.isActive = t.isActive === false ? true : false;
+      this.saveTeachers(teachers);
+      backgroundSync(() => supabase.from('mms_teachers').update({ isActive: t.isActive }).eq('id', teacherId));
+      return t.isActive;
+    }
+    return true;
+  },
+
   getStaff(madrasaId?: string): Staff[] {
     const data = localStorage.getItem(STORAGE_KEYS.STAFF);
     const staff: Staff[] = data ? JSON.parse(data) : initialStaff;
@@ -827,6 +876,96 @@ export const db = {
     const updated = current.filter(s => s.id !== staffId);
     this.saveStaff(updated);
     backgroundSync(() => supabase.from('mms_staff').delete().eq('id', staffId));
+  },
+
+  // ================= DEPARTMENTS =================
+  getDepartments(madrasaId?: string): Department[] {
+    const data = localStorage.getItem(STORAGE_KEYS.DEPARTMENTS);
+    const list: Department[] = data ? JSON.parse(data) : initialDepartments;
+    if (!data) localStorage.setItem(STORAGE_KEYS.DEPARTMENTS, JSON.stringify(initialDepartments));
+    if (madrasaId) {
+      return list.filter(d => !d.madrasaId || d.madrasaId === madrasaId);
+    }
+    return list;
+  },
+
+  saveDepartments(departments: Department[]) {
+    localStorage.setItem(STORAGE_KEYS.DEPARTMENTS, JSON.stringify(departments));
+  },
+
+  addDepartment(dept: Department) {
+    const current = this.getDepartments();
+    const updated = [dept, ...current.filter(d => d.id !== dept.id)];
+    this.saveDepartments(updated);
+    backgroundSync(() => supabase.from('mms_departments').upsert(dept));
+    return dept;
+  },
+
+  updateDepartment(dept: Department) {
+    const current = this.getDepartments();
+    const index = current.findIndex(d => d.id === dept.id);
+    if (index >= 0) {
+      current[index] = dept;
+      this.saveDepartments(current);
+    } else {
+      this.addDepartment(dept);
+    }
+    backgroundSync(() => supabase.from('mms_departments').upsert(dept));
+    return dept;
+  },
+
+  deleteDepartment(deptId: string) {
+    const current = this.getDepartments();
+    const updated = current.filter(d => d.id !== deptId);
+    this.saveDepartments(updated);
+    backgroundSync(() => supabase.from('mms_departments').delete().eq('id', deptId));
+  },
+
+  // ================= MANUAL HOLIDAYS =================
+  getManualHolidays(madrasaId?: string): ManualHoliday[] {
+    const data = localStorage.getItem(STORAGE_KEYS.MANUAL_HOLIDAYS);
+    const list: ManualHoliday[] = data ? JSON.parse(data) : initialManualHolidays;
+    if (!data) localStorage.setItem(STORAGE_KEYS.MANUAL_HOLIDAYS, JSON.stringify(initialManualHolidays));
+    if (madrasaId) {
+      return list.filter(h => !h.madrasaId || h.madrasaId === madrasaId);
+    }
+    return list;
+  },
+
+  saveManualHolidays(holidays: ManualHoliday[]) {
+    localStorage.setItem(STORAGE_KEYS.MANUAL_HOLIDAYS, JSON.stringify(holidays));
+  },
+
+  addManualHoliday(holiday: ManualHoliday) {
+    const current = this.getManualHolidays();
+    const updated = [holiday, ...current.filter(h => h.id !== holiday.id && h.date !== holiday.date)];
+    this.saveManualHolidays(updated);
+    backgroundSync(() => supabase.from('mms_manual_holidays').upsert(holiday));
+    return holiday;
+  },
+
+  deleteManualHoliday(holidayIdOrDate: string) {
+    const current = this.getManualHolidays();
+    const updated = current.filter(h => h.id !== holidayIdOrDate && h.date !== holidayIdOrDate);
+    this.saveManualHolidays(updated);
+    backgroundSync(() => supabase.from('mms_manual_holidays').delete().eq('id', holidayIdOrDate));
+  },
+
+  // Book Aliases (Subject = Book)
+  getBooks(madrasaId?: string): Subject[] {
+    return this.getSubjects(madrasaId);
+  },
+  saveBooks(books: Subject[]) {
+    this.saveSubjects(books);
+  },
+  addBook(book: Subject) {
+    return this.addSubject(book);
+  },
+  updateBook(book: Subject) {
+    return this.updateSubject(book);
+  },
+  deleteBook(bookId: string) {
+    this.deleteSubject(bookId);
   },
 
   getClasses(madrasaId?: string): MadrasaClass[] {

@@ -57,17 +57,53 @@ export interface Student {
   username?: string;
   password?: string;
   dob: string;
+  isActive?: boolean;
+  classHistory?: StudentClassTransferLog[];
+}
+
+export interface StudentClassTransferLog {
+  id: string;
+  fromClass: string;
+  toClass: string;
+  date: string;
+  reason?: string;
+  by: string;
+  promotedBy?: string;
+}
+
+export interface Department {
+  id: string;
+  name: string;
+  nameUrdu?: string;
+  code?: string;
+  description?: string;
+  madrasaId?: string;
+  createdAt?: string;
+}
+
+export interface AssignedClassBook {
+  id?: string;
+  departmentId: string;
+  departmentName: string;
+  bookId: string;
+  bookName: string;
+  totalPages?: number;
+  teacherName?: string;
 }
 
 export interface MadrasaClass {
   id: string;
   name: string;
   nameUrdu?: string;
+  departmentId?: string;
   category: string;
   incharge: string;
+  priority?: number; // Attendance priority: 1, 2, 3...
+  assignedBooks?: AssignedClassBook[];
   startTime?: string;
   endTime?: string;
   schedule?: string;
+  weekDays?: string[]; // e.g. ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
   room?: string;
   capacity?: number;
   madrasaId: string;
@@ -84,9 +120,22 @@ export interface Subject {
   totalPages: number;
   teacherName?: string;
   category?: string;
+  departmentId?: string;
+  departmentName?: string;
   author?: string;
   madrasaId: string;
   description?: string;
+}
+
+export type Book = Subject;
+
+export interface ManualHoliday {
+  id: string;
+  date: string; // YYYY-MM-DD
+  reason: string;
+  madrasaId?: string;
+  announcedBy?: string;
+  createdAt?: string;
 }
 
 export interface Teacher {
@@ -103,6 +152,7 @@ export interface Teacher {
   dob?: string;
   joiningDate?: string;
   isPresentToday: boolean;
+  isActive?: boolean;
   designation?: string;
   salary?: number;
   email?: string;
