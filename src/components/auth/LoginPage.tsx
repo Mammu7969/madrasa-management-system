@@ -11,7 +11,6 @@ import {
   AlertTriangle, 
   PhoneCall, 
   ShieldCheck, 
-  Sparkles,
   Info,
   Calendar,
   Globe
@@ -57,29 +56,6 @@ export const LoginPage: React.FC = () => {
       } else {
         setErrorMessage(res.error || 'Login failed. Please check your credentials.');
       }
-    }
-  };
-
-  // Quick fill helper for easy evaluation
-  const setDemoCredentials = (role: Role) => {
-    setSelectedRole(role);
-    setErrorMessage('');
-    
-    if (role === 'super_admin') {
-      setIdOrUsername('superadmin');
-      setPasswordOrDob('password123');
-    } else if (role === 'admin') {
-      setIdOrUsername('principal.jdh');
-      setPasswordOrDob('password123');
-      if (availableMadrasas[0]) setSelectedMadrasaId(availableMadrasas[0].id);
-    } else if (role === 'teacher') {
-      setIdOrUsername('TCH-001');
-      setPasswordOrDob('password123');
-      if (availableMadrasas[0]) setSelectedMadrasaId(availableMadrasas[0].id);
-    } else if (role === 'student') {
-      setIdOrUsername('ADM-2026-001');
-      setPasswordOrDob('password123');
-      if (availableMadrasas[0]) setSelectedMadrasaId(availableMadrasas[0].id);
     }
   };
 
@@ -133,47 +109,6 @@ export const LoginPage: React.FC = () => {
           <p className="text-xs text-slate-500 mt-1 font-medium">
             Centralized Cloud Portal for Islamic Institutions & Academies
           </p>
-        </div>
-
-        {/* Quick Demo Selector Chips */}
-        <div className="mb-6 p-3 bg-white/50 backdrop-blur-md rounded-2xl border border-white/80 shadow-2xs">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-[11px] font-bold text-slate-700 flex items-center gap-1">
-              <Sparkles className="w-3.5 h-3.5 text-amber-600" />
-              Quick Demo Fill:
-            </span>
-            <span className="text-[10px] text-slate-500 font-medium">Click any role to test</span>
-          </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
-            <button
-              type="button"
-              onClick={() => setDemoCredentials('super_admin')}
-              className={`px-2.5 py-1.5 rounded-xl text-[11px] font-bold transition-all ${selectedRole === 'super_admin' ? 'bg-amber-600 text-white shadow-xs' : 'bg-white/80 text-gray-700 hover:bg-amber-50 border border-white/80'}`}
-            >
-              Super Admin
-            </button>
-            <button
-              type="button"
-              onClick={() => setDemoCredentials('admin')}
-              className={`px-2.5 py-1.5 rounded-xl text-[11px] font-bold transition-all ${selectedRole === 'admin' ? 'bg-[#079669] text-white shadow-xs' : 'bg-white/80 text-gray-700 hover:bg-emerald-50 border border-white/80'}`}
-            >
-              Principal
-            </button>
-            <button
-              type="button"
-              onClick={() => setDemoCredentials('teacher')}
-              className={`px-2.5 py-1.5 rounded-xl text-[11px] font-bold transition-all ${selectedRole === 'teacher' ? 'bg-[#079669] text-white shadow-xs' : 'bg-white/80 text-gray-700 hover:bg-emerald-50 border border-white/80'}`}
-            >
-              Teacher
-            </button>
-            <button
-              type="button"
-              onClick={() => setDemoCredentials('student')}
-              className={`px-2.5 py-1.5 rounded-xl text-[11px] font-bold transition-all ${selectedRole === 'student' ? 'bg-[#079669] text-white shadow-xs' : 'bg-white/80 text-gray-700 hover:bg-emerald-50 border border-white/80'}`}
-            >
-              Student
-            </button>
-          </div>
         </div>
 
         {/* Dynamic Subscription Warning Alert */}
@@ -376,7 +311,7 @@ export const LoginPage: React.FC = () => {
                     type="text"
                     value={idOrUsername}
                     onChange={(e) => setIdOrUsername(e.target.value)}
-                    placeholder="superadmin"
+                    placeholder="Enter super admin username"
                     className="w-full p-3 rounded-2xl bg-white/60 backdrop-blur-md border border-white/90 text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-600 shadow-2xs"
                     required
                   />
@@ -393,7 +328,7 @@ export const LoginPage: React.FC = () => {
                     type="password"
                     value={passwordOrDob}
                     onChange={(e) => setPasswordOrDob(e.target.value)}
-                    placeholder="password123"
+                    placeholder="Enter super admin password"
                     className="w-full p-3 rounded-2xl bg-white/60 backdrop-blur-md border border-white/90 text-xs font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-amber-600 shadow-2xs"
                     required
                   />
