@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Examinations &amp; Sanad Evaluations - Jamia Zia Ul Quran Trust</title>
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Custom Configuration conforming to Fidelity Dark System -->
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          "on-primary": "#002f64",
+          "on-error": "#690005",
+          "on-tertiary-fixed": "#321200",
+          "inverse-on-surface": "#2d3037",
+          "on-secondary-fixed-variant": "#2d476f",
+          "primary": "#aac7ff",
+          "primary-fixed": "#d6e3ff",
+          "on-surface-variant": "#c1c6d5",
+          "on-secondary": "#143057",
+          "surface": "#10131a",
+          "on-tertiary-container": "#481d00",
+          "on-tertiary-fixed-variant": "#763400",
+          "on-primary-fixed": "#001b3e",
+          "tertiary": "#ffb68c",
+          "on-secondary-container": "#9db6e4",
+          "on-background": "#e0e2eb",
+          "outline-variant": "#414753",
+          "on-primary-fixed-variant": "#00458d",
+          "on-error-container": "#ffdad6",
+          "on-primary-container": "#002958",
+          "secondary-fixed-dim": "#aec7f7",
+          "inverse-primary": "#005db8",
+          "surface-container-high": "#272a31",
+          "on-tertiary": "#532200",
+          "tertiary-fixed-dim": "#ffb68c",
+          "surface-container-highest": "#31353c",
+          "error": "#ffb4ab",
+          "inverse-surface": "#e0e2eb",
+          "primary-container": "#4090fe",
+          "error-container": "#93000a",
+          "surface-tint": "#aac7ff",
+          "surface-dim": "#10131a",
+          "surface-container-low": "#181c22",
+          "surface-container-lowest": "#0b0e14",
+          "secondary": "#aec7f7",
+          "tertiary-fixed": "#ffdbc9",
+          "tertiary-container": "#e3711f",
+          "surface-container": "#1c2026",
+          "on-secondary-fixed": "#001b3d",
+          "surface-variant": "#31353c",
+          "on-surface": "#e0e2eb",
+          "secondary-container": "#2d476f",
+          "background": "#0b0e14",
+          "primary-fixed-dim": "#aac7ff",
+          "surface-bright": "#363940",
+          "outline": "#8b919f",
+          "secondary-fixed": "#d6e3ff",
+          brand: {
+            50: '#0f291e',
+            100: '#13402e',
+            400: '#34d399',
+            500: '#10b981',
+            600: '#059669',
+            700: '#047857',
+            800: '#064e3b',
+            900: '#032a20',
+            dark: '#051b14',
+          }
+        },
+        borderRadius: {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "2xl": "1rem",
+          "full": "9999px"
+        },
+        fontFamily: {
+          sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+          urdu: ['Amiri', 'Noto Nastaliq Urdu', 'Scheherazade New', 'serif']
+        }
+      }
+    }
+  };
+</script>
+<!-- Google Fonts for Urdu script support & Inter -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<style data-purpose="custom-scrollbars-and-fonts">
+    .font-urdu {
+      font-family: 'Amiri', serif;
+      direction: rtl;
+    }
+    /* iOS Safe Area Padding Support */
+    .safe-top {
+      padding-top: env(safe-area-inset-top, 12px);
+    }
+    .safe-bottom {
+      padding-bottom: env(safe-area-inset-bottom, 16px);
+    }
+    /* Hide horizontal scrollbar */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+</style>
+</head>
+<body class="bg-[#0b0e14] text-[#e0e2eb] antialiased min-h-screen pb-24 font-sans selection:bg-brand-900 selection:text-emerald-300">
+<!-- BEGIN: TopBar -->
+<!-- Status bar and Institution Header -->
+<header class="bg-[#0e131a] text-white safe-top sticky top-0 z-40 shadow-lg border-b border-[#2d3340]">
+<!-- Top Meta Row (Date, Prayer, Sync) -->
+<div class="px-4 py-2 bg-[#080b10] flex items-center justify-between text-[11px] border-b border-[#1f2530] font-medium tracking-tight">
+<div class="flex items-center space-x-1.5 text-emerald-400">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-slate-300">28 Rabi' al-Awwal 1448 AH</span>
+</div>
+<div class="flex items-center space-x-2">
+<div class="flex items-center bg-[#132b20] px-2 py-0.5 rounded-full border border-emerald-500/40 text-emerald-300 shadow-inner">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5 animate-pulse"></span>
+<span>Fajr 05:00 AM</span>
+</div>
+</div>
+</div>
+<!-- Main Navigation Bar -->
+<div class="px-4 py-3 flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<!-- Logo Stamp -->
+<div class="w-9 h-9 rounded-lg bg-[#14231d] border border-emerald-500/40 flex items-center justify-center p-1 shadow-sm">
+<svg class="w-6 h-6 text-emerald-400" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 2L3 7v9c0 5 9 7 9 7s9-2 9-7V7l-9-5zm0 2.2l6 3.3v7.4c0 3.5-6 5.1-6 5.1s-6-1.6-6-5.1V7.5l6-3.3zM12 6a2 2 0 100 4 2 2 0 000-4zm-3 8a3 3 0 016 0H9z"></path>
+</svg>
+</div>
+<div>
+<div class="flex items-center space-x-1.5">
+<h1 class="font-bold text-sm tracking-wide text-white uppercase">Jamia Zia Ul Quran</h1>
+<span class="text-[9px] bg-emerald-950 text-emerald-300 border border-emerald-700/50 px-1.5 py-0.5 rounded font-semibold tracking-wider">ERP</span>
+</div>
+<p class="text-[11px] text-slate-400">Jonnalagadda X Road • JDH-01</p>
+</div>
+</div>
+<!-- Quick Actions Header (User / Notifications) -->
+<div class="flex items-center space-x-2">
+<button aria-label="Notifications" class="w-8 h-8 rounded-full bg-[#1c212a] border border-[#2d3340] text-slate-300 flex items-center justify-center relative active:scale-95 transition-transform" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="absolute top-1 right-1 w-2 h-2 bg-rose-500 rounded-full ring-2 ring-[#0e131a]"></span>
+</button>
+<div class="w-8 h-8 rounded-full bg-emerald-700 text-white font-bold text-xs flex items-center justify-center border border-emerald-400/40 shadow-sm">
+          M
+        </div>
+</div>
+</div>
+</header>
+<!-- END: TopBar -->
+<!-- BEGIN: MainContent -->
+<main class="px-4 pt-4 space-y-4 max-w-md mx-auto">
+<!-- Page Title & Primary Actions Banner -->
+<section class="bg-[#181c22] rounded-2xl p-4 shadow-sm border border-[#2d3340]" data-purpose="page-intro-header">
+<div class="flex items-start space-x-3">
+<div class="w-10 h-10 rounded-xl bg-emerald-950/70 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-700/50">
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div class="flex-1">
+<div class="flex flex-wrap items-center gap-1.5">
+<h2 class="text-base font-bold text-white leading-tight">Examinations &amp; Sanad</h2>
+<span class="font-urdu text-sm font-semibold bg-[#112d22] text-emerald-300 px-2.5 py-0.5 rounded-full border border-emerald-600/50">امتحانات و اسناد</span>
+</div>
+<p class="text-xs text-slate-400 mt-1 leading-relaxed">
+            Examination schedules, interactive marksheet registers, and result gazettes.
+          </p>
+</div>
+</div>
+<!-- Action Buttons Row -->
+<div class="mt-4 pt-3 border-t border-[#252b37] grid grid-cols-2 gap-2">
+<button class="w-full inline-flex items-center justify-center gap-1.5 bg-emerald-700 hover:bg-emerald-600 active:scale-[0.98] text-white py-2 px-3 rounded-xl text-xs font-semibold shadow-md shadow-emerald-950/50 transition-all border border-emerald-500/40" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Schedule Exam</span>
+</button>
+<button class="w-full inline-flex items-center justify-center gap-1.5 bg-[#22262f] hover:bg-[#2a303b] active:scale-[0.98] text-slate-200 py-2 px-3 rounded-xl text-xs font-medium border border-[#363e4e] transition-all" type="button">
+<svg class="w-3.5 h-3.5 text-slate-300" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Print Overview</span>
+</button>
+</div>
+</section>
+<!-- BEGIN: MetricCardsGrid -->
+<!-- Quick Analytics: 2x2 Grid with exact desktop numbers -->
+<section class="grid grid-cols-2 gap-2.5" data-purpose="metric-summary-grid">
+<!-- Total Exams -->
+<div class="bg-[#181c22] p-3 rounded-2xl border border-[#2d3340] shadow-sm flex items-center space-x-2.5">
+<div class="w-9 h-9 rounded-xl bg-blue-950/70 text-blue-400 border border-blue-800/40 flex items-center justify-center shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div>
+<span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">Total Exams</span>
+<p class="text-sm font-bold text-white font-mono leading-tight">2 Cohorts</p>
+</div>
+</div>
+<!-- Ongoing / Active -->
+<div class="bg-[#181c22] p-3 rounded-2xl border border-[#2d3340] shadow-sm flex items-center space-x-2.5">
+<div class="w-9 h-9 rounded-xl bg-amber-950/70 text-amber-400 border border-amber-800/40 flex items-center justify-center shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div>
+<span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">Ongoing/Active</span>
+<p class="text-sm font-bold text-amber-400 font-mono leading-tight">1 Active</p>
+</div>
+</div>
+<!-- Mumtaz (Distinction) -->
+<div class="bg-[#181c22] p-3 rounded-2xl border border-[#2d3340] shadow-sm flex items-center space-x-2.5">
+<div class="w-9 h-9 rounded-xl bg-emerald-950/70 text-emerald-400 border border-emerald-800/40 flex items-center justify-center shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div>
+<span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider block truncate">Mumtaz</span>
+<p class="text-sm font-bold text-emerald-400 font-mono leading-tight">0% Rate</p>
+</div>
+</div>
+<!-- Overall Pass Rate -->
+<div class="bg-[#181c22] p-3 rounded-2xl border border-[#2d3340] shadow-sm flex items-center space-x-2.5">
+<div class="w-9 h-9 rounded-xl bg-purple-950/70 text-purple-400 border border-purple-800/40 flex items-center justify-center shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 14l9-5-9-5-9 5 9 5z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+<path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div>
+<span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider block truncate">Pass Rate</span>
+<p class="text-sm font-bold text-purple-400 font-mono leading-tight">0% Passed</p>
+</div>
+</div>
+</section>
+<!-- END: MetricCardsGrid -->
+<!-- BEGIN: SearchAndFilters -->
+<section class="space-y-2.5" data-purpose="search-filter-controls">
+<!-- Search Input -->
+<div class="relative">
+<span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</span>
+<input class="w-full pl-9 pr-4 py-2.5 bg-[#181c22] border border-[#2d3340] rounded-xl text-xs text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/40 focus:border-emerald-500 shadow-sm" placeholder="Search examinations by title, class, term..." type="text"/>
+</div>
+<!-- Select Dropdowns Row -->
+<div class="grid grid-cols-2 gap-2">
+<div class="relative">
+<select class="w-full appearance-none bg-[#181c22] border border-[#2d3340] rounded-xl px-3 py-2 text-xs font-medium text-slate-200 focus:outline-none focus:border-emerald-500 shadow-sm pr-8">
+<option>All Academic Terms</option>
+<option>Quarterly (سہ ماہی)</option>
+<option>Half-Yearly (شش ماہی)</option>
+<option>Annual (سالانہ)</option>
+</select>
+<span class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</span>
+</div>
+<div class="relative">
+<select class="w-full appearance-none bg-[#181c22] border border-[#2d3340] rounded-xl px-3 py-2 text-xs font-medium text-slate-200 focus:outline-none focus:border-emerald-500 shadow-sm pr-8">
+<option>All Statuses</option>
+<option>Ongoing</option>
+<option>Upcoming</option>
+<option>Completed</option>
+</select>
+<span class="absolute inset-y-0 right-0 flex items-center pr-2.5 pointer-events-none text-slate-400">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</span>
+</div>
+</div>
+</section>
+<!-- END: SearchAndFilters -->
+<!-- BEGIN: ExaminationCardsList -->
+<section class="space-y-3.5" data-purpose="examination-cohorts-list">
+<!-- Card 1: Quarterly Tajweed & Hifz Assessment -->
+<article class="bg-[#181c22] rounded-2xl border border-[#2d3340] shadow-sm p-4 overflow-hidden relative" data-purpose="exam-card">
+<!-- Top Pill & Status -->
+<div class="flex items-center justify-between gap-2 mb-2">
+<span class="inline-flex items-center text-[10px] font-semibold tracking-wide uppercase px-2.5 py-0.5 rounded-full bg-[#22262f] text-slate-300 border border-[#323947]">
+            Quarterly • 1447-1448 H / 2026
+          </span>
+<span class="inline-flex items-center text-[11px] font-bold px-2 py-0.5 rounded-md bg-amber-950/80 text-amber-300 border border-amber-600/50">
+            Ongoing
+          </span>
+</div>
+<!-- Title & Urdu subtitle -->
+<div class="mb-2.5">
+<h3 class="text-sm font-bold text-white leading-snug">
+            Quarterly Tajweed &amp; Hifz Assessment
+          </h3>
+<p class="font-urdu text-sm text-emerald-400 pt-0.5">سہ ماہی امتحان تجوید و حفظ قرآن</p>
+</div>
+<!-- Class/Section Badge -->
+<div class="flex items-center text-xs font-semibold text-emerald-300 mb-3 bg-[#12281e] rounded-lg px-2.5 py-1 w-fit border border-emerald-600/40">
+<svg class="w-3.5 h-3.5 mr-1.5 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Hifz Section A</span>
+</div>
+<!-- Metadata Schedule Box -->
+<div class="bg-[#12151b] rounded-xl p-2.5 space-y-1.5 text-xs text-slate-300 border border-[#252b36] mb-3">
+<div class="flex items-center justify-between">
+<span class="flex items-center text-slate-400">
+<svg class="w-3.5 h-3.5 mr-1.5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+              Schedule:
+            </span>
+<span class="font-mono font-medium text-emerald-300 text-[11px]">2026-09-15 → 2026-09-20</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="flex items-center text-slate-400">
+<svg class="w-3.5 h-3.5 mr-1.5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+              Candidates:
+            </span>
+<span class="font-mono font-bold text-white text-[11px]">0 / 0 Graded</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="flex items-center text-slate-400">
+<svg class="w-3.5 h-3.5 mr-1.5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+              Subjects:
+            </span>
+<span class="font-semibold text-slate-200 text-[11px]">3 Subjects</span>
+</div>
+</div>
+<!-- Action Links: Marksheet & Result Gazette -->
+<div class="grid grid-cols-2 gap-2">
+<button class="flex items-center justify-center py-2 px-3 rounded-xl bg-[#142d20] hover:bg-[#183928] text-emerald-300 text-xs font-semibold border border-emerald-600/40 transition-colors" type="button">
+<svg class="w-3.5 h-3.5 mr-1.5 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Marksheet</span>
+</button>
+<button class="flex items-center justify-center py-2 px-3 rounded-xl bg-[#1e2531] hover:bg-[#27303f] text-slate-200 text-xs font-semibold border border-[#343e50] transition-colors" type="button">
+<svg class="w-3.5 h-3.5 mr-1.5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Result Gazette</span>
+</button>
+</div>
+<!-- Footer Identification & Delete icon -->
+<div class="mt-3 pt-2.5 border-t border-[#252b36] flex items-center justify-between text-[11px] text-slate-400">
+<span class="font-mono">ID: exam-1</span>
+<button aria-label="Delete Exam Cohort" class="text-rose-400 hover:text-rose-300 p-1 -mr-1 transition-colors" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+</article>
+<!-- Card 2: Half-Yearly Dars-e-Nizami Examination -->
+<article class="bg-[#181c22] rounded-2xl border border-[#2d3340] shadow-sm p-4 overflow-hidden relative" data-purpose="exam-card">
+<!-- Top Pill & Status -->
+<div class="flex items-center justify-between gap-2 mb-2">
+<span class="inline-flex items-center text-[10px] font-semibold tracking-wide uppercase px-2.5 py-0.5 rounded-full bg-[#22262f] text-slate-300 border border-[#323947]">
+            Half-Yearly • 1447-1448 H / 2026
+          </span>
+<span class="inline-flex items-center text-[11px] font-bold px-2 py-0.5 rounded-md bg-sky-950/80 text-sky-300 border border-sky-600/50">
+            Upcoming
+          </span>
+</div>
+<!-- Title & Urdu subtitle -->
+<div class="mb-2.5">
+<h3 class="text-sm font-bold text-white leading-snug">
+            Half-Yearly Dars-e-Nizami Examination
+          </h3>
+<p class="font-urdu text-sm text-emerald-400 pt-0.5">شش ماہی امتحان درسِ نظامی</p>
+</div>
+<!-- Class/Section Badge -->
+<div class="flex items-center text-xs font-semibold text-emerald-300 mb-3 bg-[#12281e] rounded-lg px-2.5 py-1 w-fit border border-emerald-600/40">
+<svg class="w-3.5 h-3.5 mr-1.5 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Alimiyat Year 1</span>
+</div>
+<!-- Metadata Schedule Box -->
+<div class="bg-[#12151b] rounded-xl p-2.5 space-y-1.5 text-xs text-slate-300 border border-[#252b36] mb-3">
+<div class="flex items-center justify-between">
+<span class="flex items-center text-slate-400">
+<svg class="w-3.5 h-3.5 mr-1.5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+              Schedule:
+            </span>
+<span class="font-mono font-medium text-emerald-300 text-[11px]">2026-11-10 → 2026-11-20</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="flex items-center text-slate-400">
+<svg class="w-3.5 h-3.5 mr-1.5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+              Candidates:
+            </span>
+<span class="font-mono font-bold text-white text-[11px]">0 / 0 Graded</span>
+</div>
+<div class="flex items-center justify-between">
+<span class="flex items-center text-slate-400">
+<svg class="w-3.5 h-3.5 mr-1.5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+              Subjects:
+            </span>
+<span class="font-semibold text-slate-200 text-[11px]">3 Subjects</span>
+</div>
+</div>
+<!-- Action Links: Marksheet & Result Gazette -->
+<div class="grid grid-cols-2 gap-2">
+<button class="flex items-center justify-center py-2 px-3 rounded-xl bg-[#142d20] hover:bg-[#183928] text-emerald-300 text-xs font-semibold border border-emerald-600/40 transition-colors" type="button">
+<svg class="w-3.5 h-3.5 mr-1.5 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Marksheet</span>
+</button>
+<button class="flex items-center justify-center py-2 px-3 rounded-xl bg-[#1e2531] hover:bg-[#27303f] text-slate-200 text-xs font-semibold border border-[#343e50] transition-colors" type="button">
+<svg class="w-3.5 h-3.5 mr-1.5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Result Gazette</span>
+</button>
+</div>
+<!-- Footer Identification & Delete icon -->
+<div class="mt-3 pt-2.5 border-t border-[#252b36] flex items-center justify-between text-[11px] text-slate-400">
+<span class="font-mono">ID: exam-2</span>
+<button aria-label="Delete Exam Cohort" class="text-rose-400 hover:text-rose-300 p-1 -mr-1 transition-colors" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+</article>
+</section>
+<!-- END: ExaminationCardsList -->
+</main>
+<!-- END: MainContent -->
+<!-- BEGIN: BottomNavigation -->
+<nav class="fixed bottom-0 inset-x-0 bg-[#10131a] border-t border-[#2d3340] z-50 safe-bottom shadow-[0_-4px_20px_rgba(0,0,0,0.5)]" data-purpose="mobile-bottom-navigation">
+<div class="flex justify-around items-center h-16 max-w-md mx-auto px-2">
+<!-- Dashboard -->
+<a class="flex flex-col items-center justify-center text-slate-400 hover:text-emerald-400 w-14 py-1 transition-colors" href="#dashboard">
+<svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+<span class="text-[10px] font-medium leading-none">Home</span>
+</a>
+<!-- Students -->
+<a class="flex flex-col items-center justify-center text-slate-400 hover:text-emerald-400 w-14 py-1 transition-colors" href="#students">
+<svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+<span class="text-[10px] font-medium leading-none">Students</span>
+</a>
+<!-- Daily Roznamcha -->
+<a class="flex flex-col items-center justify-center text-slate-400 hover:text-emerald-400 w-14 py-1 transition-colors" href="#roznamcha">
+<svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+<span class="text-[10px] font-medium leading-none">Roznamcha</span>
+</a>
+<!-- Examinations (Active) -->
+<a class="flex flex-col items-center justify-center text-emerald-400 w-14 py-1 relative" href="#examinations">
+<div class="relative">
+<svg class="w-5 h-5 mb-1 text-emerald-400" fill="currentColor" viewbox="0 0 24 24">
+<path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"></path>
+</svg>
+<span class="absolute -top-1 -right-1 w-2 h-2 bg-emerald-400 rounded-full"></span>
+</div>
+<span class="text-[10px] font-bold leading-none">Exams</span>
+</a>
+<!-- Menu / More -->
+<a class="flex flex-col items-center justify-center text-slate-400 hover:text-emerald-400 w-14 py-1 transition-colors" href="#menu">
+<svg class="w-5 h-5 mb-1" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8"></path>
+</svg>
+<span class="text-[10px] font-medium leading-none">Menu</span>
+</a>
+</div>
+</nav>
+<!-- END: BottomNavigation -->
+</body></html>

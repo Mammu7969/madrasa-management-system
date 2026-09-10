@@ -126,7 +126,8 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   const [themePalette, setThemePaletteState] = useState<ThemePaletteId>('emerald');
 
   const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
-    return localStorage.getItem('mms_dark_mode') === 'true';
+    const saved = localStorage.getItem('mms_dark_mode');
+    return saved !== null ? saved === 'true' : true;
   });
 
   const toggleDarkMode = () => {
@@ -142,9 +143,11 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     if (isDarkMode) {
       htmlEl.classList.add('dark');
       htmlEl.setAttribute('data-theme', 'dark');
+      document.body.classList.add('dark');
     } else {
       htmlEl.classList.remove('dark');
       htmlEl.setAttribute('data-theme', 'transparent-glossy');
+      document.body.classList.remove('dark');
     }
   }, [isDarkMode]);
   

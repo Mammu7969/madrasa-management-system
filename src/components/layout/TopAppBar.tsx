@@ -201,44 +201,44 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({
 
   return (
     <>
-      <header className="h-16 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border-b border-slate-200/80 dark:border-slate-800 sticky top-0 z-30 px-3 sm:px-4 lg:px-6 flex items-center justify-between gap-2 sm:gap-3 shadow-xs no-print select-none transition-colors duration-200">
+      <header className="h-16 bg-white/90 dark:bg-[#10131a] backdrop-blur-xl border-b border-slate-200/80 dark:border-[#2d3340] sticky top-0 z-30 px-3 sm:px-4 lg:px-6 flex items-center justify-between gap-2 sm:gap-3 shadow-xs no-print select-none transition-colors duration-200">
         
         {/* ================= LEFT SECTION: MENU, BREADCRUMB & SEARCH ================= */}
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-3 min-w-0">
           {/* Menu / Hamburger Button */}
           <button
             onClick={onOpenCommandPalette}
             title="Global Navigation (Ctrl + K)"
-            className="p-2 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition-all cursor-pointer"
+            className="p-2 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-[#1e232b] dark:hover:bg-[#22262e] text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-[#2d3340] transition-all cursor-pointer shrink-0"
           >
             <Menu className="w-4 h-4" />
           </button>
 
           {/* Module Breadcrumb Indicator */}
-          <div className="hidden md:flex items-center gap-2 text-xs">
+          <div className="hidden md:flex items-center gap-2 text-xs shrink-0">
             <button
               onClick={onNavigateHome}
-              className="text-slate-500 dark:text-slate-400 hover:text-emerald-700 dark:hover:text-emerald-400 font-semibold cursor-pointer transition-colors"
+              className="text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 font-semibold cursor-pointer transition-colors"
             >
               ERP
             </button>
             <span className="text-slate-300 dark:text-slate-600 font-bold">/</span>
-            <span className="font-bold text-slate-900 dark:text-slate-100 bg-slate-100 dark:bg-slate-800 px-2.5 py-1 rounded-lg">
+            <span className="font-bold text-slate-900 dark:text-slate-100 bg-slate-100 dark:bg-[#1e232b] border border-slate-200/60 dark:border-[#2d3340] px-2.5 py-1 rounded-lg">
               {language === 'ur' ? activeTitle.ur : activeTitle.en}
             </span>
           </div>
 
-          {/* Search Box */}
-          <div className="w-44 sm:w-60 md:w-72">
+          {/* Search Box - Responsive Icon on Mobile, full input on sm+ */}
+          <div className="shrink-0">
             <button
               onClick={onOpenCommandPalette}
-              className="w-full flex items-center justify-between px-3 py-1.5 rounded-xl bg-slate-50 hover:bg-white dark:bg-slate-800 dark:hover:bg-slate-700 border border-slate-200/80 dark:border-slate-700 text-xs text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-all group cursor-pointer"
+              className="flex items-center justify-between p-2 sm:px-3 sm:py-1.5 rounded-xl bg-slate-50 hover:bg-white dark:bg-[#181c22] dark:hover:bg-[#1e232b] border border-slate-200/80 dark:border-[#2d3340] text-xs text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-all group cursor-pointer sm:w-56 md:w-64 lg:w-72"
             >
               <div className="flex items-center gap-2 truncate">
-                <Search className="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-600 transition-colors shrink-0" />
-                <span className="truncate text-[11px] text-slate-500 dark:text-slate-400">Search talaba, ustadh, fee...</span>
+                <Search className="w-4 h-4 sm:w-3.5 sm:h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors shrink-0" />
+                <span className="hidden sm:inline truncate text-[11px] text-slate-500 dark:text-slate-400">Search talaba, ustadh, fee...</span>
               </div>
-              <kbd className="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono font-bold text-slate-400 bg-white dark:bg-slate-900 rounded border border-slate-200 dark:border-slate-700">
+              <kbd className="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono font-bold text-slate-400 dark:text-slate-500 bg-white dark:bg-[#10131a] rounded border border-slate-200 dark:border-[#2d3340]">
                 ⌘K
               </kbd>
             </button>
@@ -246,29 +246,29 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({
         </div>
 
         {/* ================= RIGHT SECTION: TEMPORAL CAPSULES, UTILITIES & USER ================= */}
-        <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
           
           {/* Gregorian + Hijri Date */}
-          <div className="hidden xl:flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-white/65 border border-white/80 text-xs font-semibold text-slate-700 shadow-2xs">
-            <Calendar className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-            <span className="text-[11px] text-slate-800 font-bold whitespace-nowrap">{currentDateStr}</span>
-            <span className="text-slate-300">•</span>
-            <span className="text-xs font-bold text-emerald-900 font-urdu urdu-font whitespace-nowrap">{hijriDateStr}</span>
+          <div className="hidden xl:flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-white/65 dark:bg-[#181c22] border border-slate-200/80 dark:border-[#2d3340] text-xs font-semibold text-slate-700 dark:text-slate-300 shadow-2xs">
+            <Calendar className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+            <span className="text-[11px] text-slate-800 dark:text-slate-200 font-bold whitespace-nowrap">{currentDateStr}</span>
+            <span className="text-slate-300 dark:text-slate-600">•</span>
+            <span className="text-xs font-bold text-blue-600 dark:text-blue-400 font-urdu urdu-font whitespace-nowrap">{hijriDateStr}</span>
           </div>
 
           {/* Live Clock */}
-          <div className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-white/65 border border-white/80 font-mono text-xs font-bold text-slate-800 shadow-2xs">
+          <div className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-white/65 dark:bg-[#181c22] border border-slate-200/80 dark:border-[#2d3340] font-mono text-xs font-bold text-slate-800 dark:text-slate-200 shadow-2xs">
             <Clock className="w-3.5 h-3.5 text-amber-500 shrink-0" />
             <span>{currentTime}</span>
           </div>
 
           {/* Next Namaz Countdown */}
           {nextPrayerInfo && (
-            <div className="hidden 2xl:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-emerald-50/80 border border-emerald-200/70 text-xs font-bold text-emerald-900 shadow-2xs whitespace-nowrap">
-              <Sparkles className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+            <div className="hidden 2xl:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200/70 dark:border-blue-800/60 text-xs font-bold text-blue-900 dark:text-blue-300 shadow-2xs whitespace-nowrap">
+              <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
               <span>{nextPrayerInfo.name}</span>
-              <span className="font-normal text-emerald-700 text-[10px]">({nextPrayerInfo.timeStr})</span>
-              <span className="font-mono text-emerald-950 font-black bg-white/95 px-1.5 py-0.5 rounded-full border border-emerald-200/60 text-[10px]">
+              <span className="font-normal text-blue-700 dark:text-blue-400 text-[10px]">({nextPrayerInfo.timeStr})</span>
+              <span className="font-mono text-blue-950 dark:text-blue-200 font-black bg-white/95 dark:bg-[#181c22] px-1.5 py-0.5 rounded-full border border-blue-200/60 dark:border-blue-800/60 text-[10px]">
                 {nextPrayerInfo.countdownStr}
               </span>
             </div>
@@ -286,10 +286,10 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({
               }
             }}
             title="Supabase Cloud Database Status (Click to Sync)"
-            className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-2xl bg-emerald-50/90 hover:bg-emerald-100 text-emerald-800 border border-emerald-200/80 text-xs font-bold shadow-2xs transition-all active:scale-95"
+            className="flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-2xl bg-blue-50/90 dark:bg-[#181c22] hover:bg-blue-100 dark:hover:bg-[#1e232b] text-blue-800 dark:text-blue-400 border border-blue-200/80 dark:border-[#2d3340] text-xs font-bold shadow-2xs transition-all active:scale-95"
           >
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <Cloud className="w-3.5 h-3.5 text-emerald-600" />
+            <Cloud className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
             <span className="hidden sm:inline text-[11px]">Cloud Synced</span>
           </button>
 
@@ -297,10 +297,10 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({
           <button
             onClick={() => setShowAnnouncementsModal(true)}
             title="Notifications"
-            className="relative p-2 rounded-2xl bg-white/65 hover:bg-white text-slate-600 hover:text-slate-900 border border-white/80 shadow-2xs transition-all active:scale-95"
+            className="relative p-2 rounded-2xl bg-white/65 dark:bg-[#181c22] hover:bg-white dark:hover:bg-[#1e232b] text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white border border-slate-200/80 dark:border-[#2d3340] shadow-2xs transition-all active:scale-95"
           >
             <Bell className="w-4 h-4" />
-            <span className="absolute -top-1 -right-1 w-4 h-4 text-[9px] font-black bg-rose-500 text-white rounded-full flex items-center justify-center ring-2 ring-white">
+            <span className="absolute -top-1 -right-1 w-4 h-4 text-[9px] font-black bg-rose-500 text-white rounded-full flex items-center justify-center ring-2 ring-white dark:ring-[#10131a]">
               2
             </span>
           </button>
@@ -312,7 +312,7 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({
               showToast(!isDarkMode ? 'Dark Theme activated' : 'Light Theme activated', 'info');
             }}
             title={isDarkMode ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
-            className="p-2 rounded-2xl bg-white/65 hover:bg-white dark:bg-slate-800/80 dark:hover:bg-slate-700 text-slate-600 dark:text-amber-400 hover:text-amber-500 border border-white/80 dark:border-slate-700 shadow-2xs transition-all active:scale-95"
+            className="p-2 rounded-2xl bg-white/65 dark:bg-[#181c22] hover:bg-white dark:hover:bg-[#1e232b] text-slate-600 dark:text-amber-400 hover:text-amber-500 border border-slate-200/80 dark:border-[#2d3340] shadow-2xs transition-all active:scale-95 cursor-pointer"
           >
             {isDarkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-600" />}
           </button>
@@ -321,7 +321,7 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({
           <div className="relative shrink-0">
             <button
               onClick={() => setShowLangMenu(!showLangMenu)}
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-2xl bg-white/65 hover:bg-white border border-white/80 text-xs font-bold text-slate-700 shadow-2xs transition-all"
+              className="flex items-center gap-1 px-2 sm:px-2.5 py-1.5 rounded-2xl bg-white/65 dark:bg-[#181c22] hover:bg-white dark:hover:bg-[#1e232b] border border-slate-200/80 dark:border-[#2d3340] text-xs font-bold text-slate-700 dark:text-slate-300 shadow-2xs transition-all cursor-pointer"
             >
               <span className="uppercase text-[11px] font-bold tracking-wider">{language}</span>
               <ChevronDown className="w-3 h-3 text-slate-400" />
@@ -329,36 +329,36 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({
 
             {showLangMenu && (
               <div 
-                className="absolute ltr:right-0 ltr:left-auto rtl:left-0 rtl:right-auto mt-2 w-36 rounded-2xl bg-white/95 backdrop-blur-2xl border border-white/80 shadow-xl py-1.5 z-50 animate-in fade-in zoom-in-95"
+                className="absolute ltr:right-0 ltr:left-auto rtl:left-0 rtl:right-auto mt-2 w-36 rounded-2xl bg-white/95 dark:bg-[#181c22] backdrop-blur-2xl border border-slate-200/80 dark:border-[#2d3340] shadow-xl py-1.5 z-50 animate-in fade-in zoom-in-95"
                 onClick={() => setShowLangMenu(false)}
               >
                 <button
                   onClick={() => setLanguage('en')}
-                  className={`w-full px-3.5 py-2 text-start text-xs font-semibold flex items-center justify-between hover:bg-emerald-50 transition-colors ${language === 'en' ? 'text-emerald-700 font-bold bg-emerald-50/50' : 'text-slate-700'}`}
+                  className={`w-full px-3.5 py-2 text-start text-xs font-semibold flex items-center justify-between hover:bg-blue-50 dark:hover:bg-[#1e232b] transition-colors ${language === 'en' ? 'text-blue-600 dark:text-blue-400 font-bold bg-blue-50/50 dark:bg-blue-950/30' : 'text-slate-700 dark:text-slate-300'}`}
                 >
                   <span>English</span>
-                  {language === 'en' && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />}
+                  {language === 'en' && <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />}
                 </button>
                 <button
                   onClick={() => setLanguage('ur')}
-                  className={`w-full px-3.5 py-2 text-start text-xs font-semibold flex items-center justify-between hover:bg-emerald-50 transition-colors ${language === 'ur' ? 'text-emerald-700 font-bold bg-emerald-50/50' : 'text-slate-700'}`}
+                  className={`w-full px-3.5 py-2 text-start text-xs font-semibold flex items-center justify-between hover:bg-blue-50 dark:hover:bg-[#1e232b] transition-colors ${language === 'ur' ? 'text-blue-600 dark:text-blue-400 font-bold bg-blue-50/50 dark:bg-blue-950/30' : 'text-slate-700 dark:text-slate-300'}`}
                 >
                   <span className="urdu-font text-sm">اردو (Urdu)</span>
-                  {language === 'ur' && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600" />}
+                  {language === 'ur' && <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />}
                 </button>
               </div>
             )}
           </div>
 
-          {/* Full Screen Toggle Button */}
+          {/* Full Screen Toggle Button (hidden on mobile) */}
           <button
             onClick={toggleFullscreen}
             title={isFullscreen ? 'Exit Full Screen' : 'Enter Full Screen'}
             aria-label="Toggle Full Screen"
-            className="p-2 rounded-2xl bg-white/65 hover:bg-white dark:bg-slate-800/80 dark:hover:bg-slate-700 border border-white/80 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:text-emerald-700 shadow-2xs transition-all cursor-pointer flex items-center justify-center shrink-0 active:scale-95"
+            className="hidden sm:flex p-2 rounded-2xl bg-white/65 dark:bg-[#181c22] hover:bg-white dark:hover:bg-[#1e232b] border border-slate-200/80 dark:border-[#2d3340] text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 shadow-2xs transition-all cursor-pointer items-center justify-center shrink-0 active:scale-95"
           >
             {isFullscreen ? (
-              <Minimize className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              <Minimize className="w-4 h-4 text-blue-600 dark:text-blue-400" />
             ) : (
               <Maximize className="w-4 h-4 text-slate-700 dark:text-slate-200" />
             )}
@@ -368,45 +368,45 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({
           <div className="relative shrink-0">
             <button
               onClick={() => setShowProfileMenu(!showProfileMenu)}
-              className="flex items-center gap-2 p-1 pr-2.5 rounded-full bg-white/65 hover:bg-white border border-white/80 shadow-2xs transition-all group"
+              className="flex items-center gap-2 p-1 pr-2 rounded-full bg-white/65 dark:bg-[#181c22] hover:bg-white dark:hover:bg-[#1e232b] border border-slate-200/80 dark:border-[#2d3340] shadow-2xs transition-all group cursor-pointer"
               title={user?.name || 'User Profile'}
             >
               <div className="relative shrink-0">
                 <img
                   src={user?.avatarUrl || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80"}
                   alt={user?.name || 'User'}
-                  className="w-8 h-8 rounded-full object-cover ring-2 ring-emerald-500/30 shadow-2xs"
+                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover ring-2 ring-blue-500/30 shadow-2xs"
                 />
-                <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 rounded-full ring-2 ring-white" />
+                <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 rounded-full ring-2 ring-white dark:ring-[#10131a]" />
               </div>
 
               <div className="text-start hidden lg:block leading-tight max-w-[110px]">
-                <span className="text-xs font-black text-slate-900 block truncate group-hover:text-emerald-700 transition-colors">
-                  {user?.name || 'Maulana Abdul...'}
+                <span className="text-xs font-black text-slate-900 dark:text-slate-100 block truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+                  {user?.name || 'User'}
                 </span>
-                <span className="text-[9px] uppercase font-bold text-emerald-700 tracking-wider block truncate">
+                <span className="text-[9px] uppercase font-bold text-blue-600 dark:text-blue-400 tracking-wider block truncate">
                   {user?.role === 'super_admin' ? 'SUPER ADMIN' : user?.role === 'admin' ? 'PRINCIPAL' : user?.role === 'teacher' ? 'TEACHER' : 'STUDENT'}
                 </span>
               </div>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-700 transition-colors hidden sm:block shrink-0" />
+              <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-700 dark:group-hover:text-slate-200 transition-colors hidden sm:block shrink-0" />
             </button>
 
             {/* Profile Dropdown Menu */}
             {showProfileMenu && (
               <div 
-                className="absolute ltr:right-0 ltr:left-auto rtl:left-0 rtl:right-auto mt-2 w-64 max-w-[calc(100vw-1.5rem)] rounded-3xl bg-[var(--surface-strong)] border border-[var(--border)] shadow-xl p-2 z-50 animate-in fade-in zoom-in-95"
+                className="absolute ltr:right-0 ltr:left-auto rtl:left-0 rtl:right-auto mt-2 w-64 max-w-[calc(100vw-1.5rem)] rounded-3xl bg-white/95 dark:bg-[#181c22] backdrop-blur-2xl border border-slate-200/80 dark:border-[#2d3340] shadow-xl p-2 z-50 animate-in fade-in zoom-in-95"
                 onClick={() => setShowProfileMenu(false)}
               >
                 {/* Header User Card */}
-                <div className="p-3 bg-white/80 rounded-2xl border border-[var(--border)] mb-2">
+                <div className="p-3 bg-slate-50/80 dark:bg-[#1e232b] rounded-2xl border border-slate-200/60 dark:border-[#2d3340] mb-2">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-10 h-10 rounded-xl bg-[#079669] text-white flex items-center justify-center font-bold text-sm shadow-xs shrink-0">
+                    <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-sm shadow-xs shrink-0">
                       {user?.name?.charAt(0) || 'U'}
                     </div>
                     <div className="min-w-0 flex-1 text-start">
-                      <p className="text-xs font-black text-gray-900 truncate">{user?.name}</p>
-                      <p className="text-[10px] text-gray-500 font-mono truncate">{user?.username}</p>
-                      <span className="inline-block mt-1 px-2 py-0.5 rounded-md text-[9px] font-extrabold bg-emerald-100 text-emerald-900 uppercase tracking-wider">
+                      <p className="text-xs font-black text-slate-900 dark:text-white truncate">{user?.name}</p>
+                      <p className="text-[10px] text-slate-500 dark:text-slate-400 font-mono truncate">{user?.username}</p>
+                      <span className="inline-block mt-1 px-2 py-0.5 rounded-md text-[9px] font-extrabold bg-blue-100 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 uppercase tracking-wider">
                         {user?.role.replace('_', ' ')}
                       </span>
                     </div>
@@ -421,7 +421,7 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({
                         setShowProfileMenu(false);
                         handleOpenSuperAdminCreds();
                       }}
-                      className="w-full text-start px-3 py-2 rounded-xl text-xs font-semibold text-amber-900 hover:bg-amber-50 flex items-center gap-2.5 transition-colors cursor-pointer"
+                      className="w-full text-start px-3 py-2 rounded-xl text-xs font-semibold text-amber-900 dark:text-amber-300 hover:bg-amber-50 dark:hover:bg-amber-950/40 flex items-center gap-2.5 transition-colors cursor-pointer"
                     >
                       <Key className="w-4 h-4 text-amber-600 shrink-0" />
                       <span>Change Username & Password</span>
@@ -432,20 +432,20 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({
                         setShowProfileMenu(false);
                         setShowProfileChangesModal(true);
                       }}
-                      className="w-full text-start px-3 py-2 rounded-xl text-xs font-semibold text-gray-700 hover:bg-gray-100 flex items-center gap-2.5 transition-colors cursor-pointer"
+                      className="w-full text-start px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#22262e] flex items-center gap-2.5 transition-colors cursor-pointer"
                     >
-                      <Edit3 className="w-4 h-4 text-emerald-600 shrink-0" />
+                      <Edit3 className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
                       <span>{t('applyForProfileChanges')}</span>
                     </button>
                   )}
                 </div>
 
-                <div className="h-px bg-gray-100 my-1.5" />
+                <div className="h-px bg-slate-200/80 dark:bg-[#2d3340] my-1.5" />
 
                 {/* Logout Button */}
                 <button
                   onClick={logout}
-                  className="w-full text-start px-3 py-2 rounded-xl text-xs font-semibold text-rose-600 hover:bg-rose-50 flex items-center gap-2.5 transition-colors"
+                  className="w-full text-start px-3 py-2 rounded-xl text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/30 flex items-center gap-2.5 transition-colors cursor-pointer"
                 >
                   <LogOut className="w-4 h-4 text-rose-500 shrink-0" />
                   <span>{t('logout')}</span>

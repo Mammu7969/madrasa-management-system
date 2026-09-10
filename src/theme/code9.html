@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Madrasa Inventory &amp; Gallery - Jamia Zia Ul Quran Trust</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          madrasa: {
+            50: '#07241a',
+            100: '#0f3e2e',
+            600: '#10b981',
+            700: '#059669',
+            800: '#34d399',
+            900: '#064e3b',
+            950: '#03241b'
+          },
+          dark: {
+            obsidian: '#0b0e14',
+            surface: '#181c22',
+            container: '#22262e',
+            border: '#2d3340',
+            textLight: '#f8fafc',
+            textMuted: '#94a3b8'
+          }
+        },
+        fontFamily: {
+          sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+          headline: ['Inter'],
+          body: ['Inter']
+        }
+      }
+    }
+  }
+</script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
+<style data-purpose="custom-mobile-styling">
+    /* iOS smooth scrolling and safe areas */
+    body {
+      -webkit-tap-highlight-color: transparent;
+      padding-bottom: env(safe-area-inset-bottom, 20px);
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+</style>
+</head>
+<body class="bg-[#0b0e14] text-[#f8fafc] font-sans antialiased min-h-screen pb-24">
+<!-- BEGIN: TopStatusBar -->
+<!-- Header Bar containing institutional logo, branch code, Hijri clock & Nazim profile -->
+<header class="bg-[#181c22] text-[#f8fafc] pt-2 pb-3 px-4 shadow-lg border-b border-[#2d3340] sticky top-0 z-40">
+<div class="flex items-center justify-between gap-2 border-b border-[#2d3340]/80 pb-2 mb-2 text-xs">
+<!-- Hijri Date & Prayer Indicator -->
+<div class="flex items-center gap-1.5 bg-[#22262e] px-2 py-1 rounded-full text-[11px] text-emerald-400 font-medium border border-[#2d3340]">
+<i class="fa-regular fa-calendar-check text-[10px]"></i>
+<span>28 Rabi' al-Awwal 1448 AH</span>
+</div>
+<div class="flex items-center gap-1.5 bg-[#064e3b]/40 border border-emerald-500/30 text-emerald-300 px-2 py-1 rounded-full text-[11px]">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+<span class="font-semibold">Fajr</span>
+<span class="text-[10px] text-[#94a3b8]">05:00 AM (3h 45m)</span>
+</div>
+</div>
+<!-- Institutional Brand & User Bar -->
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-2.5">
+<div class="w-9 h-9 rounded-lg bg-[#064e3b]/80 border border-emerald-500/40 flex items-center justify-center text-emerald-300 text-base shadow">
+<i class="fa-solid fa-mosque"></i>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<h1 class="font-bold text-xs leading-tight tracking-wide text-[#f8fafc] uppercase">Jamia Zia Ul Quran</h1>
+<span class="bg-emerald-950 text-emerald-300 text-[9px] font-semibold px-1.5 py-0.2 rounded border border-emerald-500/40">JDH-01</span>
+</div>
+<p class="text-[10px] text-[#94a3b8]">Jonnalagadda X Road • ERP System</p>
+</div>
+</div>
+<!-- Action & Profile Avatar -->
+<div class="flex items-center gap-2">
+<button aria-label="Notifications" class="relative p-1.5 text-[#94a3b8] hover:text-[#f8fafc] transition" type="button">
+<i class="fa-regular fa-bell text-sm"></i>
+<span class="absolute top-0.5 right-0.5 w-2 h-2 bg-red-500 rounded-full border-2 border-[#181c22]"></span>
+</button>
+<div class="flex items-center gap-1.5 pl-1.5 border-l border-[#2d3340]">
+<div class="w-8 h-8 rounded-full bg-emerald-700 text-white flex items-center justify-center font-bold text-xs ring-1 ring-emerald-400/80 shadow">
+            M
+          </div>
+</div>
+</div>
+</div>
+</header>
+<!-- END: TopStatusBar -->
+<!-- BEGIN: MainContent -->
+<main class="px-3 pt-3 space-y-3">
+<!-- BEGIN: TitleAndActionHeader -->
+<!-- Page title and Quick Action Button -->
+<section class="bg-[#181c22] rounded-xl p-3.5 shadow-md border border-[#2d3340]">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-start gap-2.5">
+<div class="w-8 h-8 rounded-lg bg-[#064e3b]/40 text-emerald-300 flex items-center justify-center shrink-0 mt-0.5 border border-emerald-500/30">
+<i class="fa-solid fa-boxes-stacked text-sm"></i>
+</div>
+<div>
+<h2 class="text-sm font-bold text-[#f8fafc] leading-tight">Madrasa Inventory &amp; Gallery</h2>
+<p class="text-[11px] text-[#94a3b8] mt-0.5">Manage institutional assets, library books &amp; photographic gallery</p>
+<span class="inline-block mt-1 text-[10px] font-medium text-emerald-300 bg-emerald-950/70 border border-emerald-500/20 px-2 py-0.5 rounded">شعبہ کتب، سامان و تصویری گیلری</span>
+</div>
+</div>
+</div>
+<!-- Action buttons -->
+<div class="mt-3.5 pt-2.5 border-t border-[#2d3340] flex items-center justify-between gap-2">
+<button class="flex-1 bg-emerald-600 hover:bg-emerald-500 active:scale-[0.98] transition text-white py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 shadow" id="addAssetBtn">
+<i class="fa-solid fa-plus text-[11px]"></i>
+<span>Add Asset</span>
+</button>
+<button class="flex-1 bg-[#22262e] hover:bg-[#2d3340] active:scale-[0.98] transition text-[#f8fafc] border border-[#2d3340] py-2 px-3 rounded-lg text-xs font-semibold flex items-center justify-center gap-1.5 shadow" id="uploadPhotoBtn">
+<i class="fa-solid fa-arrow-up-from-bracket text-emerald-400 text-[11px]"></i>
+<span>Upload Photo</span>
+</button>
+</div>
+</section>
+<!-- END: TitleAndActionHeader -->
+<!-- BEGIN: MetricRibbon -->
+<!-- Quick summary stats of assets and records -->
+<section class="grid grid-cols-3 gap-2" data-purpose="summary-stats">
+<div class="bg-[#181c22] rounded-xl p-2.5 border border-[#2d3340] shadow-md text-center">
+<p class="text-[10px] uppercase font-semibold tracking-wider text-[#94a3b8]">Total Items</p>
+<p class="text-base font-bold text-[#f8fafc] mt-0.5">1,161</p>
+<p class="text-[9px] text-emerald-400 font-medium">All Units</p>
+</div>
+<div class="bg-[#181c22] rounded-xl p-2.5 border border-[#2d3340] shadow-md text-center">
+<p class="text-[10px] uppercase font-semibold tracking-wider text-[#94a3b8]">Categories</p>
+<p class="text-base font-bold text-[#f8fafc] mt-0.5">6</p>
+<p class="text-[9px] text-[#94a3b8] font-medium">Active Depts</p>
+</div>
+<div class="bg-[#181c22] rounded-xl p-2.5 border border-[#2d3340] shadow-md text-center">
+<p class="text-[10px] uppercase font-semibold tracking-wider text-[#94a3b8]">Gallery</p>
+<p class="text-base font-bold text-emerald-400 mt-0.5">3</p>
+<p class="text-[9px] text-[#94a3b8] font-medium">Verified Photos</p>
+</div>
+</section>
+<!-- END: MetricRibbon -->
+<!-- BEGIN: SegmentedNavSwitcher -->
+<!-- Interactive Segmented Pill Tabs for Inventory vs Gallery -->
+<div class="flex items-center bg-[#181c22] p-1 rounded-xl shadow-inner border border-[#2d3340] text-xs font-semibold">
+<button class="flex-1 py-1.5 px-3 rounded-lg flex items-center justify-center gap-1.5 bg-emerald-600 text-white shadow transition-all duration-200" id="tabInventory">
+<i class="fa-solid fa-boxes-stacked text-[11px]"></i>
+<span>Supplies &amp; Inventory</span>
+</button>
+<button class="flex-1 py-1.5 px-3 rounded-lg flex items-center justify-center gap-1.5 text-[#94a3b8] hover:text-[#f8fafc] transition-all duration-200" id="tabGallery">
+<i class="fa-regular fa-image text-[11px]"></i>
+<span>Madrasa Gallery</span>
+<span class="bg-[#22262e] border border-[#2d3340] text-emerald-400 px-1.5 py-0.2 rounded-full text-[10px] font-bold">3</span>
+</button>
+</div>
+<!-- END: SegmentedNavSwitcher -->
+<!-- BEGIN: SearchFilterBar -->
+<div class="flex items-center gap-2">
+<div class="relative flex-1">
+<span class="absolute inset-y-0 left-0 flex items-center pl-2.5 pointer-events-none text-[#94a3b8] text-xs">
+<i class="fa-solid fa-magnifying-glass"></i>
+</span>
+<input class="w-full pl-8 pr-3 py-1.5 text-xs bg-[#181c22] text-[#f8fafc] placeholder-[#94a3b8] border border-[#2d3340] rounded-lg focus:outline-none focus:ring-1 focus:ring-emerald-500 focus:border-emerald-500 shadow-sm" placeholder="Search kitabs, supplies, assets..." type="text"/>
+</div>
+<button class="bg-[#181c22] hover:bg-[#22262e] border border-[#2d3340] px-2.5 py-1.5 rounded-lg text-[#94a3b8] hover:text-[#f8fafc] text-xs font-medium flex items-center gap-1 shadow-sm transition">
+<i class="fa-solid fa-filter text-[10px]"></i>
+<span>Filter</span>
+</button>
+</div>
+<!-- END: SearchFilterBar -->
+<!-- BEGIN: InventoryViewContent -->
+<section class="space-y-2.5" id="inventoryViewSection">
+<div class="flex items-center justify-between px-1">
+<h3 class="text-xs font-bold text-[#94a3b8] tracking-wide uppercase">Cataloged Assets &amp; Supplies</h3>
+<span class="text-[11px] text-[#94a3b8]">6 Items Listed</span>
+</div>
+<!-- Item Card 1: Quran Majeed -->
+<article class="bg-[#181c22] rounded-xl p-3 shadow-md border border-[#2d3340] relative">
+<div class="flex items-start justify-between">
+<div class="flex-1 pr-2">
+<h4 class="text-xs font-bold text-[#f8fafc] leading-tight">Quran Majeed (Tajweed 16 Lines)</h4>
+<div class="flex items-center gap-2 mt-1.5 flex-wrap">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-[#22262e] text-[#f8fafc] border border-[#2d3340]">
+<i class="fa-solid fa-book-quran text-[10px] mr-1 text-emerald-400"></i> Kitabs
+              </span>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-950/60 text-emerald-300 border border-emerald-500/30">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1"></span> Available
+              </span>
+</div>
+</div>
+<div class="text-right">
+<span class="text-[10px] text-[#94a3b8] block uppercase font-medium">Quantity</span>
+<span class="text-base font-extrabold text-emerald-400">250</span>
+</div>
+</div>
+<div class="mt-2 pt-2 border-t border-[#2d3340] flex items-center justify-between text-[11px] text-[#94a3b8]">
+<span>Location: Maktabah Cabinet A</span>
+<button aria-label="Options" class="text-[#94a3b8] hover:text-[#f8fafc] p-1">
+<i class="fa-solid fa-ellipsis-vertical"></i>
+</button>
+</div>
+</article>
+<!-- Item Card 2: Rihal (Wooden Bookstands) -->
+<article class="bg-[#181c22] rounded-xl p-3 shadow-md border border-[#2d3340] relative">
+<div class="flex items-start justify-between">
+<div class="flex-1 pr-2">
+<h4 class="text-xs font-bold text-[#f8fafc] leading-tight">Rihal (Wooden Bookstands)</h4>
+<div class="flex items-center gap-2 mt-1.5 flex-wrap">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-[#22262e] text-[#f8fafc] border border-[#2d3340]">
+<i class="fa-solid fa-chair text-[10px] mr-1 text-amber-400"></i> Furniture
+              </span>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-blue-950/60 text-blue-300 border border-blue-500/30">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-400 mr-1"></span> In Use
+              </span>
+</div>
+</div>
+<div class="text-right">
+<span class="text-[10px] text-[#94a3b8] block uppercase font-medium">Quantity</span>
+<span class="text-base font-extrabold text-emerald-400">180</span>
+</div>
+</div>
+<div class="mt-2 pt-2 border-t border-[#2d3340] flex items-center justify-between text-[11px] text-[#94a3b8]">
+<span>Location: Main Hifz Hall 1 &amp; 2</span>
+<button aria-label="Options" class="text-[#94a3b8] hover:text-[#f8fafc] p-1">
+<i class="fa-solid fa-ellipsis-vertical"></i>
+</button>
+</div>
+</article>
+<!-- Item Card 3: Hostel Bedding & Blankets -->
+<article class="bg-[#181c22] rounded-xl p-3 shadow-md border border-[#2d3340] relative">
+<div class="flex items-start justify-between">
+<div class="flex-1 pr-2">
+<h4 class="text-xs font-bold text-[#f8fafc] leading-tight">Hostel Bedding &amp; Blankets</h4>
+<div class="flex items-center gap-2 mt-1.5 flex-wrap">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-[#22262e] text-[#f8fafc] border border-[#2d3340]">
+<i class="fa-solid fa-bed text-[10px] mr-1 text-indigo-400"></i> Hostel
+              </span>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-950/60 text-emerald-300 border border-emerald-500/30">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1"></span> Good
+              </span>
+</div>
+</div>
+<div class="text-right">
+<span class="text-[10px] text-[#94a3b8] block uppercase font-medium">Quantity</span>
+<span class="text-base font-extrabold text-emerald-400">95</span>
+</div>
+</div>
+<div class="mt-2 pt-2 border-t border-[#2d3340] flex items-center justify-between text-[11px] text-[#94a3b8]">
+<span>Location: Dar-ul-Iqama Dorms</span>
+<button aria-label="Options" class="text-[#94a3b8] hover:text-[#f8fafc] p-1">
+<i class="fa-solid fa-ellipsis-vertical"></i>
+</button>
+</div>
+</article>
+<!-- Item Card 4: Whiteboards & Markers -->
+<article class="bg-[#181c22] rounded-xl p-3 shadow-md border border-[#2d3340] relative">
+<div class="flex items-start justify-between">
+<div class="flex-1 pr-2">
+<h4 class="text-xs font-bold text-[#f8fafc] leading-tight">Whiteboards &amp; Markers</h4>
+<div class="flex items-center gap-2 mt-1.5 flex-wrap">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-[#22262e] text-[#f8fafc] border border-[#2d3340]">
+<i class="fa-solid fa-chalkboard text-[10px] mr-1 text-teal-400"></i> Classroom
+              </span>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-950/60 text-emerald-300 border border-emerald-500/30">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1"></span> Available
+              </span>
+</div>
+</div>
+<div class="text-right">
+<span class="text-[10px] text-[#94a3b8] block uppercase font-medium">Quantity</span>
+<span class="text-base font-extrabold text-emerald-400">12</span>
+</div>
+</div>
+<div class="mt-2 pt-2 border-t border-[#2d3340] flex items-center justify-between text-[11px] text-[#94a3b8]">
+<span>Location: Academic Block Rooms 1-6</span>
+<button aria-label="Options" class="text-[#94a3b8] hover:text-[#f8fafc] p-1">
+<i class="fa-solid fa-ellipsis-vertical"></i>
+</button>
+</div>
+</article>
+<!-- Item Card 5: Public Address & Azan Speaker System -->
+<article class="bg-[#181c22] rounded-xl p-3 shadow-md border border-[#2d3340] relative">
+<div class="flex items-start justify-between">
+<div class="flex-1 pr-2">
+<h4 class="text-xs font-bold text-[#f8fafc] leading-tight">Public Address &amp; Azan Speaker System</h4>
+<div class="flex items-center gap-2 mt-1.5 flex-wrap">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-[#22262e] text-[#f8fafc] border border-[#2d3340]">
+<i class="fa-solid fa-bullhorn text-[10px] mr-1 text-rose-400"></i> Audio
+              </span>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-emerald-950/60 text-emerald-300 border border-emerald-500/30">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1"></span> Active
+              </span>
+</div>
+</div>
+<div class="text-right">
+<span class="text-[10px] text-[#94a3b8] block uppercase font-medium">Quantity</span>
+<span class="text-base font-extrabold text-emerald-400">4</span>
+</div>
+</div>
+<div class="mt-2 pt-2 border-t border-[#2d3340] flex items-center justify-between text-[11px] text-[#94a3b8]">
+<span>Location: Masjid Minaret &amp; Courtyard</span>
+<button aria-label="Options" class="text-[#94a3b8] hover:text-[#f8fafc] p-1">
+<i class="fa-solid fa-ellipsis-vertical"></i>
+</button>
+</div>
+</article>
+<!-- Item Card 6: Dars-e-Nizami Reference Books -->
+<article class="bg-[#181c22] rounded-xl p-3 shadow-md border border-[#2d3340] relative">
+<div class="flex items-start justify-between">
+<div class="flex-1 pr-2">
+<h4 class="text-xs font-bold text-[#f8fafc] leading-tight">Dars-e-Nizami Reference Books (Maktabah)</h4>
+<div class="flex items-center gap-2 mt-1.5 flex-wrap">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-[#22262e] text-[#f8fafc] border border-[#2d3340]">
+<i class="fa-solid fa-book text-[10px] mr-1 text-purple-400"></i> Library
+              </span>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-blue-950/60 text-blue-300 border border-blue-500/30">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-400 mr-1"></span> Cataloged
+              </span>
+</div>
+</div>
+<div class="text-right">
+<span class="text-[10px] text-[#94a3b8] block uppercase font-medium">Quantity</span>
+<span class="text-base font-extrabold text-emerald-400">620</span>
+</div>
+</div>
+<div class="mt-2 pt-2 border-t border-[#2d3340] flex items-center justify-between text-[11px] text-[#94a3b8]">
+<span>Location: Central Library Section B</span>
+<button aria-label="Options" class="text-[#94a3b8] hover:text-[#f8fafc] p-1">
+<i class="fa-solid fa-ellipsis-vertical"></i>
+</button>
+</div>
+</article>
+</section>
+<!-- END: InventoryViewContent -->
+<!-- BEGIN: GallerySectionPreview -->
+<!-- Institutional photographic gallery cards with tags and dates -->
+<section class="space-y-3 pt-2" id="galleryViewSection">
+<div class="flex items-center justify-between px-1">
+<div>
+<h3 class="text-xs font-bold text-[#94a3b8] tracking-wide uppercase">Institutional Photo Gallery</h3>
+<p class="text-[10px] text-[#94a3b8]/80">Verified Madrasa Campus &amp; Infrastructure Records</p>
+</div>
+<button class="text-[11px] font-semibold text-emerald-400 hover:text-emerald-300 flex items-center gap-1 transition">
+<span>View All</span>
+<i class="fa-solid fa-chevron-right text-[9px]"></i>
+</button>
+</div>
+<!-- Photo Card 1: Main Campus Courtyard & Mosque -->
+<div class="bg-[#181c22] rounded-xl overflow-hidden shadow-md border border-[#2d3340]">
+<div class="relative h-44 w-full bg-[#0b0e14]">
+<img alt="Main Campus Courtyard &amp; Mosque" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD1LpakXFAF4gCl3pE2DA3D94-4_PRW5KNHEEbOjJyTkgRatOcW3UcYj0Xg8otbD6YiXpeouB1O-GJHkugfG-oRVYz_sJQibayEl1-bcyzGYIpbkF7jv4bQDa8TBgMLIt8d935Cu1YLHSozcdBOSOoyvMXxFTb1Mo-i94yg3jb6I3Xg9pgSB2GhMJlOMyvWkzjD7MNL2GQhSezWUHTXzLxkzJu7_yLemp9H_SSMzq-NRglAivHSAC4"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#0b0e14] via-transparent to-black/30"></div>
+<div class="absolute top-2.5 right-2.5">
+<span class="bg-[#0b0e14]/80 backdrop-blur-sm text-emerald-300 border border-[#2d3340] text-[10px] font-semibold px-2 py-0.5 rounded-full">
+              Campus
+            </span>
+</div>
+<div class="absolute bottom-2.5 left-2.5 text-white">
+<p class="text-xs font-bold leading-tight text-[#f8fafc]">Main Campus Courtyard &amp; Mosque</p>
+<p class="text-[10px] text-[#94a3b8] mt-0.5 flex items-center gap-1">
+<i class="fa-regular fa-calendar text-[9px]"></i> 2026-08-10
+            </p>
+</div>
+</div>
+<div class="p-2.5 flex items-center justify-between text-xs border-t border-[#2d3340] bg-[#181c22]">
+<span class="text-[#94a3b8] text-[11px] flex items-center gap-1">
+<i class="fa-solid fa-location-dot text-emerald-400"></i> South Gate Complex
+          </span>
+<button class="text-[#94a3b8] hover:text-[#f8fafc] text-xs px-2 py-1 transition">
+<i class="fa-solid fa-share-nodes mr-1"></i> Share
+          </button>
+</div>
+</div>
+<!-- Photo Card 2: Hifz-ul-Quran Memorization Hall -->
+<div class="bg-[#181c22] rounded-xl overflow-hidden shadow-md border border-[#2d3340]">
+<div class="relative h-44 w-full bg-[#0b0e14]">
+<img alt="Hifz-ul-Quran Memorization Hall" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAWWvGxoCVfkUSy0qlXoxoe_yCzFE-zf9IdEWb79oR9tQHwqEsH4BQx5WdjPRz86hRoIsjdj6SddDEJocjuLM_IPoNYzoGyXgZkS0lNesFAmYKwLPo6KnLgi7Jh4m1KvetY3tBtk9eT76O_uH99IuPQFwWFxCI0HNGl81GHaVWypqQ5PUYYpM0giLqsuD8omShYAVeROt18rd5e2czNQaxPAK2Ah9CBdDJPIOXNTOFbQBCgrgms93o"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#0b0e14] via-transparent to-black/30"></div>
+<div class="absolute top-2.5 right-2.5">
+<span class="bg-[#0b0e14]/80 backdrop-blur-sm text-emerald-300 border border-[#2d3340] text-[10px] font-semibold px-2 py-0.5 rounded-full">
+              Classes
+            </span>
+</div>
+<div class="absolute bottom-2.5 left-2.5 text-white">
+<p class="text-xs font-bold leading-tight text-[#f8fafc]">Hifz-ul-Quran Memorization Hall</p>
+<p class="text-[10px] text-[#94a3b8] mt-0.5 flex items-center gap-1">
+<i class="fa-regular fa-calendar text-[9px]"></i> 2026-08-12
+            </p>
+</div>
+</div>
+<div class="p-2.5 flex items-center justify-between text-xs border-t border-[#2d3340] bg-[#181c22]">
+<span class="text-[#94a3b8] text-[11px] flex items-center gap-1">
+<i class="fa-solid fa-location-dot text-emerald-400"></i> Main Academic Block • 2nd Floor
+          </span>
+<button class="text-[#94a3b8] hover:text-[#f8fafc] text-xs px-2 py-1 transition">
+<i class="fa-solid fa-share-nodes mr-1"></i> Share
+          </button>
+</div>
+</div>
+<!-- Photo Card 3: Islamic Library & Maktabah -->
+<div class="bg-[#181c22] rounded-xl overflow-hidden shadow-md border border-[#2d3340]">
+<div class="relative h-44 w-full bg-[#0b0e14]">
+<img alt="Islamic Library &amp; Maktabah" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAvWLVV9nHxAGVnA-qAEf5zKvXxjp3JZMsokXRflwOxTpZNp_b5-1C2BzNIJhyMnohgJj2BkNJ6wpPe1OJ-f4gxLK8Y2_x1IJmBtRrhNx5cEXAotnuY5gnqHjD3-3qiptYHhci-LrUPq4jNG3konzbZjmbqsWmeQ6UB50dQwsB7Hc75sl58ZSO8NPzzr79Pd23j898O_04FkLyXIha3lHkVS9ScOLn4uYy-2d3XRLeUgc1Cg7E0w9k"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#0b0e14] via-transparent to-black/30"></div>
+<div class="absolute top-2.5 right-2.5">
+<span class="bg-[#0b0e14]/80 backdrop-blur-sm text-emerald-300 border border-[#2d3340] text-[10px] font-semibold px-2 py-0.5 rounded-full">
+              Campus
+            </span>
+</div>
+<div class="absolute bottom-2.5 left-2.5 text-white">
+<p class="text-xs font-bold leading-tight text-[#f8fafc]">Islamic Library &amp; Maktabah</p>
+<p class="text-[10px] text-[#94a3b8] mt-0.5 flex items-center gap-1">
+<i class="fa-regular fa-calendar text-[9px]"></i> 2026-08-15
+            </p>
+</div>
+</div>
+<div class="p-2.5 flex items-center justify-between text-xs border-t border-[#2d3340] bg-[#181c22]">
+<span class="text-[#94a3b8] text-[11px] flex items-center gap-1">
+<i class="fa-solid fa-location-dot text-emerald-400"></i> Maktabah &amp; Research Wing
+          </span>
+<button class="text-[#94a3b8] hover:text-[#f8fafc] text-xs px-2 py-1 transition">
+<i class="fa-solid fa-share-nodes mr-1"></i> Share
+          </button>
+</div>
+</div>
+</section>
+<!-- END: GallerySectionPreview -->
+</main>
+<!-- END: MainContent -->
+<!-- BEGIN: BottomNavigation -->
+<!-- Persistent Mobile iOS App Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 bg-[#181c22]/95 backdrop-blur-md border-t border-[#2d3340] z-50 px-2 py-1.5 flex items-center justify-around text-[10px] font-medium text-[#94a3b8]">
+<!-- Nav Item 1: Dashboard -->
+<a class="flex flex-col items-center py-1 px-2 text-[#94a3b8] hover:text-[#f8fafc] transition" href="#">
+<i class="fa-solid fa-gauge-high text-base mb-0.5"></i>
+<span>Dashboard</span>
+</a>
+<!-- Nav Item 2: Students -->
+<a class="flex flex-col items-center py-1 px-2 text-[#94a3b8] hover:text-[#f8fafc] transition relative" href="#">
+<i class="fa-solid fa-user-graduate text-base mb-0.5"></i>
+<span>Students</span>
+<span class="absolute top-0.5 right-2 w-1.5 h-1.5 bg-emerald-400 rounded-full"></span>
+</a>
+<!-- Nav Item 3: Inventory (Active) -->
+<a class="flex flex-col items-center py-1 px-2 text-emerald-400 font-bold" href="#">
+<div class="w-7 h-7 rounded-full bg-emerald-950/90 border border-emerald-500/40 text-emerald-300 flex items-center justify-center -mt-1 shadow-sm">
+<i class="fa-solid fa-boxes-stacked text-xs"></i>
+</div>
+<span class="mt-0.5 text-emerald-400 font-bold">Inventory</span>
+</a>
+<!-- Nav Item 4: Finance -->
+<a class="flex flex-col items-center py-1 px-2 text-[#94a3b8] hover:text-[#f8fafc] transition" href="#">
+<i class="fa-solid fa-hand-holding-dollar text-base mb-0.5"></i>
+<span>Finance</span>
+</a>
+<!-- Nav Item 5: Settings / Menu -->
+<a class="flex flex-col items-center py-1 px-2 text-[#94a3b8] hover:text-[#f8fafc] transition" href="#">
+<i class="fa-solid fa-bars text-base mb-0.5"></i>
+<span>Menu</span>
+</a>
+</nav>
+<!-- END: BottomNavigation -->
+<!-- BEGIN: InteractiveTabScript -->
+<script data-purpose="tab-switcher">
+    const tabInventory = document.getElementById('tabInventory');
+    const tabGallery = document.getElementById('tabGallery');
+    const inventorySection = document.getElementById('inventoryViewSection');
+    const gallerySection = document.getElementById('galleryViewSection');
+
+    tabInventory.addEventListener('click', () => {
+      // Toggle Tab Styles
+      tabInventory.className = "flex-1 py-1.5 px-3 rounded-lg flex items-center justify-center gap-1.5 bg-emerald-600 text-white shadow transition-all duration-200";
+      tabGallery.className = "flex-1 py-1.5 px-3 rounded-lg flex items-center justify-center gap-1.5 text-[#94a3b8] hover:text-[#f8fafc] transition-all duration-200";
+      
+      // Scroll to or ensure both are visible in unified view
+      inventorySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+
+    tabGallery.addEventListener('click', () => {
+      // Toggle Tab Styles
+      tabGallery.className = "flex-1 py-1.5 px-3 rounded-lg flex items-center justify-center gap-1.5 bg-emerald-600 text-white shadow transition-all duration-200";
+      tabInventory.className = "flex-1 py-1.5 px-3 rounded-lg flex items-center justify-center gap-1.5 text-[#94a3b8] hover:text-[#f8fafc] transition-all duration-200";
+      
+      // Scroll to Gallery view
+      gallerySection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+</script>
+<!-- END: InteractiveTabScript -->
+</body></html>

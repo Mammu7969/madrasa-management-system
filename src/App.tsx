@@ -30,6 +30,8 @@ import { SettingsModule } from './components/modules/SettingsModule';
 import { SupportModule } from './components/modules/SupportModule';
 import { CommandPalette } from './components/common/CommandPalette';
 import { ToastContainer } from './components/common/ToastContainer';
+import { MobileBottomNav } from './components/layout/MobileBottomNav';
+import { AllModulesDrawer } from './components/layout/AllModulesDrawer';
 import { Student } from './types';
 import { db } from './services/db';
 
@@ -42,6 +44,7 @@ const AppContent: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<AppTab>('dashboard');
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [showCommandPalette, setShowCommandPalette] = useState<boolean>(false);
+  const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState<boolean>(false);
 
   // Global Keyboard Shortcuts (Ctrl + K)
   useEffect(() => {
@@ -89,7 +92,7 @@ const AppContent: React.FC = () => {
           onNavigateHome={() => setCurrentTab('dashboard')} 
           onOpenCommandPalette={() => setShowCommandPalette(true)}
         />
-        <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+        <main className="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-6 lg:p-8 pb-20 sm:pb-8">
           <StudentDashboard />
         </main>
         <CommandPalette
@@ -112,7 +115,7 @@ const AppContent: React.FC = () => {
           onOpenCommandPalette={() => setShowCommandPalette(true)}
           currentTab={currentTab}
         />
-        <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+        <main className="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-6 lg:p-8 pb-20 sm:pb-8">
           <TeacherDashboard />
         </main>
         <CommandPalette
@@ -147,7 +150,7 @@ const AppContent: React.FC = () => {
         />
 
         {/* Main Content Area */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
+        <main className="flex-1 overflow-y-auto p-3 sm:p-6 lg:p-8 pb-24 lg:pb-8">
           <div className="max-w-7xl mx-auto">
             {/* Super Admin Dashboard (when on dashboard tab & user is super_admin) */}
             {user.role === 'super_admin' && currentTab === 'dashboard' && (
@@ -263,6 +266,28 @@ const AppContent: React.FC = () => {
           </div>
         </main>
       </div>
+
+      {/* Persistent Mobile Bottom Navigation Bar (< lg screens) */}
+      <MobileBottomNav
+        currentTab={currentTab}
+        onSelectTab={(tab) => {
+          setCurrentTab(tab);
+          if (tab === 'students') setSelectedStudent(null);
+        }}
+        onOpenAllModules={() => setIsMobileDrawerOpen(true)}
+        isDrawerOpen={isMobileDrawerOpen}
+      />
+
+      {/* All Modules Institutional Drawer */}
+      <AllModulesDrawer
+        isOpen={isMobileDrawerOpen}
+        onClose={() => setIsMobileDrawerOpen(false)}
+        currentTab={currentTab}
+        onSelectTab={(tab) => {
+          setCurrentTab(tab);
+          if (tab === 'students') setSelectedStudent(null);
+        }}
+      />
 
       {/* Global Command Palette */}
       <CommandPalette

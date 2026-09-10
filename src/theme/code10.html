@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-[#0b0e14]" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<title>Madrasa Schedule &amp; Namaz Timetable - Jamia Zia Ul Quran Trust</title>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            surface: {
+              dim: '#10131a',
+              container: '#1c2026',
+              'container-low': '#181c22',
+              'container-high': '#22262e',
+              'container-highest': '#31353c',
+              'container-lowest': '#0b0e14',
+            },
+            fidelityBlue: {
+              DEFAULT: '#1978e5',
+              hover: '#1463c2',
+              soft: 'rgba(25, 120, 229, 0.15)',
+            },
+            accentGold: {
+              DEFAULT: '#fbbf24',
+              soft: 'rgba(251, 191, 36, 0.12)',
+              border: '#d97706',
+              text: '#fef08a',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'Plus Jakarta Sans', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            urdu: ['Noto Nastaliq Urdu', 'Traditional Arabic', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Noto+Nastaliq+Urdu:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style data-purpose="custom-scrollbars">
+    /* Custom utility styles for sleek iOS touch behavior */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    body {
+      -webkit-tap-highlight-color: transparent;
+    }
+  </style>
+</head>
+<body class="h-full font-sans antialiased text-[#f8fafc] bg-[#0b0e14] flex flex-col justify-between select-none">
+<!-- BEGIN: MainHeader -->
+<header class="sticky top-0 z-40 bg-[#10131a] text-[#f8fafc] border-b border-[#2d3340] shadow-lg pt-[env(safe-area-inset-top)]" data-purpose="app-header">
+<!-- Top System Context Bar -->
+<div class="px-4 py-2.5 flex items-center justify-between border-b border-[#22262e] text-xs">
+<div class="flex items-center space-x-2.5">
+<div class="h-8 w-8 rounded-lg bg-[#1978e5]/20 border border-[#1978e5]/40 flex items-center justify-center font-extrabold text-[11px] text-[#aac7ff] tracking-tight">
+          JZQ
+        </div>
+<div>
+<h1 class="font-bold text-xs tracking-tight text-[#f8fafc] leading-tight">JAMIA ZIA UL QURAN TRUST</h1>
+<div class="flex items-center space-x-1.5 text-[10px] text-[#94a3b8] mt-0.5">
+<span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+<span class="font-medium tracking-wide">JDH-01 • Jonnalagadda</span>
+</div>
+</div>
+</div>
+<!-- User avatar & Quick live indicator -->
+<div class="flex items-center space-x-2.5">
+<div class="text-right">
+<p class="text-[11px] font-semibold text-[#f8fafc] leading-none">Mufti Asif Sahab</p>
+<span class="text-[9px] text-[#aac7ff]">Principal</span>
+</div>
+<div class="h-8 w-8 rounded-full ring-2 ring-[#1978e5]/40 bg-[#181c22] border border-[#2d3340] flex items-center justify-center text-xs font-bold text-[#aac7ff] uppercase">
+          MA
+        </div>
+</div>
+</div>
+<!-- Islamic Date & Prayer Countdown Sub-Bar -->
+<div class="px-3.5 py-2 bg-[#181c22] flex items-center justify-between text-[11px] overflow-x-auto no-scrollbar gap-2">
+<div class="flex items-center space-x-1.5 shrink-0 text-[#94a3b8]">
+<svg class="w-3.5 h-3.5 text-[#1978e5]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="font-medium text-[#f8fafc]">Fri, 11 Sep</span>
+<span class="text-amber-400 font-serif text-[10px]">• 28 Rabi' al-Awwal 1448 AH</span>
+</div>
+<div class="flex items-center space-x-1.5 shrink-0 bg-[#22262e] px-2.5 py-1 rounded-full border border-[#2d3340]">
+<span class="inline-block w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+<span class="text-[#aac7ff] font-semibold text-[10px]">Fajr (05:00 AM) in 4h 2m</span>
+</div>
+</div>
+</header>
+<!-- END: MainHeader -->
+<!-- BEGIN: MainContent -->
+<main class="flex-1 overflow-y-auto px-3.5 py-3.5 space-y-4 pb-28">
+<!-- Page Title & Header Studio Card -->
+<section class="bg-[#181c22] rounded-xl p-3.5 shadow-sm border border-[#2d3340]" data-purpose="banner-card">
+<div class="flex items-start justify-between gap-2">
+<div class="flex items-start space-x-3">
+<div class="mt-0.5 p-2 rounded-lg bg-[#1978e5]/15 text-[#aac7ff] border border-[#1978e5]/30">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div>
+<h2 class="text-sm font-bold text-[#f8fafc] leading-tight">
+              Madrasa Timetable Studio
+            </h2>
+<p class="text-xs font-urdu font-semibold text-amber-400/90 leading-normal mt-0.5" dir="rtl">
+              (نظام الاوقات واوقات نماز)
+            </p>
+<p class="text-[11px] text-[#94a3b8] mt-1 line-clamp-1">
+              Congregational Namaz hours, 24h daily schedule &amp; academic periods
+            </p>
+</div>
+</div>
+</div>
+<!-- Quick Action Buttons -->
+<div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-[#22262e]">
+<button class="flex items-center justify-center space-x-1.5 py-1.5 px-3 rounded-lg bg-[#1978e5] hover:bg-[#1463c2] text-white text-xs font-semibold shadow-md active:scale-[0.98] transition" type="button">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Add Routine Slot</span>
+</button>
+<button class="flex items-center justify-center space-x-1.5 py-1.5 px-3 rounded-lg border border-[#2d3340] bg-[#22262e] text-[#f8fafc] hover:bg-[#272a31] text-xs font-medium active:scale-[0.98] transition" type="button">
+<svg class="w-3.5 h-3.5 text-[#94a3b8]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Print Schedule</span>
+</button>
+</div>
+</section>
+<!-- Horizontal Pill Tabs Navigation -->
+<nav aria-label="Timetable Sections" class="flex space-x-1.5 overflow-x-auto no-scrollbar py-0.5" data-purpose="tab-switcher">
+<button class="shrink-0 text-xs font-medium px-3 py-1.5 rounded-full bg-[#181c22] text-[#94a3b8] border border-[#2d3340] hover:text-[#f8fafc]">
+        24-Hour Routine (1)
+      </button>
+<button class="shrink-0 text-xs font-bold px-3.5 py-1.5 rounded-full bg-[#1978e5] text-white shadow-md flex items-center space-x-1.5 border border-[#1978e5]">
+<span>🕌 Namaz Timetable</span>
+<span class="text-[10px] font-urdu font-normal">(اوقات نماز)</span>
+</button>
+<button class="shrink-0 text-xs font-medium px-3 py-1.5 rounded-full bg-[#181c22] text-[#94a3b8] border border-[#2d3340] hover:text-[#f8fafc]">
+        Class Periods (نظام الحصص)
+      </button>
+</nav>
+<!-- BEGIN: NamazSection -->
+<section class="bg-[#181c22] rounded-xl p-3.5 shadow-sm border border-[#2d3340] space-y-3" data-purpose="namaz-timetable-container">
+<!-- Namaz Section Header -->
+<div class="flex items-center justify-between pb-2 border-b border-[#22262e]">
+<div>
+<div class="flex items-center space-x-1.5">
+<span class="text-amber-400 text-sm">☀️</span>
+<h3 class="text-xs font-bold text-[#f8fafc] tracking-tight">Congregational Prayer Timetable</h3>
+</div>
+<p class="text-[10px] font-urdu text-amber-400/90 mt-0.5" dir="rtl">
+            (اوقات باجماعت نماز) • تمام ۵ نمازوں کے اوقات
+          </p>
+</div>
+<button class="inline-flex items-center space-x-1 px-2.5 py-1 rounded-md bg-[#22262e] text-[#aac7ff] text-[11px] font-semibold border border-[#2d3340] hover:border-[#1978e5]/40" type="button">
+<svg class="w-3 h-3" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Edit</span>
+</button>
+</div>
+<!-- 5 Prayer Cards Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5" data-purpose="namaz-cards-list">
+<!-- FAJR CARD -->
+<article class="border border-[#2d3340] rounded-lg p-2.5 bg-[#22262e] flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-1.5">
+<span class="text-[#aac7ff] text-xs">🌙</span>
+<h4 class="font-bold text-xs tracking-wider text-[#f8fafc]">FAJR</h4>
+</div>
+<span class="font-urdu font-bold text-sm text-amber-300">نمازِ فجر</span>
+</div>
+<div class="mt-2 grid grid-cols-2 gap-1.5 text-center text-xs">
+<div class="bg-[#181c22] border border-[#2d3340] rounded py-1 px-1">
+<span class="text-[9px] uppercase tracking-wider text-[#94a3b8] font-semibold block">Azan</span>
+<span class="font-bold text-[#f8fafc] text-xs">05:00 AM</span>
+</div>
+<div class="bg-[#2a2414] border border-[#d97706]/60 rounded py-1 px-1">
+<span class="text-[9px] uppercase tracking-wider text-amber-400 font-semibold block">Jamat</span>
+<span class="font-extrabold text-amber-200 text-xs">05:30 AM</span>
+</div>
+</div>
+</article>
+<!-- ZOHR CARD -->
+<article class="border border-[#2d3340] rounded-lg p-2.5 bg-[#22262e] flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-1.5">
+<span class="text-amber-400 text-xs">☀️</span>
+<h4 class="font-bold text-xs tracking-wider text-[#f8fafc]">ZOHR</h4>
+</div>
+<span class="font-urdu font-bold text-sm text-amber-300">نمازِ ظہر</span>
+</div>
+<div class="mt-2 grid grid-cols-2 gap-1.5 text-center text-xs">
+<div class="bg-[#181c22] border border-[#2d3340] rounded py-1 px-1">
+<span class="text-[9px] uppercase tracking-wider text-[#94a3b8] font-semibold block">Azan</span>
+<span class="font-bold text-[#f8fafc] text-xs">01:00 PM</span>
+</div>
+<div class="bg-[#2a2414] border border-[#d97706]/60 rounded py-1 px-1">
+<span class="text-[9px] uppercase tracking-wider text-amber-400 font-semibold block">Jamat</span>
+<span class="font-extrabold text-amber-200 text-xs">01:30 PM</span>
+</div>
+</div>
+</article>
+<!-- ASAR CARD -->
+<article class="border border-[#2d3340] rounded-lg p-2.5 bg-[#22262e] flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-1.5">
+<span class="text-amber-500 text-xs">🌤️</span>
+<h4 class="font-bold text-xs tracking-wider text-[#f8fafc]">ASAR</h4>
+</div>
+<span class="font-urdu font-bold text-sm text-amber-300">نمازِ عصر</span>
+</div>
+<div class="mt-2 grid grid-cols-2 gap-1.5 text-center text-xs">
+<div class="bg-[#181c22] border border-[#2d3340] rounded py-1 px-1">
+<span class="text-[9px] uppercase tracking-wider text-[#94a3b8] font-semibold block">Azan</span>
+<span class="font-bold text-[#f8fafc] text-xs">04:45 PM</span>
+</div>
+<div class="bg-[#2a2414] border border-[#d97706]/60 rounded py-1 px-1">
+<span class="text-[9px] uppercase tracking-wider text-amber-400 font-semibold block">Jamat</span>
+<span class="font-extrabold text-amber-200 text-xs">05:10 PM</span>
+</div>
+</div>
+</article>
+<!-- MAGRIB CARD -->
+<article class="border border-[#2d3340] rounded-lg p-2.5 bg-[#22262e] flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-1.5">
+<span class="text-orange-400 text-xs">🌅</span>
+<h4 class="font-bold text-xs tracking-wider text-[#f8fafc]">MAGRIB</h4>
+</div>
+<span class="font-urdu font-bold text-sm text-amber-300">نمازِ مغرب</span>
+</div>
+<div class="mt-2 grid grid-cols-2 gap-1.5 text-center text-xs">
+<div class="bg-[#181c22] border border-[#2d3340] rounded py-1 px-1">
+<span class="text-[9px] uppercase tracking-wider text-[#94a3b8] font-semibold block">Azan</span>
+<span class="font-bold text-[#f8fafc] text-xs">06:35 PM</span>
+</div>
+<div class="bg-[#2a2414] border border-[#d97706]/60 rounded py-1 px-1">
+<span class="text-[9px] uppercase tracking-wider text-amber-400 font-semibold block">Jamat</span>
+<span class="font-extrabold text-amber-200 text-xs">06:40 PM</span>
+</div>
+</div>
+</article>
+<!-- ISHA CARD -->
+<article class="border border-[#2d3340] rounded-lg p-2.5 bg-[#22262e] flex flex-col justify-between">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-1.5">
+<span class="text-[#aac7ff] text-xs">🌌</span>
+<h4 class="font-bold text-xs tracking-wider text-[#f8fafc]">ISHA</h4>
+</div>
+<span class="font-urdu font-bold text-sm text-amber-300">نمازِ عشاء</span>
+</div>
+<div class="mt-2 grid grid-cols-2 gap-1.5 text-center text-xs">
+<div class="bg-[#181c22] border border-[#2d3340] rounded py-1 px-1">
+<span class="text-[9px] uppercase tracking-wider text-[#94a3b8] font-semibold block">Azan</span>
+<span class="font-bold text-[#f8fafc] text-xs">08:00 PM</span>
+</div>
+<div class="bg-[#2a2414] border border-[#d97706]/60 rounded py-1 px-1">
+<span class="text-[9px] uppercase tracking-wider text-amber-400 font-semibold block">Jamat</span>
+<span class="font-extrabold text-amber-200 text-xs">08:30 PM</span>
+</div>
+</div>
+</article>
+</div>
+</section>
+<!-- END: NamazSection -->
+<!-- BEGIN: DailyRoutineSection -->
+<section class="bg-[#181c22] rounded-xl p-3.5 shadow-sm border border-[#2d3340] space-y-3" data-purpose="daily-routine-card">
+<div class="flex items-center justify-between border-b border-[#22262e] pb-2">
+<div>
+<h3 class="text-xs font-bold text-[#f8fafc]">24-Hour Daily Timeline Routine</h3>
+<p class="text-[10px] text-[#94a3b8] font-urdu">(روزمرہ نظام الاوقات)</p>
+</div>
+<span class="bg-[#1978e5]/20 text-[#aac7ff] border border-[#1978e5]/40 text-[10px] font-bold px-2 py-0.5 rounded-full">
+          1 Active Slot
+        </span>
+</div>
+<!-- Mobile Slot Row Card -->
+<div class="rounded-lg border border-[#2d3340] bg-[#22262e] p-2.5 flex items-start justify-between gap-2">
+<div class="space-y-1">
+<div class="flex items-center space-x-2">
+<span class="text-[10px] font-mono bg-[#181c22] text-[#aac7ff] border border-[#2d3340] px-1.5 py-0.5 rounded font-semibold">
+              04:00 AM - 04:30 AM
+            </span>
+<span class="bg-[#1978e5]/25 text-[#d6e3ff] text-[9px] font-bold px-2 py-0.5 rounded">
+              PRAYER
+            </span>
+</div>
+<p class="text-xs font-urdu font-semibold text-[#f8fafc] mt-1" dir="rtl">
+            بیداری، تہجد کی نماز، پڑھائی
+          </p>
+<p class="text-[10px] text-[#94a3b8]">
+            Awakening, Tahajjud prayers, and early morning Quran recitation.
+          </p>
+</div>
+<div class="flex items-center space-x-1 shrink-0">
+<button class="p-1 text-[#94a3b8] hover:text-[#f8fafc] transition" title="Edit Slot">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<button class="p-1 text-red-400 hover:text-red-300 transition" title="Delete Slot">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+</div>
+</section>
+<!-- END: DailyRoutineSection -->
+</main>
+<!-- END: MainContent -->
+<!-- BEGIN: MobileBottomNav -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-[#10131a] border-t border-[#2d3340] px-2 py-1.5 pb-[calc(0.4rem+env(safe-area-inset-bottom))] flex justify-around items-center text-[10px]" data-purpose="mobile-footer-nav">
+<a class="flex flex-col items-center justify-center text-[#94a3b8] hover:text-[#aac7ff] py-1 px-1 transition" href="#">
+<svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Dashboard</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#94a3b8] hover:text-[#aac7ff] py-1 px-1 transition" href="#">
+<svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Students</span>
+</a>
+<!-- Active schedule tab -->
+<a class="flex flex-col items-center justify-center text-[#aac7ff] font-bold py-1 px-1 relative" href="#">
+<div class="p-1 rounded-md bg-[#1978e5]/20 border border-[#1978e5]/40">
+<svg class="w-5 h-5 text-[#aac7ff]" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"></path>
+</svg>
+</div>
+<span class="mt-0.5 text-[#aac7ff]">Namaz &amp; Time</span>
+<span class="w-1.5 h-1.5 rounded-full bg-[#1978e5] absolute -bottom-0.5"></span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#94a3b8] hover:text-[#aac7ff] py-1 px-1 transition" href="#">
+<svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Sabaq</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#94a3b8] hover:text-[#aac7ff] py-1 px-1 transition" href="#">
+<svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Finance</span>
+</a>
+<a class="flex flex-col items-center justify-center text-[#94a3b8] hover:text-[#aac7ff] py-1 px-1 transition" href="#">
+<svg class="w-5 h-5 mb-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Menu</span>
+</a>
+</nav>
+<!-- END: MobileBottomNav -->
+</body></html>

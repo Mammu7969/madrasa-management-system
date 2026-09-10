@@ -237,7 +237,7 @@
 }
 
 /* ==========================================================================
-   HIGH-CONTRAST DARK MODE ENGINE (100% VISIBILITY ACROSS ALL SCREENS)
+   FIDELITY DARK SYSTEM (src/theme)
    ========================================================================== */
 html.dark,
 [data-theme="dark"] {
@@ -246,8 +246,8 @@ html.dark,
 
 html.dark body,
 [data-theme="dark"] body {
-  background-color: #0B1120 !important;
-  color: #F8FAFC !important;
+  background-color: #0b0e14 !important;
+  color: #e0e2eb !important;
 }
 
 /* 1. Core Headings & Dark Text Color Overrides */
@@ -261,7 +261,7 @@ html.dark [class*="text-[#123B63]"], html.dark [class*="text-[#102A43]"],
 [data-theme="dark"] .text-slate-900, [data-theme="dark"] .text-gray-900, [data-theme="dark"] .text-zinc-900, [data-theme="dark"] .text-neutral-900,
 [data-theme="dark"] .text-slate-800, [data-theme="dark"] .text-gray-800, [data-theme="dark"] .text-zinc-800, [data-theme="dark"] .text-neutral-800,
 [data-theme="dark"] [class*="text-[#123B63]"], [data-theme="dark"] [class*="text-[#102A43]"] {
-  color: #F8FAFC !important;
+  color: #e0e2eb !important;
 }
 
 /* 2. Secondary & Body Text Overrides */
@@ -269,18 +269,18 @@ html.dark .text-slate-700, html.dark .text-gray-700, html.dark .text-zinc-700, h
 html.dark .text-slate-600, html.dark .text-gray-600, html.dark .text-zinc-600, html.dark .text-neutral-600,
 [data-theme="dark"] .text-slate-700, [data-theme="dark"] .text-gray-700, [data-theme="dark"] .text-zinc-700, [data-theme="dark"] .text-neutral-700,
 [data-theme="dark"] .text-slate-600, [data-theme="dark"] .text-gray-600, [data-theme="dark"] .text-zinc-600, [data-theme="dark"] .text-neutral-600 {
-  color: #E2E8F0 !important;
+  color: #c1c6d5 !important;
 }
 
-/* 3. Muted & Meta Text Overrides (High Visibility) */
+/* 3. Muted & Meta Text Overrides */
 html.dark .text-slate-500, html.dark .text-gray-500, html.dark .text-zinc-500, html.dark .text-neutral-500,
 html.dark .text-slate-400, html.dark .text-gray-400, html.dark .text-zinc-400, html.dark .text-neutral-400,
 [data-theme="dark"] .text-slate-500, [data-theme="dark"] .text-gray-500, [data-theme="dark"] .text-zinc-500, [data-theme="dark"] .text-neutral-500,
 [data-theme="dark"] .text-slate-400, [data-theme="dark"] .text-gray-400, [data-theme="dark"] .text-zinc-400, [data-theme="dark"] .text-neutral-400 {
-  color: #CBD5E1 !important;
+  color: #8b919f !important;
 }
 
-/* 4. White / Light Backgrounds -> Slate Dark Glass */
+/* 4. White / Light Backgrounds -> Fidelity Dark Container */
 html.dark .bg-white,
 html.dark .bg-white\/50,
 html.dark .bg-white\/60,
@@ -301,9 +301,9 @@ html.dark .bg-white\/95,
 [data-theme="dark"] .bg-white\/85,
 [data-theme="dark"] .bg-white\/90,
 [data-theme="dark"] .bg-white\/95 {
-  background-color: rgba(30, 41, 59, 0.88) !important;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  background-color: #181c22 !important;
+  color: #e0e2eb !important;
+  border-color: #2d3340 !important;
 }
 
 /* 5. Sub-containers & Alt Row Tints */
@@ -311,7 +311,9 @@ html.dark .bg-slate-50, html.dark .bg-gray-50, html.dark .bg-zinc-50, html.dark 
 html.dark .bg-slate-100, html.dark .bg-gray-100, html.dark .bg-zinc-100, html.dark .bg-neutral-100,
 [data-theme="dark"] .bg-slate-50, [data-theme="dark"] .bg-gray-50, [data-theme="dark"] .bg-zinc-50, [data-theme="dark"] .bg-neutral-50,
 [data-theme="dark"] .bg-slate-100, [data-theme="dark"] .bg-gray-100, [data-theme="dark"] .bg-zinc-100, [data-theme="dark"] .bg-neutral-100 {
-  background-color: rgba(15, 23, 42, 0.82) !important;
+  background-color: #1e232b !important;
+  color: #e0e2eb !important;
+  border-color: #2d3340 !important;
 }
 
 /* 6. Form Inputs & Selects */
@@ -321,9 +323,36 @@ html.dark textarea,
 [data-theme="dark"] input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="color"]),
 [data-theme="dark"] select,
 [data-theme="dark"] textarea {
-  background-color: rgba(15, 23, 42, 0.9) !important;
-  color: #F8FAFC !important;
-  border-color: rgba(255, 255, 255, 0.18) !important;
+  background-color: #1e232b !important;
+  color: #e0e2eb !important;
+  border-color: #2d3340 !important;
+}
+
+html.dark input:focus, html.dark select:focus, html.dark textarea:focus,
+[data-theme="dark"] input:focus, [data-theme="dark"] select:focus, [data-theme="dark"] textarea:focus {
+  border-color: #1978e5 !important;
+  box-shadow: 0 0 0 1px #1978e5 !important;
+}
+
+html.dark input::placeholder, html.dark textarea::placeholder,
+[data-theme="dark"] input::placeholder, [data-theme="dark"] textarea::placeholder {
+  color: #64748B !important;
+}
+
+html.dark select option,
+[data-theme="dark"] select option {
+  background-color: #181c22 !important;
+  color: #e0e2eb !important;
+}
+
+/* 7. Borders & Dividers */
+html.dark .border-slate-100, html.dark .border-slate-200, html.dark .border-slate-300,
+html.dark .border-gray-100, html.dark .border-gray-200, html.dark .border-gray-300,
+html.dark .border-white\/80, html.dark .border-white\/90,
+[data-theme="dark"] .border-slate-100, [data-theme="dark"] .border-slate-200, [data-theme="dark"] .border-slate-300,
+[data-theme="dark"] .border-gray-100, [data-theme="dark"] .border-gray-200, [data-theme="dark"] .border-gray-300,
+[data-theme="dark"] .border-white\/80, [data-theme="dark"] .border-white\/90 {
+  border-color: #2d3340 !important;
 }
 
 html.dark input::placeholder, html.dark textarea::placeholder,
@@ -437,28 +466,28 @@ html.dark table,
 }
 html.dark th,
 [data-theme="dark"] th {
-  background-color: rgba(15, 23, 42, 0.95) !important;
-  color: #E2E8F0 !important;
-  border-color: rgba(255, 255, 255, 0.12) !important;
+  background-color: #10131a !important;
+  color: #e0e2eb !important;
+  border-color: #2d3340 !important;
 }
 html.dark td,
 [data-theme="dark"] td {
-  border-color: rgba(255, 255, 255, 0.08) !important;
+  border-color: #2d3340 !important;
 }
 html.dark tr:hover,
 [data-theme="dark"] tr:hover {
-  background-color: rgba(51, 65, 85, 0.4) !important;
+  background-color: #1e232b !important;
 }
 
 html.dark .sticky,
 [data-theme="dark"] .sticky {
-  background-color: #0F172A !important;
-  color: #F8FAFC !important;
+  background-color: #181c22 !important;
+  color: #e0e2eb !important;
 }
 html.dark th.sticky,
 [data-theme="dark"] th.sticky {
-  background-color: #090D16 !important;
-  color: #F8FAFC !important;
+  background-color: #10131a !important;
+  color: #e0e2eb !important;
 }
 
 /* 10. Buttons & Controls in Dark Mode */
@@ -466,7 +495,31 @@ html.dark button.bg-gray-100,
 [data-theme="dark"] button.bg-gray-100,
 html.dark button.bg-slate-100,
 [data-theme="dark"] button.bg-slate-100 {
-  background-color: rgba(51, 65, 85, 0.7) !important;
-  color: #F1F5F9 !important;
+  background-color: #22262e !important;
+  color: #e0e2eb !important;
+  border-color: #2d3340 !important;
+}
+
+/* ==========================================================================
+   MOBILE SCREEN OPTIMIZATION UTILITIES
+   ========================================================================== */
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 1rem);
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+@media (max-width: 640px) {
+  /* Ensure mobile tables scroll cleanly without page overflow */
+  .mobile-table-scroll {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 }
 

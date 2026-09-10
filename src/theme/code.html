@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+
+<html class="h-full bg-[#0b0e14]" dir="ltr" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Jamia Zia Ul Quran - 15-Line Indopak Holy Quran Mushaf</title>
+<!-- Tailwind CSS v3 with Forms & Container Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Plus Jakarta Sans & Arabic Typography -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Amiri+Quran&amp;family=Lateef:wght@500;600;700&amp;family=Noto+Naskh+Arabic:wght@400;600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Scheherazade+New:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration -->
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "surface-container-lowest": "#0b0e14",
+            "surface-container-high": "#272a31",
+            "surface-dim": "#10131a",
+            "surface-variant": "#31353c",
+            "on-primary-fixed-variant": "#00458d",
+            "on-primary-fixed": "#001b3e",
+            "on-tertiary-fixed": "#321200",
+            "surface-bright": "#363940",
+            "primary-fixed": "#d6e3ff",
+            "surface-container-low": "#181c22",
+            "secondary": "#aec7f7",
+            "primary-fixed-dim": "#aac7ff",
+            "surface-container": "#1c2026",
+            "on-tertiary-fixed-variant": "#763400",
+            "on-secondary-container": "#9db6e4",
+            "secondary-fixed": "#d6e3ff",
+            "on-secondary": "#143057",
+            "error": "#ffb4ab",
+            "outline-variant": "#414753",
+            "secondary-fixed-dim": "#aec7f7",
+            "on-primary": "#002f64",
+            "error-container": "#93000a",
+            "on-tertiary": "#532200",
+            "primary-container": "#4090fe",
+            "on-surface-variant": "#c1c6d5",
+            "on-error": "#690005",
+            "on-secondary-fixed": "#001b3d",
+            "on-error-container": "#ffdad6",
+            "inverse-primary": "#005db8",
+            "tertiary-container": "#e3711f",
+            "on-surface": "#e0e2eb",
+            "tertiary": "#ffb68c",
+            "on-background": "#e0e2eb",
+            "primary": "#aac7ff",
+            "on-secondary-fixed-variant": "#2d476f",
+            "tertiary-fixed-dim": "#ffb68c",
+            "inverse-surface": "#e0e2eb",
+            "background": "#10131a",
+            "secondary-container": "#2d476f",
+            "surface-tint": "#aac7ff",
+            "inverse-on-surface": "#2d3037",
+            "surface-container-highest": "#31353c",
+            "outline": "#8b919f",
+            "on-primary-container": "#002958",
+            "on-tertiary-container": "#481d00",
+            "tertiary-fixed": "#ffdbc9",
+            "surface": "#10131a",
+            mushafDark: {
+              page: '#161920',
+              inner: '#12151b',
+              goldBorder: '#8a6e35',
+              borderOuter: '#54421e',
+              text: '#f2eed9',
+              ayahNum: '#e5c07b',
+              accent: '#d7a74a',
+              activeLine: 'rgba(215, 167, 74, 0.08)'
+            }
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            quran: ['"Amiri Quran"', '"Scheherazade New"', '"Noto Naskh Arabic"', 'serif'],
+            indopak: ['"Lateef"', '"Amiri Quran"', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+<!-- BEGIN: Custom Styles -->
+<style data-purpose="custom-scrollbars">
+    /* Subtle horizontal scrollbar for mobile pills and controls */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+<style data-purpose="mushaf-ornaments">
+    /* Authentic Islamic border frame decoration in Dark Theme */
+    .mushaf-outer-border {
+      box-shadow: 0 0 0 1px #6f5527, 0 0 0 4px #1a1e27, 0 0 0 5px #4a3a1b, 0 8px 30px -4px rgba(0, 0, 0, 0.7);
+    }
+    .corner-ornament {
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      border: 2px solid #b89146;
+    }
+    .corner-tl { top: 4px; left: 4px; border-right: none; border-bottom: none; }
+    .corner-tr { top: 4px; right: 4px; border-left: none; border-bottom: none; }
+    .corner-bl { bottom: 4px; left: 4px; border-right: none; border-top: none; }
+    .corner-br { bottom: 4px; right: 4px; border-left: none; border-top: none; }
+    
+    .quran-ayah-symbol {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.9em;
+      color: #e5be6b;
+      margin: 0 4px;
+      user-select: none;
+    }
+  </style>
+<!-- END: Custom Styles -->
+</head>
+<body class="h-full bg-surface-container-lowest font-sans text-on-surface antialiased selection:bg-secondary-container selection:text-primary-fixed pb-24">
+<!-- BEGIN: Institutional Mobile Header -->
+<header class="sticky top-0 z-40 bg-surface-container-low text-on-surface shadow-md border-b border-outline-variant/40">
+<div class="px-3.5 py-2.5 flex items-center justify-between">
+<div class="flex items-center space-x-2.5">
+<!-- Institution Logo / Crest Badge -->
+<div class="w-9 h-9 rounded-lg bg-surface-container-highest border border-primary/30 flex items-center justify-center p-1 shadow-inner">
+<svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" stroke-width="1.75" viewbox="0 0 24 24">
+<path d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div>
+<div class="flex items-center gap-1.5">
+<h1 class="text-xs font-bold tracking-tight text-on-surface leading-tight">JAMIA ZIA UL QURAN TRUST</h1>
+<span class="text-[9px] px-1 py-0.2 rounded font-semibold bg-secondary-container/60 text-secondary border border-secondary/30 uppercase">ERP</span>
+</div>
+<p class="text-[10px] text-on-surface-variant flex items-center gap-1">
+<span>JDH-01</span>
+<span class="inline-block w-1 h-1 rounded-full bg-outline"></span>
+<span>Jonnalagadda X Road</span>
+</p>
+</div>
+</div>
+<!-- Quick Action Right (Admin & Notifications) -->
+<div class="flex items-center space-x-2">
+<div class="relative">
+<button aria-label="Notifications" class="w-8 h-8 rounded-full bg-surface-container flex items-center justify-center text-on-surface-variant border border-outline-variant/50 hover:text-on-surface" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<span class="absolute -top-0.5 -right-0.5 w-4 h-4 bg-error text-on-error rounded-full text-[9px] font-bold flex items-center justify-center border-2 border-surface-container-low">2</span>
+</div>
+<!-- User Avatar -->
+<div class="w-8 h-8 rounded-full bg-secondary-container ring-2 ring-primary/40 flex items-center justify-center text-secondary-fixed font-bold text-xs">
+          M
+        </div>
+</div>
+</div>
+<!-- Live Status Sub-header -->
+<div class="bg-surface-container-lowest px-3.5 py-1.5 flex items-center justify-between text-[10.5px] border-t border-outline-variant/30 overflow-x-auto no-scrollbar gap-2">
+<div class="flex items-center gap-1.5 text-on-surface-variant whitespace-nowrap">
+<svg class="w-3.5 h-3.5 text-outline" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Fri, 11 Sept</span>
+<span class="text-primary font-medium">28 Rabi' al-Awwal 1448 AH</span>
+</div>
+<div class="flex items-center gap-2 whitespace-nowrap">
+<div class="flex items-center gap-1 bg-surface-container text-primary px-2 py-0.5 rounded border border-outline-variant/50">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-pulse"></span>
+<span class="font-semibold text-[10px]">Fajr 05:00 AM</span>
+<span class="text-[9px] text-on-surface-variant">(in 4h 8m)</span>
+</div>
+<div class="flex items-center gap-1 text-secondary bg-surface-container px-2 py-0.5 rounded border border-outline-variant/40 text-[10px]">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span>Cloud Synced</span>
+</div>
+</div>
+</div>
+</header>
+<!-- END: Institutional Mobile Header -->
+<!-- BEGIN: Main Quran Content -->
+<main class="px-3 pt-3 pb-8 max-w-xl mx-auto space-y-3.5">
+<!-- BEGIN: Sabaq Management Banner -->
+<section class="bg-surface-container rounded-xl p-3.5 shadow-sm border border-outline-variant/40" data-purpose="quran-stats-card">
+<div class="flex items-start gap-3">
+<!-- Quran Book Icon Badge -->
+<div class="w-14 h-14 rounded-lg bg-surface-container-high border border-outline-variant/50 flex-shrink-0 flex items-center justify-center text-primary shadow-sm">
+<svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="1.8" viewbox="0 0 24 24">
+<path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+</div>
+<div class="flex-1 min-w-0">
+<div class="inline-flex items-center gap-1 text-[10px] font-bold text-primary bg-secondary-container/40 border border-primary/20 px-2 py-0.5 rounded-full uppercase tracking-wider mb-1">
+<svg class="w-3 h-3" fill="currentColor" viewbox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+            Holy Quran Digital Mushaf
+          </div>
+<h2 class="text-base font-bold text-on-surface leading-tight">Quranic Learning &amp; Sabaq</h2>
+<p class="text-[11px] text-on-surface-variant mt-0.5 line-clamp-1">Madrasa Tahfeez &amp; Daily Sabaq Evaluation</p>
+</div>
+</div>
+<!-- Stats Grid -->
+<div class="grid grid-cols-4 gap-2 mt-3 pt-3 border-t border-outline-variant/30 text-center">
+<div class="bg-surface-container-low p-1.5 rounded-lg border border-outline-variant/30">
+<p class="text-xs font-black text-secondary">30</p>
+<p class="text-[9.5px] font-medium text-on-surface-variant">Juz (Parahs)</p>
+</div>
+<div class="bg-surface-container-low p-1.5 rounded-lg border border-outline-variant/30">
+<p class="text-xs font-black text-primary">114</p>
+<p class="text-[9.5px] font-medium text-on-surface-variant">Surahs</p>
+</div>
+<div class="bg-surface-container-low p-1.5 rounded-lg border border-outline-variant/30">
+<p class="text-xs font-black text-tertiary">556</p>
+<p class="text-[9.5px] font-medium text-on-surface-variant">Rukus</p>
+</div>
+<div class="bg-surface-container-low p-1.5 rounded-lg border border-outline-variant/30">
+<p class="text-xs font-black text-primary-fixed">6,236</p>
+<p class="text-[9.5px] font-medium text-on-surface-variant">Verses</p>
+</div>
+</div>
+</section>
+<!-- END: Sabaq Management Banner -->
+<!-- BEGIN: Navigation Tabs -->
+<div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
+<button class="px-3 py-2 rounded-lg text-xs font-semibold whitespace-nowrap bg-secondary-container text-on-surface shadow-sm flex items-center gap-1.5 border border-primary/40">
+<svg class="w-3.5 h-3.5 text-primary" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>15-Line Mushaf (Qudratullah)</span>
+<span class="text-[9px] bg-surface-container-lowest text-primary px-1 py-0.2 rounded uppercase font-bold border border-primary/30">Indopak</span>
+</button>
+<button class="px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap bg-surface-container text-on-surface-variant border border-outline-variant/40 shadow-sm flex items-center gap-1.5 hover:text-on-surface">
+<svg class="w-3.5 h-3.5 text-outline" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>30 Parahs (Juz)</span>
+</button>
+<button class="px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap bg-surface-container text-on-surface-variant border border-outline-variant/40 shadow-sm flex items-center gap-1.5 hover:text-on-surface">
+<svg class="w-3.5 h-3.5 text-outline" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 6h16M4 10h16M4 14h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>114 Surahs</span>
+</button>
+<button class="px-3 py-2 rounded-lg text-xs font-medium whitespace-nowrap bg-surface-container text-on-surface-variant border border-outline-variant/40 shadow-sm flex items-center gap-1.5 hover:text-on-surface">
+<svg class="w-3.5 h-3.5 text-outline" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Verse Cards</span>
+</button>
+</div>
+<!-- END: Navigation Tabs -->
+<!-- BEGIN: Mushaf Control Bar -->
+<div class="bg-surface-container rounded-xl p-2.5 shadow-sm border border-outline-variant/40 space-y-2">
+<!-- Search & Text Settings Bar -->
+<div class="flex items-center gap-2">
+<div class="relative flex-1">
+<svg class="w-4 h-4 absolute left-2.5 top-1/2 -translate-y-1/2 text-outline" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<input class="w-full pl-8 pr-3 py-1.5 text-xs bg-surface-container-low border border-outline-variant/50 rounded-lg text-on-surface focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary placeholder:text-outline" placeholder="Search Surah, Juz or Ayah..." type="text"/>
+</div>
+<!-- Size and View Mode -->
+<div class="flex items-center gap-1">
+<select class="text-xs bg-surface-container-low border border-outline-variant/50 rounded-lg px-2 py-1.5 font-medium text-on-surface focus:ring-primary">
+<option>28px</option>
+<option>30px</option>
+<option>32px</option>
+</select>
+<button class="w-8 h-8 rounded-lg bg-surface-container-low border border-outline-variant/50 flex items-center justify-center text-primary hover:bg-surface-container-high" title="Night Mode Active">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<button class="w-8 h-8 rounded-lg bg-surface-container-low border border-outline-variant/50 flex items-center justify-center text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high" title="Print Mushaf">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4H7v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+</div>
+<!-- Current Mushaf Info Indicators -->
+<div class="flex flex-wrap items-center justify-between gap-1.5 pt-1.5 border-t border-outline-variant/30 text-xs">
+<div class="flex items-center gap-1.5 flex-wrap">
+<span class="inline-flex items-center gap-1 font-semibold text-secondary bg-secondary-container/50 px-2 py-0.5 rounded text-[11px] border border-secondary/30">
+<span class="w-2 h-2 rounded-full bg-primary"></span>
+            Indopak 15 Lines
+          </span>
+<span class="font-bold text-on-surface bg-surface-container-high px-2 py-0.5 rounded text-[11px] border border-outline-variant/30">
+            Juz 1: الم (Alif Lam Meem)
+          </span>
+<span class="font-semibold text-tertiary bg-tertiary-container/30 px-2 py-0.5 rounded text-[11px] border border-tertiary/30">
+            سورة البقرة [2:16 - 2:23]
+          </span>
+</div>
+<!-- Publisher Dropdown Indicator -->
+<button class="inline-flex items-center gap-1 text-[11px] text-on-surface-variant font-medium bg-surface-container-low border border-outline-variant/50 px-2 py-0.5 rounded hover:text-on-surface">
+<span>Al Qalam Publisher (القرآن الأصلي)</span>
+<svg class="w-3 h-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<!-- Audio, Ruler, Hifz tools row -->
+<div class="flex items-center justify-between gap-1 pt-1.5 overflow-x-auto no-scrollbar">
+<div class="flex items-center gap-1">
+<button class="inline-flex items-center gap-1 text-[11px] font-medium bg-surface-container-low hover:bg-surface-container-high text-on-surface border border-outline-variant/40 px-2.5 py-1 rounded">
+<svg class="w-3.5 h-3.5 text-primary" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            Audio
+          </button>
+<button class="inline-flex items-center gap-1 text-[11px] font-medium bg-surface-container-low hover:bg-surface-container-high text-on-surface-variant hover:text-on-surface border border-outline-variant/40 px-2 py-1 rounded">
+<svg class="w-3.5 h-3.5 text-outline" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            Ruler
+          </button>
+<button class="inline-flex items-center gap-1 text-[11px] font-medium bg-tertiary-container/30 hover:bg-tertiary-container/50 text-tertiary border border-tertiary/40 px-2 py-1 rounded">
+<svg class="w-3.5 h-3.5 text-tertiary" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+            Hifz Test
+          </button>
+</div>
+<div class="flex items-center gap-1">
+<!-- Color Themes -->
+<button class="text-[10px] px-2 py-0.5 rounded font-medium bg-surface-container-low text-on-surface-variant hover:text-on-surface border border-outline-variant/40">Cream</button>
+<button class="text-[10px] px-2 py-0.5 rounded font-medium bg-surface-container-low text-tertiary border border-outline-variant/40">Gold</button>
+<button class="text-[10px] px-2 py-0.5 rounded font-medium bg-secondary-container text-primary-fixed border border-primary/50">Night</button>
+</div>
+</div>
+</div>
+<!-- END: Mushaf Control Bar -->
+<!-- BEGIN: Juz Quick Jump Horizontal Scroll -->
+<div class="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1" data-purpose="juz-quick-jump">
+<span class="text-[10px] uppercase font-bold text-on-surface-variant pl-1 flex-shrink-0">Juz Jump:</span>
+<button class="px-2.5 py-1 rounded-full text-xs font-bold bg-primary text-on-primary flex-shrink-0 shadow-sm">1. الم</button>
+<button class="px-2.5 py-1 rounded-full text-xs font-semibold bg-surface-container text-on-surface border border-outline-variant/40 flex-shrink-0 hover:bg-surface-container-high">2. سَيَقُولُ</button>
+<button class="px-2.5 py-1 rounded-full text-xs font-semibold bg-surface-container text-on-surface border border-outline-variant/40 flex-shrink-0 hover:bg-surface-container-high">3. تِلْكَ الرُّسُلُ</button>
+<button class="px-2.5 py-1 rounded-full text-xs font-semibold bg-surface-container text-on-surface border border-outline-variant/40 flex-shrink-0 hover:bg-surface-container-high">4. لَنْ تَنَالُوا</button>
+<button class="px-2.5 py-1 rounded-full text-xs font-semibold bg-surface-container text-on-surface border border-outline-variant/40 flex-shrink-0 hover:bg-surface-container-high">5. وَالْمُحْصَنَاتُ</button>
+<button class="px-2.5 py-1 rounded-full text-xs font-semibold bg-surface-container text-on-surface border border-outline-variant/40 flex-shrink-0 hover:bg-surface-container-high">6. لَا يُحِبُّ اللَّهُ</button>
+<button class="px-2.5 py-1 rounded-full text-xs font-semibold bg-surface-container text-on-surface border border-outline-variant/40 flex-shrink-0 hover:bg-surface-container-high">7. وَإِذَا سَمِعُوا</button>
+<button class="px-2.5 py-1 rounded-full text-xs font-semibold bg-surface-container text-on-surface border border-outline-variant/40 flex-shrink-0 hover:bg-surface-container-high">8. وَلَوْ أَنَّنَا</button>
+<button class="px-2.5 py-1 rounded-full text-xs font-semibold bg-surface-container text-on-surface border border-outline-variant/40 flex-shrink-0 hover:bg-surface-container-high">9. قَالَ الْمَلَأُ</button>
+<button class="px-2.5 py-1 rounded-full text-xs font-semibold bg-surface-container text-on-surface border border-outline-variant/40 flex-shrink-0 hover:bg-surface-container-high">10. وَاعْلَمُوا</button>
+</div>
+<!-- END: Juz Quick Jump -->
+<!-- BEGIN: Canonical 15-Line Mushaf Page Container (Dark Sepia / Night Contrast) -->
+<section class="bg-mushafDark-page rounded-xl p-3 sm:p-4 border-2 border-mushafDark-goldBorder mushaf-outer-border relative shadow-2xl" data-purpose="canonical-15-line-mushaf-view">
+<!-- Four Traditional Corner Ornaments -->
+<div class="corner-ornament corner-tl"></div>
+<div class="corner-ornament corner-tr"></div>
+<div class="corner-ornament corner-bl"></div>
+<div class="corner-ornament corner-br"></div>
+<!-- Inner Fine Double Border -->
+<div class="border border-mushafDark-borderOuter rounded-lg p-2 sm:p-3 bg-mushafDark-inner relative">
+<!-- Mushaf Calligraphic Page Header Top Details -->
+<div class="flex items-center justify-between pb-1.5 border-b border-mushafDark-borderOuter/80 text-[13px] text-[#dec38c] font-indopak font-bold tracking-wide">
+<!-- Left: Page Indicator in traditional cartouche -->
+<div class="inline-flex items-center gap-1 border border-mushafDark-goldBorder/80 rounded-full px-3 py-0.5 bg-[#1e232d] text-[#eed092]">
+<span>۞</span>
+<span>صفحه ۴</span>
+<span>۞</span>
+</div>
+<!-- Right: Juz Name in Arabic -->
+<div class="text-right font-quran text-base text-[#f5db9e]">
+            ( اَلْجُزْءُ ۱ ) الم
+          </div>
+</div>
+<!-- Surah Title Tag -->
+<div class="text-center pt-1 pb-2">
+<span class="inline-block font-quran text-base font-bold text-[#f0cb79] border-b-2 border-mushafDark-goldBorder/60 px-4 pb-0.5">
+            سُوْرَةُ الْبَقَرَةِ (سورة ۲)
+          </span>
+</div>
+<!-- Mushaf 15 Authentic Text Lines -->
+<div class="space-y-1.5 py-1 font-quran text-mushafDark-text text-center leading-[2.1] text-lg sm:text-xl selection:bg-secondary-container" dir="rtl">
+<!-- Line 1 -->
+<div class="flex items-center justify-center gap-1 border-b border-outline-variant/20 py-0.5 hover:bg-mushafDark-activeLine rounded transition-colors" data-line="1">
+<span class="text-[10px] text-mushafDark-ayahNum/80 font-sans ml-1 select-none">١</span>
+<span>اُولٰٓئِكَ الَّذِیْنَ اشْتَرَوُا الضَّلٰلَةَ بِالْهُدٰی۪- فَمَا رَبِحَتْ تِّجَارَتُهُمْ</span>
+<span class="quran-ayah-symbol">۝۱۶</span>
+</div>
+<!-- Line 2 -->
+<div class="flex items-center justify-center gap-1 border-b border-outline-variant/20 py-0.5 hover:bg-mushafDark-activeLine rounded transition-colors" data-line="2">
+<span class="text-[10px] text-mushafDark-ayahNum/80 font-sans ml-1 select-none">٢</span>
+<span>مَثَلُهُمْ كَمَثَلِ الَّذِی اسْتَوْقَدَ نَارًاۚ- فَلَمَّآ اَضَآءَتْ</span>
+</div>
+<!-- Line 3 -->
+<div class="flex items-center justify-center gap-1 border-b border-outline-variant/20 py-0.5 hover:bg-mushafDark-activeLine rounded transition-colors" data-line="3">
+<span class="text-[10px] text-mushafDark-ayahNum/80 font-sans ml-1 select-none">٣</span>
+<span>مَا حَوْلَهٗ ذَهَبَ اللّٰهُ بِنُوْرِهِمْ وَ تَرَكَهُمْ فِیْ ظُلُمٰتٍ لَّا يُبْصِرُوْنَ</span>
+<span class="quran-ayah-symbol">۝۱۷</span>
+</div>
+<!-- Line 4 -->
+<div class="flex items-center justify-center gap-1 border-b border-outline-variant/20 py-0.5 hover:bg-mushafDark-activeLine rounded transition-colors" data-line="4">
+<span class="text-[10px] text-mushafDark-ayahNum/80 font-sans ml-1 select-none">٤</span>
+<span>صُمٌّۢ بُكْمٌ عُمْیٌ فَهُمْ لَا يَرْجِعُوْنَ</span>
+<span class="quran-ayah-symbol">۝۱۸</span>
+<span>اَوْ كَصَيِّبٍ مِّنَ السَّمَآءِ</span>
+</div>
+<!-- Line 5 -->
+<div class="flex items-center justify-center gap-1 border-b border-outline-variant/20 py-0.5 hover:bg-mushafDark-activeLine rounded transition-colors" data-line="5">
+<span class="text-[10px] text-mushafDark-ayahNum/80 font-sans ml-1 select-none">٥</span>
+<span>فِیْهِ ظُلُمٰتٌ وَّ رَعْدٌ وَّ بَرْقٌۚ- يَجْعَلُوْنَ اَصَابِعَهُمْ فِیْۤ اٰذَانِهِمْ</span>
+</div>
+<!-- Line 6 -->
+<div class="flex items-center justify-center gap-1 border-b border-outline-variant/20 py-0.5 hover:bg-mushafDark-activeLine rounded transition-colors" data-line="6">
+<span class="text-[10px] text-mushafDark-ayahNum/80 font-sans ml-1 select-none">٦</span>
+<span>مِّنَ الصَّوَاعِقِ حَذَرَ الْمَوْتِؕ- وَ اللّٰهُ مُحِیْطٌۢ بِالْكٰفِرِیْنَ</span>
+<span class="quran-ayah-symbol">۝۱۹</span>
+</div>
+<!-- Line 7 -->
+<div class="flex items-center justify-center gap-1 border-b border-outline-variant/20 py-0.5 hover:bg-mushafDark-activeLine rounded transition-colors" data-line="7">
+<span class="text-[10px] text-mushafDark-ayahNum/80 font-sans ml-1 select-none">٧</span>
+<span>يَكَادُ الْبَرْقُ يَخْطَفُ اَبْصَارَهُمْؕ- كُلَّمَآ اَضَآءَ لَهُمْ مَّشَوْا فِیْهِۗ-</span>
+</div>
+<!-- Line 8 -->
+<div class="flex items-center justify-center gap-1 border-b border-outline-variant/20 py-0.5 hover:bg-mushafDark-activeLine rounded transition-colors" data-line="8">
+<span class="text-[10px] text-mushafDark-ayahNum/80 font-sans ml-1 select-none">٨</span>
+<span>وَ اِذَآ اَظْلَمَ عَلَيْهِمْ قَامُوْاؕ- وَ لَوْ شَآءَ اللّٰهُ لَذَهَبَ بِسَمْعِهِمْ</span>
+</div>
+<!-- Line 9 -->
+<div class="flex items-center justify-center gap-1 border-b border-outline-variant/20 py-0.5 hover:bg-mushafDark-activeLine rounded transition-colors" data-line="9">
+<span class="text-[10px] text-mushafDark-ayahNum/80 font-sans ml-1 select-none">٩</span>
+<span>وَ اَبْصَارِهِمْؕ- اِنَّ اللّٰهَ عَلٰی كُلِّ شَیْءٍ قَدِیْرٌ۠</span>
+<span class="quran-ayah-symbol">۝۲۰</span>
+</div>
+<!-- Line 10 -->
+<div class="flex items-center justify-center gap-1 border-b border-outline-variant/20 py-0.5 hover:bg-mushafDark-activeLine rounded transition-colors" data-line="10">
+<span class="text-[10px] text-mushafDark-ayahNum/80 font-sans ml-1 select-none">١٠</span>
+<span class="text-[#f5ce75] font-bold">يٰۤاَيُّهَا النَّاسُ اعْبُدُوْا رَبَّكُمُ الَّذِیْ خَلَقَكُمْ</span>
+</div>
+<!-- Line 11 -->
+<div class="flex items-center justify-center gap-1 border-b border-outline-variant/20 py-0.5 hover:bg-mushafDark-activeLine rounded transition-colors" data-line="11">
+<span class="text-[10px] text-mushafDark-ayahNum/80 font-sans ml-1 select-none">١١</span>
+<span>وَ الَّذِیْنَ مِنْ قَبْلِكُمْ لَعَلَّكُمْ تَتَّقُوْنَۙ</span>
+<span class="quran-ayah-symbol">۝۲۱</span>
+</div>
+<!-- Line 12 -->
+<div class="flex items-center justify-center gap-1 border-b border-outline-variant/20 py-0.5 hover:bg-mushafDark-activeLine rounded transition-colors" data-line="12">
+<span class="text-[10px] text-mushafDark-ayahNum/80 font-sans ml-1 select-none">١٢</span>
+<span>الَّذِیْ جَعَلَ لَكُمُ الْاَرْضَ فِرَاشًا وَّ السَّمَآءَ بِنَآءً۪-</span>
+</div>
+<!-- Line 13 -->
+<div class="flex items-center justify-center gap-1 border-b border-outline-variant/20 py-0.5 hover:bg-mushafDark-activeLine rounded transition-colors" data-line="13">
+<span class="text-[10px] text-mushafDark-ayahNum/80 font-sans ml-1 select-none">١٣</span>
+<span>وَّ اَنْزَلَ مِنَ السَّمَآءِ مَآءً فَاَخْرَجَ بِهٖ مِنَ الثَّمَرٰتِ رِزْقًا لَّكُمْۚ-</span>
+</div>
+<!-- Line 14 -->
+<div class="flex items-center justify-center gap-1 border-b border-outline-variant/20 py-0.5 hover:bg-mushafDark-activeLine rounded transition-colors" data-line="14">
+<span class="text-[10px] text-mushafDark-ayahNum/80 font-sans ml-1 select-none">١٤</span>
+<span>فَلَا تَجْعَلُوْا لِلّٰهِ اَنْدَادًا وَّ اَنْتُمْ تَعْلَمُوْنَ</span>
+<span class="quran-ayah-symbol">۝۲۲</span>
+</div>
+<!-- Line 15 -->
+<div class="flex items-center justify-center gap-1 py-0.5 hover:bg-mushafDark-activeLine rounded transition-colors" data-line="15">
+<span class="text-[10px] text-mushafDark-ayahNum/80 font-sans ml-1 select-none">١٥</span>
+<span>وَ اِنْ كُنْتُمْ فِیْ رَيْبٍ مِّمَّا نَزَّلْنَا عَلٰی عَبْدِنَا فَاْتُوْا بِسُوْرَةٍ</span>
+<span class="quran-ayah-symbol">۝۲۳</span>
+</div>
+</div>
+<!-- Page Footer Inscription (Manzil, Page, Ruku) -->
+<div class="mt-2 pt-1.5 border-t border-mushafDark-borderOuter/80 flex items-center justify-between text-[11px] text-[#dec38c] font-medium font-sans">
+<span>منزل ۱</span>
+<span class="font-bold text-[#eed092]">Page 4 of 610</span>
+<span>Medinan • ركوع ۲</span>
+</div>
+</div>
+</section>
+<!-- END: Canonical 15-Line Mushaf Page Container -->
+<!-- BEGIN: Pagination Controls -->
+<div class="bg-surface-container rounded-xl p-2.5 shadow-sm border border-outline-variant/40 flex items-center justify-between gap-2">
+<!-- Previous Page -->
+<button class="flex-1 py-2 px-2.5 rounded-lg border border-outline-variant/40 text-on-surface bg-surface-container-low text-xs font-semibold flex items-center justify-center gap-1 hover:bg-surface-container-high active:scale-95 transition-all" type="button">
+<svg class="w-4 h-4 text-outline" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Previous (3)</span>
+</button>
+<!-- Jump Form -->
+<div class="flex items-center gap-1 text-xs">
+<span class="text-on-surface-variant text-[11px]">Page:</span>
+<input class="w-12 text-center py-1 text-xs font-bold text-on-surface bg-surface-container-lowest border border-outline-variant/50 rounded focus:ring-primary focus:border-primary" max="610" min="1" type="number" value="4"/>
+<span class="text-outline text-[11px]">/ 610</span>
+<button class="bg-primary text-on-primary font-bold text-[11px] px-2.5 py-1 rounded hover:bg-primary-fixed-dim transition-colors">Go</button>
+</div>
+<!-- Next Page -->
+<button class="flex-1 py-2 px-2.5 rounded-lg border border-outline-variant/40 text-on-surface bg-surface-container-low text-xs font-semibold flex items-center justify-center gap-1 hover:bg-surface-container-high active:scale-95 transition-all" type="button">
+<span>Next (5)</span>
+<svg class="w-4 h-4 text-outline" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<!-- END: Pagination Controls -->
+</main>
+<!-- END: Main Quran Content -->
+<!-- BEGIN: Sticky Mobile Bottom Navigation -->
+<nav aria-label="Madrasa ERP Navigation" class="fixed bottom-0 inset-x-0 bg-surface-container-low border-t border-outline-variant/40 py-1.5 px-3 z-50 shadow-2xl backdrop-blur-md">
+<div class="max-w-md mx-auto grid grid-cols-5 gap-1 text-center">
+<!-- 1. Executive Dashboard -->
+<a class="flex flex-col items-center justify-center py-1 text-on-surface-variant hover:text-on-surface transition-colors" href="#">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M4 5a1 1 0 011-1h4a1 1 0 011 1v5a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v2a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM4 15a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1H5a1 1 0 01-1-1v-4zM14 12a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1v-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-[10px] mt-1 font-medium">Dashboard</span>
+</a>
+<!-- 2. Students & Sabaq -->
+<a class="flex flex-col items-center justify-center py-1 text-on-surface-variant hover:text-on-surface transition-colors" href="#">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-[10px] mt-1 font-medium">Students</span>
+</a>
+<!-- 3. Holy Quran Mushaf (Active) -->
+<a class="flex flex-col items-center justify-center py-1 text-primary font-bold transition-colors relative" href="#">
+<div class="w-8 h-8 rounded-full bg-secondary-container flex items-center justify-center text-primary-fixed mb-0.5 border border-primary/30 shadow-sm">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<span class="text-[10px]">Holy Quran</span>
+</a>
+<!-- 4. Fees & Accounts -->
+<a class="flex flex-col items-center justify-center py-1 text-on-surface-variant hover:text-on-surface transition-colors" href="#">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 14l6-6m-5.5.5h.01m4.99 5h.01M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16l3.5-2 3.5 2 3.5-2 3.5 2zM10 8.5a.5.5 0 11-1 0 .5.5 0 011 0zm5 5a.5.5 0 11-1 0 .5.5 0 011 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-[10px] mt-1 font-medium">Fees</span>
+</a>
+<!-- 5. All Menu / Drawer -->
+<a class="flex flex-col items-center justify-center py-1 text-on-surface-variant hover:text-on-surface transition-colors" href="#">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-[10px] mt-1 font-medium">Menu</span>
+</a>
+</div>
+</nav>
+<!-- END: Sticky Mobile Bottom Navigation -->
+</body></html>

@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+
+<html class="dark" dir="ltr" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Roznamcha (Sabaq) Register - Jamia Zia Ul Quran Trust</title>
+<!-- Tailwind CSS CDN with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              DEFAULT: '#1978e5',
+              dark: '#0f52a3',
+              light: '#4090fe'
+            },
+            institutional: {
+              DEFAULT: '#1978e5',
+              dark: '#0d1117',
+              light: '#1e293b',
+              tint: '#142844',
+              accent: '#d4af37'
+            }
+          },
+          fontFamily: {
+            sans: ['"Inter"', '"Plus Jakarta Sans"', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+            urdu: ['"Amiri"', '"Noto Nastaliq Urdu"', '"Jameel Noori Nastaleeq"', 'serif']
+          },
+          borderRadius: {
+            'custom': '8px'
+          }
+        }
+      }
+    };
+  </script>
+<!-- Google Fonts: Inter & Amiri for Urdu typography -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<style data-purpose="base-styling">
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #0b0e14;
+      color: #e0e2eb;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .font-urdu {
+      font-family: 'Amiri', 'Noto Nastaliq Urdu', serif;
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-[#0b0e14] text-[#e0e2eb] pb-24 select-none">
+<!-- BEGIN: InstitutionalHeader -->
+<header class="sticky top-0 z-40 bg-[#10131a] text-white border-b border-[#2d3340] shadow-md">
+<!-- Top System Meta Ribbon -->
+<div class="px-3.5 py-1.5 bg-[#0b0e14] flex items-center justify-between text-[10px] font-medium tracking-tight text-slate-300 border-b border-[#2d3340]/60">
+<div class="flex items-center space-x-1.5 truncate">
+<span class="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+<span class="font-semibold text-white">28 Rabi' al-Awwal 1448 AH</span>
+<span class="text-slate-600">|</span>
+<span class="text-slate-400">11 Sept 2026</span>
+</div>
+<div class="flex items-center space-x-2 shrink-0">
+<div class="flex items-center space-x-1 bg-[#181c22] px-2 py-0.5 rounded text-[9px] text-slate-300 border border-[#2d3340]">
+<svg class="w-3 h-3 text-amber-400" fill="currentColor" viewbox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"></path></svg>
+<span>Fajr: 05:00 AM</span>
+</div>
+<span class="flex items-center text-emerald-400 text-[9px]">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1"></span> Synced
+</span>
+</div>
+</div>
+<!-- Campus & Nazim Profile Bar -->
+<div class="px-3.5 py-2.5 flex items-center justify-between">
+<div class="flex items-center space-x-2.5 min-w-0">
+<div class="w-9 h-9 rounded-lg bg-[#181c22] border border-[#2d3340] flex items-center justify-center shrink-0 text-amber-300 font-bold text-xs shadow-inner">
+<span class="font-urdu text-base font-bold leading-none">جامعہ</span>
+</div>
+<div class="truncate">
+<div class="flex items-center space-x-1.5">
+<h1 class="font-bold text-xs leading-tight tracking-tight uppercase truncate text-white">Jamia Zia Ul Quran</h1>
+<span class="text-[9px] bg-[#1e293b] text-sky-300 px-1.5 py-0.5 rounded font-medium border border-sky-800/60 shrink-0">JDH-01</span>
+</div>
+<p class="text-[10px] text-slate-400 truncate">Jonnalagadda X Road • Commercial ERP</p>
+</div>
+</div>
+<!-- Right User Controls -->
+<div class="flex items-center space-x-2 shrink-0">
+<div class="text-right">
+<p class="text-[11px] font-semibold text-white leading-tight">Mufti M. Asif</p>
+<p class="text-[9px] text-[#aac7ff] font-medium">Principal / Nazim</p>
+</div>
+<div class="w-7 h-7 rounded-full bg-[#1978e5] border border-sky-300/40 flex items-center justify-center text-[10px] font-bold text-white shadow-sm">
+  M
+</div>
+</div>
+</div>
+</header>
+<!-- END: InstitutionalHeader -->
+<!-- BEGIN: MainContent -->
+<main class="px-3.5 py-3 space-y-3.5 max-w-md mx-auto">
+<!-- BEGIN: BannerAndKPIs -->
+<section class="bg-[#181c22] rounded-lg border border-[#2d3340] p-3.5 shadow-sm" data-purpose="page-title-card">
+<div class="flex items-start justify-between gap-3">
+<div class="flex items-start space-x-2.5">
+<div class="w-9 h-9 rounded-lg bg-[#142844] border border-[#1978e5]/40 flex items-center justify-center text-[#aac7ff] shrink-0 mt-0.5">
+<!-- Quran / Book Icon -->
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div>
+<div class="flex items-baseline space-x-1.5">
+<h2 class="text-sm font-bold text-white tracking-tight leading-snug">Roznamcha for Hifz</h2>
+<span class="text-xs font-urdu font-bold text-[#aac7ff]">(روزنامچہ حفظ)</span>
+</div>
+<p class="text-[11px] text-slate-400 mt-0.5 leading-relaxed">
+              Hifz daily &amp; monthly roznamcha with sabaq, sabaq parah, mistakes and amookhta.
+            </p>
+</div>
+</div>
+</div>
+<!-- Quick KPI Strip -->
+<div class="grid grid-cols-2 gap-2 mt-3 pt-3 border-t border-[#2d3340]">
+<div class="flex items-center space-x-2 bg-[#22262f] border border-[#2d3340] rounded-lg px-2.5 py-1.5">
+<div class="w-6 h-6 rounded-md bg-[#1978e5]/20 text-[#aac7ff] flex items-center justify-center shrink-0">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<p class="text-[9px] font-semibold text-slate-400 uppercase tracking-wider">Enrolled</p>
+<p class="text-xs font-bold text-white">1 Student</p>
+</div>
+</div>
+<div class="flex items-center space-x-2 bg-[#22262f] border border-[#2d3340] rounded-lg px-2.5 py-1.5">
+<div class="w-6 h-6 rounded-md bg-amber-500/20 text-amber-300 flex items-center justify-center shrink-0">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<div>
+<p class="text-[9px] font-semibold text-slate-400 uppercase tracking-wider">Department</p>
+<p class="text-xs font-bold text-white">Hifz Section</p>
+</div>
+</div>
+</div>
+</section>
+<!-- END: BannerAndKPIs -->
+<!-- BEGIN: ViewSwitchAndActions -->
+<section class="space-y-2" data-purpose="view-and-actions">
+<!-- Register Mode Segmented Buttons -->
+<div class="grid grid-cols-2 gap-1.5 bg-[#10131a] p-1 rounded-lg border border-[#2d3340]">
+<button class="py-1.5 px-2 rounded-md text-xs font-bold bg-[#1978e5] text-white shadow-sm flex items-center justify-center space-x-1.5 transition" type="button">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Daily Class Register</span>
+</button>
+<button class="py-1.5 px-2 rounded-md text-xs font-semibold text-slate-400 hover:text-white bg-[#181c22]/50 hover:bg-[#181c22] flex items-center justify-center space-x-1.5 transition" type="button">
+<svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Monthly Register</span>
+</button>
+</div>
+<!-- Action Toolbar (CSV, Print, Save) -->
+<div class="flex items-center space-x-2">
+<button class="flex-1 py-1.5 px-2 bg-[#181c22] hover:bg-[#22262f] border border-[#2d3340] rounded-lg text-[11px] font-semibold text-slate-300 flex items-center justify-center space-x-1 shadow-xs transition" type="button">
+<svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Export</span>
+</button>
+<button class="flex-1 py-1.5 px-2 bg-[#181c22] hover:bg-[#22262f] border border-[#2d3340] rounded-lg text-[11px] font-semibold text-slate-300 flex items-center justify-center space-x-1 shadow-xs transition" type="button">
+<svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Print</span>
+</button>
+<button class="flex-1 py-1.5 px-2 bg-[#1978e5] hover:bg-[#1668c7] text-white rounded-lg text-[11px] font-semibold flex items-center justify-center space-x-1 shadow-xs transition" type="button">
+<svg class="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Save Entry</span>
+</button>
+</div>
+</section>
+<!-- END: ViewSwitchAndActions -->
+<!-- BEGIN: FilterAndSelectors -->
+<section class="bg-[#181c22] rounded-lg border border-[#2d3340] p-3 space-y-2.5 shadow-sm" data-purpose="class-and-student-selectors">
+<div class="grid grid-cols-1 gap-2.5">
+<!-- Class Selector -->
+<div>
+<label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Select Class / درجہ</label>
+<div class="relative">
+<select class="w-full text-xs font-semibold text-white bg-[#22262f] border border-[#2d3340] rounded-lg px-2.5 py-2 appearance-none focus:outline-none focus:ring-1 focus:ring-[#1978e5]">
+<option selected="">قاعدہ و ناظرہ (الف) - Qaida &amp; Nazira A</option>
+<option>حفظ قرآن (سال اول) - Hifz 1st Year</option>
+<option>حفظ قرآن (سال دوم) - Hifz 2nd Year</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-400">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+</div>
+</div>
+<!-- Student Selector -->
+<div>
+<label class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Student / نام طالب علم</label>
+<div class="relative">
+<select class="w-full text-xs font-semibold text-white bg-[#22262f] border border-[#2d3340] rounded-lg px-2.5 py-2 appearance-none focus:outline-none focus:ring-1 focus:ring-[#1978e5]">
+<option selected="">Pathan Mohamamd Khan (ZIA-21-002)</option>
+<option>All Students Summary Matrix</option>
+</select>
+<div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-slate-400">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+</div>
+</div>
+</div>
+<!-- Template Switcher & Month Navigation -->
+<div class="flex items-center justify-between pt-1 gap-2 border-t border-[#2d3340]">
+<!-- Template switch chips -->
+<div class="flex items-center space-x-1 text-[11px]">
+<span class="text-[10px] font-semibold text-slate-400 mr-0.5">Type:</span>
+<span class="px-2 py-0.5 rounded-md bg-[#1978e5] text-white font-bold text-[10px]">Auto</span>
+<span class="px-1.5 py-0.5 rounded-md text-slate-300 bg-[#22262f] font-medium text-[10px] border border-[#2d3340]">Hifz</span>
+<span class="px-1.5 py-0.5 rounded-md text-slate-300 bg-[#22262f] font-medium text-[10px] border border-[#2d3340] truncate max-w-[65px]">Nazira</span>
+</div>
+<!-- Month selector pills -->
+<div class="flex items-center space-x-1 bg-[#22262f] p-0.5 rounded-lg border border-[#2d3340]">
+<button class="w-6 h-6 flex items-center justify-center text-slate-400 hover:text-white">
+<svg class="w-3 h-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M15 19l-7-7 7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="text-center px-1">
+<p class="text-[10px] font-bold text-white leading-tight">Sep 2026</p>
+<p class="text-[8px] text-slate-400 leading-none">26 Days</p>
+</div>
+<button class="w-6 h-6 flex items-center justify-center text-slate-400 hover:text-white">
+<svg class="w-3 h-3" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 5l7 7-7 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+</div>
+</section>
+<!-- END: FilterAndSelectors -->
+<!-- BEGIN: WorkingDaySelectorRibbon -->
+<section class="bg-[#181c22] rounded-lg border border-[#2d3340] p-3 shadow-sm" data-purpose="date-scroll-ribbon">
+<div class="flex items-center justify-between mb-2">
+<span class="text-xs font-bold text-slate-200 flex items-center">
+<svg class="w-3.5 h-3.5 text-[#1978e5] mr-1" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+Select Day:
+</span>
+<span class="text-[11px] font-bold text-[#aac7ff] bg-[#142844] px-2 py-0.5 rounded border border-[#1978e5]/40">
+Day 4 • Fri, 11 Sep 2026
+</span>
+</div>
+<!-- Horizontal scrollable Day Pills -->
+<div class="flex items-center space-x-1.5 overflow-x-auto no-scrollbar py-1 text-center">
+<!-- Days 1 to 3 -->
+<button class="w-8 h-8 rounded-lg shrink-0 bg-[#22262f] hover:bg-[#2c323e] text-xs font-semibold text-slate-300 border border-[#2d3340] flex flex-col items-center justify-center">
+<span class="text-[10px] font-bold">1</span>
+</button>
+<button class="w-8 h-8 rounded-lg shrink-0 bg-[#22262f] hover:bg-[#2c323e] text-xs font-semibold text-slate-300 border border-[#2d3340] flex flex-col items-center justify-center">
+<span class="text-[10px] font-bold">2</span>
+</button>
+<button class="w-8 h-8 rounded-lg shrink-0 bg-[#22262f] hover:bg-[#2c323e] text-xs font-semibold text-slate-300 border border-[#2d3340] flex flex-col items-center justify-center">
+<span class="text-[10px] font-bold">3</span>
+</button>
+<!-- Day 4 Active (Friday / Jumu'ah special) -->
+<button class="w-9 h-9 rounded-lg shrink-0 bg-[#1978e5] text-white text-xs font-bold ring-2 ring-sky-400/40 flex flex-col items-center justify-center shadow-md">
+<span class="text-xs font-bold leading-none">4</span>
+<span class="text-[8px] font-semibold text-sky-100 uppercase">Fri</span>
+</button>
+<!-- Days 5 onwards -->
+<button class="w-8 h-8 rounded-lg shrink-0 bg-[#22262f] text-xs font-semibold text-slate-300 border border-[#2d3340] flex items-center justify-center">5</button>
+<button class="w-8 h-8 rounded-lg shrink-0 bg-[#22262f] text-xs font-semibold text-slate-300 border border-[#2d3340] flex items-center justify-center">6</button>
+<button class="w-8 h-8 rounded-lg shrink-0 bg-[#22262f] text-xs font-semibold text-slate-300 border border-[#2d3340] flex items-center justify-center">7</button>
+<button class="w-8 h-8 rounded-lg shrink-0 bg-[#22262f] text-xs font-semibold text-slate-300 border border-[#2d3340] flex items-center justify-center">8</button>
+<button class="w-8 h-8 rounded-lg shrink-0 bg-[#22262f] text-xs font-semibold text-slate-300 border border-[#2d3340] flex items-center justify-center">9</button>
+<button class="w-8 h-8 rounded-lg shrink-0 bg-[#22262f] text-xs font-semibold text-slate-300 border border-[#2d3340] flex items-center justify-center">10</button>
+<button class="w-8 h-8 rounded-lg shrink-0 bg-rose-950/40 text-xs font-semibold text-rose-300 border border-rose-800/60 flex items-center justify-center">11</button>
+<button class="w-8 h-8 rounded-lg shrink-0 bg-[#22262f] text-xs font-semibold text-slate-300 border border-[#2d3340] flex items-center justify-center">12</button>
+<button class="w-8 h-8 rounded-lg shrink-0 bg-[#22262f] text-xs font-semibold text-slate-300 border border-[#2d3340] flex items-center justify-center">13</button>
+<button class="w-8 h-8 rounded-lg shrink-0 bg-[#22262f] text-xs font-semibold text-slate-300 border border-[#2d3340] flex items-center justify-center">14</button>
+<button class="w-8 h-8 rounded-lg shrink-0 bg-rose-950/40 text-xs font-semibold text-rose-300 border border-rose-800/60 flex items-center justify-center">18</button>
+<button class="w-8 h-8 rounded-lg shrink-0 bg-rose-950/40 text-xs font-semibold text-rose-300 border border-rose-800/60 flex items-center justify-center">25</button>
+<button class="w-8 h-8 rounded-lg shrink-0 bg-[#22262f] text-xs font-semibold text-slate-300 border border-[#2d3340] flex items-center justify-center">30</button>
+</div>
+</section>
+<!-- END: WorkingDaySelectorRibbon -->
+<!-- BEGIN: SabaqEntryCard -->
+<section class="bg-[#181c22] rounded-lg border border-[#2d3340] shadow-sm overflow-hidden" data-purpose="sabaq-daily-record-card">
+<!-- Student Card Header -->
+<div class="px-3.5 py-3 bg-[#22262f] border-b border-[#2d3340] flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<div class="w-8 h-8 rounded-full bg-[#1978e5] text-white flex items-center justify-center font-bold text-xs shadow-inner">
+  PK
+</div>
+<div>
+<div class="flex items-center space-x-1.5">
+<h3 class="text-xs font-bold text-white leading-tight">Pathan Mohamamd Khan</h3>
+</div>
+<p class="text-[10px] text-slate-400 font-mono">Adm: ZIA-21-002 • Roll #21-002</p>
+</div>
+</div>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-950/70 text-emerald-300 border border-emerald-700/60">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1"></span> حاضر (Present)
+</span>
+</div>
+<!-- Sabaq Details Form Grid -->
+<div class="p-3.5 space-y-3">
+<!-- Sabaq & Sabaq Parah Row -->
+<div class="grid grid-cols-2 gap-2.5">
+<!-- Sabaq Lesson -->
+<div class="p-2.5 rounded-lg bg-[#22262f] border border-[#2d3340]">
+<span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">سبق (Sabaq)</span>
+<div class="mt-1 flex items-baseline justify-between">
+<span class="font-urdu text-lg font-bold text-white tracking-wide">تختی نمبر 3</span>
+<span class="text-[10px] text-slate-400 font-medium">Lesson #3</span>
+</div>
+</div>
+<!-- Sabaq Parah / Quantity -->
+<div class="p-2.5 rounded-lg bg-[#22262f] border border-[#2d3340]">
+<span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">سبق پارہ (Quantity)</span>
+<div class="mt-1 flex items-baseline justify-between">
+<span class="font-urdu text-base font-bold text-white tracking-wide">(1/2 Para) نصف پارہ</span>
+</div>
+</div>
+</div>
+<!-- Sabaq Errors & Listener Row -->
+<div class="grid grid-cols-2 gap-2.5">
+<!-- Errors count -->
+<div class="p-2.5 rounded-lg bg-[#22262f] border border-[#2d3340]">
+<span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">غلطیاں (Errors)</span>
+<div class="mt-1 flex items-center justify-between">
+<span class="text-sm font-bold text-white">0 Mistake</span>
+<span class="w-5 h-5 rounded-full bg-emerald-950/80 text-emerald-300 text-[10px] font-bold flex items-center justify-center border border-emerald-700/60">0</span>
+</div>
+</div>
+<!-- Listener Teacher -->
+<div class="p-2.5 rounded-lg bg-[#22262f] border border-[#2d3340]">
+<span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">سامع (Listener)</span>
+<div class="mt-1 flex items-center justify-between">
+<span class="font-urdu text-base font-bold text-white tracking-wide">مولانا فاروق</span>
+<span class="text-[9px] bg-[#181c22] border border-[#2d3340] px-1.5 py-0.5 rounded text-slate-300">Ustadh</span>
+</div>
+</div>
+</div>
+<!-- Amookhta (Manzil Revision) Box -->
+<div class="p-2.5 rounded-lg bg-[#142844]/30 border border-[#1978e5]/40">
+<div class="flex items-center justify-between mb-1">
+<span class="text-[10px] font-bold text-slate-300 uppercase tracking-wider">آمُوختہ / کیفیت درس (Revision &amp; Quality)</span>
+<span class="text-[9px] text-sky-300 font-bold bg-[#142844] px-1.5 py-0.5 rounded border border-sky-600/50">Tajweed Check</span>
+</div>
+<p class="font-urdu text-base font-bold text-emerald-200 text-right leading-relaxed tracking-wide">
+روانگی مع تجوید درست ہے
+</p>
+<p class="text-[10px] text-slate-400 mt-0.5">Recitation fluidity and Tajweed articulation evaluated accurate.</p>
+</div>
+<!-- Performance Grade & Evaluation Row -->
+<div class="flex items-center justify-between p-2.5 rounded-lg bg-[#22262f] border border-[#2d3340]">
+<div>
+<span class="block text-[10px] font-bold text-slate-400 uppercase tracking-wider">معیار / درجہ (Grade)</span>
+<span class="text-xs font-bold text-white">Mumtaz (Excellent)</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="font-urdu text-sm font-bold text-emerald-300 bg-emerald-950/80 border border-emerald-700/60 px-2.5 py-0.5 rounded">
+ممتاز
+</span>
+<button class="text-[11px] font-bold text-[#aac7ff] bg-[#181c22] hover:bg-[#2c323e] border border-[#2d3340] px-2.5 py-1 rounded-md transition shadow-2xs">
+Edit
+</button>
+</div>
+</div>
+</div>
+<!-- Quick Remarks Footer -->
+<div class="px-3.5 py-2 bg-[#10131a] border-t border-[#2d3340] flex items-center justify-between text-[11px] text-slate-400">
+<span class="truncate">Entry recorded by: <strong class="text-white">Molana Farooq</strong></span>
+<span class="font-medium text-slate-400 shrink-0">11:30 AM</span>
+</div>
+</section>
+<!-- END: SabaqEntryCard -->
+<!-- BEGIN: AcademicProgressSummary -->
+<section class="bg-[#181c22] rounded-lg border border-[#2d3340] p-3 space-y-2.5 shadow-sm" data-purpose="monthly-cumulative-metrics">
+<div class="flex items-center justify-between border-b border-[#2d3340] pb-2">
+<h4 class="text-xs font-bold text-white flex items-center">
+<svg class="w-3.5 h-3.5 text-slate-400 mr-1.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+Monthly &amp; Academic Metrics
+</h4>
+<span class="text-[9px] font-semibold text-amber-300 bg-amber-950/60 px-1.5 py-0.5 rounded border border-amber-800/60">Ramzan to Ramzan</span>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<!-- Work Days -->
+<div class="p-2 rounded-lg bg-[#22262f] border border-[#2d3340]">
+<span class="text-[9px] font-bold text-slate-400 font-urdu block">ایام درس (ماہانہ)</span>
+<p class="text-xs font-bold text-white">26 Days</p>
+<span class="text-[8px] text-slate-400">Monthly Working Days</span>
+</div>
+<!-- Monthly Present -->
+<div class="p-2 rounded-lg bg-[#22262f] border border-[#2d3340]">
+<span class="text-[9px] font-bold text-slate-400 font-urdu block">ایام حاضری (ماہانہ)</span>
+<p class="text-xs font-bold text-emerald-400">1 Day</p>
+<span class="text-[8px] text-slate-400">Monthly Present Count</span>
+</div>
+<!-- Hijri Academic Total -->
+<div class="p-2 rounded-lg bg-[#22262f] border border-[#2d3340]">
+<span class="text-[9px] font-bold text-slate-400 font-urdu block">ایام درس (رمضان تا رمضان)</span>
+<p class="text-xs font-bold text-white">144 Days</p>
+<span class="text-[8px] text-slate-400">Hijri Academic Total</span>
+</div>
+<!-- Hifz Progress -->
+<div class="p-2 rounded-lg bg-[#22262f] border border-[#2d3340]">
+<span class="text-[9px] font-bold text-slate-400 font-urdu block">حفظ پیش رفت</span>
+<p class="text-xs font-bold text-[#aac7ff]">3% (14 / 30 Paras)</p>
+<span class="text-[8px] text-slate-400">Total Quran Completed</span>
+</div>
+</div>
+</section>
+<!-- END: AcademicProgressSummary -->
+</main>
+<!-- END: MainContent -->
+<!-- BEGIN: BottomNavigation -->
+<nav class="fixed bottom-0 inset-x-0 bg-[#10131a] border-t border-[#2d3340] z-50 px-2 py-1.5 shadow-2xl" data-purpose="mobile-bottom-nav">
+<div class="max-w-md mx-auto grid grid-cols-5 gap-1 text-center">
+<!-- Dashboard -->
+<a class="flex flex-col items-center justify-center py-1 text-slate-400 hover:text-slate-200" href="#">
+<svg class="w-4 h-4 mb-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6zM16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="text-[9px] font-medium leading-none">Dashboard</span>
+</a>
+<!-- Students -->
+<a class="flex flex-col items-center justify-center py-1 text-slate-400 hover:text-slate-200" href="#">
+<svg class="w-4 h-4 mb-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="text-[9px] font-medium leading-none">Students</span>
+</a>
+<!-- Sabaq (Active in Royal Blue #1978e5) -->
+<a class="flex flex-col items-center justify-center py-1 text-[#1978e5]" href="#">
+<div class="w-4 h-4 mb-0.5 relative flex items-center justify-center">
+<svg class="w-4 h-4 text-[#1978e5]" fill="currentColor" viewbox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9v-2h2v2zm0-4H9V7h2v5zm4 4h-2v-2h2v2zm0-4h-2V7h2v5z"></path></svg>
+<span class="absolute -top-1 -right-1.5 w-2 h-2 bg-sky-400 rounded-full"></span>
+</div>
+<span class="text-[9px] font-bold leading-none text-[#1978e5]">Roznamcha</span>
+</a>
+<!-- Attendance -->
+<a class="flex flex-col items-center justify-center py-1 text-slate-400 hover:text-slate-200" href="#">
+<svg class="w-4 h-4 mb-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="text-[9px] font-medium leading-none">Attendance</span>
+</a>
+<!-- Menu / More -->
+<a class="flex flex-col items-center justify-center py-1 text-slate-400 hover:text-slate-200" href="#">
+<svg class="w-4 h-4 mb-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span class="text-[9px] font-medium leading-none">Menu</span>
+</a>
+</div>
+</nav>
+<!-- END: BottomNavigation -->
+</body></html>

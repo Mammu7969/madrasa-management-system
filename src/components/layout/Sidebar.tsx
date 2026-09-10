@@ -186,7 +186,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
       <aside 
         className={`${
           isCollapsed ? 'w-20' : 'w-64'
-        } bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 shadow-sm rounded-2xl m-2.5 flex flex-col h-[calc(100vh-1.25rem)] sticky top-2.5 select-none shrink-0 transition-all duration-300 no-print overflow-hidden z-20`}
+        } bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 shadow-sm rounded-2xl m-2.5 hidden lg:flex flex-col h-[calc(100vh-1.25rem)] sticky top-2.5 select-none shrink-0 transition-all duration-300 no-print overflow-hidden z-20`}
       >
         {/* Top Header: Madrasa Logo / Emblem + Title */}
         <div className="p-3 pb-2 flex items-center justify-between border-b border-slate-100 dark:border-slate-800">

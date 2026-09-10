@@ -122,48 +122,48 @@
 }
 
 /* ==========================================================================
-   HIGH-CONTRAST DARK THEME TOKENS
+   FIDELITY DARK SYSTEM TOKENS (src/theme)
    ========================================================================== */
 [data-theme=dark],
 .dark {
-  /* Surface & Background */
-  --app-bg: #0B1120;
-  --surface: rgba(30, 41, 59, 0.78);
-  --surface-strong: rgba(30, 41, 59, 0.92);
-  --surface-glass: rgba(15, 23, 42, 0.82);
-  --topbar-bg: rgba(15, 23, 42, 0.88);
-  --sidebar-bg: rgba(15, 23, 42, 0.92);
-  --modal-bg: rgba(24, 34, 52, 0.98);
+  /* Surface & Background — Fidelity Dark System */
+  --app-bg: #0b0e14;
+  --surface: #181c22;
+  --surface-strong: #1e232b;
+  --surface-glass: rgba(16, 19, 26, 0.95);
+  --topbar-bg: #10131a;
+  --sidebar-bg: #10131a;
+  --modal-bg: #181c22;
 
-  /* High Contrast Typography */
-  --text-primary: #F8FAFC;
-  --text-secondary: #CBD5E1;
-  --text-muted: #94A3B8;
+  /* Typography */
+  --text-primary: #e0e2eb;
+  --text-secondary: #c1c6d5;
+  --text-muted: #8b919f;
 
   /* Brand & Accents */
-  --primary: #10B981;
-  --primary-strong: #059669;
-  --secondary: #38BDF8;
-  --blue: #38BDF8;
-  --accent: #FBBF24;
-  --purple: #A78BFA;
-  --success: #34D399;
-  --warning: #FBBF24;
-  --danger: #F87171;
+  --primary: #1978e5;
+  --primary-strong: #1275e2;
+  --secondary: #aec7f7;
+  --blue: #1978e5;
+  --accent: #d97706;
+  --purple: #8b5cf6;
+  --success: #059669;
+  --warning: #d97706;
+  --danger: #ef4444;
 
   /* Navigation */
-  --active-nav-bg: #10B981;
-  --active-nav-text: #0B1120;
+  --active-nav-bg: #1978e5;
+  --active-nav-text: #ffffff;
 
   /* Borders & Dividers */
-  --border: rgba(255, 255, 255, 0.12);
-  --border-strong: rgba(255, 255, 255, 0.22);
-  --border-luminous: rgba(255, 255, 255, 0.3);
+  --border: #2d3340;
+  --border-strong: #414753;
+  --border-luminous: #363940;
 
   /* Shadows */
-  --shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-  --shadow-gloss: 0 10px 32px 0 rgba(0, 0, 0, 0.45), inset 0 1px 1px 0 rgba(255, 255, 255, 0.1);
-  --shadow-elevated: 0 16px 40px 0 rgba(0, 0, 0, 0.6), inset 0 1px 1px 0 rgba(255, 255, 255, 0.15);
-  --shadow-btn: 0 4px 14px rgba(16, 185, 129, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  --shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  --shadow-gloss: 0 8px 24px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  --shadow-elevated: 0 12px 32px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --shadow-btn: 0 4px 12px rgba(25, 120, 229, 0.35);
 }
 

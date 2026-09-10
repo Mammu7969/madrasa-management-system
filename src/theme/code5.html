@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en" style=""><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/>
+<title>Jamia Zia Ul Quran Trust - Mobile ERP Dashboard</title>
+<!-- Tailwind CSS v3 -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        colors: {
+          surface: {
+            lowest: "#0b0e14",
+            dim: "#10131a",
+            container: "#181c22",
+            card: "#1e232b",
+            high: "#22262e",
+            variant: "#2d3340",
+            border: "#2d3340"
+          },
+          brand: {
+            blue: "#1978e5",
+            primary: "#1978e5",
+            navy: '#0b1e33',
+            dark: '#0b0e14',
+            emerald: '#059669',
+            amber: '#d97706',
+            purple: '#8b5cf6',
+            danger: '#ef4444',
+          }
+        },
+        fontFamily: {
+          sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+          arabic: ['Traditional Arabic', 'Scheherazade New', 'Amiri', 'serif']
+        }
+      }
+    }
+  }
+</script>
+<!-- Phosphor Icons -->
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<link href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/regular/style.css" rel="stylesheet" type="text/css"/>
+<link href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/bold/style.css" rel="stylesheet" type="text/css"/>
+<link href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.2/src/fill/style.css" rel="stylesheet" type="text/css"/>
+<!-- Custom Styles: iOS Scroll & Font Setup -->
+<style data-purpose="base-styling">
+    body {
+      -webkit-tap-highlight-color: transparent;
+      overscroll-behavior-y: none;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    .hide-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .hide-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .arabic-text {
+      font-family: 'Traditional Arabic', 'Scheherazade New', 'Amiri', 'Geeza Pro', serif;
+      direction: rtl;
+    }
+  </style>
+</head>
+<body class="bg-[#0b0e14] text-slate-200 antialiased min-h-screen pb-24 selection:bg-[#1978e5] selection:text-white">
+<!-- BEGIN: MobileStatusBar -->
+<div class="sticky top-0 z-40 bg-[#0b0e14]/95 backdrop-blur-md text-white pt-2 px-5 pb-2 flex items-center justify-between text-xs border-b border-[#2d3340]">
+<span class="font-medium text-slate-300">09:41</span>
+<div class="flex items-center space-x-2 text-slate-300">
+<span class="text-[11px] bg-[#1978e5]/20 text-[#8ec0ff] border border-[#1978e5]/40 px-1.5 py-0.5 rounded font-mono font-medium">JDH-01</span>
+<i class="ph ph-wifi-high text-sm"></i>
+<i class="ph ph-battery-full text-base text-[#1978e5]"></i>
+</div>
+</div>
+<!-- END: MobileStatusBar -->
+<!-- BEGIN: AppHeader -->
+<header class="bg-[#10131a] text-white px-4 pt-3 pb-4 border-b border-[#2d3340]">
+<!-- Institution Identity Row -->
+<div class="flex items-start justify-between gap-3 mb-2.5">
+<div class="flex items-center space-x-3">
+<!-- Logo Emblem -->
+<div class="relative w-11 h-11 shrink-0 rounded-xl overflow-visible shadow-sm cursor-pointer group" title="Madrasa Logo (Click to change/upload)">
+<img alt="Jamia Zia Ul Quran Trust Logo" class="w-11 h-11 object-cover rounded-xl border border-amber-400/80 shadow-inner bg-[#0b0e14]" src="https://lh3.googleusercontent.com/aida/AEtjO1V1hyXF5a0uEeNH4nShoCCCFggobEtMyGUUnTRiYL9nNj3qot1h7m32p9itpBddBxBvLEpBsndtusEO4NlGC4V8Tsv77OKVSupB1o1CeSx7xsADFE7sJbcWYoBhIs8iXPYMcs9_bY7XOsE0fNHi9cwIVJnHb3NYARU90edTwOqb52oLIMuVigilxMBWzJ6j2EMMawoHZKIR3_FtVxlLFpOzSKDe4-9LgCCuM3TFM1kR8rxAIoxCcZ9Etw"/>
+<div class="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-[#181c22] border border-amber-400 flex items-center justify-center text-amber-300 shadow-sm"><i class="ph-bold ph-upload text-[10px]"></i></div>
+</div>
+<div>
+<div class="flex items-center gap-1.5 flex-wrap">
+<h1 class="text-sm font-bold uppercase tracking-tight text-white leading-tight">JAMIA ZIA UL QURAN TRUST</h1>
+</div>
+<p class="text-[11px] font-medium text-slate-400">LAM GUNTUR • Jonnalagadda X Road</p>
+<p class="arabic-text text-sm font-semibold text-amber-300 mt-0.5 leading-none">جامعہ ضیاء القرآن ٹرسٹ لام گنٹور</p>
+</div>
+</div>
+<!-- Commercial ERP tag -->
+<span class="px-2 py-0.5 bg-[#1978e5]/20 text-[#8ec0ff] text-[10px] font-bold tracking-wide uppercase rounded border border-[#1978e5]/50 shrink-0">
+  ERP Live
+</span>
+</div>
+<!-- Sub-info summary -->
+<p class="text-[11px] text-slate-400 leading-snug line-clamp-2 mb-3">
+  Real-time administrative operations, daily attendance analytics, Namaz times, financial balance, and educational tracking.
+</p>
+<!-- Top Action Bar & Namaz Indicator -->
+<div class="flex items-center justify-between bg-[#181c22] p-2.5 rounded-lg border border-[#2d3340]">
+<div class="flex items-center space-x-2">
+<i class="ph-fill ph-clock-countdown text-[#1978e5] text-lg"></i>
+<div>
+<span class="text-[10px] uppercase text-slate-400 font-medium block">Next Namaz</span>
+<span class="text-xs font-bold text-white">Fajr (Azan): <span class="text-[#1978e5] font-semibold">in 4h 22m</span></span>
+</div>
+</div>
+<div class="flex items-center space-x-1.5">
+<button class="h-8 px-2.5 bg-[#1978e5] hover:bg-[#1669ca] active:bg-[#135bb0] text-white rounded text-xs font-semibold flex items-center space-x-1 shadow-sm transition-colors" type="button">
+<i class="ph-bold ph-plus text-xs"></i>
+<span class="">Student</span>
+</button>
+<button class="h-8 px-2.5 bg-amber-600 hover:bg-amber-700 active:bg-amber-800 text-white rounded text-xs font-semibold flex items-center space-x-1 shadow-sm transition-colors" type="button">
+<i class="ph-bold ph-hand-coins text-xs"></i>
+<span class="">Fee</span>
+</button>
+</div>
+</div>
+</header>
+<!-- END: AppHeader -->
+<!-- BEGIN: MainContentContainer -->
+<main class="p-3 space-y-3.5 bg-[#0b0e14]">
+<!-- BEGIN: SetupRequiredBanner -->
+<section class="bg-[#181c22] rounded-xl p-3.5 border border-amber-500/40 shadow-sm" data-purpose="setup-notice">
+<div class="flex items-start justify-between pb-2 border-b border-[#2d3340]">
+<div class="flex items-center space-x-2">
+<div class="w-8 h-8 rounded-lg bg-[#1978e5]/20 text-[#1978e5] border border-[#1978e5]/30 flex items-center justify-center"><i class="ph-fill ph-gear-six text-lg"></i></div>
+<div>
+<h2 class="text-xs font-bold text-white leading-tight">Madrasa Setup Required</h2>
+<p class="arabic-text text-xs text-slate-400 font-medium leading-tight">مدرسہ سیٹ اپ ضروری ترتیبات</p>
+</div>
+</div>
+<span class="px-2 py-0.5 bg-[#2d3340] text-amber-300 text-[10px] font-bold uppercase rounded border border-amber-500/30">Action Required</span>
+</div>
+<!-- Incomplete Task Card -->
+<div class="mt-2.5 bg-[#10131a] text-white p-3 rounded-lg border border-[#2d3340]">
+<div class="flex items-center justify-between mb-1">
+<div class="flex items-center space-x-1.5">
+<i class="ph-fill ph-user-plus text-purple-400 text-base"></i>
+<span class="text-xs font-semibold">Add Teachers</span>
+<span class="arabic-text text-xs text-purple-300 font-bold">(اساتذہ)</span>
+</div>
+<span class="px-1.5 py-0.5 bg-rose-950/80 text-rose-300 text-[10px] font-semibold rounded border border-rose-800/60">No Teachers</span>
+</div>
+<p class="text-[11px] text-slate-400 mb-2.5">No faculty members or teachers enrolled in this madrasa yet.</p>
+<button class="w-full py-2 bg-purple-600 hover:bg-purple-700 active:bg-purple-800 text-white text-xs font-bold rounded-md flex items-center justify-center space-x-1 shadow transition-colors" type="button">
+<i class="ph-bold ph-plus-circle text-sm"></i>
+<span class="">Add Teachers</span>
+</button>
+</div>
+</section>
+<!-- END: SetupRequiredBanner -->
+<!-- BEGIN: QuickKpiGrid -->
+<section class="grid grid-cols-2 gap-2.5" data-purpose="kpi-metrics">
+<!-- Total Students -->
+<div class="bg-[#181c22] p-3 rounded-xl border border-[#2d3340] shadow-sm flex items-center space-x-3">
+<div class="w-10 h-10 rounded-lg bg-[#1978e5] text-white flex items-center justify-center shrink-0"><i class="ph-fill ph-users text-xl"></i></div>
+<div>
+<span class="text-[10px] uppercase font-semibold text-slate-400 block leading-tight">Total Students</span>
+<span class="text-lg font-extrabold text-white leading-tight">1</span>
+<span class="text-[10px] text-[#8ec0ff] font-medium block">Active Students</span>
+</div>
+</div>
+<!-- Total Classes -->
+<div class="bg-[#181c22] p-3 rounded-xl border border-[#2d3340] shadow-sm flex items-center space-x-3">
+<div class="w-10 h-10 rounded-lg bg-[#1978e5] text-white flex items-center justify-center shrink-0">
+<i class="ph-fill ph-graduation-cap text-xl"></i>
+</div>
+<div>
+<span class="text-[10px] uppercase font-semibold text-slate-400 block leading-tight">Total Classes</span>
+<span class="text-lg font-extrabold text-white leading-tight">1</span>
+<span class="text-[10px] text-[#8ec0ff] font-medium block">Configured Classes</span>
+</div>
+</div>
+<!-- Teachers & Staff -->
+<div class="bg-[#181c22] p-3 rounded-xl border border-[#2d3340] shadow-sm flex items-center space-x-3">
+<div class="w-10 h-10 rounded-lg bg-purple-600 text-white flex items-center justify-center shrink-0">
+<i class="ph-fill ph-chalkboard-teacher text-xl"></i>
+</div>
+<div>
+<span class="text-[10px] uppercase font-semibold text-slate-400 block leading-tight">Teachers &amp; Staff</span>
+<span class="text-lg font-extrabold text-white leading-tight">0</span>
+<span class="text-[10px] text-purple-400 font-medium block">0 Teachers, 0 Staff</span>
+</div>
+</div>
+<!-- Monthly Fee Collection -->
+<div class="bg-[#181c22] p-3 rounded-xl border border-[#2d3340] shadow-sm flex items-center space-x-3">
+<div class="w-10 h-10 rounded-lg bg-amber-600 text-white flex items-center justify-center shrink-0">
+<i class="ph-fill ph-currency-inr text-xl"></i>
+</div>
+<div>
+<span class="text-[10px] uppercase font-semibold text-slate-400 block leading-tight">Fee Collection</span>
+<span class="text-lg font-extrabold text-white leading-tight">₹ 5,000</span>
+<span class="text-[10px] text-emerald-400 font-medium block">₹ 0 Pending</span>
+</div>
+</div>
+<!-- Total Expenses (Full width 5th metric) -->
+<div class="col-span-2 bg-[#181c22] p-3 rounded-xl border border-[#2d3340] shadow-sm flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 rounded-lg bg-rose-600 text-white flex items-center justify-center shrink-0">
+<i class="ph-fill ph-arrow-circle-up-right text-xl"></i>
+</div>
+<div>
+<span class="text-[10px] uppercase font-semibold text-slate-400 block leading-tight">Total Expenses (Outflow)</span>
+<span class="text-base font-extrabold text-white leading-tight">₹ 0</span>
+</div>
+</div>
+<span class="text-xs bg-[#22262e] text-slate-300 border border-[#2d3340] px-2 py-1 rounded font-medium">Financial Outflow</span>
+</div>
+</section>
+<!-- END: QuickKpiGrid -->
+<!-- BEGIN: QuickActionsBlock -->
+<section class="bg-[#181c22] rounded-xl p-3.5 border border-[#2d3340] shadow-sm" data-purpose="quick-actions">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center space-x-1.5">
+<i class="ph-fill ph-lightning text-amber-400 text-base"></i>
+<h2 class="text-xs font-bold uppercase tracking-wider text-slate-200">Quick Operations</h2>
+</div>
+<span class="text-[11px] text-slate-400">Institutional</span>
+</div>
+<!-- Action Grid -->
+<div class="grid grid-cols-2 gap-2">
+<button class="h-11 px-3 bg-[#1978e5] hover:bg-[#1669ca] active:bg-[#135bb0] text-white text-xs font-semibold rounded-lg flex items-center justify-center space-x-2 shadow-sm transition-colors" type="button">
+<i class="ph-bold ph-user-plus text-base"></i>
+<span class="">New Admission</span>
+</button>
+<button class="h-11 px-3 bg-[#1978e5] hover:bg-[#1669ca] active:bg-[#135bb0] text-white text-xs font-semibold rounded-lg flex items-center justify-center space-x-2 shadow-sm transition-colors" type="button">
+<i class="ph-bold ph-receipt text-base"></i>
+<span class="">Fee Collection</span>
+</button>
+<button class="h-11 px-3 bg-purple-600 hover:bg-purple-700 active:bg-purple-800 text-white text-xs font-semibold rounded-lg flex items-center justify-center space-x-2 shadow-sm transition-colors" type="button">
+<i class="ph-bold ph-check-circle text-base"></i>
+<span class="">Mark Attendance</span>
+</button>
+<button class="h-11 px-3 bg-amber-600 hover:bg-amber-700 active:bg-amber-800 text-white text-xs font-semibold rounded-lg flex items-center justify-center space-x-2 shadow-sm transition-colors" type="button">
+<i class="ph-bold ph-book-open-text text-base"></i>
+<span class="">Daily Sabaq</span>
+</button>
+<button class="h-11 px-3 bg-rose-600 hover:bg-rose-700 active:bg-rose-800 text-white text-xs font-semibold rounded-lg flex items-center justify-center space-x-2 shadow-sm transition-colors" type="button">
+<i class="ph-bold ph-minus-circle text-base"></i>
+<span class="">Add Expense</span>
+</button>
+<button class="h-11 px-3 bg-[#22262e] hover:bg-[#2d3340] active:bg-[#1e232b] text-white text-xs font-semibold rounded-lg flex items-center justify-center space-x-2 shadow-sm border border-[#2d3340] transition-colors" type="button">
+<i class="ph-bold ph-file-pdf text-base text-[#8ec0ff]"></i>
+<span class="">Generate Report</span>
+</button>
+</div>
+</section>
+<!-- END: QuickActionsBlock -->
+<!-- BEGIN: TodayScheduleAndAttendance -->
+<!-- Today's Schedule Card -->
+<section class="bg-[#181c22] rounded-xl p-3.5 border border-[#2d3340] shadow-sm" data-purpose="schedule-card">
+<div class="flex items-center justify-between pb-2 border-b border-[#2d3340]">
+<div class="flex items-center space-x-2">
+<i class="ph-fill ph-calendar text-[#1978e5] text-base"></i>
+<h2 class="text-xs font-bold text-white">Today's Schedule</h2>
+</div>
+<a class="text-[11px] font-semibold text-[#8ec0ff] hover:text-white flex items-center space-x-0.5" href="#">
+<span class="">View Full Schedule</span>
+<i class="ph-bold ph-arrow-right text-[10px]"></i>
+</a>
+</div>
+<div class="mt-2.5 bg-[#10131a] p-2.5 rounded-lg border border-[#2d3340] flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="w-2.5 h-2.5 rounded-full bg-[#1978e5] shrink-0"></span>
+<div>
+<span class="text-[11px] font-mono text-slate-400 font-semibold block leading-tight">04:00 AM - 05:00 AM</span>
+<span class="arabic-text text-xs font-bold text-white block mt-0.5">بیداری، تہجد کی نماز، پڑھائی</span>
+</div>
+</div>
+<span class="px-2 py-0.5 bg-[#22262e] border border-[#2d3340] text-slate-300 text-[10px] font-medium rounded">Ongoing</span>
+</div>
+</section>
+<!-- Attendance Overview Card -->
+<section class="bg-[#181c22] rounded-xl p-3.5 border border-[#2d3340] shadow-sm" data-purpose="attendance-summary">
+<div class="flex items-center justify-between pb-2 border-b border-[#2d3340]">
+<div class="flex items-center space-x-2">
+<i class="ph-fill ph-user-circle-gear text-[#1978e5] text-base"></i>
+<h2 class="text-xs font-bold text-white">Attendance Overview (Today)</h2>
+</div>
+<a class="text-[11px] font-semibold text-[#8ec0ff] hover:text-white flex items-center space-x-0.5" href="#">
+<span class="">View Details</span>
+<i class="ph-bold ph-arrow-right text-[10px]"></i>
+</a>
+</div>
+<div class="mt-3 flex items-center justify-around">
+<!-- SVG Gauge Metric -->
+<div class="relative w-24 h-24 flex items-center justify-center">
+<svg class="w-24 h-24 transform -rotate-90" viewbox="0 0 36 36">
+<circle cx="18" cy="18" fill="none" r="15.9155" stroke="#22262e" stroke-width="3.5"></circle>
+<circle cx="18" cy="18" fill="none" r="15.9155" stroke="#1978e5" stroke-dasharray="100, 100" stroke-linecap="round" stroke-width="3.5"></circle>
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+<span class="text-base font-extrabold text-white leading-none">100%</span>
+<span class="text-[9px] uppercase font-bold text-[#8ec0ff] tracking-wider">Present</span>
+</div>
+</div>
+<!-- Attendance Breakdown -->
+<div class="space-y-1.5 text-xs">
+<div class="flex items-center space-x-2">
+<span class="w-2.5 h-2.5 rounded-full bg-[#1978e5]"></span>
+<span class="text-slate-300 font-medium">Present:</span>
+<span class="font-bold text-white">1</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span>
+<span class="text-slate-300 font-medium">Absent:</span>
+<span class="font-bold text-white">0</span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="w-2.5 h-2.5 rounded-full bg-slate-500"></span>
+<span class="text-slate-300 font-medium">Total:</span>
+<span class="font-bold text-white">1</span>
+</div>
+</div>
+</div>
+</section>
+<!-- END: TodayScheduleAndAttendance -->
+<!-- BEGIN: FinancialSummaryCard -->
+<section class="bg-[#181c22] rounded-xl p-3.5 border border-[#2d3340] shadow-sm" data-purpose="financial-summary">
+<div class="flex items-center justify-between pb-2 border-b border-[#2d3340]">
+<div class="flex items-center space-x-2">
+<i class="ph-fill ph-chart-line-up text-[#1978e5] text-base"></i>
+<h2 class="text-xs font-bold text-white">Financial Summary (Current Month)</h2>
+</div>
+<a class="text-[11px] font-semibold text-[#8ec0ff] hover:text-white flex items-center space-x-0.5" href="#">
+<span class="">View Ledger</span>
+<i class="ph-bold ph-arrow-right text-[10px]"></i>
+</a>
+</div>
+<div class="mt-2.5 grid grid-cols-2 gap-2">
+<div class="p-2.5 rounded-lg bg-emerald-950/40 border border-emerald-800/60">
+<span class="text-[10px] uppercase font-bold text-emerald-400 block">Total Income</span>
+<span class="text-base font-extrabold text-white block mt-0.5">₹ 254,400</span>
+<span class="text-[10px] text-emerald-300 font-medium block">Cash &amp; Online</span>
+</div>
+<div class="p-2.5 rounded-lg bg-rose-950/40 border border-rose-800/60">
+<span class="text-[10px] uppercase font-bold text-rose-400 block">Total Expenses</span>
+<span class="text-base font-extrabold text-white block mt-0.5">₹ 0</span>
+<span class="text-[10px] text-rose-300 font-medium block">Operational</span>
+</div>
+<div class="p-2.5 rounded-lg bg-[#10131a] border border-[#2d3340]">
+<span class="text-[10px] uppercase font-bold text-slate-400 block">Net Surplus</span>
+<span class="text-sm font-bold text-emerald-400 block mt-0.5">₹ 254,400</span>
+</div>
+<div class="p-2.5 rounded-lg bg-[#10131a] border border-[#2d3340]">
+<span class="text-[10px] uppercase font-bold text-slate-400 block">Treasury Balance</span>
+<span class="text-sm font-bold text-white block mt-0.5">Verified Safe</span>
+</div>
+</div>
+</section>
+<!-- END: FinancialSummaryCard -->
+<!-- BEGIN: DepartmentAndActivity -->
+<!-- Students by Department -->
+<section class="bg-[#181c22] rounded-xl p-3.5 border border-[#2d3340] shadow-sm" data-purpose="department-stat">
+<div class="flex items-center justify-between pb-2 border-b border-[#2d3340]">
+<div class="flex items-center space-x-2">
+<i class="ph-fill ph-buildings text-[#1978e5] text-base"></i>
+<h2 class="text-xs font-bold text-white">Students by Department</h2>
+</div>
+<a class="text-[11px] font-semibold text-[#8ec0ff] hover:text-white flex items-center space-x-0.5" href="#">
+<span class="">View Details</span>
+<i class="ph-bold ph-arrow-right text-[10px]"></i>
+</a>
+</div>
+<div class="mt-3">
+<div class="flex items-center justify-between text-xs font-semibold mb-1.5">
+<span class="text-slate-300">Hifz-ul-Quran &amp; Tajweed</span>
+<span class="text-emerald-400 font-bold">1 Student</span>
+</div>
+<div class="w-full bg-[#10131a] rounded-full h-2.5 border border-[#2d3340] overflow-hidden">
+<div class="bg-[#1978e5] h-2.5 rounded-full" style="width: 100%;"></div>
+</div>
+</div>
+</section>
+<!-- Recent Activities Feed -->
+<section class="bg-[#181c22] rounded-xl p-3.5 border border-[#2d3340] shadow-sm" data-purpose="recent-activities">
+<div class="flex items-center justify-between pb-2 border-b border-[#2d3340]">
+<div class="flex items-center space-x-2">
+<i class="ph-fill ph-clock-counter-clockwise text-[#1978e5] text-base"></i>
+<h2 class="text-xs font-bold text-white">Recent Activities</h2>
+</div>
+<a class="text-[11px] font-semibold text-[#8ec0ff] hover:text-white flex items-center space-x-0.5" href="#">
+<span class="">View All</span>
+<i class="ph-bold ph-arrow-right text-[10px]"></i>
+</a>
+</div>
+<div class="mt-2.5 space-y-2.5">
+<div class="flex items-start space-x-2.5 text-xs">
+<span class="text-[10px] font-mono text-slate-400 shrink-0 mt-0.5">2026-09-08</span>
+<div class="w-2 h-2 rounded-full bg-[#1978e5] mt-1.5 shrink-0 shadow-[0_0_8px_rgba(25,120,229,0.7)]"></div>
+<div>
+<span class="font-bold text-slate-200 block">Enrolled Student</span>
+<span class="text-slate-400 text-[11px]">Pathan Mohamamd Khan (ZIA-21-002)</span>
+</div>
+</div>
+<div class="flex items-start space-x-2.5 text-xs">
+<span class="text-[10px] font-mono text-slate-400 shrink-0 mt-0.5">2026-09-09</span>
+<div class="w-2 h-2 rounded-full bg-[#1978e5] mt-1.5 shrink-0 shadow-[0_0_8px_rgba(25,120,229,0.7)]"></div>
+<div>
+<span class="font-bold text-slate-200 block">Fee Collected</span>
+<span class="text-slate-400 text-[11px]">₹ 2,500 - Pathan Mohamamd Khan</span>
+</div>
+</div>
+<div class="flex items-start space-x-2.5 text-xs">
+<span class="text-[10px] font-mono text-slate-400 shrink-0 mt-0.5">2026-09-10</span>
+<div class="w-2 h-2 rounded-full bg-[#1978e5] mt-1.5 shrink-0 shadow-[0_0_8px_rgba(25,120,229,0.7)]"></div>
+<div>
+<span class="font-bold text-slate-200 block">Fee Collected</span>
+<span class="text-slate-400 text-[11px]">₹ 2,500 - Monthly Subscription</span>
+</div>
+</div>
+</div>
+</section>
+<!-- END: DepartmentAndActivity -->
+<!-- BEGIN: DefaultersAndAlerts -->
+<!-- Fee Defaulters Notice -->
+<section class="bg-[#181c22] rounded-xl p-3.5 border border-[#2d3340] shadow-sm" data-purpose="fee-defaulters">
+<div class="flex items-center justify-between pb-2 border-b border-[#2d3340]">
+<div class="flex items-center space-x-2">
+<i class="ph-bold ph-warning-circle text-emerald-400 text-base"></i>
+<h2 class="text-xs font-bold text-white">Fee Defaulters</h2>
+</div>
+<a class="text-[11px] font-semibold text-[#8ec0ff] hover:text-white flex items-center space-x-0.5" href="#">
+<span class="">View All</span>
+<i class="ph-bold ph-arrow-right text-[10px]"></i>
+</a>
+</div>
+<div class="py-4 text-center">
+<div class="w-10 h-10 mx-auto rounded-full bg-[#1978e5]/20 text-[#1978e5] border border-[#1978e5]/40 flex items-center justify-center mb-2"><i class="ph-bold ph-check text-xl"></i></div>
+<span class="text-xs font-bold text-white block">No Pending Dues</span>
+<p class="arabic-text text-xs text-slate-400 mt-0.5">تمام طلبہ کی فیس مکمل وصول ہے</p>
+</div>
+</section>
+<!-- Low Stock Alerts (Assets & Mess) -->
+<section class="bg-[#181c22] rounded-xl p-3.5 border border-[#2d3340] shadow-sm" data-purpose="stock-alerts">
+<div class="flex items-center justify-between pb-2 border-b border-[#2d3340]">
+<div class="flex items-center space-x-2">
+<i class="ph-fill ph-cooking-pot text-amber-400 text-base"></i>
+<h2 class="text-xs font-bold text-white">Low Stock Alerts (Assets &amp; Mess)</h2>
+</div>
+<a class="text-[11px] font-semibold text-[#8ec0ff] hover:text-white flex items-center space-x-0.5" href="#">
+<span class="">View All</span>
+<i class="ph-bold ph-arrow-right text-[10px]"></i>
+</a>
+</div>
+<div class="mt-2 divide-y divide-[#2d3340]">
+<div class="py-2 flex items-center justify-between">
+<div>
+<span class="text-xs font-bold text-slate-200 block leading-snug">Cooking Rice &amp; Grains</span>
+<span class="text-[11px] text-slate-400">Qty: <strong class="text-white">40 Kg</strong></span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="px-2 py-0.5 bg-rose-950/80 text-rose-300 border border-rose-800/60 text-[10px] font-bold rounded">Low</span>
+<button class="px-2.5 py-1 bg-[#22262e] hover:bg-[#2d3340] active:bg-[#10131a] text-white text-[11px] font-semibold rounded border border-[#2d3340] shadow-sm transition-colors" type="button">
+  Order
+</button>
+</div>
+</div>
+<div class="py-2 flex items-center justify-between">
+<div>
+<span class="text-xs font-bold text-slate-200 block leading-snug">Cooking Oil</span>
+<span class="text-[11px] text-slate-400">Qty: <strong class="text-white">8 Liters</strong></span>
+</div>
+<div class="flex items-center space-x-2">
+<span class="px-2 py-0.5 bg-rose-950/80 text-rose-300 border border-rose-800/60 text-[10px] font-bold rounded">Low</span>
+<button class="px-2.5 py-1 bg-[#22262e] hover:bg-[#2d3340] active:bg-[#10131a] text-white text-[11px] font-semibold rounded border border-[#2d3340] shadow-sm transition-colors" type="button">
+  Order
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Upcoming Events & Exams -->
+<section class="bg-[#181c22] rounded-xl p-3.5 border border-[#2d3340] shadow-sm" data-purpose="upcoming-exams">
+<div class="flex items-center justify-between pb-2 border-b border-[#2d3340]">
+<div class="flex items-center space-x-2">
+<i class="ph-fill ph-calendar-check text-[#1978e5] text-base"></i>
+<h2 class="text-xs font-bold text-white">Upcoming Events &amp; Exams</h2>
+</div>
+<a class="text-[11px] font-semibold text-[#8ec0ff] hover:text-white flex items-center space-x-0.5" href="#">
+<span class="">View All</span>
+<i class="ph-bold ph-arrow-right text-[10px]"></i>
+</a>
+</div>
+<div class="mt-2.5 space-y-2">
+<div class="p-2.5 bg-[#10131a] text-white rounded-lg flex items-center justify-between border border-[#2d3340]">
+<div class="flex items-center space-x-2">
+<span class="px-2 py-0.5 bg-emerald-900/70 border border-emerald-700/60 text-emerald-200 text-[10px] font-mono font-semibold rounded">2026-09-15</span>
+<span class="text-xs font-semibold text-slate-200">Quarterly Tajweed &amp; Hifz Assessment</span>
+</div>
+<i class="ph-bold ph-caret-right text-slate-400 text-sm"></i>
+</div>
+<div class="p-2.5 bg-[#10131a] text-white rounded-lg flex items-center justify-between border border-[#2d3340]">
+<div class="flex items-center space-x-2">
+<span class="px-2 py-0.5 bg-emerald-900/70 border border-emerald-700/60 text-emerald-200 text-[10px] font-mono font-semibold rounded">2026-11-10</span>
+<span class="text-xs font-semibold text-slate-200">Half-Yearly Dars-e-Nizami Examination</span>
+</div>
+<i class="ph-bold ph-caret-right text-slate-400 text-sm"></i>
+</div>
+<div class="p-2.5 bg-[#10131a] text-white rounded-lg flex items-center justify-between border border-[#2d3340]">
+<div class="flex items-center space-x-2">
+<span class="px-2 py-0.5 bg-emerald-900/70 border border-emerald-700/60 text-emerald-200 text-[10px] font-mono font-semibold rounded">2026-09-09</span>
+<span class="text-xs font-semibold text-slate-200 truncate max-w-[200px]">Profile Change Request from Chief Super Admin</span>
+</div>
+<i class="ph-bold ph-caret-right text-slate-400 text-sm"></i>
+</div>
+</div>
+</section>
+<!-- END: DefaultersAndAlerts -->
+<!-- BEGIN: NamazTimesContainer -->
+<section class="bg-[#181c22] text-white rounded-xl p-3.5 border border-[#2d3340] shadow-sm" data-purpose="namaz-timings">
+<div class="flex items-center justify-between pb-2.5 border-b border-[#2d3340]">
+<div class="flex items-center space-x-2">
+<i class="ph-fill ph-moon-stars text-amber-400 text-lg"></i>
+<div>
+<h2 class="text-xs font-bold uppercase tracking-wider text-white">Today's Namaz Times</h2>
+<span class="text-[10px] text-slate-400 block">Azan &amp; Jamat Schedule</span>
+</div>
+</div>
+<button class="h-7 px-2.5 bg-[#22262e] hover:bg-[#2d3340] active:bg-[#10131a] border border-[#2d3340] text-white text-[11px] font-semibold rounded flex items-center space-x-1 transition-colors" type="button">
+<i class="ph-bold ph-pencil-simple text-xs text-slate-300"></i>
+<span class="">Edit Times</span>
+</button>
+</div>
+<!-- Prayer Rows -->
+<div class="mt-2 divide-y divide-[#2d3340] text-xs">
+<!-- Fajr -->
+<div class="py-2 flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="font-bold text-white">Fajr</span>
+<span class="arabic-text text-amber-300 font-semibold">(فجر)</span>
+</div>
+<div class="flex items-center space-x-3 text-[11px]">
+<span class="text-slate-300">Azan: <strong class="text-white font-mono">05:00 AM</strong></span>
+<span class="text-emerald-400 font-semibold">Jamat: <strong class="text-emerald-300 font-mono">05:30 AM</strong></span>
+</div>
+</div>
+<!-- Zohr -->
+<div class="py-2 flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="font-bold text-white">Zohr</span>
+<span class="arabic-text text-amber-300 font-semibold">(ظہر)</span>
+</div>
+<div class="flex items-center space-x-3 text-[11px]">
+<span class="text-slate-300">Azan: <strong class="text-white font-mono">01:00 PM</strong></span>
+<span class="text-emerald-400 font-semibold">Jamat: <strong class="text-emerald-300 font-mono">01:30 PM</strong></span>
+</div>
+</div>
+<!-- Asar -->
+<div class="py-2 flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="font-bold text-white">Asar</span>
+<span class="arabic-text text-amber-300 font-semibold">(عصر)</span>
+</div>
+<div class="flex items-center space-x-3 text-[11px]">
+<span class="text-slate-300">Azan: <strong class="text-white font-mono">04:45 PM</strong></span>
+<span class="text-emerald-400 font-semibold">Jamat: <strong class="text-emerald-300 font-mono">05:10 PM</strong></span>
+</div>
+</div>
+<!-- Magrib -->
+<div class="py-2 flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="font-bold text-white">Magrib</span>
+<span class="arabic-text text-amber-300 font-semibold">(مغرب)</span>
+</div>
+<div class="flex items-center space-x-3 text-[11px]">
+<span class="text-slate-300">Azan: <strong class="text-white font-mono">06:35 PM</strong></span>
+<span class="text-emerald-400 font-semibold">Jamat: <strong class="text-emerald-300 font-mono">06:40 PM</strong></span>
+</div>
+</div>
+<!-- Isha -->
+<div class="py-2 flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="font-bold text-white">Isha</span>
+<span class="arabic-text text-amber-300 font-semibold">(عشاء)</span>
+</div>
+<div class="flex items-center space-x-3 text-[11px]">
+<span class="text-slate-300">Azan: <strong class="text-white font-mono">08:00 PM</strong></span>
+<span class="text-emerald-400 font-semibold">Jamat: <strong class="text-emerald-300 font-mono">08:30 PM</strong></span>
+</div>
+</div>
+</div>
+</section>
+<!-- END: NamazTimesContainer -->
+<!-- BEGIN: MadrasaGallerySection -->
+<section class="bg-[#181c22] rounded-xl p-3.5 border border-[#2d3340] shadow-sm" data-purpose="campus-gallery">
+<div class="flex items-center justify-between pb-2 border-b border-[#2d3340]">
+<div class="flex items-center space-x-2">
+<i class="ph-fill ph-images text-emerald-400 text-base"></i>
+<div>
+<h2 class="text-xs font-bold text-white">Madrasa Gallery</h2>
+<span class="text-[10px] text-slate-400 block">Campus Infrastructure &amp; Memories</span>
+</div>
+</div>
+<button class="h-7 px-2.5 bg-[#1978e5]/20 hover:bg-[#1978e5]/30 active:bg-[#1978e5]/40 border border-[#1978e5]/40 text-[#8ec0ff] text-[11px] font-semibold rounded flex items-center space-x-1 transition-colors" type="button">
+<i class="ph-bold ph-upload text-xs"></i>
+<span class="">Upload</span>
+</button>
+</div>
+<!-- Horizontal scroll gallery -->
+<div class="mt-3 flex space-x-2.5 overflow-x-auto pb-1 hide-scrollbar">
+<!-- Campus Mosque -->
+<div class="w-48 shrink-0 rounded-lg overflow-hidden border border-[#2d3340] bg-[#10131a] relative shadow-sm">
+<img alt="Main Campus Courtyard &amp; Mosque" class="w-full h-28 object-cover opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBI6q0NDqsozoA6NWKb-pXNpMXBSwU2elih_k16slVoBe5vnZeJEIUGiFwhximNLoO4qSiRCxbqsDCHQMjKMZFxYz2jVCPM-E5ugwuDe7f9YeimxVshk3ENn3dAP1bfOBKcPZUwWaMUPinRCx4HwTyTSwWou66EBHGRGC8BKGJnYhobKebY4dY0ezbfWCe9I9nBJMr7vNObPS0Q3EAB8Fo69T-VI7nEJRN3h_q3w8jF7Rzd4IbDyo0"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#0b0e14] via-transparent to-transparent"></div>
+<div class="absolute bottom-2 left-2 right-2 text-white">
+<span class="text-[9px] uppercase font-bold tracking-wider bg-emerald-600 px-1.5 py-0.5 rounded inline-block mb-0.5">Campus</span>
+<h3 class="text-xs font-bold leading-tight truncate">Main Campus Courtyard &amp; Mosque</h3>
+</div>
+</div>
+<!-- Hifz Hall -->
+<div class="w-48 shrink-0 rounded-lg overflow-hidden border border-[#2d3340] bg-[#10131a] relative shadow-sm">
+<img alt="Hifz-ul-Quran Memorization Hall" class="w-full h-28 object-cover opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDX5QdSGyJ9hxaTTcZqQS6P5si5lnvYziDWWvzKGe15oYJ0S01YTUoxWu4ka7DME2QN3luCN4gv56HFsjmmLZGD3rRGMOsbfUGrbYfgvxt6QG8vEApt-a7yNRfCqxqLzjVk8L1LmiE0SPQwV9YJ06xMFVLMvZqJ9FAz2qhBKrd3SAe96HtNfI8SndzwaPYIuUgYAYIjtoMj1cxNj2QNZbYhM68Ul-QbzkfGZ-17D04bOIQWqF5LWPA"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#0b0e14] via-transparent to-transparent"></div>
+<div class="absolute bottom-2 left-2 right-2 text-white">
+<span class="text-[9px] uppercase font-bold tracking-wider bg-purple-600 px-1.5 py-0.5 rounded inline-block mb-0.5">Classes</span>
+<h3 class="text-xs font-bold leading-tight truncate">Hifz-ul-Quran Hall</h3>
+</div>
+</div>
+<!-- Library -->
+<div class="w-48 shrink-0 rounded-lg overflow-hidden border border-[#2d3340] bg-[#10131a] relative shadow-sm">
+<img alt="Islamic Library &amp; Maktabah" class="w-full h-28 object-cover opacity-80" src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9e9wmge4mD8TH5ZJcIT_QWzd8bJKN6om6FzwZgr2AcgRhY7OBYX7oO0phXFjMhPEnnJ9DZzX0fnm4YYHrQd8_uXlUxu4_8ZD921HtF49tAPTzSGW1GEBNA49xl_hKsMeOS93hkWaPB0HA5ypRT8U5v8tTjwGpRrA4m6U7ZCSXngz1FOvZGGDvXrqNSeiOslb_ea__SZiL1pO0CUuZR_08lPwT6SHe1GB6TAlbTLwyWAvb-ItJJE"/>
+<div class="absolute inset-0 bg-gradient-to-t from-[#0b0e14] via-transparent to-transparent"></div>
+<div class="absolute bottom-2 left-2 right-2 text-white">
+<span class="text-[9px] uppercase font-bold tracking-wider bg-amber-600 px-1.5 py-0.5 rounded inline-block mb-0.5">Campus</span>
+<h3 class="text-xs font-bold leading-tight truncate">Islamic Library &amp; Maktabah</h3>
+</div>
+</div>
+</div>
+</section>
+<!-- END: MadrasaGallerySection -->
+<!-- Institutional Footer Info -->
+<div class="text-center py-3 text-[11px] text-slate-400">
+<p class="font-semibold text-slate-300">JAMIA ZIA UL QURAN TRUST • JDH-01</p>
+<p class="text-[10px] text-slate-500 mt-0.5">Signed in as: Mufti Mohammad Asif Sahab (Principal / Nazim)</p>
+</div>
+</main>
+<!-- END: MainContentContainer -->
+<!-- BEGIN: MobileBottomNavigation -->
+<!-- BEGIN: AllModulesInstitutionalDrawer -->
+<div class="fixed inset-0 z-50 flex flex-col justify-end bg-black/80 backdrop-blur-sm transition-opacity hidden" data-purpose="all-sidebar-drawer" id="institutional-menu-drawer">
+<div class="bg-[#181c22] rounded-t-2xl max-h-[86vh] flex flex-col w-full shadow-2xl border-t border-[#2d3340] overflow-hidden">
+<!-- Drawer Drag Pill & Header -->
+<div class="pt-2.5 pb-2 px-4 bg-[#10131a] text-white flex flex-col border-b border-[#2d3340]">
+<div class="w-10 h-1 bg-[#2d3340] rounded-full mx-auto mb-2"></div>
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2.5">
+<div class="w-9 h-9 rounded-lg bg-[#1978e5]/20 border border-[#1978e5]/40 flex items-center justify-center text-[#8ec0ff]">
+<i class="ph-fill ph-mosque text-xl"></i>
+</div>
+<div>
+<div class="flex items-center space-x-1.5">
+<h3 class="text-xs font-bold uppercase tracking-wider text-white">All Madrasa Modules</h3>
+<span class="text-[9px] bg-[#1978e5]/20 text-[#8ec0ff] border border-[#1978e5]/40 px-1 rounded font-mono font-medium">10 Tabs</span>
+</div>
+<p class="arabic-text text-xs text-amber-300 font-semibold leading-none mt-0.5">تمام شعبہ جات و انتظامی مینیو</p>
+</div>
+</div>
+<button class="w-8 h-8 rounded-full bg-[#22262e] flex items-center justify-center text-slate-300 hover:text-white border border-[#2d3340]" onclick="document.getElementById('institutional-menu-drawer').classList.add('hidden')">
+<i class="ph-bold ph-x text-base"></i>
+</button>
+</div>
+</div>
+<!-- Scrollable Modules Directory -->
+<div class="overflow-y-auto p-3.5 space-y-3 pb-8 bg-[#0b0e14]">
+<!-- Category 1: Core & Overview -->
+<div class="bg-[#181c22] rounded-xl p-3 border border-[#2d3340] shadow-sm">
+<div class="flex items-center justify-between pb-2 mb-2 border-b border-[#2d3340]">
+<span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">1. Core &amp; Overview</span>
+<span class="arabic-text text-xs font-bold text-[#8ec0ff]">مرکز و عمومی</span>
+</div>
+<div class="space-y-1">
+<a class="flex items-center justify-between p-2 rounded-lg bg-[#1978e5]/15 border border-[#1978e5]/30 text-white" href="#">
+<div class="flex items-center space-x-2.5">
+<i class="ph-fill ph-squares-four text-base text-[#1978e5]"></i>
+<div>
+<span class="text-xs font-bold block leading-tight text-white">Executive Dashboard</span>
+<span class="arabic-text text-[11px] text-slate-300 block">مرکزِ نظامت</span>
+</div>
+</div>
+<span class="text-[10px] bg-[#1978e5] text-white font-bold px-1.5 py-0.5 rounded">Active</span>
+</a>
+<a class="flex items-center justify-between p-2 rounded-lg hover:bg-[#22262e] text-slate-200 transition-colors" href="#">
+<div class="flex items-center space-x-2.5">
+<i class="ph-fill ph-book-open text-base text-emerald-400"></i>
+<div>
+<span class="text-xs font-semibold block leading-tight">Holy Quran Mushaf</span>
+<span class="arabic-text text-[11px] text-slate-400 block">مصحف شریف (13 Lines Tajweed)</span>
+</div>
+</div>
+<i class="ph ph-caret-right text-slate-500 text-xs"></i>
+</a>
+<a class="flex items-center justify-between p-2 rounded-lg hover:bg-[#22262e] text-slate-200 transition-colors" href="#">
+<div class="flex items-center space-x-2.5">
+<i class="ph-fill ph-clock-countdown text-base text-amber-400"></i>
+<div>
+<span class="text-xs font-semibold block leading-tight">Madrasa Schedule &amp; Namaz</span>
+<span class="arabic-text text-[11px] text-slate-400 block">اوقاتِ نماز و نظام الاوقات</span>
+</div>
+</div>
+<span class="text-[10px] bg-amber-950/80 text-amber-300 border border-amber-700/60 font-bold px-1.5 py-0.5 rounded">5 Waqt</span>
+</a>
+</div>
+</div>
+<!-- Category 2: Academic Operations -->
+<div class="bg-[#181c22] rounded-xl p-3 border border-[#2d3340] shadow-sm">
+<div class="flex items-center justify-between pb-2 mb-2 border-b border-[#2d3340]">
+<span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">2. Academic Operations</span>
+<span class="arabic-text text-xs font-bold text-[#8ec0ff]">تعلیمی امور</span>
+</div>
+<div class="space-y-1">
+<a class="flex items-center justify-between p-2 rounded-lg hover:bg-[#22262e] text-slate-200 transition-colors" href="#">
+<div class="flex items-center space-x-2.5">
+<i class="ph-fill ph-graduation-cap text-base text-[#1978e5]"></i>
+<div>
+<span class="text-xs font-semibold block leading-tight">Classes &amp; Syllabus</span>
+<span class="arabic-text text-[11px] text-slate-400 block">کلاسز و نصاب</span>
+</div>
+</div>
+<span class="text-[10px] bg-[#1978e5]/20 text-[#8ec0ff] border border-[#1978e5]/40 font-bold px-1.5 py-0.5 rounded">1 Class</span>
+</a>
+<a class="flex items-center justify-between p-2 rounded-lg hover:bg-[#22262e] text-slate-200 transition-colors" href="#">
+<div class="flex items-center space-x-2.5">
+<i class="ph-fill ph-chalkboard-teacher text-base text-purple-400"></i>
+<div>
+<span class="text-xs font-semibold block leading-tight">Teachers Directory</span>
+<span class="arabic-text text-[11px] text-slate-400 block">اساتذہ کرام</span>
+</div>
+</div>
+<span class="text-[10px] bg-rose-950/80 text-rose-300 border border-rose-800/60 font-bold px-1.5 py-0.5 rounded">0 Active</span>
+</a>
+<a class="flex items-center justify-between p-2 rounded-lg hover:bg-[#22262e] text-slate-200 transition-colors" href="#">
+<div class="flex items-center space-x-2.5">
+<i class="ph-fill ph-book-open-text text-base text-amber-400"></i>
+<div>
+<span class="text-xs font-semibold block leading-tight">Daily Roznamcha (Sabaq)</span>
+<span class="arabic-text text-[11px] text-slate-400 block">روزنامچہ و سبق</span>
+</div>
+</div>
+<span class="text-[10px] bg-emerald-950/80 text-emerald-300 border border-emerald-800/60 font-bold px-1.5 py-0.5 rounded">Daily Log</span>
+</a>
+<a class="flex items-center justify-between p-2 rounded-lg hover:bg-[#22262e] text-slate-200 transition-colors" href="#">
+<div class="flex items-center space-x-2.5">
+<i class="ph-fill ph-check-circle text-base text-emerald-400"></i>
+<div>
+<span class="text-xs font-semibold block leading-tight">Dual-Session Attendance</span>
+<span class="arabic-text text-[11px] text-slate-400 block">حاضری دو وقتہ (صبح و شام)</span>
+</div>
+</div>
+<span class="text-[10px] bg-[#22262e] text-slate-300 border border-[#2d3340] font-bold px-1.5 py-0.5 rounded">Morning &amp; Evening</span>
+</a>
+</div>
+</div>
+<!-- Category 3: Student Affairs -->
+<div class="bg-[#181c22] rounded-xl p-3 border border-[#2d3340] shadow-sm">
+<div class="flex items-center justify-between pb-2 mb-2 border-b border-[#2d3340]">
+<span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">3. Student Affairs</span>
+<span class="arabic-text text-xs font-bold text-emerald-400">شعبہ طلبہ</span>
+</div>
+<div class="space-y-1">
+<a class="flex items-center justify-between p-2 rounded-lg hover:bg-[#22262e] text-slate-200 transition-colors" href="#">
+<div class="flex items-center space-x-2.5">
+<i class="ph-fill ph-users text-base text-emerald-400"></i>
+<div>
+<span class="text-xs font-semibold block leading-tight">Students Roster &amp; Profiles</span>
+<span class="arabic-text text-[11px] text-slate-400 block">طلبہ فہرست و کوائف</span>
+</div>
+</div>
+<span class="text-[10px] bg-emerald-950/80 text-emerald-300 border border-emerald-800/60 font-bold px-1.5 py-0.5 rounded">1 Enrolled</span>
+</a>
+<a class="flex items-center justify-between p-2 rounded-lg hover:bg-[#22262e] text-slate-200 transition-colors" href="#">
+<div class="flex items-center space-x-2.5">
+<i class="ph-bold ph-user-plus text-base text-[#1978e5]"></i>
+<div>
+<span class="text-xs font-semibold block leading-tight">New Student Admission</span>
+<span class="arabic-text text-[11px] text-slate-400 block">داخلہ نیا طالب علم</span>
+</div>
+</div>
+<i class="ph ph-caret-right text-slate-500 text-xs"></i>
+</a>
+</div>
+</div>
+<!-- Category 4: Finance & Accounts -->
+<div class="bg-[#181c22] rounded-xl p-3 border border-[#2d3340] shadow-sm">
+<div class="flex items-center justify-between pb-2 mb-2 border-b border-[#2d3340]">
+<span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">4. Finance &amp; Accounts</span>
+<span class="arabic-text text-xs font-bold text-amber-400">مالیات و بیت المال</span>
+</div>
+<div class="space-y-1">
+<a class="flex items-center justify-between p-2 rounded-lg hover:bg-[#22262e] text-slate-200 transition-colors" href="#">
+<div class="flex items-center space-x-2.5">
+<i class="ph-fill ph-currency-inr text-base text-amber-400"></i>
+<div>
+<span class="text-xs font-semibold block leading-tight">Fees &amp; Collections</span>
+<span class="arabic-text text-[11px] text-slate-400 block">وصولی فیس و چالان</span>
+</div>
+</div>
+<span class="text-[10px] bg-emerald-950/80 text-emerald-300 border border-emerald-800/60 font-bold px-1.5 py-0.5 rounded">₹ 5,000 Paid</span>
+</a>
+<a class="flex items-center justify-between p-2 rounded-lg hover:bg-[#22262e] text-slate-200 transition-colors" href="#">
+<div class="flex items-center space-x-2.5">
+<i class="ph-fill ph-receipt text-base text-rose-400"></i>
+<div>
+<span class="text-xs font-semibold block leading-tight">Cashbook &amp; Expenses</span>
+<span class="arabic-text text-[11px] text-slate-400 block">روزنامچہ خرچ و آمدن</span>
+</div>
+</div>
+<span class="text-[10px] bg-[#22262e] text-slate-300 border border-[#2d3340] font-bold px-1.5 py-0.5 rounded">Ledger</span>
+</a>
+<a class="flex items-center justify-between p-2 rounded-lg hover:bg-[#22262e] text-slate-200 transition-colors" href="#">
+<div class="flex items-center space-x-2.5">
+<i class="ph-fill ph-wallet text-base text-purple-400"></i>
+<div>
+<span class="text-xs font-semibold block leading-tight">Staff Management &amp; Salaries</span>
+<span class="arabic-text text-[11px] text-slate-400 block">عملہ و مشاہرہ</span>
+</div>
+</div>
+<i class="ph ph-caret-right text-slate-500 text-xs"></i>
+</a>
+</div>
+</div>
+<!-- Logged in Principal Card in Drawer -->
+<div class="p-3 bg-[#10131a] rounded-xl text-white flex items-center justify-between border border-[#2d3340]">
+<div class="flex items-center space-x-2.5">
+<div class="w-9 h-9 rounded-full bg-[#1978e5]/20 border border-[#1978e5]/40 flex items-center justify-center text-[#8ec0ff] font-bold text-xs">MA</div>
+<div>
+<span class="text-xs font-bold block leading-tight text-white">Mufti Mohammad Asif Sahab</span>
+<span class="text-[10px] text-slate-400 block">Principal / Nazim (JDH-01)</span>
+</div>
+</div>
+<button class="px-2.5 py-1 bg-[#22262e] hover:bg-[#2d3340] border border-[#2d3340] text-[10px] font-semibold text-slate-300 rounded transition-colors" onclick="document.getElementById('institutional-menu-drawer').classList.add('hidden')">Close</button>
+</div>
+</div>
+</div>
+</div>
+<!-- END: AllModulesInstitutionalDrawer -->
+<!-- Persistent Mobile Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 z-50 bg-[#10131a]/95 backdrop-blur-md border-t border-[#2d3340] px-3 py-1.5 pb-safe flex items-center justify-around shadow-2xl" data-purpose="mobile-nav">
+<!-- Tab 1: Executive Dashboard (Active) -->
+<a aria-current="page" class="flex flex-col items-center justify-center text-[#1978e5] w-14 py-1" href="#">
+<i class="ph-fill ph-squares-four text-xl text-[#1978e5]"></i>
+<span class="text-[10px] font-bold mt-0.5 text-[#1978e5]">Dashboard</span>
+</a>
+<!-- Tab 2: Students & Classes -->
+<a class="flex flex-col items-center justify-center text-slate-400 hover:text-white w-14 py-1 transition-colors" href="#">
+<i class="ph ph-student text-xl"></i>
+<span class="text-[10px] font-medium mt-0.5">Students</span>
+</a>
+<!-- Tab 3: Sabaq & Mushaf -->
+<a class="flex flex-col items-center justify-center text-slate-400 hover:text-white w-14 py-1 transition-colors" href="#">
+<i class="ph ph-book-open-text text-xl"></i>
+<span class="text-[10px] font-medium mt-0.5">Sabaq</span>
+</a>
+<!-- Tab 4: Finance & Fees -->
+<a class="flex flex-col items-center justify-center text-slate-400 hover:text-white w-14 py-1 transition-colors" href="#">
+<i class="ph ph-wallet text-xl"></i>
+<span class="text-[10px] font-medium mt-0.5">Finance</span>
+</a>
+<!-- Tab 5: All Menu Trigger -->
+<a class="flex flex-col items-center justify-center text-slate-300 hover:text-[#1978e5] w-14 py-1 relative cursor-pointer transition-colors" href="javascript:void(0)" onclick="document.getElementById('institutional-menu-drawer').classList.toggle('hidden')">
+<div class="relative">
+<i class="ph ph-squares-four text-xl"></i>
+<span class="absolute -top-1 -right-1.5 w-2.5 h-2.5 bg-amber-400 rounded-full border-2 border-[#10131a]"></span>
+</div>
+<span class="text-[10px] font-bold mt-0.5 text-slate-200">مینیو All</span>
+</a>
+</nav>
+<!-- END: MobileBottomNavigation -->
+</body></html>

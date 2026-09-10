@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Jamia Zia Ul Quran Trust - New Admission Form</title>
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Google Fonts: Plus Jakarta Sans & Noto Nastaliq Urdu -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;600;700&amp;family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<!-- Lucide Icons CDN -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<!-- Tailwind Configuration -->
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            madrasa: {
+              50: '#f0fdf6',
+              100: '#dcfce8',
+              200: '#bbf7d1',
+              600: '#0f764a',
+              700: '#134e38',
+              800: '#0f3e2e',
+              900: '#06261a',
+              950: '#031911',
+            },
+            slatebg: '#0b0e14',
+            cardbg: '#161b22',
+            cardelevated: '#1e232d'
+          },
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            urdu: ['"Noto Nastaliq Urdu"', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+<!-- Custom CSS for specialized inputs & iOS optimizations -->
+<style data-purpose="custom-styling">
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+    .font-urdu {
+      font-family: 'Noto Nastaliq Urdu', serif;
+      line-height: 1.8;
+    }
+    .tap-press:active {
+      transform: scale(0.98);
+    }
+    body {
+      -webkit-tap-highlight-color: transparent;
+      padding-bottom: env(safe-area-inset-bottom, 24px);
+    }
+    .safe-top {
+      padding-top: env(safe-area-inset-top, 12px);
+    }
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(0.8);
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body class="bg-[#0b0e14] text-slate-200 font-sans antialiased min-h-screen pb-28">
+<!-- BEGIN: Institutional Top Header -->
+<header class="bg-[#0e121a] border-b border-[#222834] text-white safe-top sticky top-0 z-40 shadow-lg">
+<div class="px-4 py-3 flex items-center justify-between">
+<!-- Left: Logo & Madrasa Identity -->
+<div class="flex items-center space-x-2.5">
+<div class="w-10 h-10 rounded-xl bg-[#142646] border border-blue-400/40 flex items-center justify-center text-blue-300 font-bold shadow-inner">
+<svg aria-hidden="true" class="lucide lucide-book-open w-5 h-5" data-lucide="book-open" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 5v16"></path><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z"></path></svg>
+</div>
+<div>
+<div class="flex items-center space-x-1.5">
+<h1 class="text-xs font-extrabold tracking-wide text-white uppercase leading-none">Jamia Zia Ul Quran Trust</h1>
+<span class="bg-blue-500/20 text-blue-300 text-[9px] font-bold px-1.5 py-0.5 rounded border border-blue-400/30">ERP</span>
+</div>
+<div class="flex items-center space-x-1.5 mt-1">
+<span class="text-[10px] font-semibold text-slate-400 flex items-center gap-1">
+<svg aria-hidden="true" class="lucide lucide-map-pin w-3 h-3 text-blue-400" data-lucide="map-pin" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path><circle cx="12" cy="10" r="3"></circle></svg> JDH-01 Jonnalagadda
+            </span>
+</div>
+</div>
+</div>
+<!-- Right: Quick Status & User Avatar -->
+<div class="flex items-center space-x-2">
+<div class="hidden sm:flex items-center gap-1 text-[10px] bg-[#161d2b] px-2 py-1 rounded-lg text-blue-200 border border-blue-900/40">
+<span class="w-1.5 h-1.5 rounded-full bg-blue-400 animate-pulse"></span>
+<span class="">Cloud Synced</span>
+</div>
+<div class="flex items-center space-x-1.5 pl-1">
+<div class="w-8 h-8 rounded-full bg-[#1c3a72] border-2 border-blue-400/40 flex items-center justify-center text-xs font-bold text-blue-100">
+            M
+          </div>
+</div>
+</div>
+</div>
+<!-- Institutional Notification & Meta Ticker Strip -->
+<div class="bg-[#080b10] px-4 py-1.5 border-t border-[#1f2635] flex items-center justify-between text-[11px] text-slate-400 overflow-x-auto no-scrollbar">
+<div class="flex items-center space-x-3 whitespace-nowrap">
+<span class="flex items-center gap-1 font-medium text-slate-300">
+<svg aria-hidden="true" class="lucide lucide-calendar w-3 h-3 text-blue-400" data-lucide="calendar" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v3"></path><path d="M16 2v3"></path><rect height="18" rx="2" width="18" x="3" y="3"></rect><path d="M3 9h18"></path></svg>
+          28 Rabi' al-Awwal 1448 AH
+        </span>
+<span class="text-slate-600">•</span>
+<span class="flex items-center gap-1">
+<svg aria-hidden="true" class="lucide lucide-sun-medium w-3 h-3 text-amber-400" data-lucide="sun-medium" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><circle cx="12" cy="12" r="4"></circle><path d="M12 3v1"></path><path d="M12 20v1"></path><path d="M3 12h1"></path><path d="M20 12h1"></path><path d="m18.364 5.636-.707.707"></path><path d="m6.343 17.657-.707.707"></path><path d="m5.636 5.636.707.707"></path><path d="m17.657 17.657.707.707"></path></svg>
+          Fajr 05:00 AM <span class="text-[9px] bg-[#1a2538] text-blue-300 px-1 py-0.2 rounded border border-blue-700/40">3h 30m</span>
+</span>
+</div>
+<div class="flex items-center gap-1 text-emerald-400 font-semibold pl-2">
+<span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+<span class="text-[10px]">Online</span>
+</div>
+</div>
+</header>
+<!-- END: Institutional Top Header -->
+<!-- BEGIN: Page Header / Admission Workflow Title -->
+<section class="px-4 pt-4 pb-2">
+<div class="flex items-start justify-between">
+<div class="flex items-start space-x-3">
+<button class="mt-0.5 p-2 rounded-xl bg-[#161b22] border border-[#2d3340] text-slate-300 shadow-sm tap-press hover:bg-[#1e232d]">
+<svg aria-hidden="true" class="lucide lucide-arrow-left w-4 h-4" data-lucide="arrow-left" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
+</button>
+<div>
+<div class="flex items-center gap-1.5">
+<span class="p-1 rounded bg-blue-950/80 text-blue-300 border border-blue-800/40">
+<svg aria-hidden="true" class="lucide lucide-user-plus w-3.5 h-3.5" data-lucide="user-plus" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" x2="19" y1="8" y2="14"></line><line x1="22" x2="16" y1="11" y2="11"></line></svg>
+</span>
+<h2 class="text-base font-bold text-white tracking-tight leading-tight">New Admission Form</h2>
+</div>
+<p class="text-xs text-blue-300 font-urdu font-medium leading-normal mt-0.5" dir="rtl">داخلہ فارم / نیا طالب علم</p>
+<p class="text-[11px] text-slate-400 mt-0.5 leading-tight">Enterprise onboarding workflow &amp; credential generation</p>
+</div>
+</div>
+<div class="flex flex-col items-end">
+<span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#142646] text-blue-200 border border-blue-500/30">
+<svg aria-hidden="true" class="lucide lucide-layers w-3 h-3" data-lucide="layers" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z"></path><path d="M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12"></path><path d="M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17"></path></svg> Step 5 of 5
+        </span>
+</div>
+</div>
+</section>
+<!-- END: Page Header -->
+<!-- BEGIN: Horizontal Interactive Step Bar -->
+<section class="px-4 py-2">
+<div class="bg-[#161b22] rounded-2xl p-2.5 border border-[#2d3340] shadow-sm overflow-x-auto no-scrollbar">
+<div class="flex items-center space-x-2 min-w-max">
+<!-- Step 1 Done -->
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#142236] border border-blue-800/40 text-blue-200">
+<span class="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[11px] font-bold shadow">
+<svg aria-hidden="true" class="lucide lucide-check w-3 h-3" data-lucide="check" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 9 17l-5-5"></path></svg>
+</span>
+<div class="leading-none">
+<div class="text-[11px] font-bold text-slate-200">1. Personal</div>
+<div class="text-[9px] text-slate-400 font-urdu" dir="rtl">ذاتی معلومات</div>
+</div>
+</div>
+<svg aria-hidden="true" class="lucide lucide-chevron-right w-3.5 h-3.5 text-slate-600" data-lucide="chevron-right" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"></path></svg>
+<!-- Step 2 Done -->
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#142236] border border-blue-800/40 text-blue-200">
+<span class="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[11px] font-bold shadow">
+<svg aria-hidden="true" class="lucide lucide-check w-3 h-3" data-lucide="check" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 9 17l-5-5"></path></svg>
+</span>
+<div class="leading-none">
+<div class="text-[11px] font-bold text-slate-200">2. Guardian</div>
+<div class="text-[9px] text-slate-400 font-urdu" dir="rtl">سرپرست</div>
+</div>
+</div>
+<svg aria-hidden="true" class="lucide lucide-chevron-right w-3.5 h-3.5 text-slate-600" data-lucide="chevron-right" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"></path></svg>
+<!-- Step 3 Done -->
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#142236] border border-blue-800/40 text-blue-200">
+<span class="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[11px] font-bold shadow">
+<svg aria-hidden="true" class="lucide lucide-check w-3 h-3" data-lucide="check" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 9 17l-5-5"></path></svg>
+</span>
+<div class="leading-none">
+<div class="text-[11px] font-bold text-slate-200">3. Academic</div>
+<div class="text-[9px] text-slate-400 font-urdu" dir="rtl">تعلیمی درجہ</div>
+</div>
+</div>
+<svg aria-hidden="true" class="lucide lucide-chevron-right w-3.5 h-3.5 text-slate-600" data-lucide="chevron-right" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"></path></svg>
+<!-- Step 4 Done -->
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#142236] border border-blue-800/40 text-blue-200">
+<span class="w-5 h-5 rounded-full bg-blue-600 text-white flex items-center justify-center text-[11px] font-bold shadow">
+<svg aria-hidden="true" class="lucide lucide-check w-3 h-3" data-lucide="check" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M20 6 9 17l-5-5"></path></svg>
+</span>
+<div class="leading-none">
+<div class="text-[11px] font-bold text-slate-200">4. Fees</div>
+<div class="text-[9px] text-slate-400 font-urdu" dir="rtl">فیس و کفالت</div>
+</div>
+</div>
+<svg aria-hidden="true" class="lucide lucide-chevron-right w-3.5 h-3.5 text-slate-600" data-lucide="chevron-right" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="m9 18 6-6-6-6"></path></svg>
+<!-- Step 5 Active Current -->
+<div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-md ring-2 ring-blue-400/50">
+<span class="w-5 h-5 rounded-full bg-white text-blue-900 flex items-center justify-center text-[11px] font-extrabold shadow-sm">
+            5
+          </span>
+<div class="leading-none">
+<div class="text-[11px] font-bold text-white">Docs &amp; Login</div>
+<div class="text-[9px] text-blue-200 font-urdu" dir="rtl">دستاویزات</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: Horizontal Step Bar -->
+<!-- BEGIN: Form Container -->
+<main class="px-4 space-y-4 mt-2"><!-- SECTION 1: Student Details -->
+<div class="bg-[#161b22] rounded-2xl border border-[#2d3340] p-4 shadow-sm space-y-4">
+<div class="border-b border-[#232a36] pb-2.5 flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="p-1.5 rounded-lg bg-[#142646] text-blue-300 border border-blue-500/30">
+<i class="w-4 h-4" data-lucide="user"></i>
+</span>
+<div>
+<h3 class="text-sm font-extrabold text-white tracking-tight">1. Student Details</h3>
+<p class="text-xs text-blue-400 font-urdu font-medium" dir="rtl">طالب علم کی ذاتی تفصیلات</p>
+</div>
+</div>
+<span class="text-[10px] bg-[#142646] text-blue-300 border border-blue-500/30 px-2 py-0.5 rounded font-bold">Section 1 of 5</span>
+</div>
+<!-- Photo Uploader Slot -->
+<div class="flex items-center space-x-3.5 bg-[#10141b] p-3 rounded-xl border border-[#262e3d]">
+<div class="w-16 h-20 rounded-xl overflow-hidden border-2 border-blue-500/40 relative flex-shrink-0 bg-[#0d1017] shadow-inner">
+<img alt="Student Passport" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDm8wejro1ynCof_3mpOx5G3Nav4H5Y4duNwzaEuKX51SEoQFXogswm70iDFdTKTtUywlhXKAL0yiHxcgQuDb07IOHGhZlpNp7WyovXJnqlIlwDJK6dGhBeKcomdY4vkoi_H7t07dtTmbJfX4F6Cx9xobzB298-f1sKSLtYLpudOrbWPkNqzywK9BstjC4JjngjXqC5i_HmMKT1I4qK-7DNyqUolWZM2QWKPql6EvBYqj7JxqF-2-g"/>
+<span class="absolute bottom-0 inset-x-0 bg-black/75 text-[8px] text-center text-slate-200 py-0.5 font-mono">3x4</span>
+</div>
+<div class="space-y-1.5 flex-1">
+<p class="text-xs font-bold text-white">Student Photograph (3x4 aspect ratio)</p>
+<p class="text-[10px] text-slate-400">Passport size photo with plain background</p>
+<button class="px-2.5 py-1 rounded-lg bg-[#1a202c] border border-[#333d4e] text-slate-200 text-xs font-semibold flex items-center gap-1 shadow-sm tap-press hover:bg-[#232b3b]" type="button">
+<i class="w-3 h-3 text-slate-400" data-lucide="camera"></i> Change Photo
+      </button>
+</div>
+</div>
+<!-- Section 1 Fields -->
+<div class="space-y-3">
+<div>
+<label class="block text-xs font-bold text-slate-300 mb-1">Student Full Name (English) <span class="text-rose-400">*</span></label>
+<input class="w-full text-xs font-medium border border-[#2d3340] bg-[#141820] rounded-xl px-3 py-2 text-white focus:ring-blue-500 focus:border-blue-500 shadow-sm" placeholder="e.g. Mohammad Salman Khan" type="text" value="Mohammad Salman Khan"/>
+</div>
+<div>
+<label class="block text-xs font-bold text-slate-300 mb-1 flex items-center justify-between">
+<span class="">Student Full Name (Urdu)</span>
+<span class="text-[10px] text-blue-300 font-urdu" dir="rtl">طالب علم کا نام</span>
+</label>
+<input class="w-full text-xs font-urdu font-medium border border-[#2d3340] bg-[#141820] rounded-xl px-3 py-1.5 text-white focus:ring-blue-500 focus:border-blue-500 shadow-sm" dir="rtl" placeholder="طالب علم کا مکمل نام" type="text" value="محمد سلمان خان"/>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div>
+<label class="block text-xs font-bold text-slate-300 mb-1">Date of Birth <span class="text-rose-400">*</span></label>
+<input class="w-full text-xs font-medium border border-[#2d3340] bg-[#141820] rounded-xl px-2.5 py-2 text-white focus:ring-blue-500 focus:border-blue-500 shadow-sm" type="date" value="2015-05-15"/>
+</div>
+<div>
+<label class="block text-xs font-bold text-slate-300 mb-1">Student Aadhar Number</label>
+<input class="w-full text-xs font-mono font-medium border border-[#2d3340] bg-[#141820] rounded-xl px-2.5 py-2 text-white focus:ring-blue-500 focus:border-blue-500 shadow-sm" placeholder="12 Digit Number" type="text" value="7849 2018 3921"/>
+</div>
+</div>
+</div>
+</div>
+<!-- SECTION 2: Parents & Contact Information -->
+<div class="bg-[#161b22] rounded-2xl border border-[#2d3340] p-4 shadow-sm space-y-4">
+<div class="border-b border-[#232a36] pb-2.5 flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="p-1.5 rounded-lg bg-[#142646] text-blue-300 border border-blue-500/30">
+<i class="w-4 h-4" data-lucide="users"></i>
+</span>
+<div>
+<h3 class="text-sm font-extrabold text-white tracking-tight">2. Parents &amp; Contact Information</h3>
+<p class="text-xs text-blue-400 font-urdu font-medium" dir="rtl">سرپرست و پتہ</p>
+</div>
+</div>
+<span class="text-[10px] bg-[#142646] text-blue-300 border border-blue-500/30 px-2 py-0.5 rounded font-bold">Section 2 of 5</span>
+</div>
+<div class="space-y-3">
+<div class="grid grid-cols-2 gap-3">
+<div>
+<label class="block text-xs font-bold text-slate-300 mb-1">Father Name <span class="text-rose-400">*</span></label>
+<input class="w-full text-xs font-medium border border-[#2d3340] bg-[#141820] rounded-xl px-3 py-2 text-white focus:ring-blue-500 focus:border-blue-500 shadow-sm" type="text" value="Pattan Saleem"/>
+</div>
+<div>
+<label class="block text-xs font-bold text-slate-300 mb-1">Mother Name</label>
+<input class="w-full text-xs font-medium border border-[#2d3340] bg-[#141820] rounded-xl px-3 py-2 text-white focus:ring-blue-500 focus:border-blue-500 shadow-sm" type="text" value="P. Ashu Bi"/>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div>
+<label class="block text-xs font-bold text-slate-300 mb-1">Guardian Name</label>
+<input class="w-full text-xs font-medium border border-[#2d3340] bg-[#141820] rounded-xl px-3 py-2 text-white focus:ring-blue-500 focus:border-blue-500 shadow-sm" placeholder="If different" type="text" value="Pattan Saleem (Father)"/>
+</div>
+<div>
+<label class="block text-xs font-bold text-slate-300 mb-1">Guardian Occupation</label>
+<input class="w-full text-xs font-medium border border-[#2d3340] bg-[#141820] rounded-xl px-3 py-2 text-white focus:ring-blue-500 focus:border-blue-500 shadow-sm" type="text" value="Trade / Agriculture"/>
+</div>
+</div>
+<div>
+<label class="block text-xs font-bold text-slate-300 mb-1">Primary Mobile / WhatsApp <span class="text-rose-400">*</span></label>
+<div class="relative">
+<input class="w-full text-xs font-mono font-medium border border-[#2d3340] bg-[#141820] rounded-xl pl-8 pr-3 py-2 text-white focus:ring-blue-500 focus:border-blue-500 shadow-sm" type="tel" value="+91 98480 12345"/>
+<i class="w-4 h-4 text-blue-400 absolute left-2.5 top-2.5" data-lucide="phone"></i>
+</div>
+</div>
+<div>
+<label class="block text-xs font-bold text-slate-300 mb-1">Permanent Residential Address <span class="text-rose-400">*</span></label>
+<textarea class="w-full text-xs font-medium border border-[#2d3340] bg-[#141820] rounded-xl px-3 py-2 text-white focus:ring-blue-500 focus:border-blue-500 shadow-sm" rows="2">H.No 4-128, Jonnalagadda X Road, Guntur District, AP - 522019</textarea>
+</div>
+</div>
+</div>
+<!-- SECTION 3: Academic & Madrasa Assignment -->
+<div class="bg-[#161b22] rounded-2xl border border-[#2d3340] p-4 shadow-sm space-y-4">
+<div class="border-b border-[#232a36] pb-2.5 flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="p-1.5 rounded-lg bg-[#142646] text-blue-300 border border-blue-500/30">
+<i class="w-4 h-4" data-lucide="book-open"></i>
+</span>
+<div>
+<h3 class="text-sm font-extrabold text-white tracking-tight">3. Academic &amp; Madrasa Assignment</h3>
+<p class="text-xs text-blue-400 font-urdu font-medium" dir="rtl">تعلیمی و جماعت درجہ</p>
+</div>
+</div>
+<span class="text-[10px] bg-[#142646] text-blue-300 border border-blue-500/30 px-2 py-0.5 rounded font-bold">Section 3 of 5</span>
+</div>
+<div class="space-y-3">
+<div class="grid grid-cols-2 gap-3">
+<div>
+<label class="block text-xs font-bold text-slate-300 mb-1">Admission Number <span class="text-rose-400">*</span></label>
+<div class="relative">
+<input class="w-full text-xs font-mono font-bold border border-blue-500/50 rounded-xl pl-3 pr-8 py-2 text-blue-200 bg-[#12223a] shadow-sm" type="text" value="ADM-2026-0018"/>
+<i class="w-4 h-4 text-blue-400 absolute right-2.5 top-2.5" data-lucide="check-circle"></i>
+</div>
+<p class="text-[10px] text-blue-400 mt-1 flex items-center gap-1 font-medium"><i class="w-3 h-3 text-blue-400" data-lucide="check"></i> Admission No is available</p>
+</div>
+<div>
+<label class="block text-xs font-bold text-slate-300 mb-1">Admission Date <span class="text-rose-400">*</span></label>
+<input class="w-full text-xs font-medium border border-[#2d3340] bg-[#141820] rounded-xl px-2.5 py-2 text-white focus:ring-blue-500 focus:border-blue-500 shadow-sm" type="date" value="2026-10-09"/>
+</div>
+</div>
+<div>
+<label class="block text-xs font-bold text-slate-300 mb-1">Enrolled Class / Department <span class="text-rose-400">*</span></label>
+<select class="w-full text-xs font-semibold border border-[#2d3340] bg-[#141820] rounded-xl px-3 py-2 text-white focus:ring-blue-500 focus:border-blue-500 shadow-sm">
+<option selected="">Hifz Section A (حفظ قرآن)</option>
+<option>Noorani Qaida (نورانی قاعدہ)</option>
+<option>Nazira Quran (ناظرہ قرآن)</option>
+<option>Aalimiyat 1st Year (عالمیت سال اول)</option>
+</select>
+</div>
+<div>
+<label class="block text-xs font-bold text-slate-300 mb-1">Previous School / Madrasa Name</label>
+<input class="w-full text-xs font-medium border border-[#2d3340] bg-[#141820] rounded-xl px-3 py-2 text-white focus:ring-blue-500 focus:border-blue-500 shadow-sm" type="text" value="Madrasa Islamia, Hyderabad"/>
+</div>
+<div>
+<label class="block text-xs font-bold text-slate-300 mb-1 flex items-center justify-between">
+<span class="">Previous Study Status</span>
+<span class="text-[10px] text-blue-300 font-urdu" dir="rtl">سابقہ تعلیم</span>
+</label>
+<input class="w-full text-xs font-medium border border-[#2d3340] bg-[#141820] rounded-xl px-3 py-2 text-white focus:ring-blue-500 focus:border-blue-500 shadow-sm" type="text" value="Completed 5 Paras Nazira with Tajweed rules"/>
+</div>
+</div>
+</div>
+<!-- SECTION 4: Accommodation, Sponsorship & Fees -->
+<div class="bg-[#161b22] rounded-2xl border border-[#2d3340] p-4 shadow-sm space-y-4">
+<div class="border-b border-[#232a36] pb-2.5 flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="p-1.5 rounded-lg bg-[#142646] text-blue-300 border border-blue-500/30">
+<i class="w-4 h-4" data-lucide="home"></i>
+</span>
+<div>
+<h3 class="text-sm font-extrabold text-white tracking-tight">4. Accommodation, Sponsorship &amp; Fees</h3>
+<p class="text-xs text-blue-400 font-urdu font-medium" dir="rtl">اقامت، کفالت و فیس</p>
+</div>
+</div>
+<span class="text-[10px] bg-[#142646] text-blue-300 border border-blue-500/30 px-2 py-0.5 rounded font-bold">Section 4 of 5</span>
+</div>
+<div class="space-y-3">
+<div class="grid grid-cols-2 gap-3">
+<div>
+<label class="block text-xs font-bold text-slate-300 mb-1">Hostel / Day Scholar <span class="text-rose-400">*</span></label>
+<select class="w-full text-xs font-semibold border border-[#2d3340] bg-[#141820] rounded-xl px-3 py-2 text-white focus:ring-blue-500 focus:border-blue-500 shadow-sm">
+<option selected="">Hostel (اقامتی)</option>
+<option>Day Scholar (غیر اقامتی)</option>
+</select>
+</div>
+<div>
+<label class="block text-xs font-bold text-slate-300 mb-1">Sponsorship Category <span class="text-rose-400">*</span></label>
+<select class="w-full text-xs font-semibold border border-[#2d3340] bg-[#141820] rounded-xl px-3 py-2 text-white focus:ring-blue-500 focus:border-blue-500 shadow-sm">
+<option selected="">Self-Sponsored</option>
+<option>Madrasa Kafeel / Sponsored</option>
+<option>Zakat Eligible / Mustahiq</option>
+</select>
+</div>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<div>
+<label class="block text-xs font-bold text-slate-300 mb-1">Kafeel / Sponsor Name</label>
+<input class="w-full text-xs font-medium border border-[#2d3340] bg-[#141820] rounded-xl px-3 py-2 text-white focus:ring-blue-500 focus:border-blue-500 shadow-sm" placeholder="Optional" type="text" value="N/A (Direct Parent Payment)"/>
+</div>
+<div>
+<label class="block text-xs font-bold text-slate-300 mb-1">Monthly Fees (₹) <span class="text-rose-400">*</span></label>
+<div class="relative">
+<span class="absolute left-3 top-2 text-xs font-bold text-slate-400">₹</span>
+<input class="w-full text-xs font-extrabold font-mono border border-[#2d3340] bg-[#141820] rounded-xl pl-7 pr-3 py-2 text-blue-200 focus:ring-blue-500 focus:border-blue-500 shadow-sm" type="number" value="2500"/>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- SECTION 5: Verification Documents & Credentials -->
+<div class="bg-[#161b22] rounded-2xl border-2 border-blue-500/40 p-4 shadow-sm space-y-4">
+<div class="border-b border-[#232a36] pb-2.5 flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="p-1.5 rounded-lg bg-[#142646] text-blue-300 border border-blue-500/30">
+<i class="w-4 h-4" data-lucide="shield-check"></i>
+</span>
+<div>
+<h3 class="text-sm font-extrabold text-white tracking-tight">5. Verification Documents &amp; Credentials</h3>
+<p class="text-xs text-blue-400 font-urdu font-medium" dir="rtl">دستاویزات کی تصدیق و پورٹل کریڈنشیلز</p>
+</div>
+</div>
+<span class="text-[10px] bg-[#142646] text-blue-300 border border-blue-500/30 px-2 py-0.5 rounded font-bold">Section 5 of 5</span>
+</div>
+<!-- Document Upload Cards -->
+<div class="space-y-3">
+<label class="block text-xs font-bold text-slate-300">Official Document Uploads</label>
+<!-- Upload 1: Previous Study Certificate -->
+<div class="border-2 border-dashed border-[#2f3747] hover:border-blue-500 rounded-2xl p-4 text-center bg-[#11151e] flex flex-col items-center justify-center transition-colors">
+<div class="w-10 h-10 rounded-xl bg-[#17243a] text-blue-300 border border-blue-500/30 flex items-center justify-center mb-2">
+<i class="w-5 h-5" data-lucide="file-text"></i>
+</div>
+<p class="text-xs font-bold text-white">Upload Previous Study Certificate</p>
+<p class="text-[10px] text-slate-400 mt-0.5">Previous TC, Marksheet, or Hifz Sanad scan</p>
+<button class="mt-3 px-3.5 py-1.5 rounded-xl bg-[#1c2230] border border-[#343e52] text-slate-200 text-xs font-semibold flex items-center gap-1.5 shadow-sm tap-press hover:bg-[#252e42]" type="button">
+<i class="w-3.5 h-3.5 text-slate-400" data-lucide="upload"></i> Browse Certificate
+      </button>
+</div>
+<!-- Upload 2: Aadhar Card -->
+<div class="border-2 border-dashed border-amber-500/40 bg-amber-500/5 hover:border-amber-400 rounded-2xl p-4 text-center flex flex-col items-center justify-center transition-colors">
+<div class="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/30 flex items-center justify-center mb-2">
+<i class="w-5 h-5" data-lucide="shield"></i>
+</div>
+<p class="text-xs font-bold text-white">Upload Aadhar Card</p>
+<p class="text-[10px] text-slate-400 mt-0.5">Scanned photo or copy of government Aadhar card</p>
+<button class="mt-3 px-3.5 py-1.5 rounded-xl bg-[#1c2230] border border-[#343e52] text-slate-200 text-xs font-semibold flex items-center gap-1.5 shadow-sm tap-press hover:bg-[#252e42]" type="button">
+<i class="w-3.5 h-3.5 text-amber-400" data-lucide="upload"></i> Browse Aadhar
+      </button>
+</div>
+</div>
+<!-- Portal Credentials Box -->
+<div class="bg-gradient-to-br from-[#101e38] via-[#0d1627] to-[#0a0f1c] border border-blue-500/30 rounded-2xl p-4 text-white shadow-md space-y-3.5">
+<div class="flex items-start justify-between">
+<div class="flex items-center space-x-2">
+<div class="p-1 rounded-lg bg-blue-500/20 text-blue-300 border border-blue-400/30">
+<i class="w-4 h-4" data-lucide="key"></i>
+</div>
+<div>
+<h4 class="text-xs font-bold text-white tracking-wide">Portal Credentials</h4>
+<p class="text-[10px] text-blue-300 font-urdu" dir="rtl">طلبہ و سرپرست لاگ ان</p>
+</div>
+</div>
+<button class="px-2.5 py-1 rounded-lg bg-amber-400/20 border border-amber-400/40 text-amber-300 text-[10px] font-bold flex items-center gap-1 tap-press hover:bg-amber-400/30" type="button">
+<i class="w-3 h-3" data-lucide="sparkles"></i> Auto-Generate
+      </button>
+</div>
+<p class="text-[10px] text-slate-300 leading-relaxed">
+      Generate instant portal access login credentials for both student &amp; guardian upon enrollment confirmation.
+    </p>
+<div class="bg-black/40 border border-slate-700/50 rounded-xl p-3 text-[11px] space-y-2">
+<span class="text-[9px] uppercase tracking-wider font-extrabold text-amber-300 flex items-center gap-1">
+<i class="w-3 h-3" data-lucide="info"></i> Standard Institutional Formula
+      </span>
+<div class="space-y-1.5 font-mono text-[10px]">
+<div class="flex items-center justify-between text-slate-300 bg-white/5 p-1.5 rounded">
+<span class="text-slate-400">Username:</span>
+<span class="text-blue-300 font-bold">Moha-2026</span>
+</div>
+<div class="flex items-center justify-between text-slate-300 bg-white/5 p-1.5 rounded">
+<span class="text-slate-400">Password:</span>
+<span class="text-blue-300 font-bold">Moha@2015</span>
+</div>
+</div>
+<p class="text-[9px] text-slate-400">
+        Rule: 1st 4 Letters of Name + (-) + Adm Year / Birth Year
+      </p>
+</div>
+<div class="space-y-2 pt-1 border-t border-white/10">
+<label class="flex items-center space-x-2.5 text-xs text-slate-200 cursor-pointer">
+<input checked="" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 bg-[#0d121c] border-[#364154]" type="checkbox"/>
+<span class="">Send SMS &amp; WhatsApp welcome message with credentials</span>
+</label>
+<label class="flex items-center space-x-2.5 text-xs text-slate-200 cursor-pointer">
+<input checked="" class="w-4 h-4 rounded text-blue-600 focus:ring-blue-500 bg-[#0d121c] border-[#364154]" type="checkbox"/>
+<span class="">Activate student LMS &amp; Sabaq Tracker immediately</span>
+</label>
+</div>
+</div>
+</div>
+<!-- Bottom Action Buttons -->
+<div class="pt-2 space-y-2.5">
+<button class="w-full py-3.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-bold text-sm shadow-lg flex items-center justify-center gap-2 tap-press transition-colors" type="button">
+<i class="w-4 h-4 text-white" data-lucide="check-check"></i>
+<span class="">Complete Admission (مکمل داخلہ کریں)</span>
+</button>
+<div class="flex items-center space-x-2">
+<button class="flex-1 py-2.5 px-3 rounded-xl bg-[#161b22] border border-[#2d3340] text-slate-200 text-xs font-semibold flex items-center justify-center gap-1.5 tap-press shadow-sm hover:bg-[#1e232d]" type="button">
+<i class="w-3.5 h-3.5 text-slate-400" data-lucide="save"></i>
+      Save as Draft (محفوظ کریں)
+    </button>
+<button class="flex-1 py-2.5 px-3 rounded-xl bg-[#161b22] border border-rose-900/50 text-rose-400 text-xs font-semibold flex items-center justify-center gap-1.5 tap-press hover:bg-rose-950/20" type="button">
+<i class="w-3.5 h-3.5" data-lucide="x"></i>
+      Cancel &amp; Exit
+    </button>
+</div>
+</div></main>
+<!-- END: Form Container -->
+<!-- BEGIN: Persistent 5-Tab iOS Bottom Navigation Bar -->
+<nav class="fixed bottom-0 inset-x-0 bg-[#0e121a]/95 backdrop-blur-md border-t border-[#222834] z-50 px-2 py-1.5 pb-safe">
+<div class="grid grid-cols-5 gap-1 items-center max-w-md mx-auto">
+<!-- Dashboard -->
+<a class="flex flex-col items-center justify-center py-1 text-slate-400 hover:text-slate-200 tap-press" href="#">
+<svg aria-hidden="true" class="lucide lucide-layout-dashboard w-5 h-5" data-lucide="layout-dashboard" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><rect height="9" rx="1" width="7" x="3" y="3"></rect><rect height="5" rx="1" width="7" x="14" y="3"></rect><rect height="9" rx="1" width="7" x="14" y="12"></rect><rect height="5" rx="1" width="7" x="3" y="16"></rect></svg>
+<span class="text-[10px] font-semibold mt-1">Dashboard</span>
+</a>
+<!-- Students (Active Tab) -->
+<a class="flex flex-col items-center justify-center py-1 text-blue-400 font-bold tap-press" href="#">
+<div class="relative">
+<svg aria-hidden="true" class="lucide lucide-users w-5 h-5" data-lucide="users" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><path d="M16 3.128a4 4 0 0 1 0 7.744"></path><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><circle cx="9" cy="7" r="4"></circle></svg>
+<span class="absolute -top-1 -right-2 w-2 h-2 bg-blue-500 rounded-full ring-2 ring-[#0e121a]"></span>
+</div>
+<span class="text-[10px] font-bold mt-1 text-blue-400">Students</span>
+</a>
+<!-- Quran & Sabaq -->
+<a class="flex flex-col items-center justify-center py-1 text-slate-400 hover:text-slate-200 tap-press" href="#">
+<svg aria-hidden="true" class="lucide lucide-book-marked w-5 h-5" data-lucide="book-marked" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M10 2v8l3-3 3 3V2"></path><path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H19a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H6.5a1 1 0 0 1 0-5H20"></path></svg>
+<span class="text-[10px] font-semibold mt-1">Sabaq</span>
+</a>
+<!-- Finance & Fees -->
+<a class="flex flex-col items-center justify-center py-1 text-slate-400 hover:text-slate-200 tap-press" href="#">
+<svg aria-hidden="true" class="lucide lucide-receipt w-5 h-5" data-lucide="receipt" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M12 17V7"></path><path d="M16 8h-6a2 2 0 0 0 0 4h4a2 2 0 0 1 0 4H8"></path><path d="M4 3a1 1 0 0 1 1-1 1.3 1.3 0 0 1 .7.2l.933.6a1.3 1.3 0 0 0 1.4 0l.934-.6a1.3 1.3 0 0 1 1.4 0l.933.6a1.3 1.3 0 0 0 1.4 0l.933-.6a1.3 1.3 0 0 1 1.4 0l.934.6a1.3 1.3 0 0 0 1.4 0l.933-.6A1.3 1.3 0 0 1 19 2a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1 1.3 1.3 0 0 1-.7-.2l-.933-.6a1.3 1.3 0 0 0-1.4 0l-.934.6a1.3 1.3 0 0 1-1.4 0l-.933-.6a1.3 1.3 0 0 0-1.4 0l-.933.6a1.3 1.3 0 0 1-1.4 0l-.934-.6a1.3 1.3 0 0 0-1.4 0l-.933.6a1.3 1.3 0 0 1-.7.2 1 1 0 0 1-1-1z"></path></svg>
+<span class="text-[10px] font-semibold mt-1">Finance</span>
+</a>
+<!-- Menu -->
+<a class="flex flex-col items-center justify-center py-1 text-slate-400 hover:text-slate-200 tap-press" href="#">
+<svg aria-hidden="true" class="lucide lucide-menu w-5 h-5" data-lucide="menu" fill="none" height="24" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewbox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M4 5h16"></path><path d="M4 12h16"></path><path d="M4 19h16"></path></svg>
+<span class="text-[10px] font-semibold mt-1">More</span>
+</a>
+</div>
+</nav>
+<!-- END: Persistent 5-Tab iOS Bottom Navigation Bar -->
+<!-- BEGIN: Script for Lucide Icons Rendering -->
+<script data-purpose="icon-initialization">
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+    });
+  </script>
+<!-- END: Script for Lucide Icons Rendering -->
+</body></html>

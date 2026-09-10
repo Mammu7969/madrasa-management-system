@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>Jamia Zia Ul Quran Trust - Fees &amp; Financial Accounting</title>
+<!-- Tailwind CSS v3 CDN with plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=Noto+Naskh+Arabic:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind Configuration for Fidelity Dark System -->
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "on-primary": "#002f64",
+            "on-error": "#690005",
+            "on-tertiary-fixed": "#321200",
+            "inverse-on-surface": "#2d3037",
+            "on-secondary-fixed-variant": "#2d476f",
+            "primary": "#aac7ff",
+            "primary-fixed": "#d6e3ff",
+            "on-surface-variant": "#c1c6d5",
+            "on-secondary": "#143057",
+            "surface": "#10131a",
+            "on-tertiary-container": "#481d00",
+            "on-tertiary-fixed-variant": "#763400",
+            "on-primary-fixed": "#001b3e",
+            "tertiary": "#ffb68c",
+            "on-secondary-container": "#9db6e4",
+            "on-background": "#e0e2eb",
+            "outline-variant": "#414753",
+            "on-primary-fixed-variant": "#00458d",
+            "on-error-container": "#ffdad6",
+            "on-primary-container": "#002958",
+            "secondary-fixed-dim": "#aec7f7",
+            "inverse-primary": "#005db8",
+            "surface-container-high": "#272a31",
+            "on-tertiary": "#532200",
+            "tertiary-fixed-dim": "#ffb68c",
+            "surface-container-highest": "#31353c",
+            "error": "#ffb4ab",
+            "inverse-surface": "#e0e2eb",
+            "primary-container": "#4090fe",
+            "error-container": "#93000a",
+            "surface-tint": "#aac7ff",
+            "surface-dim": "#10131a",
+            "surface-container-low": "#181c22",
+            "surface-container-lowest": "#0b0e14",
+            "secondary": "#aec7f7",
+            "tertiary-fixed": "#ffdbc9",
+            "tertiary-container": "#e3711f",
+            "surface-container": "#1c2026",
+            "on-secondary-fixed": "#001b3d",
+            "surface-variant": "#31353c",
+            "on-surface": "#e0e2eb",
+            "secondary-container": "#2d476f",
+            "background": "#10131a",
+            "primary-fixed-dim": "#aac7ff",
+            "surface-bright": "#363940",
+            "outline": "#8b919f",
+            "secondary-fixed": "#d6e3ff",
+            "fidelity-blue": "#1978e5",
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', 'sans-serif'],
+            urdu: ['Noto Naskh Arabic', 'Tahoma', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="base-layout">
+    body {
+      -webkit-tap-highlight-color: transparent;
+      background-color: #0b0e14;
+      color: #e0e2eb;
+    }
+    /* Hide scrollbar for clean horizontal tabs */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans pb-24 selection:bg-[#1978e5]/30 bg-[#0b0e14] text-[#e0e2eb]">
+<!-- BEGIN: TopStatusBarAndHeader -->
+<header class="bg-[#10131a] text-white sticky top-0 z-40 border-b border-[#272a31] shadow-lg">
+<!-- Top System Live Info Strip -->
+<div class="px-3.5 py-1.5 bg-[#0b0e14] border-b border-[#1c2026] flex items-center justify-between text-[11px] text-[#c1c6d5] font-medium">
+<!-- Hijri Date & Prayer Time Indicator -->
+<div class="flex items-center space-x-2">
+<span class="inline-flex items-center text-amber-400 font-urdu font-medium">
+<svg class="w-3.5 h-3.5 mr-1 text-amber-400" fill="currentColor" viewbox="0 0 20 20">
+<path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+</svg>
+          28 Rabi' al-Awwal 1448 AH
+        </span>
+<span class="text-[#414753] font-bold">•</span>
+<span class="flex items-center bg-[#181c22] border border-[#272a31] px-2 py-0.5 rounded text-[10px] text-emerald-400 font-semibold">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400 mr-1.5 animate-pulse"></span>
+          Fajr (05:00 AM)
+        </span>
+</div>
+<!-- Cloud Sync & Language -->
+<div class="flex items-center space-x-2 text-[10px]">
+<span class="inline-flex items-center text-emerald-400">
+<svg class="w-3 h-3 mr-1 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+          Synced
+        </span>
+<span class="px-1.5 py-0.5 bg-[#1c2026] border border-[#31353c] rounded text-[9px] font-semibold uppercase tracking-wider text-[#aec7f7]">EN</span>
+</div>
+</div>
+<!-- Main Mobile Header Bar -->
+<div class="px-4 py-3 flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<!-- Logo Emblem -->
+<div class="w-10 h-10 rounded-xl border border-amber-500/40 bg-[#181c22] flex items-center justify-center shadow-md overflow-hidden flex-shrink-0">
+<svg class="w-6 h-6 text-amber-400" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 2L2 7l10 5 10-5-10-5zm0 8.5L4.5 7.5 12 4.5l7.5 3-7.5 3zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
+</svg>
+</div>
+<div>
+<h1 class="font-bold text-sm tracking-tight leading-tight uppercase text-white">Jamia Zia Ul Quran Trust</h1>
+<div class="flex items-center text-xs text-[#c1c6d5] mt-0.5">
+<span class="bg-[#1c2026] border border-[#31353c] px-1.5 py-0.5 rounded text-[10px] font-mono mr-1.5 text-amber-400 font-semibold">JDH-01</span>
+<span class="truncate max-w-[170px] text-[11px] text-[#8b919f]">Jonnalagadda X Road</span>
+</div>
+</div>
+</div>
+<!-- Quick Action Profile & Notification -->
+<div class="flex items-center space-x-2">
+<button aria-label="Notifications" class="p-2 rounded-lg bg-[#181c22] hover:bg-[#272a31] border border-[#272a31] text-[#c1c6d5] relative transition" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="absolute top-1 right-1 w-2 h-2 bg-[#1978e5] rounded-full ring-2 ring-[#10131a]"></span>
+</button>
+</div>
+</div>
+</header>
+<!-- END: TopStatusBarAndHeader -->
+<main class="flex-1 px-3.5 pt-3.5 space-y-4 max-w-lg mx-auto w-full">
+<!-- BEGIN: PageTitleCard -->
+<section class="bg-[#10131a] rounded-xl p-3.5 border border-[#272a31] shadow-sm" data-purpose="page-title-banner">
+<div class="flex items-start justify-between">
+<div class="flex items-center space-x-3">
+<div class="w-10 h-10 rounded-lg bg-[#22262f] border border-[#31353c] text-amber-400 flex items-center justify-center flex-shrink-0">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div>
+<div class="flex items-center gap-1.5 flex-wrap">
+<h2 class="text-base font-bold text-white">Fees &amp; Financial Accounting</h2>
+<span class="text-xs bg-[#22262f] text-amber-300 border border-amber-500/30 font-semibold px-2 py-0.5 rounded-full font-urdu">(شعبہ مالیات و فیس)</span>
+</div>
+<p class="text-[11px] text-[#8b919f] mt-1 leading-snug">Official counterfoil receipts, pending dues tracking, and sponsor concessions</p>
+</div>
+</div>
+</div>
+<!-- Action Buttons Row -->
+<div class="mt-3.5 pt-3 border-t border-[#1c2026] flex items-center gap-2">
+<button class="flex-1 bg-[#1978e5] hover:bg-[#1567c6] text-white font-semibold py-2.5 px-3 rounded-lg text-xs flex items-center justify-center shadow-sm space-x-1.5 active:scale-[0.98] transition" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 6v6m0 0v6m0-6h6m-6 0H6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Collect Fee <span class="font-urdu ml-0.5">(فیس وصولی)</span></span>
+</button>
+<button class="bg-[#181c22] hover:bg-[#22262f] text-[#c1c6d5] hover:text-white font-medium py-2.5 px-3 rounded-lg text-xs flex items-center justify-center border border-[#272a31] active:scale-[0.98] transition" type="button">
+<svg class="w-3.5 h-3.5 mr-1 text-[#8b919f]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span>Export Ledger</span>
+</button>
+</div>
+</section>
+<!-- END: PageTitleCard -->
+<!-- BEGIN: KPIGrid -->
+<section class="grid grid-cols-2 gap-2.5" data-purpose="financial-kpis">
+<!-- Total Collections -->
+<div class="bg-[#10131a] p-3 rounded-xl border border-[#272a31] shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-1.5">
+<span class="text-[11px] font-semibold text-[#8b919f] uppercase tracking-wide">Total Collections</span>
+<div class="w-6 h-6 rounded-full bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+</div>
+</div>
+<div class="text-xl font-extrabold text-emerald-400 font-mono tracking-tight">₹5,000</div>
+</div>
+<!-- Pending Dues -->
+<div class="bg-[#10131a] p-3 rounded-xl border border-[#272a31] shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-1.5">
+<span class="text-[11px] font-semibold text-[#8b919f] uppercase tracking-wide">Pending Dues</span>
+<div class="w-6 h-6 rounded-full bg-rose-500/15 border border-rose-500/30 flex items-center justify-center text-rose-400">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+<div class="text-xl font-extrabold text-rose-400 font-mono tracking-tight">₹0</div>
+</div>
+<!-- Fee Defaulters -->
+<div class="bg-[#10131a] p-3 rounded-xl border border-[#272a31] shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-1.5">
+<span class="text-[11px] font-semibold text-[#8b919f] uppercase tracking-wide">Fee Defaulters</span>
+<div class="w-6 h-6 rounded-full bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+<div class="text-base font-extrabold text-amber-400 tracking-tight">0 <span class="text-xs font-semibold text-[#c1c6d5] font-sans">Talaba</span></div>
+</div>
+<!-- Sponsored / Free -->
+<div class="bg-[#10131a] p-3 rounded-xl border border-[#272a31] shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-1.5">
+<span class="text-[11px] font-semibold text-[#8b919f] uppercase tracking-wide">Sponsored / Free</span>
+<div class="w-6 h-6 rounded-full bg-purple-500/15 border border-purple-500/30 flex items-center justify-center text-purple-400">
+<svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+<div class="text-base font-extrabold text-purple-300 tracking-tight">0 <span class="text-xs font-semibold text-[#c1c6d5] font-sans">Students</span></div>
+</div>
+</section>
+<!-- END: KPIGrid -->
+<!-- BEGIN: TabsNavigation -->
+<nav aria-label="Tabs" class="flex space-x-2 overflow-x-auto no-scrollbar pb-0.5">
+<button class="flex-shrink-0 px-3.5 py-2 rounded-lg bg-[#1978e5] text-white font-semibold text-xs shadow-sm flex items-center space-x-1.5 border border-[#4090fe]/40">
+<span>Official Receipts Ledger</span>
+<span class="bg-[#002f64] text-[#aac7ff] text-[10px] px-1.5 py-0.2 rounded-full font-bold">2</span>
+</button>
+<button class="flex-shrink-0 px-3.5 py-2 rounded-lg bg-[#10131a] border border-[#272a31] text-[#c1c6d5] hover:bg-[#181c22] font-medium text-xs transition">
+<span>Pending Dues / Defaulters</span>
+</button>
+<button class="flex-shrink-0 px-3.5 py-2 rounded-lg bg-[#10131a] border border-[#272a31] text-[#c1c6d5] hover:bg-[#181c22] font-medium text-xs flex items-center space-x-1 transition">
+<span>Sponsorships</span>
+<span class="text-[#8b919f] text-[10px]">(0)</span>
+</button>
+</nav>
+<!-- END: TabsNavigation -->
+<!-- BEGIN: SearchAndFilters -->
+<section class="bg-[#10131a] p-3 rounded-xl border border-[#272a31] shadow-sm space-y-2.5" data-purpose="ledger-filters">
+<div class="relative">
+<input class="w-full text-xs pl-8 pr-3 py-2 bg-[#181c22] border border-[#31353c] text-[#e0e2eb] rounded-lg focus:ring-1 focus:ring-[#1978e5] focus:border-[#1978e5] placeholder-[#8b919f]" placeholder="Search receipts by student name or receipt #..." type="text"/>
+<svg class="w-4 h-4 text-[#8b919f] absolute left-2.5 top-2.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<div class="grid grid-cols-2 gap-2">
+<div>
+<select class="w-full text-xs py-1.5 px-2 bg-[#181c22] border border-[#31353c] rounded-lg text-[#e0e2eb] focus:ring-[#1978e5] focus:border-[#1978e5]">
+<option class="bg-[#181c22] text-[#e0e2eb]">All Modes</option>
+<option class="bg-[#181c22] text-[#e0e2eb]">Cash</option>
+<option class="bg-[#181c22] text-[#e0e2eb]">Bank / UPI</option>
+</select>
+</div>
+<div>
+<select class="w-full text-xs py-1.5 px-2 bg-[#181c22] border border-[#31353c] rounded-lg text-[#e0e2eb] focus:ring-[#1978e5] focus:border-[#1978e5]">
+<option class="bg-[#181c22] text-[#e0e2eb]">All Months</option>
+<option class="bg-[#181c22] text-[#e0e2eb]" selected="">September 2026</option>
+<option class="bg-[#181c22] text-[#e0e2eb]">August 2026</option>
+</select>
+</div>
+</div>
+</section>
+<!-- END: SearchAndFilters -->
+<!-- BEGIN: ReceiptsCardList -->
+<section class="space-y-3" data-purpose="receipts-list">
+<div class="flex items-center justify-between text-xs font-semibold text-[#8b919f] px-1">
+<span class="tracking-wide">RECEIPTS COUNTERFOIL (2)</span>
+<span class="text-[#aac7ff] font-medium">Sorted by: Recent First</span>
+</div>
+<!-- Receipt Card 1 -->
+<article class="bg-[#10131a] rounded-xl border border-[#272a31] shadow-sm overflow-hidden" data-purpose="receipt-card">
+<div class="p-3.5 space-y-2.5">
+<!-- Top Row: Receipt No + Status -->
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="font-mono text-xs font-bold text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded">
+                RCP-2026-471
+              </span>
+<span class="text-[11px] text-[#8b919f]">2026-09-09</span>
+</div>
+<span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center space-x-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+<span>Paid</span>
+</span>
+</div>
+<!-- Student Information -->
+<div class="pt-1">
+<h3 class="text-sm font-bold text-white leading-snug">Pathan Mohamamd Khan</h3>
+<p class="text-[11px] text-[#c1c6d5] mt-0.5 flex items-center space-x-1 font-urdu">
+<span class="font-mono text-[#8b919f]">Adm: ZIA-21-002</span>
+<span>•</span>
+<span class="text-emerald-400 font-semibold">قاعدہ و ناظرہ (الف)</span>
+</p>
+</div>
+<!-- Billing & Financial Breakdown -->
+<div class="bg-[#181c22] rounded-lg p-2.5 flex items-center justify-between border border-[#272a31]">
+<div>
+<span class="block text-[10px] uppercase font-semibold text-[#8b919f]">Billing Month</span>
+<span class="text-xs font-medium text-[#e0e2eb]">September 2026</span>
+</div>
+<div class="text-right">
+<span class="block text-[10px] uppercase font-semibold text-[#8b919f]">Amount Paid</span>
+<span class="text-base font-extrabold text-emerald-400 font-mono">₹2,500</span>
+</div>
+</div>
+<!-- Footer of Card: Mode & Action -->
+<div class="pt-1 flex items-center justify-between">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-[#1c2026] text-[#c1c6d5] border border-[#31353c]">
+<svg class="w-3 h-3 mr-1 text-[#8b919f]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+              Cash
+            </span>
+<button aria-label="Print Slip" class="text-amber-400 hover:text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 p-2 rounded-lg flex items-center space-x-1 text-xs font-medium transition active:scale-95" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-[11px]">Print Slip</span>
+</button>
+</div>
+</div>
+</article>
+<!-- Receipt Card 2 -->
+<article class="bg-[#10131a] rounded-xl border border-[#272a31] shadow-sm overflow-hidden" data-purpose="receipt-card">
+<div class="p-3.5 space-y-2.5">
+<!-- Top Row: Receipt No + Status -->
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-2">
+<span class="font-mono text-xs font-bold text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded">
+                RCP-2026-444
+              </span>
+<span class="text-[11px] text-[#8b919f]">2026-09-10</span>
+</div>
+<span class="px-2 py-0.5 rounded-full text-[11px] font-semibold bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 flex items-center space-x-1">
+<span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+<span>Paid</span>
+</span>
+</div>
+<!-- Student Information -->
+<div class="pt-1">
+<h3 class="text-sm font-bold text-white leading-snug">Pathan Mohamamd Khan</h3>
+<p class="text-[11px] text-[#c1c6d5] mt-0.5 flex items-center space-x-1 font-urdu">
+<span class="font-mono text-[#8b919f]">Adm: ZIA-21-002</span>
+<span>•</span>
+<span class="text-emerald-400 font-semibold">قاعدہ و ناظرہ (الف)</span>
+</p>
+</div>
+<!-- Billing & Financial Breakdown -->
+<div class="bg-[#181c22] rounded-lg p-2.5 flex items-center justify-between border border-[#272a31]">
+<div>
+<span class="block text-[10px] uppercase font-semibold text-[#8b919f]">Billing Month</span>
+<span class="text-xs font-medium text-[#e0e2eb]">September 2026</span>
+</div>
+<div class="text-right">
+<span class="block text-[10px] uppercase font-semibold text-[#8b919f]">Amount Paid</span>
+<span class="text-base font-extrabold text-emerald-400 font-mono">₹2,500</span>
+</div>
+</div>
+<!-- Footer of Card: Mode & Action -->
+<div class="pt-1 flex items-center justify-between">
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-[#1c2026] text-[#c1c6d5] border border-[#31353c]">
+<svg class="w-3 h-3 mr-1 text-[#8b919f]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+              Cash
+            </span>
+<button aria-label="Print Slip" class="text-amber-400 hover:text-amber-300 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 p-2 rounded-lg flex items-center space-x-1 text-xs font-medium transition active:scale-95" type="button">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-[11px]">Print Slip</span>
+</button>
+</div>
+</div>
+</article>
+</section>
+<!-- END: ReceiptsCardList -->
+</main>
+<!-- BEGIN: BottomNavigationBar -->
+<nav class="fixed bottom-0 left-0 right-0 bg-[#10131a] border-t border-[#272a31] py-2 px-3 flex justify-around items-center z-50 shadow-2xl safe-area-pb" data-purpose="mobile-dock">
+<!-- Dashboard -->
+<a class="flex flex-col items-center justify-center text-[#8b919f] hover:text-[#aac7ff] transition" href="#">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-[10px] mt-1 font-medium">Dashboard</span>
+</a>
+<!-- Students -->
+<a class="flex flex-col items-center justify-center text-[#8b919f] hover:text-[#aac7ff] transition" href="#">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-[10px] mt-1 font-medium">Students</span>
+</a>
+<!-- Holy Quran / Schedule -->
+<a class="flex flex-col items-center justify-center text-[#8b919f] hover:text-[#aac7ff] transition" href="#">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-[10px] mt-1 font-medium">Quran</span>
+</a>
+<!-- Fees (Active) -->
+<a class="flex flex-col items-center justify-center text-[#1978e5] transition" href="#">
+<div class="p-1 rounded-full bg-[#1978e5]/20 border border-[#1978e5]/40">
+<svg class="w-5 h-5 text-[#4090fe]" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path>
+</svg>
+</div>
+<span class="text-[10px] mt-0.5 font-bold text-[#aac7ff]">Fees</span>
+</a>
+<!-- All Menu -->
+<a class="flex flex-col items-center justify-center text-[#8b919f] hover:text-[#aac7ff] transition" href="#">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+<span class="text-[10px] mt-1 font-medium">All Menu</span>
+</a>
+</nav>
+<!-- END: BottomNavigationBar -->
+</body></html>
