@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-theme="transparent-glossy">
+<html lang="en" class="dark" data-theme="dark">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230B664B'><path d='M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z'/></svg>" />
@@ -12,8 +12,15 @@
     <script>
       (function() {
         try {
-          var t = localStorage.getItem('mms_erp_theme') || 'transparent-glossy';
-          document.documentElement.setAttribute('data-theme', t);
+          var dark = localStorage.getItem('mms_dark_mode');
+          if (dark === 'false') {
+            document.documentElement.classList.remove('dark');
+            var t = localStorage.getItem('mms_erp_theme') || 'transparent-glossy';
+            document.documentElement.setAttribute('data-theme', t);
+          } else {
+            document.documentElement.classList.add('dark');
+            document.documentElement.setAttribute('data-theme', 'dark');
+          }
           var u = localStorage.getItem('mms_pref_urdu_font');
           var e = localStorage.getItem('mms_pref_english_font');
           var uMap = {
