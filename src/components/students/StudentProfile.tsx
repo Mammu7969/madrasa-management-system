@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { db } from '../../services/db';
-import { Student, FeeTransaction, StudentUpdateLog, StudentUpdateChange } from '../../types';
+import { Student, FeeTransaction, StudentUpdateLog, StudentUpdateChange, MadrasaClass } from '../../types';
 import { parseSabaqProgress, QURAN_PARAHS } from '../../services/quran';
 import { 
   ArrowLeft, 
@@ -229,6 +229,7 @@ export const StudentProfile: React.FC<StudentProfileProps> = ({
   };
 
   // Quick Action Modals
+  const availableClasses: MadrasaClass[] = useMemo(() => db.getClasses(activeMadrasa?.id), [activeMadrasa?.id]);
   const [showSelectClassModal, setShowSelectClassModal] = useState<boolean>(false);
   const [selectedClassVal, setSelectedClassVal] = useState<string>(student.class);
 
@@ -2090,13 +2091,19 @@ export const StudentProfile: React.FC<StudentProfileProps> = ({
                     onChange={(e) => setEditClassName(e.target.value)}
                     className="w-full p-2 text-xs rounded-xl border bg-white font-semibold"
                   >
-                    <option value="Hifz Section A">Hifz Section A</option>
-                    <option value="Hifz Section B">Hifz Section B</option>
-                    <option value="Nazira Class 1">Nazira Class 1</option>
-                    <option value="Nazira Class 2">Nazira Class 2</option>
-                    <option value="Alimiyat Year 1">Alimiyat Year 1</option>
-                    <option value="Alimiyat Year 2">Alimiyat Year 2</option>
-                    <option value="Qirat & Tajweed">Qirat & Tajweed</option>
+                    {availableClasses.map((c: MadrasaClass) => (
+                      <option key={c.id} value={c.name}>
+                        {c.name} {c.category ? `(${c.category})` : ''}
+                      </option>
+                    ))}
+                    {availableClasses.length === 0 && (
+                      <>
+                        <option value="Hifz Section A">Hifz Section A</option>
+                        <option value="Hifz Section B">Hifz Section B</option>
+                        <option value="Nazira Class 1">Nazira Class 1</option>
+                        <option value="Alimiyat Year 1">Alimiyat Year 1</option>
+                      </>
+                    )}
                   </select>
                 </div>
 
@@ -2478,13 +2485,19 @@ export const StudentProfile: React.FC<StudentProfileProps> = ({
             onChange={(e) => setSelectedClassVal(e.target.value)}
             className="w-full p-2 text-xs rounded-xl border bg-white font-semibold"
           >
-            <option value="Hifz Section A">Hifz Section A</option>
-            <option value="Hifz Section B">Hifz Section B</option>
-            <option value="Nazira Class 1">Nazira Class 1</option>
-            <option value="Nazira Class 2">Nazira Class 2</option>
-            <option value="Alimiyat Year 1">Alimiyat Year 1</option>
-            <option value="Alimiyat Year 2">Alimiyat Year 2</option>
-            <option value="Qirat & Tajweed">Qirat & Tajweed</option>
+            {availableClasses.map((c: MadrasaClass) => (
+              <option key={c.id} value={c.name}>
+                {c.name} {c.category ? `(${c.category})` : ''}
+              </option>
+            ))}
+            {availableClasses.length === 0 && (
+              <>
+                <option value="Hifz Section A">Hifz Section A</option>
+                <option value="Hifz Section B">Hifz Section B</option>
+                <option value="Nazira Class 1">Nazira Class 1</option>
+                <option value="Alimiyat Year 1">Alimiyat Year 1</option>
+              </>
+            )}
           </select>
         </form>
       </Modal>

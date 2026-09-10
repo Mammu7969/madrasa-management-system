@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { db } from '../../services/db';
-import { Student } from '../../types';
+import { Student, MadrasaClass } from '../../types';
 import { 
   BookOpen, 
   CalendarCheck, 
@@ -11,16 +11,16 @@ import {
   ChevronLeft, 
   ChevronRight, 
   CheckCircle2, 
-  XCircle,
-  Save,
-  Edit3,
-  Calendar,
-  User,
-  Users,
-  Home,
-  Check,
-  X,
-  Layers
+  XCircle, 
+  Save, 
+  Edit3, 
+  Calendar, 
+  User, 
+  Users, 
+  Home, 
+  Check, 
+  X, 
+  Layers 
 } from 'lucide-react';
 import { Modal } from '../common/Modal';
 
@@ -51,20 +51,39 @@ export const RoznamchaModule: React.FC = () => {
     return isUrdu ? ur : en;
   };
 
-  const allStudents = db.getStudents(activeMadrasa?.id);
-  const madrasaClasses = useMemo(() => {
-    const list = db.getClasses(activeMadrasa?.id);
-    if (list.length > 0) return list;
-    return [
-      { id: 'cls-1', name: 'Hifz Section A', nameUrdu: 'شعبہ حفظ الف' },
-      { id: 'cls-2', name: 'Hifz Section B', nameUrdu: 'شعبہ حفظ ب' },
-      { id: 'cls-3', name: 'Nazira Class 1', nameUrdu: 'ناظرہ اول' },
-      { id: 'cls-4', name: 'Alimiyat Year 1', nameUrdu: 'عالمیت سال اول' }
-    ];
+  const [allStudents, setAllStudents] = useState<Student[]>(() => db.getStudents(activeMadrasa?.id));
+  const [madrasaClasses, setMadrasaClasses] = useState<MadrasaClass[]>(() => db.getClasses(activeMadrasa?.id));
+
+  // Sync across modules on live updates
+  useEffect(() => {
+    const handleSync = () => {
+      setAllStudents(db.getStudents(activeMadrasa?.id));
+      setMadrasaClasses(db.getClasses(activeMadrasa?.id));
+    };
+
+    window.addEventListener('mms_data_updated', handleSync);
+    window.addEventListener('mms_data_synced', handleSync);
+    window.addEventListener('storage', handleSync);
+    return () => {
+      window.removeEventListener('mms_data_updated', handleSync);
+      window.removeEventListener('mms_data_synced', handleSync);
+      window.removeEventListener('storage', handleSync);
+    };
   }, [activeMadrasa?.id]);
 
-  const [selectedClass, setSelectedClass] = useState<string>('Hifz Section A');
-  const [selectedStudentId, setSelectedStudentId] = useState<string>('std-2');
+  const [selectedClass, setSelectedClass] = useState<string>(() => {
+    const list = db.getClasses(activeMadrasa?.id);
+    return list[0]?.name || 'Hifz Section A';
+  });
+
+  // Keep selectedClass valid if classes change
+  useEffect(() => {
+    if (madrasaClasses.length > 0 && !madrasaClasses.some(c => c.name === selectedClass)) {
+      setSelectedClass(madrasaClasses[0].name);
+    }
+  }, [madrasaClasses, selectedClass]);
+
+  const [selectedStudentId, setSelectedStudentId] = useState<string>('');
   const [selectedYear, setSelectedYear] = useState<number>(2026);
   const [selectedMonth, setSelectedMonth] = useState<number>(8); // 8 = September (0-indexed)
   const [activeView, setActiveView] = useState<'roznamchah' | 'roznamchah_daily'>('roznamchah');
@@ -80,11 +99,14 @@ export const RoznamchaModule: React.FC = () => {
   }, [departmentOverride, isAutoHifz]);
 
   const classStudents = useMemo(() => {
-    return allStudents.filter(s => s.class === selectedClass);
+    return allStudents.filter(s => {
+      if (!s.class) return false;
+      return s.class === selectedClass || s.class.trim().toLowerCase() === selectedClass.trim().toLowerCase();
+    });
   }, [allStudents, selectedClass]);
 
   const selectedStudent = useMemo(() => {
-    if (!selectedStudentId || selectedStudentId === 'all') return null;
+    if (!selectedStudentId || selectedStudentId === 'all') return classStudents[0] || null;
     return classStudents.find(s => s.id === selectedStudentId) || classStudents[0] || null;
   }, [classStudents, selectedStudentId]);
 

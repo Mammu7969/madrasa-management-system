@@ -74,7 +74,14 @@ export const AddAdmission: React.FC<AddAdmissionProps> = ({
   const [sponsorship, setSponsorship] = useState<'Self-Sponsored' | 'Discounted' | 'Non-Sponsored' | 'Sponsored by'>('Self-Sponsored');
   const [kafeelName, setKafeelName] = useState<string>('');
   const [monthlyFees, setMonthlyFees] = useState<number>(2500);
-  const [className, setClassName] = useState<string>('Hifz Section A');
+  const availableClasses = useMemo(() => {
+    return db.getClasses(activeMadrasa?.id);
+  }, [activeMadrasa?.id]);
+
+  const [className, setClassName] = useState<string>(() => {
+    const list = db.getClasses(activeMadrasa?.id);
+    return list[0]?.name || 'Hifz Section A';
+  });
   const [previousSchool, setPreviousSchool] = useState<string>('');
   const [previousStudy, setPreviousStudy] = useState<string>('');
   const [aadharNumber, setAadharNumber] = useState<string>('');
@@ -733,14 +740,21 @@ export const AddAdmission: React.FC<AddAdmissionProps> = ({
                   value={className}
                   onChange={(e) => setClassName(e.target.value)}
                   className="w-full p-2.5 text-xs rounded-xl border border-m3-outline-variant/30 bg-white dark:bg-m3-surface-container-high text-m3-on-surface font-semibold"
+                  required
                 >
-                  <option value="Hifz Section A">Hifz Section A</option>
-                  <option value="Hifz Section B">Hifz Section B</option>
-                  <option value="Nazira Class 1">Nazira Class 1</option>
-                  <option value="Nazira Class 2">Nazira Class 2</option>
-                  <option value="Alimiyat Year 1">Alimiyat Year 1</option>
-                  <option value="Alimiyat Year 2">Alimiyat Year 2</option>
-                  <option value="Qirat & Tajweed">Qirat & Tajweed</option>
+                  {availableClasses.map(c => (
+                    <option key={c.id} value={c.name}>
+                      {c.name} {c.category ? `(${c.category})` : ''} {c.incharge && c.incharge !== 'Not Assigned' ? `- Ustadh: ${c.incharge}` : ''}
+                    </option>
+                  ))}
+                  {availableClasses.length === 0 && (
+                    <>
+                      <option value="Hifz Section A">Hifz Section A</option>
+                      <option value="Hifz Section B">Hifz Section B</option>
+                      <option value="Nazira Class 1">Nazira Class 1</option>
+                      <option value="Alimiyat Year 1">Alimiyat Year 1</option>
+                    </>
+                  )}
                 </select>
               </div>
 

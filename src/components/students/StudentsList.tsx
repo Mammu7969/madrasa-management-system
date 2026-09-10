@@ -60,16 +60,25 @@ export const StudentsList: React.FC<StudentsListProps> = ({
   useEffect(() => {
     const handleSync = () => setSyncVersion(v => v + 1);
     window.addEventListener('mms_data_synced', handleSync);
-    return () => window.removeEventListener('mms_data_synced', handleSync);
+    window.addEventListener('mms_data_updated', handleSync);
+    window.addEventListener('storage', handleSync);
+    return () => {
+      window.removeEventListener('mms_data_synced', handleSync);
+      window.removeEventListener('mms_data_updated', handleSync);
+      window.removeEventListener('storage', handleSync);
+    };
   }, []);
 
   // Live students list
   const students = useMemo(() => db.getStudents(activeMadrasa?.id), [activeMadrasa?.id, syncVersion]);
 
-  // Unique classes in current madrasa
+  // Unique classes in current madrasa (both from registered classes and students)
+  const registeredClasses = useMemo(() => db.getClasses(activeMadrasa?.id), [activeMadrasa?.id, syncVersion]);
   const availableClasses = useMemo(() => {
-    return Array.from(new Set(students.map(s => s.class))).filter(Boolean);
-  }, [students]);
+    const fromClasses = registeredClasses.map(c => c.name);
+    const fromStudents = students.map(s => s.class);
+    return Array.from(new Set([...fromClasses, ...fromStudents])).filter(Boolean);
+  }, [registeredClasses, students]);
 
   // Filtered and sorted students
   const filteredStudents = useMemo(() => {
@@ -83,7 +92,10 @@ export const StudentsList: React.FC<StudentsListProps> = ({
           s.fatherName.toLowerCase().includes(searchQuery.toLowerCase()) ||
           (s.contactNumber && s.contactNumber.includes(searchQuery));
 
-        const matchesClass = selectedClass === 'all' || s.class === selectedClass;
+        const matchesClass = 
+          selectedClass === 'all' || 
+          s.class === selectedClass ||
+          s.class?.trim().toLowerCase() === selectedClass?.trim().toLowerCase();
         const matchesCategory = selectedCategory === 'all' || s.category === selectedCategory;
         const matchesStatus = 
           selectedStatusFilter === 'all' ||

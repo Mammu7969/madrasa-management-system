@@ -1,8 +1,8 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { db } from '../../services/db';
-import { Student, ManualHoliday, MadrasaClass } from '../../types';
+import { Student, ManualHoliday, MadrasaClass, Teacher } from '../../types';
 import { 
   CalendarCheck, 
   Download, 
@@ -10,12 +10,12 @@ import {
   ChevronLeft, 
   ChevronRight, 
   CheckCircle2, 
-  Save,
-  Users,
-  Calendar,
-  Plus,
-  Trash2,
-  AlertCircle
+  Save, 
+  Users, 
+  Calendar, 
+  Plus, 
+  Trash2, 
+  AlertCircle 
 } from 'lucide-react';
 import { Modal } from '../common/Modal';
 
@@ -36,19 +36,52 @@ export const AttendanceModule: React.FC = () => {
     return isUrdu ? ur : en;
   };
 
-  const allStudents = db.getStudents(activeMadrasa?.id);
-  const madrasaClasses: MadrasaClass[] = useMemo(() => {
-    const list = db.getClasses(activeMadrasa?.id);
-    if (list.length > 0) return list;
-    return [
-      { id: 'cls-1', name: 'Hifz Section A', nameUrdu: 'شعبہ حفظ الف', section: 'A', room: '101', capacity: 30, priority: 1, category: 'Hifz', incharge: 'Ustadh Ahmad', madrasaId: activeMadrasa?.id || 'madrasa-1' },
-      { id: 'cls-2', name: 'Hifz Section B', nameUrdu: 'شعبہ حفظ ب', section: 'B', room: '102', capacity: 30, priority: 2, category: 'Hifz', incharge: 'Ustadh Bilal', madrasaId: activeMadrasa?.id || 'madrasa-1' },
-      { id: 'cls-3', name: 'Nazira Class 1', nameUrdu: 'ناظرہ اول', section: 'A', room: '103', capacity: 25, priority: 3, category: 'Nazira', incharge: 'Ustadh Tariq', madrasaId: activeMadrasa?.id || 'madrasa-1' },
-      { id: 'cls-4', name: 'Alimiyat Year 1', nameUrdu: 'عالمیت سال اول', section: 'A', room: '201', capacity: 20, priority: 4, category: 'Alimiyat', incharge: 'Ustadh Zubair', madrasaId: activeMadrasa?.id || 'madrasa-1' }
-    ];
+  const [allStudents, setAllStudents] = useState<Student[]>(() => db.getStudents(activeMadrasa?.id));
+  const [madrasaClasses, setMadrasaClasses] = useState<MadrasaClass[]>(() => db.getClasses(activeMadrasa?.id));
+  const [teachers, setTeachers] = useState<Teacher[]>(() => db.getTeachers(activeMadrasa?.id));
+
+  // Sync across modules on live updates
+  useEffect(() => {
+    const handleSync = () => {
+      setAllStudents(db.getStudents(activeMadrasa?.id));
+      setMadrasaClasses(db.getClasses(activeMadrasa?.id));
+      setTeachers(db.getTeachers(activeMadrasa?.id));
+    };
+
+    window.addEventListener('mms_data_updated', handleSync);
+    window.addEventListener('mms_data_synced', handleSync);
+    window.addEventListener('storage', handleSync);
+    return () => {
+      window.removeEventListener('mms_data_updated', handleSync);
+      window.removeEventListener('mms_data_synced', handleSync);
+      window.removeEventListener('storage', handleSync);
+    };
   }, [activeMadrasa?.id]);
 
-  const [selectedClass, setSelectedClass] = useState<string>('Hifz Section A');
+  const [selectedClass, setSelectedClass] = useState<string>(() => {
+    const list = db.getClasses(activeMadrasa?.id);
+    return list[0]?.name || 'Hifz Section A';
+  });
+
+  // Keep selectedClass valid if classes change
+  useEffect(() => {
+    if (madrasaClasses.length > 0 && !madrasaClasses.some(c => c.name === selectedClass)) {
+      setSelectedClass(madrasaClasses[0].name);
+    }
+  }, [madrasaClasses, selectedClass]);
+
+  const currentClassObj = useMemo(() => {
+    return madrasaClasses.find(c => c.name === selectedClass || c.id === selectedClass);
+  }, [madrasaClasses, selectedClass]);
+
+  const assignedTeacher = useMemo(() => {
+    if (!currentClassObj) return null;
+    return teachers.find(t => 
+      (currentClassObj.incharge && currentClassObj.incharge !== 'Not Assigned' && (t.name.trim().toLowerCase() === currentClassObj.incharge.trim().toLowerCase() || t.id === currentClassObj.incharge)) ||
+      (t.assignedClass && (t.assignedClass.trim().toLowerCase() === currentClassObj.name.trim().toLowerCase() || t.assignedClass === currentClassObj.id))
+    );
+  }, [teachers, currentClassObj]);
+
   const [selectedYear, setSelectedYear] = useState<number>(2026);
   const [selectedMonth, setSelectedMonth] = useState<number>(8); // 8 = September (0-indexed)
   const [sessionView, setSessionView] = useState<AttendanceSessionView>('both');
@@ -60,7 +93,10 @@ export const AttendanceModule: React.FC = () => {
   const [holidayReason, setHolidayReason] = useState<string>('');
 
   const classStudents = useMemo(() => {
-    return allStudents.filter(s => s.class === selectedClass);
+    return allStudents.filter(s => {
+      if (!s.class) return false;
+      return s.class === selectedClass || s.class.trim().toLowerCase() === selectedClass.trim().toLowerCase();
+    });
   }, [allStudents, selectedClass]);
 
   // Month metadata
@@ -420,6 +456,14 @@ export const AttendanceModule: React.FC = () => {
             </select>
           </div>
 
+          {/* Assigned Teacher Badge */}
+          <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl text-xs">
+            <span className="text-[11px] text-emerald-800 font-semibold">{loc('Ustadh:', 'استاد محترم:')}</span>
+            <span className="font-bold text-emerald-950">
+              {assignedTeacher?.name || (currentClassObj?.incharge && currentClassObj.incharge !== 'Not Assigned' ? currentClassObj.incharge : loc('Not Assigned', 'تعینات نہیں'))}
+            </span>
+          </div>
+
           {/* Session Selector (Per-day 2 Times Attendance) */}
           <div className="flex items-center bg-gray-100 p-1 rounded-2xl border border-gray-200">
             <button
@@ -744,7 +788,10 @@ export const AttendanceModule: React.FC = () => {
         {/* Official Signatures Footer For Ledger Print */}
         <div className="p-6 bg-gray-50/80 border-t border-gray-200 mt-2 flex flex-wrap items-center justify-between gap-6 text-xs text-gray-700 font-urdu">
           <div className="text-center min-w-[140px] pt-4 border-t-2 border-gray-400">
-            <span className="font-bold block">{loc("Teacher's Signature", 'دستخط استاذ')}</span>
+            <span className="font-bold block">
+              {assignedTeacher ? assignedTeacher.name : (currentClassObj?.incharge && currentClassObj.incharge !== 'Not Assigned' ? currentClassObj.incharge : loc("Teacher's Signature", 'دستخط استاذ'))}
+            </span>
+            <span className="text-[10px] text-gray-500 block">{loc("Ustadh Incharge", 'استاد نگراں')}</span>
           </div>
           <div className="text-center min-w-[160px] pt-4 border-t-2 border-gray-400">
             <span className="font-bold block">{loc('Supervisor Signature', 'دستخط ناظم تعلیمات')}</span>

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { db } from '../../services/db';
@@ -54,7 +54,24 @@ export const TeachersModule: React.FC = () => {
   const { showToast } = useTheme();
 
   const [teachers, setTeachers] = useState<Teacher[]>(() => db.getTeachers(activeMadrasa?.id));
-  const [classes] = useState<MadrasaClass[]>(() => db.getClasses(activeMadrasa?.id));
+  const [classes, setClasses] = useState<MadrasaClass[]>(() => db.getClasses(activeMadrasa?.id));
+
+  // Sync teachers and classes across all modules dynamically
+  useEffect(() => {
+    const handleSync = () => {
+      setTeachers(db.getTeachers(activeMadrasa?.id));
+      setClasses(db.getClasses(activeMadrasa?.id));
+    };
+
+    window.addEventListener('mms_data_updated', handleSync);
+    window.addEventListener('mms_data_synced', handleSync);
+    window.addEventListener('storage', handleSync);
+    return () => {
+      window.removeEventListener('mms_data_updated', handleSync);
+      window.removeEventListener('mms_data_synced', handleSync);
+      window.removeEventListener('storage', handleSync);
+    };
+  }, [activeMadrasa?.id]);
   
   // Filters & View State
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -165,6 +182,7 @@ export const TeachersModule: React.FC = () => {
     db.updateTeacher(updated);
     const updatedList = db.getTeachers(activeMadrasa.id);
     setTeachers(updatedList);
+    setClasses(db.getClasses(activeMadrasa.id));
     if (selectedTeacherForProfile && selectedTeacherForProfile.id === updated.id) {
       setSelectedTeacherForProfile(updated);
     }
@@ -251,6 +269,7 @@ export const TeachersModule: React.FC = () => {
     db.addTeacher(newTeacher);
     const updated = db.getTeachers(activeMadrasa.id);
     setTeachers(updated);
+    setClasses(db.getClasses(activeMadrasa.id));
     showToast(`Ustadh ${newTeacher.name} registered with username ${creds.username}!`, 'success');
 
     // Reset
@@ -1280,6 +1299,7 @@ export const TeachersModule: React.FC = () => {
                   onChange={(e) => setAssignedClass(e.target.value)}
                   className="w-full p-2.5 text-xs rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-emerald-500/20 focus:outline-none font-bold"
                 >
+                  <option value="General">General / Not Assigned (عمومی)</option>
                   {classes.map(c => (
                     <option key={c.id} value={c.name}>{c.name}</option>
                   ))}
@@ -1583,6 +1603,7 @@ export const TeachersModule: React.FC = () => {
                   onChange={(e) => setEditAssignedClass(e.target.value)}
                   className="w-full p-2.5 text-xs rounded-xl border border-gray-300 bg-white focus:ring-2 focus:ring-emerald-500/20 focus:outline-none font-bold"
                 >
+                  <option value="General">General / Not Assigned (عمومی)</option>
                   {classes.map(c => (
                     <option key={c.id} value={c.name}>{c.name}</option>
                   ))}

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { db } from '../../services/db';
-import { MadrasaClass, Subject, Student, Department, AssignedClassBook } from '../../types';
+import { MadrasaClass, Subject, Student, Department, AssignedClassBook, Teacher } from '../../types';
 import { generateDefaultCredentials } from '../../utils/credentialGenerator';
 import { 
   BookOpen, 
@@ -46,7 +46,34 @@ export const ClassesModule: React.FC = () => {
   const [books, setBooks] = useState<Subject[]>(() => db.getBooks(activeMadrasa?.id));
   const [classes, setClasses] = useState<MadrasaClass[]>(() => db.getClasses(activeMadrasa?.id));
   const [students, setStudents] = useState<Student[]>(() => db.getStudents(activeMadrasa?.id));
-  const teachers = db.getTeachers(activeMadrasa?.id);
+  const [teachers, setTeachers] = useState<Teacher[]>(() => db.getTeachers(activeMadrasa?.id));
+
+  // Live synchronizer across modules
+  useEffect(() => {
+    const handleSync = () => {
+      setDepartments(db.getDepartments(activeMadrasa?.id));
+      setBooks(db.getBooks(activeMadrasa?.id));
+      setClasses(db.getClasses(activeMadrasa?.id));
+      setStudents(db.getStudents(activeMadrasa?.id));
+      setTeachers(db.getTeachers(activeMadrasa?.id));
+    };
+    window.addEventListener('mms_data_updated', handleSync);
+    window.addEventListener('mms_data_synced', handleSync);
+    return () => {
+      window.removeEventListener('mms_data_updated', handleSync);
+      window.removeEventListener('mms_data_synced', handleSync);
+    };
+  }, [activeMadrasa?.id]);
+
+  // Robust bidirectional Student-in-Class matching helper
+  const isStudentInClass = (s: Student, cls: MadrasaClass | null | undefined): boolean => {
+    if (!s || !cls) return false;
+    const studentClass = (s.class || '').trim().toLowerCase();
+    const className = (cls.name || '').trim().toLowerCase();
+    const classId = (cls.id || '').trim().toLowerCase();
+    if (!studentClass) return false;
+    return studentClass === className || studentClass === classId;
+  };
 
   // Search & Filter State
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -264,7 +291,7 @@ export const ClassesModule: React.FC = () => {
     setClassNameInput('');
     setClassPriority(classes.length + 1);
     setClassDeptId(departments[0]?.id || '');
-    setIncharge(teachers[0]?.name || '');
+    setIncharge(teachers[0]?.name || 'Not Assigned');
     setStartTime('08:00 AM');
     setEndTime('01:30 PM');
     setRoom('Hall A-1');
@@ -281,7 +308,7 @@ export const ClassesModule: React.FC = () => {
     setClassNameInput(cls.name);
     setClassPriority(cls.priority || 1);
     setClassDeptId(cls.departmentId || departments[0]?.id || '');
-    setIncharge(cls.incharge || teachers[0]?.name || '');
+    setIncharge(cls.incharge || 'Not Assigned');
     setStartTime(cls.startTime || '08:00 AM');
     setEndTime(cls.endTime || '01:30 PM');
     setRoom(cls.room || 'Hall A-1');
@@ -498,7 +525,8 @@ export const ClassesModule: React.FC = () => {
   const [isDirectSubmitting, setIsDirectSubmitting] = useState<boolean>(false);
 
   const openAddStudentModal = (cls: MadrasaClass | null, initialTab: 'assign' | 'new' | 'enrolled' = 'assign') => {
-    setTargetClassForStudent(cls || classes[0] || null);
+    const freshCls = cls ? (classes.find(c => c.id === cls.id || c.name === cls.name) || cls) : (classes[0] || null);
+    setTargetClassForStudent(freshCls);
     setAddStudentSubTab(initialTab);
     setAssignSearch('');
     setAssignFilter('all');
@@ -519,7 +547,8 @@ export const ClassesModule: React.FC = () => {
     setIsAssigning(true);
     try {
       await db.updateStudent({ ...student, class: targetClassName });
-      setStudents(db.getStudents(activeMadrasa?.id));
+      const updated = db.getStudents(activeMadrasa?.id);
+      setStudents(updated);
       showToast(loc(`Student "${student.studentName}" enrolled in "${targetClassName}"!`, `طالب علم "${student.studentName}" درجہ میں شامل ہو گیا`), 'success');
     } catch (err: any) {
       showToast(err?.message || 'Failed to enroll student', 'error');
@@ -538,7 +567,8 @@ export const ClassesModule: React.FC = () => {
           await db.updateStudent({ ...s, class: targetClassForStudent.name });
         }
       }
-      setStudents(db.getStudents(activeMadrasa?.id));
+      const updated = db.getStudents(activeMadrasa?.id);
+      setStudents(updated);
       showToast(loc(`${selectedStudentIds.length} students enrolled in "${targetClassForStudent.name}"!`, `${selectedStudentIds.length} طلبہ درجہ میں داخل کر لیے گئے`), 'success');
       setSelectedStudentIds([]);
     } catch (err: any) {
@@ -647,7 +677,7 @@ export const ClassesModule: React.FC = () => {
   });
 
   const currentClassStudents = targetClassForStudent 
-    ? students.filter(s => s.class === targetClassForStudent.name)
+    ? students.filter(s => isStudentInClass(s, targetClassForStudent))
     : [];
 
   const unassignedStudentsCount = students.filter(s => !s.class || s.class.trim() === '' || s.class.toLowerCase() === 'unassigned').length;
@@ -657,12 +687,13 @@ export const ClassesModule: React.FC = () => {
     const matchesSearch = 
       !q ||
       s.studentName.toLowerCase().includes(q) ||
+      (s.studentNameUrdu && s.studentNameUrdu.includes(assignSearch.trim())) ||
       s.admissionNo.toLowerCase().includes(q) ||
       s.fatherName.toLowerCase().includes(q);
 
     if (!matchesSearch) return false;
     if (assignFilter === 'unassigned') return !s.class || s.class.trim() === '' || s.class.toLowerCase() === 'unassigned';
-    if (assignFilter === 'other') return s.class && s.class.trim() !== '' && s.class !== targetClassForStudent?.name;
+    if (assignFilter === 'other') return s.class && s.class.trim() !== '' && !isStudentInClass(s, targetClassForStudent);
     return true;
   });
 
@@ -1053,9 +1084,13 @@ export const ClassesModule: React.FC = () => {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {filteredClasses.map(c => {
-              const classStudents = students.filter(s => s.class === c.name);
+              const classStudents = students.filter(s => isStudentInClass(s, c));
               const enrolledCount = classStudents.length;
               const assignedBooksList = c.assignedBooks || [];
+              const assignedTeacher = teachers.find(t => 
+                (c.incharge && c.incharge !== 'Not Assigned' && (t.name.trim().toLowerCase() === c.incharge.trim().toLowerCase() || t.id === c.incharge)) ||
+                (t.assignedClass && (t.assignedClass.trim().toLowerCase() === c.name.trim().toLowerCase() || t.assignedClass === c.id))
+              );
 
               return (
                 <div key={c.id} className="bg-white rounded-3xl border border-gray-200 shadow-sm p-5 flex flex-col justify-between space-y-4 hover:border-emerald-300 transition-all">
@@ -1133,34 +1168,64 @@ export const ClassesModule: React.FC = () => {
                   </div>
 
                   <div className="space-y-2 pt-3 border-t border-gray-100 text-xs">
-                    {/* Ustadh Incharge */}
-                    <div className="flex items-center justify-between text-gray-700">
+                    {/* Ustadh Incharge Badge */}
+                    <div className="flex items-center justify-between text-gray-700 bg-gray-50/80 p-2.5 rounded-2xl border border-gray-100">
                       <span className="flex items-center gap-1.5 text-gray-500 text-[11px]">
-                        <GraduationCap className="w-3.5 h-3.5 text-emerald-600" />
+                        <GraduationCap className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
                         <span>{loc('Ustadh:', 'استاد محترم:')}</span>
                       </span>
-                      <strong className="font-bold text-gray-900">{c.incharge || 'Not Assigned'}</strong>
+                      {assignedTeacher ? (
+                        <div className="flex items-center gap-2">
+                          <div className="w-7 h-7 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center text-[10px] font-bold overflow-hidden border border-emerald-300 shrink-0">
+                            {assignedTeacher.photoUrl ? (
+                              <img src={assignedTeacher.photoUrl} alt={assignedTeacher.name} className="w-full h-full object-cover" />
+                            ) : (
+                              <span>{assignedTeacher.name.substring(0, 2).toUpperCase()}</span>
+                            )}
+                          </div>
+                          <div className="text-right">
+                            <span className="font-bold text-gray-900 block leading-tight text-xs">{assignedTeacher.name}</span>
+                            <span className="text-[10px] text-emerald-700 font-medium block">{assignedTeacher.designation || 'استاد'}</span>
+                          </div>
+                        </div>
+                      ) : (
+                        <span className="text-xs font-semibold text-gray-500 bg-gray-100 px-2.5 py-1 rounded-xl border border-gray-200">
+                          {c.incharge && c.incharge !== 'Not Assigned' ? c.incharge : loc('Not Assigned', 'تعینات نہیں')}
+                        </span>
+                      )}
                     </div>
 
-                    {/* Students Count & Add Student action */}
-                    <div className="flex items-center justify-between text-gray-700">
+                    {/* Students Count */}
+                    <div className="flex items-center justify-between text-gray-700 px-1">
                       <span className="flex items-center gap-1.5 text-gray-500 text-[11px]">
                         <Users className="w-3.5 h-3.5 text-emerald-600" />
                         <span>{loc('Enrolled Students:', 'داخل طلبہ:')}</span>
                       </span>
-                      <span className="font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded">
+                      <span className="font-bold text-emerald-800 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200/60">
                         {enrolledCount} / {c.capacity || 35}
                       </span>
                     </div>
 
-                    <div className="pt-2 border-t border-gray-100 flex items-center justify-between gap-2">
+                    {/* Dual Actions: View Students & Add Student */}
+                    <div className="pt-2 border-t border-gray-100 flex items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => openAddStudentModal(c, 'enrolled')}
+                        className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-bold transition-all cursor-pointer border border-gray-200"
+                        title={loc('View enrolled students list', 'داخل طلبہ کی فہرست دیکھیں')}
+                      >
+                        <Users className="w-3.5 h-3.5 text-gray-600" />
+                        <span>{loc(`View (${enrolledCount})`, `طلبہ (${enrolledCount})`)}</span>
+                      </button>
+
                       <button
                         type="button"
                         onClick={() => openAddStudentModal(c, 'assign')}
-                        className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold transition-all cursor-pointer"
+                        className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-700 hover:bg-emerald-800 text-white text-xs font-bold transition-all cursor-pointer shadow-xs"
+                        title={loc('Add student to class', 'طالب علم درجہ میں شامل کریں')}
                       >
                         <UserPlus className="w-3.5 h-3.5" />
-                        <span>{loc('Add Student to Class', 'طالب علم شامل کریں')}</span>
+                        <span>{loc('+ Add Student', '+ طالب علم')}</span>
                       </button>
                     </div>
                   </div>
@@ -1499,8 +1564,8 @@ export const ClassesModule: React.FC = () => {
               value={incharge}
               onChange={(e) => setIncharge(e.target.value)}
               className="w-full p-2.5 text-xs rounded-xl border border-gray-300 bg-white font-bold text-gray-900 focus:ring-2 focus:ring-emerald-500 focus:outline-none cursor-pointer"
-              required
             >
+              <option value="Not Assigned">{loc('-- Not Assigned / بغیر نگراں --', '-- تعینات نہیں / بغیر نگراں --')}</option>
               {teachers.map(t => (
                 <option key={t.id} value={t.name}>
                   {t.name} ({t.designation || 'Teacher'}) {t.phone ? `- ${t.phone}` : ''}
@@ -1840,7 +1905,7 @@ export const ClassesModule: React.FC = () => {
                     </thead>
                     <tbody className="divide-y divide-gray-100">
                       {candidateStudents.map(s => {
-                        const isEnrolled = s.class === targetClassForStudent.name;
+                        const isEnrolled = targetClassForStudent ? isStudentInClass(s, targetClassForStudent) : false;
                         const isSelected = selectedStudentIds.includes(s.id);
                         return (
                           <tr key={s.id} className={`hover:bg-gray-50 ${isEnrolled ? 'bg-emerald-50/30' : isSelected ? 'bg-emerald-50/50' : ''}`}>
@@ -1852,7 +1917,10 @@ export const ClassesModule: React.FC = () => {
                                 onChange={() => setSelectedStudentIds(prev => prev.includes(s.id) ? prev.filter(x => x !== s.id) : [...prev, s.id])}
                               />
                             </td>
-                            <td className="p-2.5 font-bold text-gray-900">{s.studentName}</td>
+                            <td className="p-2.5 font-bold text-gray-900">
+                              <div>{s.studentName}</div>
+                              {s.studentNameUrdu && <div className="text-[10px] text-emerald-800 font-urdu">{s.studentNameUrdu}</div>}
+                            </td>
                             <td className="p-2.5 font-mono text-gray-600">{s.admissionNo}</td>
                             <td className="p-2.5">{s.class || loc('Unassigned', 'بلا درجہ')}</td>
                             <td className="p-2.5 text-right">
@@ -1861,7 +1929,7 @@ export const ClassesModule: React.FC = () => {
                               ) : (
                                 <button
                                   type="button"
-                                  onClick={() => handleAssignSingleStudent(s, targetClassForStudent.name)}
+                                  onClick={() => handleAssignSingleStudent(s, targetClassForStudent?.name || '')}
                                   className="px-3 py-1 bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg text-xs font-bold cursor-pointer"
                                 >
                                   {loc('Add to Class', 'شامل کریں')}
@@ -1957,7 +2025,9 @@ export const ClassesModule: React.FC = () => {
                   <thead className="bg-gray-100 sticky top-0 font-bold text-gray-600">
                     <tr>
                       <th className="p-2.5">{loc('Student Name', 'طالب علم کا نام')}</th>
+                      <th className="p-2.5">{loc('Father Name', 'والد کا نام')}</th>
                       <th className="p-2.5">{loc('Admission No', 'داخلہ نمبر')}</th>
+                      <th className="p-2.5">{loc('Contact', 'رابطہ')}</th>
                       <th className="p-2.5">{loc('Category', 'زمرہ')}</th>
                       <th className="p-2.5 text-right">{loc('Action', 'کارروائی')}</th>
                     </tr>
@@ -1965,9 +2035,18 @@ export const ClassesModule: React.FC = () => {
                   <tbody className="divide-y divide-gray-100">
                     {currentClassStudents.map(s => (
                       <tr key={s.id} className="hover:bg-gray-50">
-                        <td className="p-2.5 font-bold text-gray-900">{s.studentName}</td>
-                        <td className="p-2.5 font-mono text-gray-600">{s.admissionNo}</td>
-                        <td className="p-2.5">{s.category}</td>
+                        <td className="p-2.5 font-bold text-gray-900">
+                          <div>{s.studentName}</div>
+                          {s.studentNameUrdu && <div className="text-[10px] text-emerald-800 font-urdu">{s.studentNameUrdu}</div>}
+                        </td>
+                        <td className="p-2.5 text-gray-600">{s.fatherName || '-'}</td>
+                        <td className="p-2.5 font-mono text-gray-600 font-bold">{s.admissionNo}</td>
+                        <td className="p-2.5 text-gray-600">{s.contactNumber || '-'}</td>
+                        <td className="p-2.5">
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${s.category === 'Hostel' ? 'bg-purple-50 text-purple-700 border border-purple-200' : 'bg-blue-50 text-blue-700 border border-blue-200'}`}>
+                            {s.category}
+                          </span>
+                        </td>
                         <td className="p-2.5 text-right">
                           <button
                             type="button"
@@ -1985,7 +2064,7 @@ export const ClassesModule: React.FC = () => {
                     ))}
                     {currentClassStudents.length === 0 && (
                       <tr>
-                        <td colSpan={4} className="p-6 text-center text-gray-400">
+                        <td colSpan={6} className="p-6 text-center text-gray-400">
                           {loc('No students currently enrolled in this class.', 'اس درجہ میں ابھی کوئی طالب علم داخل نہیں ہے۔')}
                         </td>
                       </tr>

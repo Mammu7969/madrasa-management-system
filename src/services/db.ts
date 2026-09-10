@@ -282,9 +282,17 @@ const initialRoznamchah: RoznamchahRecord[] = [];
 
 const initialStudentLogs: StudentUpdateLog[] = [];
 
+export const dispatchDataUpdatedEvent = (detail?: any) => {
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('mms_data_updated', { detail }));
+    window.dispatchEvent(new CustomEvent('mms_data_synced', { detail }));
+  }
+};
+
 const safeSetItem = (key: string, data: any) => {
   try {
     localStorage.setItem(key, JSON.stringify(data));
+    dispatchDataUpdatedEvent({ key });
   } catch (err: any) {
     console.warn(`[db] localStorage quota exceeded for ${key}:`, err);
     if (Array.isArray(data)) {
@@ -303,6 +311,7 @@ const safeSetItem = (key: string, data: any) => {
       });
       try {
         localStorage.setItem(key, JSON.stringify(sanitized));
+        dispatchDataUpdatedEvent({ key });
       } catch (innerErr) {
         console.error(`[db] Critical quota failure for ${key}:`, innerErr);
       }
@@ -849,15 +858,15 @@ export const db = {
   getTeachers(madrasaId?: string): Teacher[] {
     const data = localStorage.getItem(STORAGE_KEYS.TEACHERS);
     const teachers: Teacher[] = data ? JSON.parse(data) : initialTeachers;
-    if (!data) localStorage.setItem(STORAGE_KEYS.TEACHERS, JSON.stringify(initialTeachers));
+    if (!data) safeSetItem(STORAGE_KEYS.TEACHERS, initialTeachers);
     if (madrasaId) {
-      return teachers.filter(t => t.madrasaId === madrasaId);
+      return teachers.filter(t => !t.madrasaId || t.madrasaId === madrasaId);
     }
     return teachers;
   },
 
   saveTeachers(teachers: Teacher[]) {
-    localStorage.setItem(STORAGE_KEYS.TEACHERS, JSON.stringify(teachers));
+    safeSetItem(STORAGE_KEYS.TEACHERS, teachers);
   },
 
   addTeacher(teacher: Teacher) {
@@ -865,12 +874,19 @@ export const db = {
     const updated = [teacher, ...teachers.filter(t => t.id !== teacher.id)];
     this.saveTeachers(updated);
     backgroundSync(() => supabase.from('mms_teachers').upsert(teacher));
+
+    // Bi-directional Class Linkage:
+    if (teacher.assignedClass && teacher.assignedClass.trim() && teacher.assignedClass !== 'General' && teacher.assignedClass !== 'Not Assigned') {
+      this.syncTeacherClassToClassIncharge(teacher.name.trim(), teacher.assignedClass.trim(), teacher.madrasaId);
+    }
     return teacher;
   },
 
   updateTeacher(teacher: Teacher) {
     const teachers = this.getTeachers();
     const index = teachers.findIndex(t => t.id === teacher.id);
+    const oldTeacher = index >= 0 ? teachers[index] : null;
+
     if (index >= 0) {
       teachers[index] = teacher;
     } else {
@@ -878,6 +894,17 @@ export const db = {
     }
     this.saveTeachers(teachers);
     backgroundSync(() => supabase.from('mms_teachers').upsert(teacher));
+
+    // If teacher's assigned class changed, clear old class's incharge if it was this teacher
+    if (oldTeacher && oldTeacher.assignedClass && oldTeacher.assignedClass !== teacher.assignedClass) {
+      this.clearClassInchargeIfTeacher(oldTeacher.assignedClass, oldTeacher.name, teacher.madrasaId);
+    }
+
+    // Bi-directional Class Linkage:
+    if (teacher.assignedClass && teacher.assignedClass.trim() && teacher.assignedClass !== 'General' && teacher.assignedClass !== 'Not Assigned') {
+      this.syncTeacherClassToClassIncharge(teacher.name.trim(), teacher.assignedClass.trim(), teacher.madrasaId);
+    }
+
     return teacher;
   },
 
@@ -1033,16 +1060,83 @@ export const db = {
 
   getClasses(madrasaId?: string): MadrasaClass[] {
     const data = localStorage.getItem(STORAGE_KEYS.CLASSES);
-    const classes: MadrasaClass[] = data ? JSON.parse(data) : initialClasses;
-    if (!data) localStorage.setItem(STORAGE_KEYS.CLASSES, JSON.stringify(initialClasses));
+    let classes: MadrasaClass[] = data ? JSON.parse(data) : [];
+    if (!data || classes.length === 0) {
+      const mid = madrasaId || 'madrasa-1';
+      classes = [
+        {
+          id: 'cls-1',
+          name: 'Hifz Section A',
+          nameUrdu: 'شعبہ حفظ الف',
+          category: 'Tahfeez-ul-Quran',
+          incharge: 'Not Assigned',
+          priority: 1,
+          startTime: '08:00 AM',
+          endTime: '01:30 PM',
+          schedule: '08:00 AM - 01:30 PM',
+          room: 'Hall A-1',
+          capacity: 35,
+          madrasaId: mid,
+          weekDays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+        },
+        {
+          id: 'cls-2',
+          name: 'Hifz Section B',
+          nameUrdu: 'شعبہ حفظ ب',
+          category: 'Tahfeez-ul-Quran',
+          incharge: 'Not Assigned',
+          priority: 2,
+          startTime: '08:00 AM',
+          endTime: '01:30 PM',
+          schedule: '08:00 AM - 01:30 PM',
+          room: 'Hall A-2',
+          capacity: 35,
+          madrasaId: mid,
+          weekDays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+        },
+        {
+          id: 'cls-3',
+          name: 'Nazira Class 1',
+          nameUrdu: 'ناظرہ اول',
+          category: 'Nazira & Tajweed',
+          incharge: 'Not Assigned',
+          priority: 3,
+          startTime: '08:00 AM',
+          endTime: '01:30 PM',
+          schedule: '08:00 AM - 01:30 PM',
+          room: 'Room 102',
+          capacity: 30,
+          madrasaId: mid,
+          weekDays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+        },
+        {
+          id: 'cls-4',
+          name: 'Alimiyat Year 1',
+          nameUrdu: 'عالمیت سال اول',
+          category: 'Dars-e-Nizami (Alimiyat)',
+          incharge: 'Not Assigned',
+          priority: 4,
+          startTime: '08:00 AM',
+          endTime: '01:30 PM',
+          schedule: '08:00 AM - 01:30 PM',
+          room: 'Hall B',
+          capacity: 25,
+          madrasaId: mid,
+          weekDays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+        }
+      ];
+      safeSetItem(STORAGE_KEYS.CLASSES, classes);
+    }
     if (madrasaId) {
-      return classes.filter(c => !c.madrasaId || c.madrasaId === madrasaId);
+      const filtered = classes.filter(c => !c.madrasaId || c.madrasaId === madrasaId);
+      if (filtered.length > 0) return filtered;
+      return classes.map(c => ({ ...c, madrasaId }));
     }
     return classes;
   },
 
   saveClasses(classes: MadrasaClass[]) {
-    localStorage.setItem(STORAGE_KEYS.CLASSES, JSON.stringify(classes));
+    safeSetItem(STORAGE_KEYS.CLASSES, classes);
   },
 
   addClass(cls: MadrasaClass) {
@@ -1050,19 +1144,43 @@ export const db = {
     const updated = [cls, ...current.filter(c => c.id !== cls.id)];
     this.saveClasses(updated);
     backgroundSync(() => supabase.from('mms_classes').upsert(cls));
+
+    // Bi-directional Teacher Linkage:
+    if (cls.incharge && cls.incharge.trim() && cls.incharge !== 'Not Assigned') {
+      this.syncClassInchargeToTeacher(cls.incharge.trim(), cls.name.trim(), cls.madrasaId);
+    }
     return cls;
   },
 
   updateClass(updated: MadrasaClass) {
     const current = this.getClasses();
     const index = current.findIndex(c => c.id === updated.id);
+    const oldClass = index >= 0 ? current[index] : null;
+
     if (index >= 0) {
       current[index] = updated;
       this.saveClasses(current);
     } else {
       this.addClass(updated);
+      return updated;
     }
     backgroundSync(() => supabase.from('mms_classes').upsert(updated));
+
+    // If incharge changed, remove class from old teacher if needed
+    if (oldClass && oldClass.incharge && oldClass.incharge !== updated.incharge) {
+      this.clearTeacherAssignedClass(oldClass.incharge, oldClass.name, updated.madrasaId);
+    }
+
+    // Bi-directional Teacher Linkage:
+    if (updated.incharge && updated.incharge.trim() && updated.incharge !== 'Not Assigned') {
+      this.syncClassInchargeToTeacher(updated.incharge.trim(), updated.name.trim(), updated.madrasaId);
+    }
+
+    // If class name changed, update students who have the old class name
+    if (oldClass && oldClass.name !== updated.name) {
+      this.updateStudentClassName(oldClass.name, updated.name, updated.madrasaId);
+    }
+
     return updated;
   },
 
@@ -1071,6 +1189,132 @@ export const db = {
     const updated = current.filter(c => c.id !== classId);
     this.saveClasses(updated);
     backgroundSync(() => supabase.from('mms_classes').delete().eq('id', classId));
+  },
+
+  syncClassInchargeToTeacher(teacherName: string, className: string, madrasaId?: string) {
+    if (!teacherName || teacherName === 'Not Assigned') return;
+    const teachers = this.getTeachers();
+    const cleanTeacherName = teacherName.trim().toLowerCase();
+    const target = teachers.find(t => 
+      (t.name.trim().toLowerCase() === cleanTeacherName || t.id === teacherName) &&
+      (!madrasaId || !t.madrasaId || t.madrasaId === madrasaId)
+    );
+    if (target && target.assignedClass !== className) {
+      target.assignedClass = className;
+      this.saveTeachers(teachers);
+      backgroundSync(() => supabase.from('mms_teachers').upsert(target));
+    }
+  },
+
+  clearTeacherAssignedClass(teacherName: string, className: string, madrasaId?: string) {
+    if (!teacherName || teacherName === 'Not Assigned') return;
+    const teachers = this.getTeachers();
+    const cleanTeacherName = teacherName.trim().toLowerCase();
+    const target = teachers.find(t => 
+      (t.name.trim().toLowerCase() === cleanTeacherName || t.id === teacherName) &&
+      (!madrasaId || !t.madrasaId || t.madrasaId === madrasaId)
+    );
+    if (target && target.assignedClass === className) {
+      target.assignedClass = 'General';
+      this.saveTeachers(teachers);
+      backgroundSync(() => supabase.from('mms_teachers').upsert(target));
+    }
+  },
+
+  syncTeacherClassToClassIncharge(teacherName: string, className: string, madrasaId?: string) {
+    if (!className || className === 'General' || className === 'Not Assigned') return;
+    const classes = this.getClasses();
+    const cleanClassName = className.trim().toLowerCase();
+    const target = classes.find(c => 
+      (c.name.trim().toLowerCase() === cleanClassName || c.id === className) &&
+      (!madrasaId || !c.madrasaId || c.madrasaId === madrasaId)
+    );
+    if (target && target.incharge !== teacherName) {
+      target.incharge = teacherName;
+      this.saveClasses(classes);
+      backgroundSync(() => supabase.from('mms_classes').upsert(target));
+    }
+  },
+
+  clearClassInchargeIfTeacher(className: string, teacherName: string, madrasaId?: string) {
+    if (!className || className === 'General') return;
+    const classes = this.getClasses();
+    const cleanClassName = className.trim().toLowerCase();
+    const cleanTeacherName = teacherName.trim().toLowerCase();
+    const target = classes.find(c => 
+      (c.name.trim().toLowerCase() === cleanClassName || c.id === className) &&
+      (!madrasaId || !c.madrasaId || c.madrasaId === madrasaId)
+    );
+    if (target && target.incharge && target.incharge.trim().toLowerCase() === cleanTeacherName) {
+      target.incharge = 'Not Assigned';
+      this.saveClasses(classes);
+      backgroundSync(() => supabase.from('mms_classes').upsert(target));
+    }
+  },
+
+  updateStudentClassName(oldClassName: string, newClassName: string, madrasaId?: string) {
+    if (!oldClassName || !newClassName || oldClassName === newClassName) return;
+    const students = this.getStudents();
+    let modified = false;
+    students.forEach(s => {
+      if ((!madrasaId || !s.madrasaId || s.madrasaId === madrasaId) && 
+          (s.class === oldClassName || s.class?.trim().toLowerCase() === oldClassName.trim().toLowerCase())) {
+        s.class = newClassName;
+        modified = true;
+      }
+    });
+    if (modified) {
+      this.saveStudents(students);
+    }
+  },
+
+  assignTeacherToClass(teacherIdOrName: string, classIdOrName: string, madrasaId?: string) {
+    const teachers = this.getTeachers();
+    const classes = this.getClasses();
+    const teacher = teachers.find(t => 
+      (t.id === teacherIdOrName || t.name.trim().toLowerCase() === teacherIdOrName.trim().toLowerCase()) &&
+      (!madrasaId || !t.madrasaId || t.madrasaId === madrasaId)
+    );
+    const cls = classes.find(c => 
+      (c.id === classIdOrName || c.name.trim().toLowerCase() === classIdOrName.trim().toLowerCase()) &&
+      (!madrasaId || !c.madrasaId || c.madrasaId === madrasaId)
+    );
+
+    if (cls && teacher) {
+      cls.incharge = teacher.name;
+      teacher.assignedClass = cls.name;
+      this.saveClasses(classes);
+      this.saveTeachers(teachers);
+      backgroundSync(() => supabase.from('mms_classes').upsert(cls));
+      backgroundSync(() => supabase.from('mms_teachers').upsert(teacher));
+      return { success: true, teacher, class: cls };
+    }
+    return { success: false, error: 'Teacher or Class not found' };
+  },
+
+  enrollStudentInClass(studentId: string, className: string): boolean {
+    const students = this.getStudents();
+    const s = students.find(item => item.id === studentId);
+    if (!s) return false;
+    const oldClass = s.class;
+    s.class = className;
+    if (oldClass && oldClass !== className) {
+      const history = s.classHistory || [];
+      s.classHistory = [
+        {
+          id: `tf-${Date.now()}`,
+          fromClass: oldClass,
+          toClass: className,
+          date: new Date().toISOString().split('T')[0],
+          reason: 'Enrolled via Class Management',
+          by: 'Administrator'
+        },
+        ...history
+      ];
+    }
+    this.saveStudents(students);
+    backgroundSync(() => supabase.from('mms_students').upsert(s));
+    return true;
   },
 
   getSubjects(madrasaId?: string): Subject[] {
