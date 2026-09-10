@@ -11,6 +11,8 @@ interface AuthUser {
   madrasaId?: string;
   avatarUrl?: string;
   assignedClass?: string;
+  subTitle?: string;
+  mobileNumber?: string;
 }
 
 interface AuthContextType {
@@ -191,17 +193,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
           id: adminMatch ? adminMatch.id : 'principal-default',
           username: cleanId,
           role: 'admin',
-          name: targetMadrasa.principalName || 'Principal / Admin',
-          nameUrdu: 'پرنسپل / ایڈمن',
+          name: adminMatch?.name || targetMadrasa.principalName || 'Principal / Admin',
+          nameUrdu: adminMatch?.nameUrdu || 'پرنسپل / ایڈمن',
           madrasaId: targetMadrasa.id,
-          avatarUrl: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=400&q=80'
+          avatarUrl: adminMatch?.profilePicUrl || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=400&q=80',
+          subTitle: adminMatch?.subTitle || 'Admin',
+          mobileNumber: adminMatch?.mobileNumber || targetMadrasa.contactNumber
         };
         setUser(adminUser);
         setActiveMadrasa(targetMadrasa);
         localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(adminUser));
         db.addUserLog({
           username: cleanId,
-          role: 'Admin / Principal',
+          role: adminMatch?.subTitle || 'Admin / Principal',
           madrasaId: targetMadrasa.id,
           viewedData: 'Madrasa Main Dashboard & Operations',
           submittedData: 'Admin Authenticated',

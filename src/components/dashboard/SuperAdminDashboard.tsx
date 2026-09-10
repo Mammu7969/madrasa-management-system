@@ -16,9 +16,13 @@ import {
   ChevronRight,
   Sparkles,
   Users,
-  Trash2
+  Trash2,
+  Key,
+  UserCheck,
+  ShieldCheck
 } from 'lucide-react';
 import { Modal } from '../common/Modal';
+import { AdminProfilesManager } from '../mms/AdminProfilesManager';
 
 interface SuperAdminDashboardProps {
   onOpenMadrasaDashboard: (m: Madrasa) => void;
@@ -34,6 +38,7 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
 
   const [showAddMadrasaModal, setShowAddMadrasaModal] = useState<boolean>(false);
   const [madrasaToDelete, setMadrasaToDelete] = useState<Madrasa | null>(null);
+  const [madrasaForAdminsModal, setMadrasaForAdminsModal] = useState<Madrasa | null>(null);
   const [newMadrasaName, setNewMadrasaName] = useState<string>('');
   const [newMadrasaUrdu, setNewMadrasaUrdu] = useState<string>('');
   const [newAddress, setNewAddress] = useState<string>('');
@@ -70,11 +75,11 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
       isSubscriptionActive: new Date(subscriptionEnd) > new Date(),
       cloudSyncEnabled: true,
       admins: [
-        { id: `adm-${Date.now()}-1`, slot: 'Admin-1', username: `admin.${code.toLowerCase()}`, password: 'password123', isActive: true },
-        { id: `adm-${Date.now()}-2`, slot: 'Admin-2', username: `staff.${code.toLowerCase()}`, password: 'password123', isActive: false },
-        { id: `adm-${Date.now()}-3`, slot: 'Admin-3', username: `accountant.${code.toLowerCase()}`, password: 'password123', isActive: false },
-        { id: `adm-${Date.now()}-4`, slot: 'Admin-4', username: `clerk.${code.toLowerCase()}`, password: 'password123', isActive: false },
-        { id: `adm-${Date.now()}-5`, slot: 'Admin-5', username: `support.${code.toLowerCase()}`, password: 'password123', isActive: false },
+        { id: `adm-${Date.now()}-1`, slot: 'Admin-1', name: newPrincipal.trim() || 'Principal / Nazim', subTitle: 'Principal', mobileNumber: newContact.trim() || '+91 98480 00000', profilePicUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80', username: `admin.${code.toLowerCase()}`, password: 'password123', isActive: true },
+        { id: `adm-${Date.now()}-2`, slot: 'Admin-2', name: 'Vice Principal / Admin', subTitle: 'Admin', mobileNumber: newContact.trim() || '+91 98480 00000', profilePicUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80', username: `staff.${code.toLowerCase()}`, password: 'password123', isActive: false },
+        { id: `adm-${Date.now()}-3`, slot: 'Admin-3', name: 'Academic Supervisor', subTitle: 'Supervisor', mobileNumber: newContact.trim() || '+91 98480 00000', profilePicUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80', username: `supervisor.${code.toLowerCase()}`, password: 'password123', isActive: false },
+        { id: `adm-${Date.now()}-4`, slot: 'Admin-4', name: 'Financial Administrator', subTitle: 'Admin', mobileNumber: newContact.trim() || '+91 98480 00000', profilePicUrl: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=400&q=80', username: `finance.${code.toLowerCase()}`, password: 'password123', isActive: false },
+        { id: `adm-${Date.now()}-5`, slot: 'Admin-5', name: 'Campus Supervisor', subTitle: 'Supervisor', mobileNumber: newContact.trim() || '+91 98480 00000', profilePicUrl: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80', username: `campus.${code.toLowerCase()}`, password: 'password123', isActive: false },
       ]
     };
 
@@ -218,19 +223,33 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
                   </div>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-gray-100 flex items-center justify-between gap-2">
-                  <button
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      setMadrasaToDelete(madrasa);
-                    }}
-                    className="flex items-center gap-1 text-[11px] font-bold text-rose-700 hover:text-rose-900 bg-rose-50 hover:bg-rose-100 px-2.5 py-1.5 rounded-xl border border-rose-200 transition-all cursor-pointer"
-                    title={`Remove ${madrasa.name}`}
-                  >
-                    <Trash2 className="w-3.5 h-3.5 text-rose-600" />
-                    <span>Remove</span>
-                  </button>
+                <div className="mt-4 pt-3 border-t border-gray-100 dark:border-[#2d3340] flex items-center justify-between gap-2 flex-wrap">
+                  <div className="flex items-center gap-1.5">
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setMadrasaToDelete(madrasa);
+                      }}
+                      className="flex items-center gap-1 text-[11px] font-bold text-rose-700 dark:text-rose-400 hover:text-rose-900 bg-rose-50 hover:bg-rose-100 dark:bg-rose-950/40 dark:hover:bg-rose-900/60 px-2.5 py-1.5 rounded-xl border border-rose-200 dark:border-rose-900 transition-all cursor-pointer"
+                      title={`Remove ${madrasa.name}`}
+                    >
+                      <Trash2 className="w-3.5 h-3.5 text-rose-600" />
+                      <span>Remove</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setMadrasaForAdminsModal(madrasa);
+                      }}
+                      className="flex items-center gap-1 text-[11px] font-bold text-blue-700 dark:text-blue-300 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 dark:bg-blue-950/40 dark:hover:bg-blue-900/60 px-2.5 py-1.5 rounded-xl border border-blue-200 dark:border-blue-800 transition-all cursor-pointer"
+                      title={`Manage 5 Admins for ${madrasa.name}`}
+                    >
+                      <Key className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                      <span>5 Admins</span>
+                    </button>
+                  </div>
                   <button
                     onClick={() => handleMadrasaSelect(madrasa.id)}
                     className="flex items-center gap-1 text-xs font-bold text-m3-primary hover:text-m3-primary/80 transition-colors cursor-pointer"
@@ -244,6 +263,20 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
           })}
         </div>
       </div>
+
+      {/* Direct Admin-1 to Admin-5 Profiles Manager for Active Madrasa */}
+      {activeMadrasa && (
+        <div className="p-4 sm:p-6 rounded-3xl bg-white dark:bg-[#181c22] border border-slate-200/80 dark:border-[#2d3340] shadow-xs">
+          <AdminProfilesManager
+            madrasa={activeMadrasa}
+            onUpdateMadrasa={(updated) => {
+              setActiveMadrasa(updated);
+            }}
+            title={`Admin-1 to Admin-5 Profiles & Logins — ${activeMadrasa.name}`}
+            subtitle="Manage Names, Designations (Admin, Principal, Supervisor), Profile Pictures, Mobile Numbers, and Credentials for all 5 administrative tiers."
+          />
+        </div>
+      )}
 
       {/* Feedbacks from All Madrasas Section */}
       <div className="p-6 rounded-3xl bg-white border border-m3-outline-variant/30 shadow-m3-1 space-y-4">
@@ -447,6 +480,38 @@ export const SuperAdminDashboard: React.FC<SuperAdminDashboardProps> = ({
                 </p>
               </div>
             </div>
+          </div>
+        </Modal>
+      )}
+
+      {/* Modal for 5 Admins Quick Manager */}
+      {madrasaForAdminsModal && (
+        <Modal
+          isOpen={Boolean(madrasaForAdminsModal)}
+          onClose={() => setMadrasaForAdminsModal(null)}
+          title={`Admin Profiles (Admin-1 to Admin-5) — ${madrasaForAdminsModal.name}`}
+          subtitle="Configure profile details, designations, photos, and credentials for this Madrasa"
+          maxWidth="2xl"
+          footer={
+            <button
+              type="button"
+              onClick={() => setMadrasaForAdminsModal(null)}
+              className="px-5 py-2 text-xs font-bold bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 rounded-full cursor-pointer hover:bg-slate-800 transition-colors"
+            >
+              Close
+            </button>
+          }
+        >
+          <div className="py-2">
+            <AdminProfilesManager
+              madrasa={madrasaForAdminsModal}
+              onUpdateMadrasa={(updated) => {
+                setMadrasaForAdminsModal(updated);
+                if (activeMadrasa?.id === updated.id) {
+                  setActiveMadrasa(updated);
+                }
+              }}
+            />
           </div>
         </Modal>
       )}

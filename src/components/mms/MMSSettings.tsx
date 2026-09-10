@@ -20,6 +20,7 @@ import {
   Lock,
   Edit3
 } from 'lucide-react';
+import { AdminProfilesManager } from './AdminProfilesManager';
 
 export const MMSSettings: React.FC = () => {
   const { activeMadrasa, availableMadrasas, updateActiveMadrasa, refreshMadrasas } = useAuth();
@@ -221,101 +222,16 @@ export const MMSSettings: React.FC = () => {
         </button>
       </div>
 
-      {/* Sub Menu 1: Admin Credentials (Admin-1 to Admin-5) */}
-      {activeSubMenu === 'admins' && (
-        <div className="bg-white p-6 rounded-3xl border border-m3-outline-variant/30 shadow-m3-1 space-y-6">
-          <div>
-            <h3 className="text-sm font-bold text-m3-on-surface flex items-center gap-2">
-              <Key className="w-4 h-4 text-amber-600" />
-              <span>Configure Multiple Admins for "{currentMadrasa?.name}"</span>
-            </h3>
-            <p className="text-xs text-m3-on-surface-variant mt-1">
-              Super Admin manages up to 5 discrete Admin accounts. Principals and admins can only log in using these designated credentials.
-            </p>
-          </div>
-
-          <div className="space-y-4">
-            {adminsState.map((admin, idx) => (
-              <div 
-                key={admin.id || idx}
-                className="p-4 rounded-2xl bg-m3-surface-container-low border border-m3-outline-variant/30 flex flex-col lg:flex-row lg:items-center justify-between gap-4"
-              >
-                <div className="flex items-center gap-3">
-                  <span className="w-20 px-2.5 py-1.5 rounded-xl bg-amber-100 text-amber-900 font-bold text-xs text-center border border-amber-300">
-                    {admin.slot}
-                  </span>
-                  <div className="text-xs">
-                    <span className="font-semibold text-gray-900 block">{admin.slot} Access Slot</span>
-                    <span className="text-[10px] text-gray-500">
-                      Status: <strong className={admin.isActive ? 'text-emerald-700' : 'text-rose-600'}>{admin.isActive ? 'Active' : 'Inactive'}</strong>
-                    </span>
-                  </div>
-                </div>
-
-                <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-xl">
-                  <div>
-                    <label className="text-[10px] font-semibold text-gray-600 block mb-1">Username</label>
-                    <input
-                      type="text"
-                      value={admin.username}
-                      onChange={(e) => {
-                        const updated = [...adminsState];
-                        updated[idx].username = e.target.value;
-                        setAdminsState(updated);
-                      }}
-                      className="w-full p-2 text-xs rounded-xl border bg-white font-mono"
-                      placeholder="username"
-                      required
-                    />
-                  </div>
-                  <div>
-                    <label className="text-[10px] font-semibold text-gray-600 block mb-1">Password</label>
-                    <input
-                      type="text"
-                      value={admin.password}
-                      onChange={(e) => {
-                        const updated = [...adminsState];
-                        updated[idx].password = e.target.value;
-                        setAdminsState(updated);
-                      }}
-                      className="w-full p-2 text-xs rounded-xl border bg-white font-mono"
-                      placeholder="password"
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between sm:justify-end gap-3 pt-2 lg:pt-0 border-t lg:border-t-0 border-gray-200">
-                  {/* Active / Inactive Toggle */}
-                  <label className="flex items-center gap-2 cursor-pointer text-xs font-semibold">
-                    <input
-                      type="checkbox"
-                      checked={admin.isActive}
-                      onChange={(e) => {
-                        const updated = [...adminsState];
-                        updated[idx].isActive = e.target.checked;
-                        setAdminsState(updated);
-                      }}
-                      className="w-4 h-4 text-emerald-600 rounded"
-                    />
-                    <span className={admin.isActive ? 'text-emerald-700' : 'text-gray-400'}>
-                      {admin.isActive ? 'Active' : 'Inactive'}
-                    </span>
-                  </label>
-
-                  {/* Save Button */}
-                  <button
-                    type="button"
-                    onClick={() => handleSaveAdminSlot(idx)}
-                    className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-m3-primary hover:bg-m3-primary/90 text-white text-xs font-bold shadow-xs active:scale-95 transition-all"
-                  >
-                    <Save className="w-3.5 h-3.5" />
-                    <span>Save {admin.slot}</span>
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
+      {/* Sub Menu 1: Admin Profiles & Credentials (Admin-1 to Admin-5) */}
+      {activeSubMenu === 'admins' && currentMadrasa && (
+        <div className="bg-white dark:bg-[#181c22] p-4 sm:p-6 rounded-3xl border border-slate-200/80 dark:border-[#2d3340] shadow-xs">
+          <AdminProfilesManager
+            madrasa={currentMadrasa}
+            onUpdateMadrasa={(updated) => {
+              setAdminsState(updated.admins);
+              updateActiveMadrasa(updated);
+            }}
+          />
         </div>
       )}
 

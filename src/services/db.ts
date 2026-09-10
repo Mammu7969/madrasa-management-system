@@ -51,11 +51,11 @@ const initialMadrasas: Madrasa[] = [
     isSubscriptionActive: true,
     cloudSyncEnabled: true,
     admins: [
-      { id: 'adm-1-1', slot: 'Admin-1', username: 'principal.jdh', password: 'password123', isActive: true },
-      { id: 'adm-1-2', slot: 'Admin-2', username: 'accountant.jdh', password: 'password123', isActive: true },
-      { id: 'adm-1-3', slot: 'Admin-3', username: 'nazim.jdh', password: 'password123', isActive: false },
-      { id: 'adm-1-4', slot: 'Admin-4', username: 'admin4.jdh', password: 'password123', isActive: false },
-      { id: 'adm-1-5', slot: 'Admin-5', username: 'admin5.jdh', password: 'password123', isActive: false },
+      { id: 'adm-1-1', slot: 'Admin-1', name: 'Maulana Abdul Qadeer Qasmi', nameUrdu: 'مولانا عبد القدیر قاسمی', subTitle: 'Principal', profilePicUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80', mobileNumber: '+91 98480 22334', username: 'principal.jdh', password: 'password123', isActive: true },
+      { id: 'adm-1-2', slot: 'Admin-2', name: 'Maulana Hafiz Tariq Ansari', nameUrdu: 'مولانا حافظ طارق انصاری', subTitle: 'Admin', profilePicUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80', mobileNumber: '+91 98480 33445', username: 'accountant.jdh', password: 'password123', isActive: true },
+      { id: 'adm-1-3', slot: 'Admin-3', name: 'Qari Mohammad Bilal Qasmi', nameUrdu: 'قاری محمد بلال قاسمی', subTitle: 'Supervisor', profilePicUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80', mobileNumber: '+91 98480 44556', username: 'nazim.jdh', password: 'password123', isActive: false },
+      { id: 'adm-1-4', slot: 'Admin-4', name: 'Maulana Zayd Al-Husaini', nameUrdu: 'مولانا زید الحسینی', subTitle: 'Admin', profilePicUrl: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=400&q=80', mobileNumber: '+91 98480 55667', username: 'admin4.jdh', password: 'password123', isActive: false },
+      { id: 'adm-1-5', slot: 'Admin-5', name: 'Mufti Salman Nadwi', nameUrdu: 'مفتی سلمان ندوی', subTitle: 'Supervisor', profilePicUrl: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80', mobileNumber: '+91 98480 66778', username: 'admin5.jdh', password: 'password123', isActive: false },
     ]
   },
   {
@@ -71,11 +71,11 @@ const initialMadrasas: Madrasa[] = [
     isSubscriptionActive: true,
     cloudSyncEnabled: true,
     admins: [
-      { id: 'adm-2-1', slot: 'Admin-1', username: 'principal.mau', password: 'password123', isActive: true },
-      { id: 'adm-2-2', slot: 'Admin-2', username: 'clerk.mau', password: 'password123', isActive: true },
-      { id: 'adm-2-3', slot: 'Admin-3', username: 'admin3.mau', password: 'password123', isActive: false },
-      { id: 'adm-2-4', slot: 'Admin-4', username: 'admin4.mau', password: 'password123', isActive: false },
-      { id: 'adm-2-5', slot: 'Admin-5', username: 'admin5.mau', password: 'password123', isActive: false },
+      { id: 'adm-2-1', slot: 'Admin-1', name: 'Maulana Mohammad Siddiq Nadwi', nameUrdu: 'مولانا محمد صدیق ندوی', subTitle: 'Principal', profilePicUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80', mobileNumber: '+91 97001 55442', username: 'principal.mau', password: 'password123', isActive: true },
+      { id: 'adm-2-2', slot: 'Admin-2', name: 'Maulana Rashid Ahmad', nameUrdu: 'مولانا راشد احمد', subTitle: 'Admin', profilePicUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80', mobileNumber: '+91 97001 66553', username: 'clerk.mau', password: 'password123', isActive: true },
+      { id: 'adm-2-3', slot: 'Admin-3', name: 'Hafiz Imran Qureshi', nameUrdu: 'حافظ عمران قریشی', subTitle: 'Supervisor', profilePicUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80', mobileNumber: '+91 97001 77664', username: 'admin3.mau', password: 'password123', isActive: false },
+      { id: 'adm-2-4', slot: 'Admin-4', name: 'Maulana Zubair Qasmi', nameUrdu: 'مولانا زبیر قاسمی', subTitle: 'Admin', profilePicUrl: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80', mobileNumber: '+91 97001 88775', username: 'admin4.mau', password: 'password123', isActive: false },
+      { id: 'adm-2-5', slot: 'Admin-5', name: 'Qari Arshad Siddiqui', nameUrdu: 'قاری ارشد صدیقی', subTitle: 'Supervisor', profilePicUrl: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=400&q=80', mobileNumber: '+91 97001 99886', username: 'admin5.mau', password: 'password123', isActive: false },
     ]
   },
   {
@@ -91,11 +91,11 @@ const initialMadrasas: Madrasa[] = [
     isSubscriptionActive: false,
     cloudSyncEnabled: false,
     admins: [
-      { id: 'adm-3-1', slot: 'Admin-1', username: 'principal.mfa', password: 'password123', isActive: true },
-      { id: 'adm-3-2', slot: 'Admin-2', username: 'admin2.mfa', password: 'password123', isActive: false },
-      { id: 'adm-3-3', slot: 'Admin-3', username: 'admin3.mfa', password: 'password123', isActive: false },
-      { id: 'adm-3-4', slot: 'Admin-4', username: 'admin4.mfa', password: 'password123', isActive: false },
-      { id: 'adm-3-5', slot: 'Admin-5', username: 'admin5.mfa', password: 'password123', isActive: false },
+      { id: 'adm-3-1', slot: 'Admin-1', name: 'Maulana Mufti Tariq Jameel Qureshi', nameUrdu: 'مولانا مفتی طارق جمیل قریشی', subTitle: 'Principal', profilePicUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80', mobileNumber: '+91 94401 88990', username: 'principal.mfa', password: 'password123', isActive: true },
+      { id: 'adm-3-2', slot: 'Admin-2', name: 'Maulana Naseem Akhtar', nameUrdu: 'مولانا نسیم اختر', subTitle: 'Admin', profilePicUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80', mobileNumber: '+91 94401 99001', username: 'admin2.mfa', password: 'password123', isActive: false },
+      { id: 'adm-3-3', slot: 'Admin-3', name: 'Qari Shakeel Ahmad', nameUrdu: 'قاری شکیل احمد', subTitle: 'Supervisor', profilePicUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80', mobileNumber: '+91 94401 11223', username: 'admin3.mfa', password: 'password123', isActive: false },
+      { id: 'adm-3-4', slot: 'Admin-4', name: 'Hafiz Owais Ansari', nameUrdu: 'حافظ اویس انصاری', subTitle: 'Admin', profilePicUrl: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80', mobileNumber: '+91 94401 22334', username: 'admin4.mfa', password: 'password123', isActive: false },
+      { id: 'adm-3-5', slot: 'Admin-5', name: 'Mufti Huzaifa Nadwi', nameUrdu: 'مفتی حذیفہ ندوی', subTitle: 'Supervisor', profilePicUrl: 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=400&q=80', mobileNumber: '+91 94401 33445', username: 'admin5.mfa', password: 'password123', isActive: false },
     ]
   },
   {
@@ -111,11 +111,11 @@ const initialMadrasas: Madrasa[] = [
     isSubscriptionActive: true,
     cloudSyncEnabled: true,
     admins: [
-      { id: 'adm-4-1', slot: 'Admin-1', username: 'principal.mku', password: 'password123', isActive: true },
-      { id: 'adm-4-2', slot: 'Admin-2', username: 'admin2.mku', password: 'password123', isActive: true },
-      { id: 'adm-4-3', slot: 'Admin-3', username: 'admin3.mku', password: 'password123', isActive: false },
-      { id: 'adm-4-4', slot: 'Admin-4', username: 'admin4.mku', password: 'password123', isActive: false },
-      { id: 'adm-4-5', slot: 'Admin-5', username: 'admin5.mku', password: 'password123', isActive: false },
+      { id: 'adm-4-1', slot: 'Admin-1', name: 'Maulana Hafiz Zubair Ahmad', nameUrdu: 'مولانا حافظ زبیر احمد', subTitle: 'Principal', profilePicUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80', mobileNumber: '+91 98855 11223', username: 'principal.mku', password: 'password123', isActive: true },
+      { id: 'adm-4-2', slot: 'Admin-2', name: 'Maulana Irfan Ali', nameUrdu: 'مولانا عرفان علی', subTitle: 'Admin', profilePicUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80', mobileNumber: '+91 98855 22334', username: 'admin2.mku', password: 'password123', isActive: true },
+      { id: 'adm-4-3', slot: 'Admin-3', name: 'Qari Junaid Khan', nameUrdu: 'قاری جنید خان', subTitle: 'Supervisor', profilePicUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80', mobileNumber: '+91 98855 33445', username: 'admin3.mku', password: 'password123', isActive: false },
+      { id: 'adm-4-4', slot: 'Admin-4', name: 'Maulana Noman Qasmi', nameUrdu: 'مولانا نعمان قاسمی', subTitle: 'Admin', profilePicUrl: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=400&q=80', mobileNumber: '+91 98855 44556', username: 'admin4.mku', password: 'password123', isActive: false },
+      { id: 'adm-4-5', slot: 'Admin-5', name: 'Mufti Adil Husain', nameUrdu: 'مفتی عادل حسین', subTitle: 'Supervisor', profilePicUrl: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80', mobileNumber: '+91 98855 55667', username: 'admin5.mku', password: 'password123', isActive: false },
     ]
   }
 ];
@@ -548,11 +548,72 @@ export const db = {
 
   getMadrasas(): Madrasa[] {
     const data = localStorage.getItem(STORAGE_KEYS.MADRASAS);
+    let list: Madrasa[] = [];
     if (!data) {
+      list = initialMadrasas;
       localStorage.setItem(STORAGE_KEYS.MADRASAS, JSON.stringify(initialMadrasas));
-      return initialMadrasas;
+      return list;
     }
-    return JSON.parse(data);
+    try {
+      list = JSON.parse(data);
+    } catch {
+      list = initialMadrasas;
+    }
+
+    let modified = false;
+    const defaultSlots: Array<'Admin-1' | 'Admin-2' | 'Admin-3' | 'Admin-4' | 'Admin-5'> = [
+      'Admin-1', 'Admin-2', 'Admin-3', 'Admin-4', 'Admin-5'
+    ];
+
+    list = list.map(m => {
+      const existingAdmins = m.admins || [];
+      const updatedAdmins = defaultSlots.map((slot, idx) => {
+        const found = existingAdmins.find(a => a.slot === slot) || existingAdmins[idx];
+        const defaultSubTitle: 'Principal' | 'Admin' | 'Supervisor' = idx === 0 ? 'Principal' : idx === 1 ? 'Admin' : 'Supervisor';
+        const defaultName = idx === 0 ? (m.principalName || 'Principal / Nazim') : `${slot} Officer (${m.code})`;
+        const defaultUsername = idx === 0 
+          ? `principal.${m.code.toLowerCase().replace(/[^a-z0-9]/g, '')}` 
+          : `admin${idx + 1}.${m.code.toLowerCase().replace(/[^a-z0-9]/g, '')}`;
+        
+        const defaultAvatar = idx === 0 
+          ? 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80'
+          : idx === 1 
+          ? 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80'
+          : idx === 2
+          ? 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=400&q=80'
+          : idx === 3
+          ? 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=400&q=80'
+          : 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=400&q=80';
+
+        if (!found || !found.name || !found.subTitle || !found.mobileNumber) {
+          modified = true;
+        }
+
+        return {
+          id: found?.id || `adm-${m.id}-${idx + 1}`,
+          slot: slot,
+          name: found?.name || defaultName,
+          nameUrdu: found?.nameUrdu || '',
+          subTitle: found?.subTitle || defaultSubTitle,
+          profilePicUrl: found?.profilePicUrl || defaultAvatar,
+          mobileNumber: found?.mobileNumber || m.contactNumber || '+91 98480 00000',
+          username: found?.username || defaultUsername,
+          password: found?.password || 'password123',
+          isActive: found?.isActive ?? (idx < 2)
+        };
+      });
+
+      return {
+        ...m,
+        admins: updatedAdmins
+      };
+    });
+
+    if (modified) {
+      localStorage.setItem(STORAGE_KEYS.MADRASAS, JSON.stringify(list));
+    }
+
+    return list;
   },
 
   saveMadrasas(madrasas: Madrasa[]) {

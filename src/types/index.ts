@@ -3,6 +3,11 @@ export type Role = 'super_admin' | 'admin' | 'teacher' | 'student';
 export interface MadrasaAdmin {
   id: string;
   slot: 'Admin-1' | 'Admin-2' | 'Admin-3' | 'Admin-4' | 'Admin-5';
+  name?: string;
+  nameUrdu?: string;
+  subTitle?: 'Admin' | 'Principal' | 'Supervisor' | string;
+  profilePicUrl?: string;
+  mobileNumber?: string;
   username: string;
   password: string;
   isActive: boolean;
