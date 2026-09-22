@@ -331,56 +331,57 @@ export const AttendanceModule: React.FC = () => {
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       
-      {/* Top Banner */}
-      <div className="relative rounded-3xl bg-emerald-900 text-white p-6 sm:p-8 shadow-m3-2 overflow-hidden">
+      {/* Top Banner (Midnight Navy & Royal Blue Institutional Neo-Glass Banner) */}
+      <div className="relative overflow-hidden rounded-[26px] p-6 sm:p-8 text-white shadow-xl border border-white/15 bg-gradient-to-r from-[#111b4b] via-[#18245b] to-[#24336e]">
+        <div className="absolute top-0 right-0 w-80 h-80 bg-radial from-[#3567ff]/25 to-transparent blur-3xl pointer-events-none" />
         <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
           <div>
             <div className="flex items-center gap-2 mb-2 flex-wrap">
-              <span className="px-3 py-1 rounded-full text-xs font-bold bg-white/20 uppercase tracking-wide flex items-center gap-1.5">
-                <CalendarCheck className="w-3.5 h-3.5 text-amber-300" />
+              <span className="px-3 py-1 rounded-full text-xs font-bold bg-[#3567ff]/20 text-[#59c7ff] border border-[#3567ff]/40 uppercase tracking-wide flex items-center gap-1.5">
+                <CalendarCheck className="w-3.5 h-3.5 text-[#59c7ff]" />
                 {loc('Madrasa Academic Registers', 'دفاتر و رجسٹرات مدرسہ')}
               </span>
-              <span className="text-xs text-amber-300 font-bold bg-amber-400/20 px-3 py-0.5 rounded-full border border-amber-300/30">
+              <span className="text-xs text-white/90 font-bold bg-white/10 px-3 py-0.5 rounded-full border border-white/15">
                 {loc('Academic Year: Ramzan to Ramzan', 'تعلیمی سال: رمضان المبارک تا رمضان المبارک')}
               </span>
             </div>
-            <h1 className="text-2xl sm:text-3xl font-black tracking-tight">
+            <h1 className="text-2xl sm:text-3xl font-black tracking-tight font-montserrat text-white">
               {loc('Monthly Attendance Matrix Register', 'ماہانہ رجسٹر حاضری طلبہ')}
             </h1>
-            <p className="text-xs text-emerald-100/90 mt-1 max-w-2xl font-urdu text-sm">
+            <p className="text-xs text-white/75 mt-1 max-w-2xl font-medium">
               {loc(
                 'Academic Attendance Register: Continuous monthly evaluation from Ramzan to Ramzan with Student Name, Homeland, Working Days and Present Days.',
-                'سلسلہ وار حاضری رجسٹر برائے ماہانہ و سالانہ جائزہ - تعلیمی سال: رمضان المبارک تا رمضان المبارک مع نام طالب علم، وطن، ایامِ درس و ایامِ حاضری'
+                'سلسلہ وار حاضری رجسٹر برائے جائزہ - تعلیمی سال: رمضان المبارک تا رمضان المبارک مع نام طالب علم، وطن، ایامِ درس و ایامِ حاضری'
               )}
             </p>
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            <div className="px-4 py-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-center">
-              <span className="text-[10px] uppercase font-bold text-emerald-300 block">
+            <div className="px-5 py-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-center shadow-inner">
+              <span className="text-[10px] uppercase font-bold text-[#59c7ff] block">
                 {loc('Enrolled Students', 'کل طلبہ')}
               </span>
-              <span className="text-2xl font-black">{classStudents.length}</span>
+              <span className="text-2xl font-black text-white font-montserrat">{classStudents.length}</span>
             </div>
-            <div className="px-4 py-3 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 text-center">
-              <span className="text-[10px] uppercase font-bold text-amber-300 block">
+            <div className="px-5 py-3 rounded-2xl bg-white/10 backdrop-blur-md border border-[#3567ff]/40 text-center shadow-inner">
+              <span className="text-[10px] uppercase font-bold text-[#16b981] block">
                 {loc('Avg Attendance', 'اوسط حاضری')}
               </span>
-              <span className="text-2xl font-black text-amber-200">{classAvgAttendance}%</span>
+              <span className="text-2xl font-black text-[#16b981] font-montserrat">{classAvgAttendance}%</span>
             </div>
           </div>
         </div>
 
         {/* Quick Actions Bar */}
-        <div className="flex flex-wrap items-center justify-between gap-3 mt-6 pt-4 border-t border-white/15 no-print">
+        <div className="flex flex-wrap items-center justify-between gap-3 mt-6 pt-4 border-t border-white/15 no-print relative z-10">
           <div className="flex items-center gap-2 flex-wrap">
             <button
               type="button"
               onClick={handleMarkAllMonthPresent}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold transition-colors shadow-xs cursor-pointer"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-95"
               title="Mark all non-holiday days as Present"
             >
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-300" />
+              <CheckCircle2 className="w-3.5 h-3.5 text-[#16b981]" />
               <span>{loc('Mark Month Present', 'پورا مہینہ حاضر درج کریں')}</span>
             </button>
 
@@ -388,44 +389,44 @@ export const AttendanceModule: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowHolidayModal(true)}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-500/30 hover:bg-amber-500/40 text-amber-200 border border-amber-400/40 text-xs font-bold transition-colors shadow-xs cursor-pointer"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-[#7654ff]/30 hover:bg-[#7654ff]/40 text-white border border-[#7654ff]/40 text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-95"
               title="Declare or manage Manual Holidays with Reason"
             >
-              <Calendar className="w-3.5 h-3.5 text-amber-300" />
-              <span>{loc('Declare Holiday / تعطیل کا اعلان', 'تعطیل کا اعلان مع سبب')}</span>
+              <Calendar className="w-3.5 h-3.5 text-[#59c7ff]" />
+              <span>{loc('Declare Holiday', 'تعطیل کا اعلان مع سبب')}</span>
               {manualHolidays.length > 0 && (
-                <span className="px-1.5 py-0.2 bg-amber-400 text-amber-950 rounded-full text-[10px] font-black">
+                <span className="px-1.5 py-0.2 bg-[#3567ff] text-white rounded-full text-[10px] font-black">
                   {manualHolidays.length}
                 </span>
               )}
             </button>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2.5">
             <button
               type="button"
               onClick={handleExportCSV}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-95"
               title="Download CSV Spreadsheet"
             >
-              <Download className="w-3.5 h-3.5 text-amber-300" />
-              <span>{loc('Export CSV', 'ایکسپورٹ CSV')}</span>
+              <Download className="w-3.5 h-3.5 text-[#59c7ff]" />
+              <span>{loc('Export CSV', 'ایکسپورٹ فائل')}</span>
             </button>
 
             <button
               type="button"
               onClick={() => window.print()}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-white/15 hover:bg-white/25 text-white text-xs font-bold transition-all shadow-xs cursor-pointer active:scale-95"
               title="Print Official Register Ledger"
             >
-              <Printer className="w-3.5 h-3.5 text-emerald-300" />
+              <Printer className="w-3.5 h-3.5 text-white" />
               <span>{loc('Print Ledger', 'پرنٹ رجسٹر')}</span>
             </button>
 
             <button
               type="button"
               onClick={handleSaveRegister}
-              className="flex items-center gap-1.5 px-4 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold shadow-md cursor-pointer"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold shadow-lg shadow-[#3567ff]/30 bg-gradient-to-r from-[#3567ff] to-[#7654ff] hover:from-[#2d5be6] hover:to-[#6844eb] text-white cursor-pointer active:scale-95 transition-all"
             >
               <Save className="w-3.5 h-3.5" />
               <span>{loc('Save Register', 'رجسٹر محفوظ کریں')}</span>
@@ -435,66 +436,69 @@ export const AttendanceModule: React.FC = () => {
       </div>
 
       {/* Filter & Control Bar */}
-      <div className="bg-white p-5 rounded-3xl border border-gray-200 shadow-sm flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-4 no-print">
+      <div className="glass card p-5 shadow-sm flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-4 no-print">
         
         <div className="flex flex-wrap items-center gap-3">
           {/* Class Selector */}
           <div className="flex items-center gap-2">
-            <label className="text-xs font-bold text-gray-700 whitespace-nowrap">
+            <label className="text-xs font-bold text-stone-700 dark:text-stone-300 whitespace-nowrap">
               {loc('Class:', 'درجہ:')}
             </label>
             <select
               value={selectedClass}
               onChange={(e) => setSelectedClass(e.target.value)}
-              className="px-3.5 py-2 text-xs rounded-xl border border-gray-300 bg-white font-bold text-gray-900 focus:ring-2 focus:ring-emerald-500 min-w-[180px]"
+              className="px-3.5 py-2 text-xs rounded-xl border border-stone-200 dark:border-white/10 bg-white/80 dark:bg-[#111b4b]/80 font-bold text-stone-800 dark:text-stone-200 focus:border-[#3567ff] focus:outline-none min-w-[180px] shadow-xs"
             >
-              {madrasaClasses.map(cls => (
-                <option key={cls.id} value={cls.name}>
-                  {loc(cls.name, cls.nameUrdu || cls.name)} {cls.priority ? `(P#${cls.priority})` : ''}
+              {madrasaClasses.map(c => (
+                <option key={c.id} value={c.name}>
+                  {c.name} {c.category ? `(${c.category})` : ''}
                 </option>
               ))}
+              {madrasaClasses.length === 0 && (
+                <option value="Hifz Section A">Hifz Section A</option>
+              )}
             </select>
           </div>
 
-          {/* Assigned Teacher Badge */}
-          <div className="flex items-center gap-2 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-xl text-xs">
-            <span className="text-[11px] text-emerald-800 font-semibold">{loc('Ustadh:', 'استاد محترم:')}</span>
-            <span className="font-bold text-emerald-950">
-              {assignedTeacher?.name || (currentClassObj?.incharge && currentClassObj.incharge !== 'Not Assigned' ? currentClassObj.incharge : loc('Not Assigned', 'تعینات نہیں'))}
-            </span>
-          </div>
+          {/* Teacher In-charge Badge */}
+          {assignedTeacher && (
+            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#3567ff]/10 border border-[#3567ff]/25 text-xs font-bold text-[#3567ff]">
+              <Users className="w-3.5 h-3.5 text-[#3567ff]" />
+              <span>{loc(`Ustadh: ${assignedTeacher.name}`, `استاد نگران: ${assignedTeacher.name}`)}</span>
+            </div>
+          )}
 
-          {/* Session Selector (Per-day 2 Times Attendance) */}
-          <div className="flex items-center bg-gray-100 p-1 rounded-2xl border border-gray-200">
+          {/* Session View Toggle (M / E / Both) */}
+          <div className="flex items-center bg-stone-100 dark:bg-white/5 p-1 rounded-2xl border border-stone-200/50 dark:border-white/10">
             <button
               type="button"
               onClick={() => setSessionView('both')}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                sessionView === 'both'
-                  ? 'bg-emerald-700 text-white shadow-xs'
-                  : 'text-gray-600 hover:text-gray-900'
+              className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
+                sessionView === 'both' 
+                  ? 'bg-gradient-to-r from-[#3567ff] to-[#7654ff] text-white shadow-xs' 
+                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900'
               }`}
             >
-              {loc('Both Sessions (2x Daily)', 'دونوں اوقات (صبح و شام)')}
+              {loc('Full Day (2 Sessions)', 'مکمل دن (صبح و شام)')}
             </button>
             <button
               type="button"
               onClick={() => setSessionView('morning')}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                sessionView === 'morning'
-                  ? 'bg-emerald-700 text-white shadow-xs'
-                  : 'text-gray-600 hover:text-gray-900'
+              className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
+                sessionView === 'morning' 
+                  ? 'bg-gradient-to-r from-[#3567ff] to-[#7654ff] text-white shadow-xs' 
+                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900'
               }`}
             >
-              {loc('Morning to Noon', 'صبح تا دوپہر')}
+              {loc('Morning Session', 'صبح کا وقت')}
             </button>
             <button
               type="button"
               onClick={() => setSessionView('evening')}
-              className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                sessionView === 'evening'
-                  ? 'bg-emerald-700 text-white shadow-xs'
-                  : 'text-gray-600 hover:text-gray-900'
+              className={`px-3 py-1 rounded-xl text-xs font-bold transition-all ${
+                sessionView === 'evening' 
+                  ? 'bg-gradient-to-r from-[#3567ff] to-[#7654ff] text-white shadow-xs' 
+                  : 'text-stone-600 dark:text-stone-400 hover:text-stone-900'
               }`}
             >
               {loc('Afternoon to Evening', 'دوپہر تا شام')}
@@ -504,21 +508,21 @@ export const AttendanceModule: React.FC = () => {
 
         {/* Legend */}
         <div className="flex items-center gap-2 text-xs flex-wrap">
-          <span className="font-bold text-gray-500 text-[11px]">{loc('Legend:', 'علامات:')}</span>
-          <span className="px-2 py-0.5 rounded-md bg-emerald-100 text-emerald-900 font-bold border border-emerald-300 text-[11px]">
-            {isUrdu ? 'ح = حاضر (P)' : 'P = Present'}
+          <span className="font-bold text-stone-500 text-[11px]">{loc('Legend:', 'علامات:')}</span>
+          <span className="px-2 py-0.5 rounded-md bg-[#065F46]/15 text-[#065F46] dark:text-[#34D399] font-bold border border-[#065F46]/30 text-[11px]">
+            {isUrdu ? 'ح = حاضر' : 'P = Present'}
           </span>
-          <span className="px-2 py-0.5 rounded-md bg-rose-100 text-rose-900 font-bold border border-rose-300 text-[11px]">
-            {isUrdu ? 'غ = غیر حاضر (A)' : 'A = Absent'}
+          <span className="px-2 py-0.5 rounded-md bg-rose-100 dark:bg-rose-950/40 text-rose-900 dark:text-rose-300 font-bold border border-rose-300 text-[11px]">
+            {isUrdu ? 'غ = غیر حاضر' : 'A = Absent'}
           </span>
-          <span className="px-2 py-0.5 rounded-md bg-amber-100 text-amber-900 font-bold border border-amber-300 text-[11px]">
-            {isUrdu ? 'ر = رخصت (L)' : 'L = Leave'}
+          <span className="px-2 py-0.5 rounded-md bg-[#FEF3C7] dark:bg-[#78350F]/30 text-[#92400E] dark:text-[#FDE68A] font-bold border border-[#D97706]/30 text-[11px]">
+            {isUrdu ? 'ر = رخصت' : 'L = Leave'}
           </span>
-          <span className="px-2 py-0.5 rounded-md bg-blue-50 text-blue-900 font-bold border border-blue-200 text-[11px]">
-            {loc('M = Morning (صبح)', 'صبح')}
+          <span className="px-2 py-0.5 rounded-md bg-[#FAF5EB] text-stone-700 dark:text-stone-300 font-bold border border-[#D97706]/20 text-[11px]">
+            {loc('M = Morning', 'صبح')}
           </span>
-          <span className="px-2 py-0.5 rounded-md bg-teal-50 text-teal-900 font-bold border border-teal-200 text-[11px]">
-            {loc('E = Evening (شام)', 'شام')}
+          <span className="px-2 py-0.5 rounded-md bg-[#FAF5EB] text-stone-700 dark:text-stone-300 font-bold border border-[#D97706]/20 text-[11px]">
+            {loc('E = Evening', 'شام')}
           </span>
         </div>
 
@@ -527,19 +531,19 @@ export const AttendanceModule: React.FC = () => {
           <button
             type="button"
             onClick={() => setSelectedMonth(prev => prev > 0 ? prev - 1 : 11)}
-            className="p-2 rounded-xl border hover:bg-gray-50 text-gray-600 cursor-pointer"
+            className="p-2 rounded-xl border border-[#D97706]/25 bg-white dark:bg-[#0E1A14] hover:bg-[#FAF6EF] text-stone-700 dark:text-stone-300 cursor-pointer shadow-xs"
           >
             <ChevronLeft className="w-4 h-4" />
           </button>
 
-          <div className="px-4 py-1.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-center min-w-[170px]">
-            <span className="font-bold text-xs text-emerald-950 block">
+          <div className="px-4 py-1.5 rounded-2xl bg-[#FAF5EB] dark:bg-[#0E1A14] border border-[#D97706]/30 text-center min-w-[170px]">
+            <span className="font-bold text-xs text-[#065F46] dark:text-[#34D399] block font-montserrat">
               {loc(
                 `${currentMonthMeta.en} ${selectedYear}`,
                 `${currentMonthMeta.ur} ${selectedYear}`
               )}
             </span>
-            <span className="text-[10px] text-emerald-700 font-semibold">
+            <span className="text-[10px] text-[#D97706] font-semibold">
               {monthlyAyyamDars} {loc('Days', 'ایام')} &bull; {monthlyAyyamDars * 2} {loc('Sessions', 'اوقات')}
             </span>
           </div>
@@ -547,7 +551,7 @@ export const AttendanceModule: React.FC = () => {
           <button
             type="button"
             onClick={() => setSelectedMonth(prev => prev < 11 ? prev + 1 : 0)}
-            className="p-2 rounded-xl border hover:bg-gray-50 text-gray-600 cursor-pointer"
+            className="p-2 rounded-xl border border-[#D97706]/25 bg-white dark:bg-[#0E1A14] hover:bg-[#FAF6EF] text-stone-700 dark:text-stone-300 cursor-pointer shadow-xs"
           >
             <ChevronRight className="w-4 h-4" />
           </button>
@@ -555,15 +559,15 @@ export const AttendanceModule: React.FC = () => {
       </div>
 
       {/* FULL MONTH ATTENDANCE MATRIX TABLE */}
-      <div className="bg-white rounded-3xl border border-gray-200 shadow-sm overflow-hidden animate-in fade-in duration-200">
+      <div className="heritage-card rounded-3xl shadow-sm overflow-hidden animate-in fade-in duration-200">
         <div className="overflow-x-auto max-w-full">
           <table className="w-full text-left border-collapse text-xs">
             <thead>
-              <tr className="bg-emerald-950 text-white text-[11px]">
-                <th className="p-3 text-center w-12 border-r border-emerald-800 font-bold uppercase sticky left-0 bg-emerald-950 z-20">
+              <tr className="bg-gradient-to-r from-[#064E3B] via-[#065F46] to-[#044E38] text-[#FAF5EB] text-[11px] border-b-2 border-[#D97706]">
+                <th className="p-3 text-center w-12 border-r border-[#D97706]/30 font-bold uppercase sticky left-0 bg-[#064E3B] z-20">
                   {loc('S.No', 'شمار')}
                 </th>
-                <th className="p-3 w-24 border-r border-emerald-800 font-bold uppercase sticky left-12 bg-emerald-950 z-20">
+                <th className="p-3 w-24 border-r border-[#D97706]/30 font-bold uppercase sticky left-12 bg-[#064E3B] z-20">
                   {loc('Adm No', 'داخلہ نمبر')}
                 </th>
                 <th className="p-3 min-w-[200px] border-r border-emerald-800 font-bold uppercase sticky left-36 bg-emerald-950 z-20 shadow-md">

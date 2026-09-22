@@ -807,10 +807,10 @@ export const ClassesModule: React.FC = () => {
       </div>
 
       {/* Main Tabs Navigation: Departments | Books | Classes */}
-      <div className="flex items-center gap-2 border-b border-gray-200">
+      <div className="flex items-center gap-2 border-b border-gray-200 overflow-x-auto pb-0.5 no-scrollbar shrink-0 whitespace-nowrap">
         <button
           onClick={() => setActiveTab('departments')}
-          className={`pb-3 px-4 text-xs font-bold flex items-center gap-2 transition-all border-b-2 cursor-pointer ${
+          className={`pb-3 px-4 text-xs font-bold flex items-center gap-2 transition-all border-b-2 shrink-0 whitespace-nowrap cursor-pointer ${
             activeTab === 'departments'
               ? 'border-emerald-700 text-emerald-800'
               : 'border-transparent text-gray-500 hover:text-gray-800'
@@ -825,7 +825,7 @@ export const ClassesModule: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('books')}
-          className={`pb-3 px-4 text-xs font-bold flex items-center gap-2 transition-all border-b-2 cursor-pointer ${
+          className={`pb-3 px-4 text-xs font-bold flex items-center gap-2 transition-all border-b-2 shrink-0 whitespace-nowrap cursor-pointer ${
             activeTab === 'books'
               ? 'border-emerald-700 text-emerald-800'
               : 'border-transparent text-gray-500 hover:text-gray-800'
@@ -840,7 +840,7 @@ export const ClassesModule: React.FC = () => {
 
         <button
           onClick={() => setActiveTab('classes')}
-          className={`pb-3 px-4 text-xs font-bold flex items-center gap-2 transition-all border-b-2 cursor-pointer ${
+          className={`pb-3 px-4 text-xs font-bold flex items-center gap-2 transition-all border-b-2 shrink-0 whitespace-nowrap cursor-pointer ${
             activeTab === 'classes'
               ? 'border-emerald-700 text-emerald-800'
               : 'border-transparent text-gray-500 hover:text-gray-800'

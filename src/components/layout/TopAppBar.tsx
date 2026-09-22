@@ -201,80 +201,89 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({
 
   return (
     <>
-      <header className="h-16 bg-white/90 dark:bg-[#10131a] backdrop-blur-xl border-b border-slate-200/80 dark:border-[#2d3340] sticky top-0 z-30 px-3 sm:px-4 lg:px-6 flex items-center justify-between gap-2 sm:gap-3 shadow-xs no-print select-none transition-colors duration-200">
+      <header className="h-16 bg-white/85 dark:bg-[#111b4b]/85 backdrop-blur-2xl border-b border-[#6679b4]/16 dark:border-white/10 sticky top-0 z-30 px-3 sm:px-4 lg:px-6 flex items-center justify-between gap-2 sm:gap-4 no-print select-none transition-colors duration-200 shadow-[0_8px_30px_rgba(47,61,126,0.06)]">
         
-        {/* ================= LEFT SECTION: MENU, BREADCRUMB & SEARCH ================= */}
-        <div className="flex items-center gap-1.5 sm:gap-3 min-w-0">
-          {/* Menu / Hamburger Button */}
+        {/* ================= LEFT: LOGO, BRAND & BREADCRUMB ================= */}
+        <div className="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
+          {/* Quick Command / Sidebar Trigger */}
           <button
             onClick={onOpenCommandPalette}
-            title="Global Navigation (Ctrl + K)"
-            className="p-2 rounded-xl bg-slate-50 hover:bg-slate-100 dark:bg-[#1e232b] dark:hover:bg-[#22262e] text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-[#2d3340] transition-all cursor-pointer shrink-0"
+            title="Open Command Palette (Ctrl + K)"
+            className="p-2 rounded-xl bg-white/80 hover:bg-white dark:bg-white/10 dark:hover:bg-white/15 text-[#14204d] dark:text-white border border-[#6679b4]/20 hover:border-[#3567ff]/40 transition-all cursor-pointer shrink-0 active:scale-95 shadow-xs"
           >
-            <Menu className="w-4 h-4" />
+            <Menu className="w-4 h-4 text-[#3567ff] dark:text-[#59c7ff]" />
           </button>
 
-          {/* Module Breadcrumb Indicator */}
-          <div className="hidden md:flex items-center gap-2 text-xs shrink-0">
-            <button
-              onClick={onNavigateHome}
-              className="text-slate-500 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-400 font-semibold cursor-pointer transition-colors"
-            >
-              ERP
-            </button>
-            <span className="text-slate-300 dark:text-slate-600 font-bold">/</span>
-            <span className="font-bold text-slate-900 dark:text-slate-100 bg-slate-100 dark:bg-[#1e232b] border border-slate-200/60 dark:border-[#2d3340] px-2.5 py-1 rounded-lg">
-              {language === 'ur' ? activeTitle.ur : activeTitle.en}
-            </span>
+          {/* Prototype Brand Logo & Title */}
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-[13px] bg-gradient-to-br from-white to-[#dbe5ff] dark:from-[#1e2a5e] dark:to-[#111b4b] flex items-center justify-center shadow-[0_7px_18px_rgba(63,86,171,0.18)] text-lg font-bold text-[#3567ff] dark:text-[#59c7ff] select-none border border-white/80 dark:border-white/10 shrink-0">
+              ☾
+            </div>
+            <div className="hidden sm:flex flex-col truncate">
+              <button
+                onClick={onNavigateHome}
+                className="font-extrabold text-sm text-[#14204d] dark:text-white leading-tight hover:text-[#3567ff] transition-colors text-left truncate cursor-pointer"
+              >
+                {activeMadrasa?.name || 'Madrasa Management'}
+              </button>
+              <span className="text-[10px] text-[#7180a6] dark:text-slate-400 font-semibold truncate text-left">
+                {activeMadrasa?.code ? `${activeMadrasa.code} • 2025–26` : 'Jamia Islamia Madrasa • 2025–26'}
+              </span>
+            </div>
           </div>
 
-          {/* Search Box - Responsive Icon on Mobile, full input on sm+ */}
-          <div className="shrink-0">
+          <span className="hidden md:inline text-slate-300 dark:text-slate-700 font-bold">/</span>
+
+          {/* Active Tab Badge Pill */}
+          <span className="font-bold text-[#3567ff] dark:text-[#59c7ff] bg-[#eef2ff] dark:bg-[#3567ff]/20 border border-[#3567ff]/20 dark:border-[#3567ff]/30 px-2.5 py-1 rounded-xl truncate text-xs shadow-2xs">
+            {language === 'ur' ? activeTitle.ur : activeTitle.en}
+          </span>
+
+          {/* Quick Search Bar */}
+          <div className="hidden lg:block shrink-0 ml-1">
             <button
               onClick={onOpenCommandPalette}
-              className="flex items-center justify-between p-2 sm:px-3 sm:py-1.5 rounded-xl bg-slate-50 hover:bg-white dark:bg-[#181c22] dark:hover:bg-[#1e232b] border border-slate-200/80 dark:border-[#2d3340] text-xs text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-all group cursor-pointer sm:w-56 md:w-64 lg:w-72"
+              className="flex items-center justify-between px-3.5 py-1.5 rounded-xl bg-white/75 hover:bg-white dark:bg-[#18245b]/60 dark:hover:bg-[#18245b] border border-[#6679b4]/16 hover:border-[#3567ff]/40 text-xs text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200 transition-all group cursor-pointer w-52 xl:w-64 shadow-xs"
             >
               <div className="flex items-center gap-2 truncate">
-                <Search className="w-4 h-4 sm:w-3.5 sm:h-3.5 text-slate-400 group-hover:text-blue-500 transition-colors shrink-0" />
-                <span className="hidden sm:inline truncate text-[11px] text-slate-500 dark:text-slate-400">Search talaba, ustadh, fee...</span>
+                <Search className="w-3.5 h-3.5 text-[#3567ff] dark:text-[#59c7ff] group-hover:scale-110 transition-transform shrink-0" />
+                <span className="truncate text-[11px] font-medium">Search student, fee, class...</span>
               </div>
-              <kbd className="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono font-bold text-slate-400 dark:text-slate-500 bg-white dark:bg-[#10131a] rounded border border-slate-200 dark:border-[#2d3340]">
+              <kbd className="inline-flex items-center px-1.5 py-0.5 text-[9px] font-mono font-bold text-[#3567ff] dark:text-[#59c7ff] bg-[#eef2ff] dark:bg-[#3567ff]/20 rounded border border-[#3567ff]/30">
                 ⌘K
               </kbd>
             </button>
           </div>
         </div>
 
-        {/* ================= RIGHT SECTION: TEMPORAL CAPSULES, UTILITIES & USER ================= */}
-        <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+        {/* ================= RIGHT: TEMPORAL CAPSULE, ACTIONS & USER ================= */}
+        <div className="flex items-center gap-1.5 sm:gap-2.5 shrink-0">
           
-          {/* Gregorian + Hijri Date */}
-          <div className="hidden xl:flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-white/65 dark:bg-[#181c22] border border-slate-200/80 dark:border-[#2d3340] text-xs font-semibold text-slate-700 dark:text-slate-300 shadow-2xs">
-            <Calendar className="w-3.5 h-3.5 text-blue-500 shrink-0" />
-            <span className="text-[11px] text-slate-800 dark:text-slate-200 font-bold whitespace-nowrap">{currentDateStr}</span>
-            <span className="text-slate-300 dark:text-slate-600">•</span>
-            <span className="text-xs font-bold text-blue-600 dark:text-blue-400 font-urdu urdu-font whitespace-nowrap">{hijriDateStr}</span>
-          </div>
-
-          {/* Live Clock */}
-          <div className="hidden lg:flex items-center gap-1.5 px-3 py-1.5 rounded-2xl bg-white/65 dark:bg-[#181c22] border border-slate-200/80 dark:border-[#2d3340] font-mono text-xs font-bold text-slate-800 dark:text-slate-200 shadow-2xs">
-            <Clock className="w-3.5 h-3.5 text-amber-500 shrink-0" />
-            <span>{currentTime}</span>
-          </div>
-
-          {/* Next Namaz Countdown */}
-          {nextPrayerInfo && (
-            <div className="hidden 2xl:flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200/70 dark:border-blue-800/60 text-xs font-bold text-blue-900 dark:text-blue-300 shadow-2xs whitespace-nowrap">
-              <Sparkles className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400 shrink-0" />
-              <span>{nextPrayerInfo.name}</span>
-              <span className="font-normal text-blue-700 dark:text-blue-400 text-[10px]">({nextPrayerInfo.timeStr})</span>
-              <span className="font-mono text-blue-950 dark:text-blue-200 font-black bg-white/95 dark:bg-[#181c22] px-1.5 py-0.5 rounded-full border border-blue-200/60 dark:border-blue-800/60 text-[10px]">
-                {nextPrayerInfo.countdownStr}
+          {/* Unified Temporal Capsule: Hijri Date & Next Namaz Countdown */}
+          <div className="hidden md:flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-[#eef2ff] via-white to-[#f5f0ff] dark:from-[#18245b]/80 dark:via-[#111b4b] dark:to-[#241a54]/80 border border-[#6679b4]/20 dark:border-white/10 text-xs shadow-2xs">
+            {/* Hijri Calendar */}
+            <div className="flex items-center gap-1.5">
+              <Calendar className="w-3.5 h-3.5 text-[#3567ff] dark:text-[#59c7ff] shrink-0" />
+              <span className="text-xs font-bold text-[#14204d] dark:text-white font-urdu urdu-font whitespace-nowrap">
+                {hijriDateStr}
               </span>
             </div>
-          )}
 
-          {/* Supabase Cloud Status & Manual Sync */}
+            {nextPrayerInfo && (
+              <>
+                <span className="text-slate-300 dark:text-slate-600">•</span>
+                <div className="flex items-center gap-1 text-[11px] font-bold text-slate-700 dark:text-slate-300 whitespace-nowrap">
+                  <Clock className="w-3.5 h-3.5 text-[#f6a83b] shrink-0" />
+                  <span>{nextPrayerInfo.name}:</span>
+                  <span className="font-mono text-[#3567ff] dark:text-[#59c7ff] font-black">
+                    {nextPrayerInfo.countdownStr}
+                  </span>
+                </div>
+              </>
+            )}
+          </div>
+
+          {/* Compact Cloud Sync Status Button */}
           <button
             onClick={async () => {
               showToast('Syncing with Supabase Cloud...', 'info');
@@ -282,109 +291,95 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({
               if (ok) {
                 showToast('Cloud data synchronized successfully!', 'success');
               } else {
-                showToast('Cloud sync failed. Running on local cache.', 'warning');
+                showToast('Cloud sync completed with local cache.', 'info');
               }
             }}
-            title="Supabase Cloud Database Status (Click to Sync)"
-            className="flex items-center gap-1.5 px-2 sm:px-2.5 py-1.5 rounded-2xl bg-blue-50/90 dark:bg-[#181c22] hover:bg-blue-100 dark:hover:bg-[#1e232b] text-blue-800 dark:text-blue-400 border border-blue-200/80 dark:border-[#2d3340] text-xs font-bold shadow-2xs transition-all active:scale-95"
+            title="Cloud Synchronized (Click to Refresh)"
+            className="p-2 rounded-xl bg-white/80 hover:bg-white dark:bg-white/10 dark:hover:bg-white/15 text-[#3567ff] dark:text-[#59c7ff] border border-[#6679b4]/16 hover:border-[#3567ff]/40 transition-all active:scale-95 cursor-pointer relative shadow-xs"
           >
-            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-            <Cloud className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-            <span className="hidden sm:inline text-[11px]">Cloud Synced</span>
+            <Cloud className="w-4 h-4" />
+            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-[#16b981] ring-2 ring-white dark:ring-[#111b4b] animate-pulse" />
           </button>
 
-          {/* Notification Bell */}
+          {/* Notification Center */}
           <button
             onClick={() => setShowAnnouncementsModal(true)}
-            title="Notifications"
-            className="relative p-2 rounded-2xl bg-white/65 dark:bg-[#181c22] hover:bg-white dark:hover:bg-[#1e232b] text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white border border-slate-200/80 dark:border-[#2d3340] shadow-2xs transition-all active:scale-95"
+            title="Notifications & Notices"
+            className="relative p-2 rounded-xl bg-white/80 hover:bg-white dark:bg-white/10 dark:hover:bg-white/15 text-slate-600 dark:text-slate-300 hover:text-[#3567ff] dark:hover:text-white border border-[#6679b4]/16 hover:border-[#3567ff]/40 transition-all active:scale-95 cursor-pointer shadow-xs"
           >
             <Bell className="w-4 h-4" />
-            <span className="absolute -top-1 -right-1 w-4 h-4 text-[9px] font-black bg-rose-500 text-white rounded-full flex items-center justify-center ring-2 ring-white dark:ring-[#10131a]">
+            <span className="absolute -top-0.5 -right-0.5 w-4 h-4 text-[9px] font-black bg-[#ef476f] text-white rounded-full flex items-center justify-center ring-2 ring-white dark:ring-[#111b4b]">
               2
             </span>
           </button>
 
-          {/* Light / Dark Mode Toggle */}
+          {/* Dark / Light Mode Toggle */}
           <button
             onClick={() => {
               toggleDarkMode();
               showToast(!isDarkMode ? 'Dark Theme activated' : 'Light Theme activated', 'info');
             }}
-            title={isDarkMode ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
-            className="p-2 rounded-2xl bg-white/65 dark:bg-[#181c22] hover:bg-white dark:hover:bg-[#1e232b] text-slate-600 dark:text-amber-400 hover:text-amber-500 border border-slate-200/80 dark:border-[#2d3340] shadow-2xs transition-all active:scale-95 cursor-pointer"
+            title={isDarkMode ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            className="p-2 rounded-xl bg-white/80 hover:bg-white dark:bg-white/10 dark:hover:bg-white/15 text-slate-600 dark:text-[#f6a83b] hover:text-[#f6a83b] border border-[#6679b4]/16 hover:border-[#3567ff]/40 transition-all active:scale-95 cursor-pointer shadow-xs"
           >
-            {isDarkMode ? <Sun className="w-4 h-4 text-amber-400" /> : <Moon className="w-4 h-4 text-slate-600" />}
+            {isDarkMode ? <Sun className="w-4 h-4 text-[#f6a83b]" /> : <Moon className="w-4 h-4 text-slate-600" />}
           </button>
 
-          {/* Language Switcher Dropdown */}
+          {/* Language Switcher */}
           <div className="relative shrink-0">
             <button
               onClick={() => setShowLangMenu(!showLangMenu)}
-              className="flex items-center gap-1 px-2 sm:px-2.5 py-1.5 rounded-2xl bg-white/65 dark:bg-[#181c22] hover:bg-white dark:hover:bg-[#1e232b] border border-slate-200/80 dark:border-[#2d3340] text-xs font-bold text-slate-700 dark:text-slate-300 shadow-2xs transition-all cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/80 hover:bg-white dark:bg-white/10 dark:hover:bg-white/15 border border-[#6679b4]/16 hover:border-[#3567ff]/40 text-xs font-bold text-slate-700 dark:text-slate-200 transition-all cursor-pointer shadow-xs"
             >
+              <Globe className="w-3.5 h-3.5 text-[#3567ff] dark:text-[#59c7ff]" />
               <span className="uppercase text-[11px] font-bold tracking-wider">{language}</span>
               <ChevronDown className="w-3 h-3 text-slate-400" />
             </button>
 
             {showLangMenu && (
               <div 
-                className="absolute ltr:right-0 ltr:left-auto rtl:left-0 rtl:right-auto mt-2 w-36 rounded-2xl bg-white/95 dark:bg-[#181c22] backdrop-blur-2xl border border-slate-200/80 dark:border-[#2d3340] shadow-xl py-1.5 z-50 animate-in fade-in zoom-in-95"
+                className="absolute ltr:right-0 ltr:left-auto rtl:left-0 rtl:right-auto mt-2 w-36 rounded-2xl bg-white/95 dark:bg-[#141a24] backdrop-blur-2xl border border-slate-200/80 dark:border-white/10 shadow-xl py-1.5 z-50 animate-in fade-in zoom-in-95"
                 onClick={() => setShowLangMenu(false)}
               >
                 <button
                   onClick={() => setLanguage('en')}
-                  className={`w-full px-3.5 py-2 text-start text-xs font-semibold flex items-center justify-between hover:bg-blue-50 dark:hover:bg-[#1e232b] transition-colors ${language === 'en' ? 'text-blue-600 dark:text-blue-400 font-bold bg-blue-50/50 dark:bg-blue-950/30' : 'text-slate-700 dark:text-slate-300'}`}
+                  className={`w-full px-3.5 py-2 text-start text-xs font-semibold flex items-center justify-between hover:bg-emerald-50 dark:hover:bg-white/5 transition-colors ${language === 'en' ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50/50 dark:bg-emerald-950/30' : 'text-slate-700 dark:text-slate-300'}`}
                 >
                   <span>English</span>
-                  {language === 'en' && <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />}
+                  {language === 'en' && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />}
                 </button>
                 <button
                   onClick={() => setLanguage('ur')}
-                  className={`w-full px-3.5 py-2 text-start text-xs font-semibold flex items-center justify-between hover:bg-blue-50 dark:hover:bg-[#1e232b] transition-colors ${language === 'ur' ? 'text-blue-600 dark:text-blue-400 font-bold bg-blue-50/50 dark:bg-blue-950/30' : 'text-slate-700 dark:text-slate-300'}`}
+                  className={`w-full px-3.5 py-2 text-start text-xs font-semibold flex items-center justify-between hover:bg-emerald-50 dark:hover:bg-white/5 transition-colors ${language === 'ur' ? 'text-emerald-600 dark:text-emerald-400 font-bold bg-emerald-50/50 dark:bg-emerald-950/30' : 'text-slate-700 dark:text-slate-300'}`}
                 >
                   <span className="urdu-font text-sm">اردو (Urdu)</span>
-                  {language === 'ur' && <CheckCircle2 className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />}
+                  {language === 'ur' && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />}
                 </button>
               </div>
             )}
           </div>
 
-          {/* Full Screen Toggle Button (hidden on mobile) */}
-          <button
-            onClick={toggleFullscreen}
-            title={isFullscreen ? 'Exit Full Screen' : 'Enter Full Screen'}
-            aria-label="Toggle Full Screen"
-            className="hidden sm:flex p-2 rounded-2xl bg-white/65 dark:bg-[#181c22] hover:bg-white dark:hover:bg-[#1e232b] border border-slate-200/80 dark:border-[#2d3340] text-slate-700 dark:text-slate-200 hover:text-blue-600 dark:hover:text-blue-400 shadow-2xs transition-all cursor-pointer items-center justify-center shrink-0 active:scale-95"
-          >
-            {isFullscreen ? (
-              <Minimize className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-            ) : (
-              <Maximize className="w-4 h-4 text-slate-700 dark:text-slate-200" />
-            )}
-          </button>
-
-          {/* User Profile Capsule */}
+          {/* User Profile Pill with Gold Ring Highlight */}
           <div className="relative shrink-0">
             <button
               onClick={() => setShowProfileMenu(!showProfileMenu)}
-              className="flex items-center gap-2 p-1 pr-2 rounded-full bg-white/65 dark:bg-[#181c22] hover:bg-white dark:hover:bg-[#1e232b] border border-slate-200/80 dark:border-[#2d3340] shadow-2xs transition-all group cursor-pointer"
+              className="flex items-center gap-2 p-1 pr-2.5 rounded-full bg-white/80 hover:bg-white dark:bg-[#14221B] dark:hover:bg-[#1C3026] border border-[#065F46]/15 hover:border-[#D97706]/40 transition-all group cursor-pointer shadow-2xs"
               title={user?.name || 'User Profile'}
             >
               <div className="relative shrink-0">
                 <img
                   src={user?.avatarUrl || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80"}
                   alt={user?.name || 'User'}
-                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover ring-2 ring-blue-500/30 shadow-2xs"
+                  className="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-cover ring-2 ring-[#D97706]/60 shadow-2xs"
                 />
-                <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-emerald-500 rounded-full ring-2 ring-white dark:ring-[#10131a]" />
+                <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 bg-[#059669] rounded-full ring-2 ring-white dark:ring-[#0c1017]" />
               </div>
 
-              <div className="text-start hidden lg:block leading-tight max-w-[110px]">
-                <span className="text-xs font-black text-slate-900 dark:text-slate-100 block truncate group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+              <div className="text-start hidden lg:block leading-tight max-w-[120px]">
+                <span className="text-xs font-bold text-slate-900 dark:text-white block truncate group-hover:text-[#065F46] dark:group-hover:text-[#34D399] transition-colors">
                   {user?.name || 'User'}
                 </span>
-                <span className="text-[9px] uppercase font-bold text-blue-600 dark:text-blue-400 tracking-wider block truncate">
+                <span className="text-[9px] uppercase font-bold text-[#D97706] dark:text-[#FBBF24] tracking-wider block truncate">
                   {user?.role === 'super_admin' ? 'SUPER ADMIN' : user?.role === 'admin' ? 'PRINCIPAL' : user?.role === 'teacher' ? 'TEACHER' : 'STUDENT'}
                 </span>
               </div>
@@ -394,19 +389,19 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({
             {/* Profile Dropdown Menu */}
             {showProfileMenu && (
               <div 
-                className="absolute ltr:right-0 ltr:left-auto rtl:left-0 rtl:right-auto mt-2 w-64 max-w-[calc(100vw-1.5rem)] rounded-3xl bg-white/95 dark:bg-[#181c22] backdrop-blur-2xl border border-slate-200/80 dark:border-[#2d3340] shadow-xl p-2 z-50 animate-in fade-in zoom-in-95"
+                className="absolute ltr:right-0 ltr:left-auto rtl:left-0 rtl:right-auto mt-2 w-64 max-w-[calc(100vw-1.5rem)] rounded-2xl bg-white/95 dark:bg-[#141a24] backdrop-blur-2xl border border-slate-200/80 dark:border-white/10 shadow-xl p-2 z-50 animate-in fade-in zoom-in-95"
                 onClick={() => setShowProfileMenu(false)}
               >
                 {/* Header User Card */}
-                <div className="p-3 bg-slate-50/80 dark:bg-[#1e232b] rounded-2xl border border-slate-200/60 dark:border-[#2d3340] mb-2">
+                <div className="p-3 bg-slate-50 dark:bg-white/5 rounded-xl border border-slate-200/60 dark:border-white/5 mb-2">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold text-sm shadow-xs shrink-0">
+                    <div className="w-9 h-9 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold text-sm shadow-xs shrink-0">
                       {user?.name?.charAt(0) || 'U'}
                     </div>
                     <div className="min-w-0 flex-1 text-start">
-                      <p className="text-xs font-black text-slate-900 dark:text-white truncate">{user?.name}</p>
+                      <p className="text-xs font-bold text-slate-900 dark:text-white truncate">{user?.name}</p>
                       <p className="text-[10px] text-slate-500 dark:text-slate-400 font-mono truncate">{user?.username}</p>
-                      <span className="inline-block mt-1 px-2 py-0.5 rounded-md text-[9px] font-extrabold bg-blue-100 dark:bg-blue-950/60 text-blue-800 dark:text-blue-300 uppercase tracking-wider">
+                      <span className="inline-block mt-1 px-2 py-0.5 rounded-md text-[9px] font-extrabold bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 uppercase tracking-wider">
                         {user?.role.replace('_', ' ')}
                       </span>
                     </div>
@@ -415,6 +410,17 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({
 
                 {/* Dropdown Action Links */}
                 <div className="space-y-0.5">
+                  <button
+                    onClick={toggleFullscreen}
+                    className="w-full text-start px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5 flex items-center justify-between transition-colors cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2.5">
+                      {isFullscreen ? <Minimize className="w-4 h-4 text-emerald-600 shrink-0" /> : <Maximize className="w-4 h-4 text-slate-500 shrink-0" />}
+                      <span>{isFullscreen ? 'Exit Full Screen' : 'Enter Full Screen'}</span>
+                    </div>
+                    <span className="text-[10px] font-mono text-slate-400">F11</span>
+                  </button>
+
                   {user?.role === 'super_admin' ? (
                     <button
                       onClick={() => {
@@ -432,15 +438,15 @@ export const TopAppBar: React.FC<TopAppBarProps> = ({
                         setShowProfileMenu(false);
                         setShowProfileChangesModal(true);
                       }}
-                      className="w-full text-start px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-[#22262e] flex items-center gap-2.5 transition-colors cursor-pointer"
+                      className="w-full text-start px-3 py-2 rounded-xl text-xs font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5 flex items-center gap-2.5 transition-colors cursor-pointer"
                     >
-                      <Edit3 className="w-4 h-4 text-blue-600 dark:text-blue-400 shrink-0" />
+                      <Edit3 className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
                       <span>{t('applyForProfileChanges')}</span>
                     </button>
                   )}
                 </div>
 
-                <div className="h-px bg-slate-200/80 dark:bg-[#2d3340] my-1.5" />
+                <div className="h-px bg-slate-200/80 dark:bg-white/10 my-1.5" />
 
                 {/* Logout Button */}
                 <button

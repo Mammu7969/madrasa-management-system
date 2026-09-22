@@ -11,7 +11,9 @@ import {
 
 export const CertificatesModule: React.FC = () => {
   const { activeMadrasa } = useAuth();
-  const { showToast } = useTheme();
+  const { language, showToast } = useTheme();
+  const isUrdu = language === 'ur';
+  const loc = (en: string, ur: string): string => isUrdu ? ur : en;
   const students = db.getStudents(activeMadrasa?.id);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -186,7 +188,7 @@ export const CertificatesModule: React.FC = () => {
 
           {/* Student Selector */}
           <div>
-            <label className="text-[11px] font-bold text-gray-700 block mb-1">Select Student (طالب علم):</label>
+            <label className="text-[11px] font-bold text-gray-700 block mb-1">{loc('Select Student:', 'طالب علم منتخب کریں:')}</label>
             <select
               value={selectedStudentId}
               onChange={(e) => setSelectedStudentId(e.target.value)}
@@ -194,7 +196,7 @@ export const CertificatesModule: React.FC = () => {
             >
               {students.map(s => (
                 <option key={s.id} value={s.id}>
-                  {s.studentName} ({s.admissionNo}) - {s.class}
+                  {isUrdu && s.studentNameUrdu ? s.studentNameUrdu : s.studentName} ({s.admissionNo}) - {s.class}
                 </option>
               ))}
             </select>
@@ -202,19 +204,19 @@ export const CertificatesModule: React.FC = () => {
 
           {/* Certificate Type */}
           <div>
-            <label className="text-[11px] font-bold text-gray-700 block mb-1">Sanad / Certificate Title:</label>
+            <label className="text-[11px] font-bold text-gray-700 block mb-1">{loc('Sanad / Certificate Title:', 'عنوانِ سند یا سرٹیفکیٹ:')}</label>
             <select
               value={certType}
               onChange={(e) => setCertType(e.target.value as any)}
               className="w-full p-2.5 text-xs rounded-xl border border-gray-300 bg-white font-semibold"
             >
-              <option value="sanad_hifz">سند حفظ القرآن الکریم (Hifz-ul-Quran Sanad)</option>
-              <option value="sanad_alim">سند فضیلت و عالمیت (Alimiyat Degree)</option>
-              <option value="nazira">سند تکمیل ناظرہ و دینیات (Nazira Completion)</option>
-              <option value="merit">توصیفی سند برائے حسن کارکردگی (Certificate of Merit)</option>
-              <option value="character">سند حسن اخلاق (Character Certificate)</option>
-              <option value="id_card">شناختی کارڈ طالب علم (Student ID Card)</option>
-              <option value="custom">Custom Certificate (حسب ضرورت عنوان)</option>
+              <option value="sanad_hifz">{loc('Hifz-ul-Quran Sanad', 'سند حفظ القرآن الکریم')}</option>
+              <option value="sanad_alim">{loc('Alimiyat Degree', 'سند فضیلت و عالمیت')}</option>
+              <option value="nazira">{loc('Nazira Completion Certificate', 'سند تکمیل ناظرہ و دینیات')}</option>
+              <option value="merit">{loc('Certificate of Merit', 'توصیفی سند برائے حسن کارکردگی')}</option>
+              <option value="character">{loc('Character Certificate', 'سند حسن اخلاق')}</option>
+              <option value="id_card">{loc('Student ID Card', 'شناختی کارڈ طالب علم')}</option>
+              <option value="custom">{loc('Custom Certificate', 'حسب ضرورت عنوان')}</option>
             </select>
           </div>
 

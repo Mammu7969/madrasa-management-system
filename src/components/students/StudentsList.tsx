@@ -38,7 +38,8 @@ export const StudentsList: React.FC<StudentsListProps> = ({
   onAddNewAdmission
 }) => {
   const { activeMadrasa } = useAuth();
-  const { t, showToast } = useTheme();
+  const { t, showToast, language } = useTheme();
+  const isUrdu = language === 'ur';
 
   // Search & Filter state
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -159,21 +160,26 @@ export const StudentsList: React.FC<StudentsListProps> = ({
     setSelectedStatusFilter('all');
     setCurrentPage(1);
     setGotoPageInput('1');
-    showToast('Filters reset to default', 'info');
+    showToast(isUrdu ? 'فلٹرز دوبارہ ترتیب دے دیے گئے' : 'Filters reset to default', 'info');
   };
 
   // Delete student handler
   const handleDelete = (e: React.MouseEvent, studentId: string, studentName: string) => {
     e.stopPropagation();
-    if (window.confirm(`Are you sure you want to remove student "${studentName}" from registry?`)) {
+    const confirmPrompt = isUrdu 
+      ? `کیا آپ واقعی طالب علم "${studentName}" کا اندراج حذف کرنا چاہتے ہیں؟`
+      : `Are you sure you want to remove student "${studentName}" from the registry?`;
+    if (window.confirm(confirmPrompt)) {
       db.deleteStudent(studentId);
-      showToast(`Student ${studentName} removed from records.`, 'info');
+      showToast(isUrdu ? `طالب علم ${studentName} کا ریکارڈ حذف کر دیا گیا` : `Student ${studentName} removed from records.`, 'info');
     }
   };
 
   // Export to CSV
   const handleExportCSV = () => {
-    const headers = ['Admission No', 'Student Name', 'Name (Urdu)', 'Father Name', 'Class', 'Category', 'Status', 'Contact', 'Monthly Fees', 'Sabaq'];
+    const headers = isUrdu 
+      ? ['داخلہ نمبر', 'طالب علم کا نام', 'اردو نام', 'والد کا نام', 'درجہ', 'زمرہ', 'حیثیت', 'رابطہ نمبر', 'ماہانہ فیس', 'موجودہ سبق']
+      : ['Admission No', 'Student Name', 'Name (Urdu)', 'Father Name', 'Class', 'Category', 'Status', 'Contact', 'Monthly Fees', 'Sabaq'];
     const rows = filteredStudents.map(s => [
       `"${s.admissionNo}"`,
       `"${s.studentName}"`,
@@ -181,7 +187,7 @@ export const StudentsList: React.FC<StudentsListProps> = ({
       `"${s.fatherName}"`,
       `"${s.class}"`,
       `"${s.category}"`,
-      s.isActive !== false ? 'Active' : 'Inactive',
+      s.isActive !== false ? (isUrdu ? 'فعال' : 'Active') : (isUrdu ? 'غیر فعال' : 'Inactive'),
       `"${s.contactNumber}"`,
       s.monthlyFees,
       `"${s.presentSabaqAt}"`
@@ -195,7 +201,7 @@ export const StudentsList: React.FC<StudentsListProps> = ({
     link.download = `students_register_${activeMadrasa?.code || 'mms'}_${new Date().toISOString().split('T')[0]}.csv`;
     link.click();
     URL.revokeObjectURL(url);
-    showToast(`Exported ${filteredStudents.length} students to CSV!`, 'success');
+    showToast(isUrdu ? `طلباء کا ریکارڈ ڈاؤن لوڈ ہو گیا` : `Exported ${filteredStudents.length} students to CSV!`, 'success');
   };
 
   // Statistics calculation for the bottom 5 cards
@@ -226,40 +232,46 @@ export const StudentsList: React.FC<StudentsListProps> = ({
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       {/* =========================================================================
-          1. TOP HEADER ROW (Matching media_1788721593765.png)
+          1. TOP HEADER BANNER (Midnight Navy & Royal Blue Neo-Glass Banner)
           ========================================================================= */}
-      <div className="glossy-card-elevated p-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-2xl glossy-squircle bg-[#079669] text-white flex items-center justify-center shrink-0 border border-white/40 shadow-xs">
-            <Users className="w-6 h-6 relative z-10" />
+      <div className="relative overflow-hidden rounded-[26px] p-6 text-white shadow-xl flex flex-col md:flex-row md:items-center justify-between gap-4 border border-white/15 bg-gradient-to-r from-[#111b4b] via-[#18245b] to-[#24336e]">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-radial from-[#3567ff]/20 to-transparent blur-2xl pointer-events-none" />
+        <div className="flex items-center gap-4 relative z-10">
+          <div className="w-13 h-13 rounded-2xl bg-gradient-to-br from-[#3567ff] to-[#7654ff] text-white flex items-center justify-center shrink-0 shadow-lg shadow-[#3567ff]/30">
+            <Users className="w-6 h-6" />
           </div>
           <div>
-            <h1 className="text-2xl font-black text-slate-900 tracking-tight font-montserrat">
-              {t('allStudents')}
-            </h1>
-            <p className="text-xs text-slate-500 font-medium mt-0.5">
-              Comprehensive student database, academic progression, and profiles
+            <div className="flex items-center gap-2.5">
+              <h1 className="text-2xl font-black text-white tracking-tight font-montserrat">
+                {isUrdu ? 'طلباء کا مرکزی رجسٹر' : 'Student Registry'}
+              </h1>
+              <span className="px-3 py-1 rounded-full text-xs font-bold bg-[#3567ff]/20 text-[#59c7ff] border border-[#3567ff]/40 shadow-xs">
+                {filteredStudents.length} {isUrdu ? 'طلباء' : 'Enrolled'}
+              </span>
+            </div>
+            <p className="text-xs text-white/70 font-medium mt-1">
+              {isUrdu ? 'جامع طلباء ریکارڈ، درجات اور تعلیمی پیش رفت کا انتظام' : 'Comprehensive student database, academic progression, and profiles'}
             </p>
           </div>
         </div>
 
         {/* Action Buttons: Export & New Admission */}
-        <div className="flex items-center gap-2.5 flex-wrap sm:flex-nowrap">
+        <div className="flex items-center gap-3 flex-wrap sm:flex-nowrap relative z-10">
           <button
             type="button"
             onClick={handleExportCSV}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-white/70 hover:bg-white border border-white/90 text-xs font-bold text-slate-700 shadow-2xs transition-all active:scale-95 cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-white/10 hover:bg-white/15 border border-white/20 text-xs font-bold text-white shadow-sm backdrop-blur-md transition-all active:scale-95 cursor-pointer"
           >
-            <Download className="w-4 h-4 text-[#079669]" />
-            <span>Export CSV</span>
+            <Download className="w-4 h-4 text-[#59c7ff]" />
+            <span>{isUrdu ? 'ایکسپورٹ فائل' : 'Export CSV'}</span>
           </button>
           <button
             type="button"
             onClick={onAddNewAdmission}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-[#079669] hover:bg-[#057A57] text-white text-xs font-bold shadow-[0_4px_14px_rgba(7,150,105,0.3)] transition-all active:scale-95 cursor-pointer"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-bold shadow-lg shadow-[#3567ff]/35 bg-gradient-to-r from-[#3567ff] to-[#7654ff] hover:from-[#2d5be6] hover:to-[#6844eb] text-white transition-all active:scale-95 cursor-pointer"
           >
-            <UserPlus className="w-4 h-4" />
-            <span>New Admission (نیا داخلہ)</span>
+            <UserPlus className="w-4 h-4 text-white" />
+            <span>{isUrdu ? 'نیا داخلہ' : 'New Admission'}</span>
           </button>
         </div>
       </div>
@@ -267,19 +279,19 @@ export const StudentsList: React.FC<StudentsListProps> = ({
       {/* =========================================================================
           2. SEARCH AND FILTER STRIP
           ========================================================================= */}
-      <div className="glossy-card p-4 flex flex-col md:flex-row items-center justify-between gap-3">
+      <div className="glass card p-4 flex flex-col md:flex-row items-center justify-between gap-3">
         {/* Search Bar */}
         <div className="relative flex-1 w-full">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
           <input
             type="text"
-            placeholder="Search by student name, admission no, father name, contact..."
+            placeholder={isUrdu ? 'نام، داخلہ نمبر، والد کا نام یا فون نمبر تلاش کریں...' : 'Search by student name, admission no, father name, contact...'}
             value={searchQuery}
             onChange={(e) => {
               setSearchQuery(e.target.value);
               setCurrentPage(1);
             }}
-            className="w-full pl-10 pr-4 py-2.5 text-xs rounded-2xl bg-white/60 backdrop-blur-md border border-white/90 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-600 transition-all shadow-2xs font-medium text-slate-800 placeholder:text-slate-400"
+            className="w-full pl-10 pr-4 py-2.5 text-xs rounded-2xl bg-white/70 dark:bg-[#111b4b]/50 border border-stone-200 dark:border-white/10 focus:border-[#3567ff] dark:focus:border-[#59c7ff] focus:outline-none focus:ring-2 focus:ring-[#3567ff]/20 transition-all font-medium text-stone-800 dark:text-stone-100 placeholder:text-stone-400 shadow-inner"
           />
         </div>
 
@@ -291,9 +303,9 @@ export const StudentsList: React.FC<StudentsListProps> = ({
               setSelectedClass(e.target.value);
               setCurrentPage(1);
             }}
-            className="w-full px-3.5 py-2.5 text-xs rounded-2xl bg-white/60 backdrop-blur-md border border-white/90 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-600 font-semibold text-slate-700 cursor-pointer transition-all shadow-2xs"
+            className="w-full px-3.5 py-2.5 text-xs rounded-2xl bg-white/70 dark:bg-[#111b4b]/50 border border-stone-200 dark:border-white/10 focus:border-[#3567ff] focus:outline-none font-semibold text-stone-700 dark:text-stone-200 cursor-pointer transition-all shadow-sm"
           >
-            <option value="all">All Classes & Sections</option>
+            <option value="all">{isUrdu ? 'تمام درجات و شعبہ جات' : 'All Classes & Sections'}</option>
             {availableClasses.map(c => (
               <option key={c} value={c}>{c}</option>
             ))}
@@ -308,11 +320,11 @@ export const StudentsList: React.FC<StudentsListProps> = ({
               setSelectedCategory(e.target.value);
               setCurrentPage(1);
             }}
-            className="w-full px-3.5 py-2.5 text-xs rounded-2xl bg-white/60 backdrop-blur-md border border-white/90 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-600 font-semibold text-slate-700 cursor-pointer transition-all shadow-2xs"
+            className="w-full px-3.5 py-2.5 text-xs rounded-2xl bg-white/70 dark:bg-[#111b4b]/50 border border-stone-200 dark:border-white/10 focus:border-[#3567ff] focus:outline-none font-semibold text-stone-700 dark:text-stone-200 cursor-pointer transition-all shadow-sm"
           >
-            <option value="all">All Categories</option>
-            <option value="Hostel">Hostel (اقامتی)</option>
-            <option value="Day Scholar">Day Scholar (غیر اقامتی)</option>
+            <option value="all">{isUrdu ? 'تمام زمرے' : 'All Categories'}</option>
+            <option value="Hostel">{isUrdu ? 'اقامتی' : 'Hostel'}</option>
+            <option value="Day Scholar">{isUrdu ? 'غیر اقامتی' : 'Day Scholar'}</option>
           </select>
         </div>
 
@@ -324,11 +336,11 @@ export const StudentsList: React.FC<StudentsListProps> = ({
               setSelectedStatusFilter(e.target.value as any);
               setCurrentPage(1);
             }}
-            className="w-full px-3.5 py-2.5 text-xs rounded-2xl bg-white/60 backdrop-blur-md border border-white/90 focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-600 font-semibold text-slate-700 cursor-pointer transition-all shadow-2xs"
+            className="w-full px-3.5 py-2.5 text-xs rounded-2xl bg-white/70 dark:bg-[#111b4b]/50 border border-stone-200 dark:border-white/10 focus:border-[#3567ff] focus:outline-none font-semibold text-stone-700 dark:text-stone-200 cursor-pointer transition-all shadow-sm"
           >
-            <option value="all">All Status ({students.length})</option>
-            <option value="active">Active ({students.filter(s => s.isActive !== false).length})</option>
-            <option value="inactive">Inactive ({students.filter(s => s.isActive === false).length})</option>
+            <option value="all">{isUrdu ? `تمام حالتیں (${students.length})` : `All Status (${students.length})`}</option>
+            <option value="active">{isUrdu ? `فعال (${students.filter(s => s.isActive !== false).length})` : `Active (${students.filter(s => s.isActive !== false).length})`}</option>
+            <option value="inactive">{isUrdu ? `غیر فعال (${students.filter(s => s.isActive === false).length})` : `Inactive (${students.filter(s => s.isActive === false).length})`}</option>
           </select>
         </div>
 
@@ -337,83 +349,197 @@ export const StudentsList: React.FC<StudentsListProps> = ({
           <button
             type="button"
             onClick={handleResetFilters}
-            title="Reset Filters"
-            className="p-2.5 rounded-2xl bg-white/70 hover:bg-white/90 border border-white/90 text-slate-700 transition-colors shadow-2xs cursor-pointer"
+            title={isUrdu ? 'فلٹرز دوبارہ ترتیب دیں' : 'Reset Filters'}
+            className="p-2.5 rounded-2xl bg-white/80 dark:bg-[#18245b]/80 hover:bg-stone-100 dark:hover:bg-[#24336e] border border-stone-200 dark:border-white/10 text-stone-700 dark:text-stone-300 transition-colors shadow-sm cursor-pointer"
           >
-            <RotateCcw className="w-4 h-4" />
+            <RotateCcw className="w-4 h-4 text-[#3567ff]" />
           </button>
         </div>
       </div>
 
       {/* =========================================================================
-          3. STUDENTS REGISTRY TABLE (Matching media_1788721593765.png)
+          3. STUDENTS REGISTRY (Responsive Cards for Mobile, Full Table for Desktop)
           ========================================================================= */}
-      <div className="glossy-card overflow-hidden">
+      {/* Mobile Card Layout (< md screens) */}
+      <div className="block md:hidden space-y-3" data-purpose="mobile-student-cards">
+        {paginatedStudents.length === 0 ? (
+          <div className="glass card p-8 text-center text-stone-500">
+            <div className="w-12 h-12 rounded-2xl bg-[#3567ff]/10 text-[#3567ff] flex items-center justify-center mx-auto mb-3">
+              <Users className="w-6 h-6" />
+            </div>
+            <p className="font-bold text-sm text-stone-800 dark:text-stone-200">{isUrdu ? 'کوئی طالب علم نہیں ملا' : 'No students found'}</p>
+            <p className="text-xs text-stone-500 dark:text-stone-400 mt-0.5">{isUrdu ? 'تلاش کے الفاظ یا فلٹر تبدیل کر کے دیکھیں' : 'Try adjusting your search keywords or filter criteria'}</p>
+          </div>
+        ) : (
+          paginatedStudents.map((st) => {
+            const sabaqInfo = getSabaqInfo(st);
+            return (
+              <article
+                key={st.id}
+                onClick={() => onSelectStudent(st)}
+                className="glass card p-4 space-y-3.5 cursor-pointer hover:border-[#3567ff]/60 transition-all active:scale-[0.99] group shadow-sm"
+              >
+                {/* Header: Admission No, Status & Actions */}
+                <div className="flex items-center justify-between gap-2 border-b border-stone-200/50 dark:border-white/10 pb-2.5">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2.5 py-0.5 rounded-lg text-[11px] font-bold font-mono bg-[#3567ff]/10 text-[#3567ff] border border-[#3567ff]/30">
+                      {st.admissionNo}
+                    </span>
+                    <span className="text-[11px] text-stone-600 dark:text-stone-400 font-semibold">
+                      {st.class || (isUrdu ? 'عام' : 'General')}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1.5" onClick={(e) => e.stopPropagation()}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const newStatus = db.toggleStudentActive(st.id);
+                        setSyncVersion(v => v + 1);
+                        showToast(isUrdu ? `طالب علم "${st.studentName}" کی حالت ${newStatus ? 'فعال' : 'غیر فعال'} کر دی گئی` : `Student "${st.studentName}" marked ${newStatus ? 'Active' : 'Inactive'}`, 'info');
+                      }}
+                      className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold transition-all ${
+                        st.isActive !== false
+                          ? 'bg-[#16b981]/15 text-[#16b981] border border-[#16b981]/30'
+                          : 'bg-[#f6a83b]/15 text-[#f6a83b] border border-[#f6a83b]/30'
+                      }`}
+                    >
+                      <span className={`w-1.5 h-1.5 rounded-full ${st.isActive !== false ? 'bg-[#16b981]' : 'bg-[#f6a83b]'}`} />
+                      <span>{st.isActive !== false ? (isUrdu ? 'فعال' : 'Active') : (isUrdu ? 'غیر فعال' : 'Inactive')}</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={(e) => handleDelete(e, st.id, st.studentName)}
+                      title={isUrdu ? 'طالب علم خارج کریں' : 'Delete Student'}
+                      className="p-1.5 rounded-lg text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/30 transition-colors"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Identity: Photo, Names, Category */}
+                <div className="flex items-start gap-3">
+                  <div className="relative shrink-0">
+                    <img
+                      src={st.photoUrl}
+                      alt={st.studentName}
+                      className="w-12 h-12 rounded-xl object-cover border border-stone-200 dark:border-white/10 shadow-xs"
+                    />
+                    <span className="w-2.5 h-2.5 bg-[#16b981] rounded-full border border-white dark:border-[#0b112c] absolute -bottom-0.5 -right-0.5" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-xs font-bold text-stone-900 dark:text-stone-100 truncate group-hover:text-[#3567ff] transition-colors">
+                      {st.studentName}
+                    </h3>
+                    {st.studentNameUrdu && (
+                      <p className="text-xs font-semibold text-[#3567ff] urdu-font mt-0.5">
+                        {st.studentNameUrdu}
+                      </p>
+                    )}
+                    <p className="text-[11px] text-stone-500 dark:text-stone-400 mt-0.5 truncate">
+                      {isUrdu ? `ولدیت: ${st.fatherName || '—'}` : `S/O ${st.fatherName || '—'}`}
+                    </p>
+                  </div>
+                  <span className="px-2.5 py-0.5 rounded-lg text-[10px] font-bold shrink-0 bg-[#3567ff]/10 text-[#3567ff] border border-[#3567ff]/25">
+                    {st.category === 'Hostel' ? (isUrdu ? 'اقامتی' : 'Hostel') : (isUrdu ? 'غیر اقامتی' : 'Day Scholar')}
+                  </span>
+                </div>
+
+                {/* Contact & Sabaq Progress */}
+                <div className="bg-stone-50/80 dark:bg-white/5 p-2.5 rounded-xl border border-stone-200/50 dark:border-white/10 space-y-1.5 text-[11px]">
+                  <div className="flex items-center justify-between text-stone-700 dark:text-stone-300">
+                    <div className="flex items-center gap-1.5 font-mono">
+                      <Phone className="w-3.5 h-3.5 text-[#3567ff]" />
+                      <span>{st.contactNumber}</span>
+                    </div>
+                    <span className="font-bold text-[#3567ff] font-mono">
+                      {sabaqInfo.percentage}%
+                    </span>
+                  </div>
+                  <div className="w-full h-1.5 bg-stone-200 dark:bg-stone-700 rounded-full overflow-hidden">
+                    <div 
+                      style={{ width: `${sabaqInfo.percentage}%` }}
+                      className="h-full bg-gradient-to-r from-[#3567ff] to-[#7654ff] rounded-full"
+                    />
+                  </div>
+                  <p className="text-[10px] text-stone-500 dark:text-stone-400 truncate">
+                    {isUrdu ? 'موجودہ سبق: ' : 'Sabaq: '}
+                    <span className="font-semibold text-stone-800 dark:text-stone-200">{sabaqInfo.text}</span>
+                  </p>
+                </div>
+              </article>
+            );
+          })
+        )}
+      </div>
+
+      {/* Desktop Table View (>= md screens) */}
+      <div className="glass card overflow-hidden hidden md:block shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
-            <thead className="bg-emerald-50/50 backdrop-blur-md border-b border-white/80 text-slate-700 font-bold uppercase tracking-wider text-[11px]">
+            <thead className="bg-gradient-to-r from-[#111b4b] via-[#18245b] to-[#24336e] text-white font-bold uppercase tracking-wider text-[11px] border-b-2 border-[#3567ff]">
               <tr>
                 <th className="p-4 w-10 text-center">
                   <input
                     type="checkbox"
                     checked={filteredStudents.length > 0 && selectedIds.length === filteredStudents.length}
                     onChange={handleSelectAll}
-                    className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-gray-300 cursor-pointer"
+                    className="w-4 h-4 rounded text-[#3567ff] focus:ring-[#3567ff] border-stone-300 cursor-pointer"
                   />
                 </th>
-                <th className="p-4">PROFILE</th>
+                <th className="p-4">{isUrdu ? 'تصویر' : 'PROFILE'}</th>
                 <th 
-                  className="p-4 cursor-pointer select-none hover:text-emerald-700 transition-colors"
+                  className="p-4 cursor-pointer select-none hover:text-[#59c7ff] transition-colors"
                   onClick={() => handleSort('admissionNo')}
                 >
                   <div className="flex items-center gap-1.5">
-                    <span>ADMISSION NO</span>
-                    <ArrowUpDown className="w-3 h-3 text-gray-400" />
+                    <span>{isUrdu ? 'داخلہ نمبر' : 'ADMISSION NO'}</span>
+                    <ArrowUpDown className="w-3 h-3 text-[#59c7ff]" />
                   </div>
                 </th>
                 <th 
-                  className="p-4 cursor-pointer select-none hover:text-emerald-700 transition-colors"
+                  className="p-4 cursor-pointer select-none hover:text-[#FEF3C7] transition-colors"
                   onClick={() => handleSort('name')}
                 >
                   <div className="flex items-center gap-1.5">
-                    <span>STUDENT NAME</span>
-                    <ArrowUpDown className="w-3 h-3 text-gray-400" />
+                    <span>{isUrdu ? 'طالب علم کا نام' : 'STUDENT NAME'}</span>
+                    <ArrowUpDown className="w-3 h-3 text-[#FDE68A]" />
                   </div>
                 </th>
-                <th className="p-4">FATHER NAME</th>
+                <th className="p-4">{isUrdu ? 'والد کا نام' : 'FATHER NAME'}</th>
                 <th 
-                  className="p-4 cursor-pointer select-none hover:text-emerald-700 transition-colors"
+                  className="p-4 cursor-pointer select-none hover:text-[#FEF3C7] transition-colors"
                   onClick={() => handleSort('class')}
                 >
                   <div className="flex items-center gap-1.5">
-                    <span>CLASS</span>
-                    <ArrowUpDown className="w-3 h-3 text-gray-400" />
+                    <span>{isUrdu ? 'درجہ' : 'CLASS'}</span>
+                    <ArrowUpDown className="w-3 h-3 text-[#FDE68A]" />
                   </div>
                 </th>
                 <th 
-                  className="p-4 cursor-pointer select-none hover:text-emerald-700 transition-colors"
+                  className="p-4 cursor-pointer select-none hover:text-[#FEF3C7] transition-colors"
                   onClick={() => handleSort('category')}
                 >
                   <div className="flex items-center gap-1.5">
-                    <span>CATEGORY</span>
-                    <ArrowUpDown className="w-3 h-3 text-gray-400" />
+                    <span>{isUrdu ? 'زمرہ' : 'CATEGORY'}</span>
+                    <ArrowUpDown className="w-3 h-3 text-[#FDE68A]" />
                   </div>
                 </th>
-                <th className="p-4">GUARDIAN CELL NO</th>
-                <th className="p-4">SABAQ PROGRESS</th>
-                <th className="p-4 text-center">STATUS</th>
-                <th className="p-4 text-center">ACTIONS</th>
+                <th className="p-4">{isUrdu ? 'رابطہ نمبر' : 'GUARDIAN CONTACT'}</th>
+                <th className="p-4">{isUrdu ? 'سبق کی رفتار' : 'SABAQ PROGRESS'}</th>
+                <th className="p-4 text-center">{isUrdu ? 'حالت' : 'STATUS'}</th>
+                <th className="p-4 text-center">{isUrdu ? 'اقدامات' : 'ACTIONS'}</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100 font-medium">
+            <tbody className="divide-y divide-[#D97706]/15 font-medium">
               {paginatedStudents.length === 0 ? (
                 <tr>
-                  <td colSpan={11} className="p-12 text-center text-gray-500">
-                    <div className="w-12 h-12 rounded-2xl bg-gray-100 text-gray-400 flex items-center justify-center mx-auto mb-3">
+                  <td colSpan={11} className="p-12 text-center text-stone-500">
+                    <div className="w-12 h-12 rounded-2xl bg-[#064E3B]/10 text-[#065F46] flex items-center justify-center mx-auto mb-3">
                       <Users className="w-6 h-6" />
                     </div>
-                    <p className="font-bold text-sm text-gray-700">No students found</p>
-                    <p className="text-xs text-gray-400 mt-0.5">Try adjusting your search keywords or filter criteria</p>
+                    <p className="font-bold text-sm text-stone-800 dark:text-stone-200">{isUrdu ? 'کوئی طالب علم نہیں ملا' : 'No students found'}</p>
+                    <p className="text-xs text-stone-500 mt-0.5">{isUrdu ? 'تلاش کے الفاظ یا فلٹر تبدیل کر کے دیکھیں' : 'Try adjusting your search keywords or filter criteria'}</p>
                   </td>
                 </tr>
               ) : (
@@ -425,8 +551,8 @@ export const StudentsList: React.FC<StudentsListProps> = ({
                     <tr
                       key={st.id}
                       onClick={() => onSelectStudent(st)}
-                      className={`hover:bg-emerald-50/40 transition-colors cursor-pointer group ${
-                        isSelected ? 'bg-emerald-50/60' : ''
+                      className={`hover:bg-[#064E3B]/5 dark:hover:bg-[#065F46]/15 transition-colors cursor-pointer group ${
+                        isSelected ? 'bg-[#064E3B]/10 dark:bg-[#065F46]/20' : ''
                       }`}
                     >
                       {/* Checkbox */}
@@ -435,7 +561,7 @@ export const StudentsList: React.FC<StudentsListProps> = ({
                           type="checkbox"
                           checked={isSelected}
                           onChange={() => handleToggleSelectOne(st.id)}
-                          className="w-4 h-4 rounded text-emerald-600 focus:ring-emerald-500 border-gray-300 cursor-pointer"
+                          className="w-4 h-4 rounded text-[#065F46] focus:ring-[#D97706] border-stone-300 cursor-pointer"
                         />
                       </td>
 
@@ -445,42 +571,46 @@ export const StudentsList: React.FC<StudentsListProps> = ({
                           <img
                             src={st.photoUrl}
                             alt={st.studentName}
-                            className="w-11 h-11 rounded-2xl object-cover border border-gray-200 shadow-xs group-hover:scale-105 transition-transform"
+                            className="w-11 h-11 rounded-2xl object-cover border border-[#D97706]/30 shadow-xs group-hover:scale-105 transition-transform"
                           />
-                          <span className="w-3 h-3 bg-emerald-500 rounded-full border-2 border-white absolute -bottom-0.5 -right-0.5 shadow-xs" />
+                          <span className="w-3 h-3 bg-[#065F46] rounded-full border-2 border-white dark:border-[#080E0B] absolute -bottom-0.5 -right-0.5 shadow-xs" />
                         </div>
                       </td>
 
                       {/* Admission No */}
-                      <td className="p-4 font-mono font-bold text-emerald-800 whitespace-nowrap text-xs">
-                        {st.admissionNo}
+                      <td className="p-4 whitespace-nowrap">
+                        <span className="heritage-badge-gold font-mono font-bold text-xs">
+                          {st.admissionNo}
+                        </span>
                       </td>
 
                       {/* Student Name (English + Urdu underneath) */}
                       <td className="p-4">
-                        <span className="font-bold text-gray-900 block group-hover:text-emerald-700 transition-colors">
+                        <span className="font-bold text-stone-900 dark:text-stone-100 block group-hover:text-[#065F46] dark:group-hover:text-[#34D399] transition-colors">
                           {st.studentName}
                         </span>
-                        <span className="text-xs text-emerald-800 font-urdu urdu-font font-semibold leading-tight">
-                          {st.studentNameUrdu}
-                        </span>
+                        {st.studentNameUrdu && (
+                          <span className="text-xs text-[#065F46] dark:text-[#34D399] font-urdu urdu-font font-semibold leading-tight">
+                            {st.studentNameUrdu}
+                          </span>
+                        )}
                       </td>
 
                       {/* Father Name */}
-                      <td className="p-4 text-gray-700 font-medium">
+                      <td className="p-4 text-stone-700 dark:text-stone-300 font-medium">
                         {st.fatherName}
                       </td>
 
                       {/* Class */}
                       <td className="p-4">
                         <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className="px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-200/80 whitespace-nowrap">
+                          <span className="px-3 py-1 rounded-full text-[11px] font-bold bg-[#FAF5EB] dark:bg-[#0E1A14] text-[#065F46] dark:text-[#34D399] border border-[#065F46]/30 whitespace-nowrap">
                             {st.class}
                           </span>
                           {st.classHistory && st.classHistory.length > 0 && (
                             <span 
-                              title={`Class Transfer History (${st.classHistory.length} transfers/promotions)`}
-                              className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-800 border border-blue-200"
+                              title={isUrdu ? `ترقی و تبادلہ ریکارڈ (${st.classHistory.length})` : `Class Transfer History (${st.classHistory.length} transfers/promotions)`}
+                              className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-[#FEF3C7] dark:bg-[#78350F]/40 text-[#92400E] dark:text-[#FCD34D] border border-[#D97706]/30"
                             >
                               <ArrowRightLeft className="w-2.5 h-2.5" />
                               <span>{st.classHistory.length}</span>
@@ -491,19 +621,15 @@ export const StudentsList: React.FC<StudentsListProps> = ({
 
                       {/* Category */}
                       <td className="p-4">
-                        <span className={`px-2.5 py-1 rounded-full text-[10px] font-bold whitespace-nowrap ${
-                          st.category === 'Hostel' 
-                            ? 'bg-purple-50 text-purple-700 border border-purple-200/70' 
-                            : 'bg-blue-50 text-blue-700 border border-blue-200/70'
-                        }`}>
-                          {st.category}
+                        <span className="px-2.5 py-1 rounded-full text-[10px] font-bold whitespace-nowrap bg-[#FAF5EB] dark:bg-[#0E1A14] text-[#B45309] dark:text-[#FCD34D] border border-[#D97706]/30">
+                          {st.category === 'Hostel' ? (isUrdu ? 'اقامتی' : 'Hostel') : (isUrdu ? 'غیر اقامتی' : 'Day Scholar')}
                         </span>
                       </td>
 
                       {/* Guardian Cell No */}
                       <td className="p-4 whitespace-nowrap">
-                        <div className="flex items-center gap-1.5 text-gray-700 font-mono text-xs">
-                          <Phone className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                        <div className="flex items-center gap-1.5 text-stone-700 dark:text-stone-300 font-mono text-xs">
+                          <Phone className="w-3.5 h-3.5 text-[#065F46] dark:text-[#34D399] shrink-0" />
                           <span>{st.contactNumber}</span>
                         </div>
                       </td>
@@ -512,17 +638,17 @@ export const StudentsList: React.FC<StudentsListProps> = ({
                       <td className="p-4 max-w-xs">
                         <div className="space-y-1.5">
                           <div className="flex justify-between items-center text-[11px]">
-                            <span className="font-semibold text-gray-800 truncate max-w-[150px]" title={sabaqInfo.text}>
+                            <span className="font-semibold text-stone-800 dark:text-stone-200 truncate max-w-[150px]" title={sabaqInfo.text}>
                               {sabaqInfo.text}
                             </span>
-                            <span className="font-bold text-emerald-800 font-mono ml-2">
+                            <span className="font-bold text-[#065F46] dark:text-[#34D399] font-mono ml-2">
                               {sabaqInfo.percentage}%
                             </span>
                           </div>
-                          <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                          <div className="w-full h-1.5 bg-stone-200 dark:bg-stone-700 rounded-full overflow-hidden">
                             <div 
                               style={{ width: `${sabaqInfo.percentage}%` }}
-                              className="h-full bg-emerald-600 rounded-full transition-all duration-300"
+                              className="h-full bg-gradient-to-r from-[#065F46] to-[#D97706] rounded-full transition-all duration-300"
                             />
                           </div>
                         </div>
@@ -535,17 +661,17 @@ export const StudentsList: React.FC<StudentsListProps> = ({
                           onClick={() => {
                             const newStatus = db.toggleStudentActive(st.id);
                             setSyncVersion(v => v + 1);
-                            showToast(`Student "${st.studentName}" marked ${newStatus ? 'Active' : 'Inactive'}`, 'info');
+                            showToast(isUrdu ? `طالب علم "${st.studentName}" کی حالت ${newStatus ? 'فعال' : 'غیر فعال'} کر دی گئی` : `Student "${st.studentName}" marked ${newStatus ? 'Active' : 'Inactive'}`, 'info');
                           }}
-                          title="Click to toggle Active / Inactive status"
-                          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold transition-all shadow-2xs cursor-pointer ${
+                          title={isUrdu ? 'کیفیت تبدیل کرنے کے لیے کلک کریں' : 'Click to toggle Active / Inactive status'}
+                          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold transition-all shadow-xs cursor-pointer ${
                             st.isActive !== false 
-                              ? 'bg-emerald-100 text-emerald-800 border border-emerald-300 hover:bg-emerald-200' 
-                              : 'bg-amber-100 text-amber-900 border border-amber-300 hover:bg-amber-200'
+                              ? 'bg-[#065F46]/15 text-[#065F46] dark:text-[#34D399] border border-[#065F46]/30 hover:bg-[#065F46]/25' 
+                              : 'bg-[#D97706]/15 text-[#D97706] dark:text-[#FBBF24] border border-[#D97706]/30 hover:bg-[#D97706]/25'
                           }`}
                         >
-                          <span className={`w-2 h-2 rounded-full ${st.isActive !== false ? 'bg-emerald-600' : 'bg-amber-600'}`} />
-                          <span>{st.isActive !== false ? 'Active' : 'Inactive'}</span>
+                          <span className={`w-2 h-2 rounded-full ${st.isActive !== false ? 'bg-[#065F46] dark:bg-[#34D399]' : 'bg-[#D97706]'}`} />
+                          <span>{st.isActive !== false ? (isUrdu ? 'فعال' : 'Active') : (isUrdu ? 'غیر فعال' : 'Inactive')}</span>
                         </button>
                       </td>
 
@@ -556,8 +682,8 @@ export const StudentsList: React.FC<StudentsListProps> = ({
                           <button
                             type="button"
                             onClick={() => onSelectStudent(st)}
-                            title="View Student Profile"
-                            className="p-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 transition-colors"
+                            title={isUrdu ? 'تفصیلات دیکھیں' : 'View Student Profile'}
+                            className="p-2 rounded-xl bg-[#FAF6EF] dark:bg-[#0E1A14] hover:bg-[#065F46]/10 text-[#065F46] dark:text-[#34D399] border border-[#D97706]/20 transition-colors"
                           >
                             <Eye className="w-3.5 h-3.5" />
                           </button>
@@ -566,8 +692,8 @@ export const StudentsList: React.FC<StudentsListProps> = ({
                           <button
                             type="button"
                             onClick={() => onSelectStudent(st)}
-                            title="Edit Student"
-                            className="p-2 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-700 transition-colors"
+                            title={isUrdu ? 'ریکارڈ میں ترمیم' : 'Edit Student'}
+                            className="p-2 rounded-xl bg-[#FAF6EF] dark:bg-[#0E1A14] hover:bg-[#D97706]/10 text-[#D97706] border border-[#D97706]/20 transition-colors"
                           >
                             <Edit3 className="w-3.5 h-3.5" />
                           </button>
@@ -576,8 +702,8 @@ export const StudentsList: React.FC<StudentsListProps> = ({
                           <button
                             type="button"
                             onClick={(e) => handleDelete(e, st.id, st.studentName)}
-                            title="Delete Student"
-                            className="p-2 rounded-xl bg-red-50 hover:bg-red-100 text-red-600 transition-colors"
+                            title={isUrdu ? 'طالب علم خارج کریں' : 'Delete Student'}
+                            className="p-2 rounded-xl bg-rose-50 dark:bg-rose-950/40 hover:bg-rose-100 text-rose-600 border border-rose-200/50 transition-colors"
                           >
                             <Trash2 className="w-3.5 h-3.5" />
                           </button>
@@ -592,24 +718,28 @@ export const StudentsList: React.FC<StudentsListProps> = ({
         </div>
 
         {/* Table Footer: Pagination Controls */}
-        <div className="p-4 bg-white/50 backdrop-blur-md border-t border-white/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-slate-600 font-medium">
+        <div className="p-4 bg-[#FAF6EF]/90 dark:bg-[#0E1A14]/90 border-t border-[#D97706]/20 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-600 dark:text-stone-300 font-medium">
           <div>
             <span>
-              Showing <strong>{paginatedStudents.length}</strong> of <strong>{filteredStudents.length}</strong> students
+              {isUrdu ? (
+                <>کل <strong>{filteredStudents.length}</strong> میں سے <strong>{paginatedStudents.length}</strong> طلباء دکھائے جا رہے ہیں</>
+              ) : (
+                <>Showing <strong>{paginatedStudents.length}</strong> of <strong>{filteredStudents.length}</strong> students</>
+              )}
             </span>
           </div>
 
           <div className="flex items-center gap-3">
             {/* Rows per page */}
             <div className="flex items-center gap-1.5">
-              <span>Rows per page:</span>
+              <span>{isUrdu ? 'فی صفحہ قطاریں:' : 'Rows per page:'}</span>
               <select
                 value={rowsPerPage}
                 onChange={(e) => {
                   setRowsPerPage(Number(e.target.value));
                   setCurrentPage(1);
                 }}
-                className="px-2.5 py-1 rounded-xl bg-white/80 backdrop-blur-sm border border-white/90 font-bold text-slate-700 shadow-2xs"
+                className="px-2.5 py-1 rounded-xl bg-white dark:bg-[#080E0B] border border-[#D97706]/25 font-bold text-stone-700 dark:text-stone-200 shadow-xs"
               >
                 <option value={5}>5</option>
                 <option value={10}>10</option>
@@ -628,7 +758,7 @@ export const StudentsList: React.FC<StudentsListProps> = ({
                   setCurrentPage(p);
                   setGotoPageInput(String(p));
                 }}
-                className="p-1.5 rounded-xl border border-white/90 bg-white/70 hover:bg-white/90 disabled:opacity-40 disabled:pointer-events-none text-slate-700 shadow-2xs cursor-pointer"
+                className="p-1.5 rounded-xl border border-[#D97706]/25 bg-white dark:bg-[#080E0B] hover:bg-[#FAF6EF] disabled:opacity-40 disabled:pointer-events-none text-stone-700 dark:text-stone-300 shadow-xs cursor-pointer"
               >
                 <ChevronLeft className="w-4 h-4" />
               </button>
@@ -639,7 +769,7 @@ export const StudentsList: React.FC<StudentsListProps> = ({
                   const showEllipsis = idx > 0 && p - arr[idx - 1] > 1;
                   return (
                     <React.Fragment key={p}>
-                      {showEllipsis && <span className="px-1 text-gray-400">...</span>}
+                      {showEllipsis && <span className="px-1 text-stone-400">...</span>}
                       <button
                         type="button"
                         onClick={() => {
@@ -648,8 +778,8 @@ export const StudentsList: React.FC<StudentsListProps> = ({
                         }}
                         className={`w-7 h-7 rounded-xl text-xs font-bold transition-all ${
                           currentPage === p
-                            ? 'bg-emerald-700 text-white shadow-xs'
-                            : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-100'
+                            ? 'bg-[#065F46] text-[#FAF5EB] shadow-xs'
+                            : 'bg-white dark:bg-[#080E0B] border border-[#D97706]/25 text-stone-700 dark:text-stone-300 hover:bg-[#FAF6EF]'
                         }`}
                       >
                         {p}
@@ -666,7 +796,7 @@ export const StudentsList: React.FC<StudentsListProps> = ({
                   setCurrentPage(p);
                   setGotoPageInput(String(p));
                 }}
-                className="p-1.5 rounded-xl border border-gray-200 bg-white hover:bg-gray-100 disabled:opacity-40 disabled:pointer-events-none text-gray-700"
+                className="p-1.5 rounded-xl border border-[#D97706]/25 bg-white dark:bg-[#080E0B] hover:bg-[#FAF6EF] disabled:opacity-40 disabled:pointer-events-none text-stone-700 dark:text-stone-300"
               >
                 <ChevronRight className="w-4 h-4" />
               </button>
@@ -674,7 +804,7 @@ export const StudentsList: React.FC<StudentsListProps> = ({
 
             {/* Go to page input */}
             <div className="flex items-center gap-1">
-              <span>Go to</span>
+              <span>{isUrdu ? 'صفحہ' : 'Go to'}</span>
               <input
                 type="number"
                 min={1}
@@ -687,7 +817,7 @@ export const StudentsList: React.FC<StudentsListProps> = ({
                     setCurrentPage(page);
                   }
                 }}
-                className="w-12 px-2 py-1 text-center font-mono font-bold rounded-xl border border-gray-200 bg-white"
+                className="w-12 px-2 py-1 text-center font-mono font-bold rounded-xl border border-[#D97706]/25 bg-white dark:bg-[#080E0B] text-stone-800 dark:text-stone-200"
               />
             </div>
           </div>
@@ -695,99 +825,99 @@ export const StudentsList: React.FC<StudentsListProps> = ({
       </div>
 
       {/* =========================================================================
-          4. BOTTOM 5 CARDS: SUMMARY STATS & QUICK ACTIONS (Matching media_1788721593765.png)
+          4. BOTTOM 5 CARDS: SUMMARY STATS & QUICK ACTIONS (Bento Metric Cards)
           ========================================================================= */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         {/* Card 1: Total Students */}
-        <div className="bg-white/95 backdrop-blur-md p-4 rounded-3xl border border-gray-200/80 shadow-xs space-y-2">
+        <div className="glass card p-5 space-y-2 border-t-2 border-[#3567ff]">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-gray-500">Total Students</span>
-            <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-800 flex items-center justify-center">
+            <span className="text-xs font-bold text-[#7180a6] dark:text-[#a0aec0]">{isUrdu ? 'کل طلباء' : 'Total Students'}</span>
+            <div className="w-9 h-9 rounded-xl bg-[#3567ff]/10 text-[#3567ff] flex items-center justify-center border border-[#3567ff]/20">
               <Users className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl font-black text-gray-900 font-montserrat">
+          <div className="text-2xl font-black text-[#14204d] dark:text-white font-montserrat">
             {totalStudentsCount || 482}
           </div>
-          <div className="flex items-center gap-1 text-[11px] text-emerald-700 font-bold">
+          <div className="flex items-center gap-1 text-[11px] text-[#16b981] font-bold">
             <TrendingUp className="w-3.5 h-3.5" />
-            <span>+12 this month</span>
+            <span>{isUrdu ? '+12 اس ماہ' : '+12 this month'}</span>
           </div>
         </div>
 
         {/* Card 2: Hostel Students */}
-        <div className="bg-white/95 backdrop-blur-md p-4 rounded-3xl border border-gray-200/80 shadow-xs space-y-2">
+        <div className="glass card p-5 space-y-2 border-t-2 border-[#7654ff]">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-gray-500">Hostel Students</span>
-            <div className="w-9 h-9 rounded-xl bg-purple-100 text-purple-800 flex items-center justify-center">
+            <span className="text-xs font-bold text-[#7180a6] dark:text-[#a0aec0]">{isUrdu ? 'اقامتی طلباء' : 'Hostel Students'}</span>
+            <div className="w-9 h-9 rounded-xl bg-[#7654ff]/10 text-[#7654ff] flex items-center justify-center border border-[#7654ff]/20">
               <Building2 className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl font-black text-gray-900 font-montserrat">
+          <div className="text-2xl font-black text-[#14204d] dark:text-white font-montserrat">
             {hostelStudentsCount || 312}
           </div>
-          <div className="text-[11px] text-purple-700 font-bold">
-            <span>{hostelPercentage}% of total</span>
+          <div className="text-[11px] text-[#7654ff] font-bold">
+            <span>{hostelPercentage}% {isUrdu ? 'کل تعداد کا' : 'of total'}</span>
           </div>
         </div>
 
         {/* Card 3: Day Scholars */}
-        <div className="bg-white/95 backdrop-blur-md p-4 rounded-3xl border border-gray-200/80 shadow-xs space-y-2">
+        <div className="glass card p-5 space-y-2 border-t-2 border-[#59c7ff]">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-gray-500">Day Scholars</span>
-            <div className="w-9 h-9 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center">
+            <span className="text-xs font-bold text-[#7180a6] dark:text-[#a0aec0]">{isUrdu ? 'غیر اقامتی طلباء' : 'Day Scholars'}</span>
+            <div className="w-9 h-9 rounded-xl bg-[#59c7ff]/10 text-[#3567ff] flex items-center justify-center border border-[#59c7ff]/20">
               <Sun className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl font-black text-gray-900 font-montserrat">
+          <div className="text-2xl font-black text-[#14204d] dark:text-white font-montserrat">
             {dayScholarCount || 170}
           </div>
-          <div className="text-[11px] text-blue-700 font-bold">
-            <span>{dayScholarPercentage}% of total</span>
+          <div className="text-[11px] text-[#3567ff] font-bold">
+            <span>{dayScholarPercentage}% {isUrdu ? 'کل تعداد کا' : 'of total'}</span>
           </div>
         </div>
 
         {/* Card 4: New Admissions (This Month) */}
-        <div className="bg-white/95 backdrop-blur-md p-4 rounded-3xl border border-gray-200/80 shadow-xs space-y-2">
+        <div className="glass card p-5 space-y-2 border-t-2 border-[#16b981]">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-gray-500">New Admissions</span>
-            <div className="w-9 h-9 rounded-xl bg-violet-100 text-violet-800 flex items-center justify-center">
+            <span className="text-xs font-bold text-[#7180a6] dark:text-[#a0aec0]">{isUrdu ? 'نئے داخلے' : 'New Admissions'}</span>
+            <div className="w-9 h-9 rounded-xl bg-[#16b981]/10 text-[#16b981] flex items-center justify-center border border-[#16b981]/20">
               <UserPlus className="w-4 h-4" />
             </div>
           </div>
-          <div className="text-2xl font-black text-gray-900 font-montserrat">
+          <div className="text-2xl font-black text-[#14204d] dark:text-white font-montserrat">
             18
           </div>
-          <div className="flex items-center gap-1 text-[11px] text-violet-700 font-bold">
+          <div className="flex items-center gap-1 text-[11px] text-[#16b981] font-bold">
             <TrendingUp className="w-3.5 h-3.5" />
-            <span>+5 from last month</span>
+            <span>{isUrdu ? 'گزشتہ ماہ سے +5 زیادہ' : '+5 from last month'}</span>
           </div>
         </div>
 
         {/* Card 5: Quick Actions */}
-        <div className="bg-white/95 backdrop-blur-md p-4 rounded-3xl border border-gray-200/80 shadow-xs space-y-2 flex flex-col justify-between">
-          <span className="text-xs font-bold text-gray-700 flex items-center gap-1">
-            <SlidersHorizontal className="w-3.5 h-3.5 text-emerald-700" />
-            <span>Quick Actions</span>
+        <div className="glass card p-5 space-y-2 flex flex-col justify-between border-t-2 border-[#f6a83b]">
+          <span className="text-xs font-bold text-[#14204d] dark:text-white flex items-center gap-1">
+            <SlidersHorizontal className="w-3.5 h-3.5 text-[#f6a83b]" />
+            <span>{isUrdu ? 'فوری اقدامات' : 'Quick Actions'}</span>
           </span>
 
           <div className="space-y-1.5">
             <button
               type="button"
               onClick={handleExportCSV}
-              className="w-full py-2 px-3 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 text-[11px] font-bold text-gray-700 flex items-center justify-center gap-1.5 transition-colors"
+              className="w-full py-2 px-3 rounded-xl bg-stone-100 dark:bg-white/5 hover:bg-stone-200/70 border border-stone-200/60 dark:border-white/10 text-[11px] font-bold text-stone-800 dark:text-stone-200 flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
             >
-              <Download className="w-3.5 h-3.5 text-emerald-700" />
-              <span>Import / Export Data</span>
+              <Download className="w-3.5 h-3.5 text-[#3567ff]" />
+              <span>{isUrdu ? 'امپورٹ و ایکسپورٹ' : 'Import / Export Data'}</span>
             </button>
 
             <button
               type="button"
-              onClick={() => showToast('Generating Student Master Registry Report...', 'info')}
-              className="w-full py-2 px-3 rounded-xl bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-[11px] font-bold text-emerald-800 flex items-center justify-center gap-1.5 transition-colors"
+              onClick={() => showToast(isUrdu ? 'طالب علم رپورٹ تیار ہو رہی ہے...' : 'Generating Student Master Registry Report...', 'info')}
+              className="w-full py-2 px-3 rounded-xl bg-[#3567ff]/10 hover:bg-[#3567ff]/20 border border-[#3567ff]/30 text-[11px] font-bold text-[#3567ff] flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
             >
-              <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-700" />
-              <span>Student Reports</span>
+              <FileSpreadsheet className="w-3.5 h-3.5 text-[#3567ff]" />
+              <span>{isUrdu ? 'مرکزی رپورٹ' : 'Student Reports'}</span>
             </button>
           </div>
         </div>

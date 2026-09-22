@@ -186,32 +186,32 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
       <aside 
         className={`${
           isCollapsed ? 'w-20' : 'w-64'
-        } bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-slate-200/80 dark:border-slate-800 shadow-sm rounded-2xl m-2.5 hidden lg:flex flex-col h-[calc(100vh-1.25rem)] sticky top-2.5 select-none shrink-0 transition-all duration-300 no-print overflow-hidden z-20`}
+        } bg-white/85 dark:bg-[#111b4b]/85 backdrop-blur-2xl border border-[#6679b4]/16 dark:border-white/10 shadow-[0_18px_45px_rgba(47,61,126,0.1)] rounded-3xl m-2.5 hidden lg:flex flex-col h-[calc(100vh-1.25rem)] sticky top-2.5 select-none shrink-0 transition-all duration-300 no-print overflow-hidden z-20`}
       >
-        {/* Top Header: Madrasa Logo / Emblem + Title */}
-        <div className="p-3 pb-2 flex items-center justify-between border-b border-slate-100 dark:border-slate-800">
+        {/* Top Header: Prototype Crescent Logo & Title */}
+        <div className="p-3.5 pb-3 flex items-center justify-between border-b border-[#6679b4]/14 dark:border-white/10">
           <div className="flex items-center gap-2.5 min-w-0">
             <div 
               onClick={() => {
                 setLogoInputUrl(activeMadrasa?.logoUrl || '');
                 setShowLogoModal(true);
               }}
-              className="w-10 h-10 rounded-xl bg-emerald-700 text-white flex items-center justify-center shadow-sm shrink-0 overflow-hidden cursor-pointer hover:opacity-90 transition-opacity border border-emerald-600/30"
+              className="w-10 h-10 rounded-[14px] bg-gradient-to-br from-white to-[#dbe5ff] dark:from-[#1e2a5e] dark:to-[#111b4b] flex items-center justify-center shadow-[0_7px_18px_rgba(63,86,171,0.18)] text-xl font-bold text-[#3567ff] dark:text-[#59c7ff] select-none border border-white/80 dark:border-white/10 shrink-0 cursor-pointer hover:scale-105 transition-transform"
               title="Click to view/change Madrasa Logo (3x4 inches)"
             >
               {activeMadrasa?.logoUrl ? (
-                <img src={activeMadrasa.logoUrl} alt="Madrasa Logo" className="w-full h-full object-cover" />
+                <img src={activeMadrasa.logoUrl} alt="Madrasa Logo" className="w-full h-full object-cover rounded-[14px]" />
               ) : (
-                <Building2 className="w-5 h-5 text-white" />
+                '☾'
               )}
             </div>
             {!isCollapsed && (
               <div className="min-w-0">
-                <h2 className="text-xs font-bold text-slate-900 dark:text-slate-100 truncate">
-                  {activeMadrasa?.name || 'Jamia Darul Huda'}
+                <h2 className="text-xs font-black text-[#14204d] dark:text-white truncate">
+                  {activeMadrasa?.name || 'Madrasa Management'}
                 </h2>
-                <span className="text-[10px] font-bold text-emerald-700 dark:text-emerald-400 tracking-wider uppercase block">
-                  COMMERCIAL ERP
+                <span className="text-[10px] font-black text-[#3567ff] dark:text-[#59c7ff] tracking-wider uppercase block">
+                  JAMIA ERP SYSTEM
                 </span>
               </div>
             )}
@@ -219,7 +219,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
           <button
             onClick={() => setIsCollapsed(!isCollapsed)}
             title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
-            className="p-1 rounded-lg text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors cursor-pointer"
+            className="p-1.5 rounded-xl text-slate-400 hover:text-[#3567ff] dark:hover:text-[#59c7ff] hover:bg-[#eef2ff] dark:hover:bg-white/10 transition-colors cursor-pointer"
           >
             {isCollapsed ? <PanelLeftOpen className="w-4 h-4" /> : <PanelLeftClose className="w-4 h-4" />}
           </button>
@@ -227,12 +227,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
 
         {/* Institution Badge Card */}
         {!isCollapsed && (
-          <div className="mx-2.5 my-2 p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/70 dark:border-slate-700/60 flex items-center justify-between">
+          <div className="mx-2.5 my-2 p-2.5 rounded-2xl bg-gradient-to-br from-[#eef2ff] to-[#f4f7ff] dark:from-[#18245b]/70 dark:to-[#111b4b] border border-[#6679b4]/16 dark:border-white/10 flex items-center justify-between shadow-2xs">
             <div className="min-w-0">
-              <span className="text-[10px] font-bold text-emerald-800 dark:text-emerald-300 bg-emerald-100 dark:bg-emerald-950/80 px-2 py-0.5 rounded-md inline-block">
+              <span className="text-[10px] font-black text-white bg-gradient-to-r from-[#3567ff] to-[#7654ff] px-2 py-0.5 rounded-md inline-block font-mono shadow-xs">
                 {activeMadrasa?.code || 'JAMIA-01'}
               </span>
-              <p className="text-[11px] font-medium text-slate-600 dark:text-slate-400 truncate mt-1">
+              <p className="text-[11px] font-semibold text-[#14204d] dark:text-slate-300 truncate mt-1">
                 {activeMadrasa?.address?.split(',')[0] || 'Central Campus'}
               </p>
             </div>
@@ -242,7 +242,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
                 setShowLogoModal(true);
               }}
               title="Official 3x4 Logo"
-              className="p-1.5 rounded-lg text-slate-500 hover:text-emerald-700 hover:bg-white dark:hover:bg-slate-700 transition-colors cursor-pointer"
+              className="p-1.5 rounded-xl text-[#3567ff] dark:text-[#59c7ff] hover:bg-white dark:hover:bg-white/10 border border-[#6679b4]/20 transition-all cursor-pointer shadow-xs"
             >
               <Camera className="w-3.5 h-3.5" />
             </button>
@@ -250,11 +250,11 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
         )}
 
         {/* Grouped Navigation List */}
-        <div className="flex-1 overflow-y-auto px-2 py-1.5 space-y-3">
+        <div className="flex-1 overflow-y-auto px-2 py-1.5 space-y-3 no-scrollbar hide-scrollbar">
           {navGroups.map((group) => (
             <div key={group.id} className="space-y-0.5">
               {!isCollapsed && (
-                <div className="px-2.5 pt-1.5 pb-1 flex items-center justify-between text-[10px] font-bold text-slate-400 dark:text-slate-500 uppercase tracking-wider">
+                <div className="px-2.5 pt-1.5 pb-1 flex items-center justify-between text-[10px] font-black text-[#7180a6] dark:text-slate-400 uppercase tracking-wider">
                   <span>{isUrdu ? group.groupNameUrdu : group.groupName}</span>
                 </div>
               )}
@@ -270,12 +270,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
                     title={`${label} (${group.groupName})`}
                     className={`w-full flex items-center ${isCollapsed ? 'justify-center py-2.5' : 'justify-between px-3 py-2'} rounded-xl text-xs transition-all relative group cursor-pointer ${
                       isActive
-                        ? 'bg-emerald-700 text-white font-bold shadow-xs'
-                        : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white font-medium'
+                        ? 'bg-gradient-to-r from-[#3567ff] to-[#8752ff] text-white font-bold shadow-[0_10px_22px_rgba(71,78,238,0.25)]'
+                        : 'text-[#55658f] dark:text-slate-300 hover:bg-[#eef2ff] dark:hover:bg-white/10 hover:text-[#14204d] dark:hover:text-white font-semibold'
                     }`}
                   >
                     <div className="flex items-center gap-2.5 truncate">
-                      <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-slate-500 dark:text-slate-400 group-hover:text-emerald-600 dark:group-hover:text-emerald-400'}`} />
+                      <Icon className={`w-4 h-4 shrink-0 ${isActive ? 'text-white' : 'text-[#7480a4] group-hover:text-[#3567ff] dark:group-hover:text-[#59c7ff]'}`} />
                       {!isCollapsed && <span className="truncate">{label}</span>}
                     </div>
 
@@ -284,13 +284,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
                         {item.badge !== undefined && typeof item.badge === 'number' && item.badge > 0 && (
                           <span className={`text-[10px] font-mono font-bold px-1.5 py-0.2 rounded-full ${
                             isActive 
-                              ? 'bg-emerald-800 text-emerald-100' 
-                              : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700'
+                              ? 'bg-[#D97706] text-white' 
+                              : 'bg-amber-100 dark:bg-amber-950/60 text-amber-900 dark:text-amber-200 border border-amber-300/40 dark:border-amber-500/20'
                           }`}>
                             {item.badge}
                           </span>
                         )}
-                        {isActive && <ChevronRight className="w-3.5 h-3.5 text-white/90 shrink-0" />}
+                        {isActive && <ChevronRight className="w-3.5 h-3.5 text-amber-200 shrink-0" />}
                       </div>
                     )}
                   </button>
@@ -326,14 +326,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ currentTab, onSelectTab }) => 
         </div>
 
         {/* Footer User Capsule */}
-        <div className="p-2.5 border-t border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/60">
-          <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'gap-2.5'} p-2 rounded-xl bg-white dark:bg-slate-800 border border-slate-200/70 dark:border-slate-700 shadow-2xs`}>
-            <div className="w-8 h-8 rounded-full bg-emerald-700 text-white flex items-center justify-center font-bold text-xs shrink-0">
+        <div className="p-2.5 border-t border-slate-100 dark:border-white/10 bg-slate-50/60 dark:bg-white/5">
+          <div className={`flex items-center ${isCollapsed ? 'justify-center' : 'gap-2.5'} p-2 rounded-xl bg-white dark:bg-white/5 border border-slate-200/70 dark:border-white/10 shadow-2xs`}>
+            <div className="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shrink-0">
               {user?.name?.[0] || 'A'}
             </div>
             {!isCollapsed && (
               <div className="overflow-hidden leading-tight flex-1">
-                <span className="text-xs font-bold text-slate-900 dark:text-slate-100 block truncate">
+                <span className="text-xs font-bold text-slate-900 dark:text-white block truncate">
                   {user?.name || 'Administrator'}
                 </span>
                 <span className="text-[10px] text-slate-500 dark:text-slate-400 capitalize block truncate">

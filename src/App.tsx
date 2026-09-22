@@ -87,7 +87,7 @@ const AppContent: React.FC = () => {
   // If role is Student / Guardian
   if (user.role === 'student') {
     return (
-      <div className="min-h-screen bg-transparent text-slate-800 flex flex-col">
+      <div className="min-h-screen bg-transparent text-slate-800 dark:text-slate-100 flex flex-col">
         <TopAppBar 
           onNavigateHome={() => setCurrentTab('dashboard')} 
           onOpenCommandPalette={() => setShowCommandPalette(true)}
@@ -109,7 +109,7 @@ const AppContent: React.FC = () => {
   // If role is Teacher
   if (user.role === 'teacher') {
     return (
-      <div className="min-h-screen bg-transparent text-slate-800 flex flex-col">
+      <div className="min-h-screen bg-transparent text-slate-800 dark:text-slate-100 flex flex-col">
         <TopAppBar 
           onNavigateHome={() => setCurrentTab('dashboard')} 
           onOpenCommandPalette={() => setShowCommandPalette(true)}
@@ -131,7 +131,7 @@ const AppContent: React.FC = () => {
 
   // Admin / Principal and Super Admin have full dashboard & navigation layout
   return (
-    <div className="min-h-screen bg-transparent text-slate-800 flex flex-col">
+    <div className="min-h-screen bg-transparent text-slate-800 dark:text-slate-100 flex flex-col">
       {/* Upper Main Menu (Header) */}
       <TopAppBar 
         onNavigateHome={() => setCurrentTab('dashboard')} 

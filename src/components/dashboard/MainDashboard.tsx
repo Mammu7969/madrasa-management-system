@@ -243,554 +243,327 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-300">
-      {/* Welcome Banner - Frosted Glossy Glass */}
-      <div className="glossy-card-elevated p-6 relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-emerald-100/30 rounded-full blur-3xl pointer-events-none" />
-        <div className="relative z-10">
-          <div className="flex items-center gap-2 mb-1.5">
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase tracking-wide bg-emerald-100/80 text-emerald-800 border border-emerald-200/80 shadow-2xs">
-              Principal & Admin Overview
-            </span>
-            <span className="text-xs font-urdu font-bold text-emerald-900">
-              {activeMadrasa?.nameUrdu}
-            </span>
-          </div>
-          <h2 className="text-2xl sm:text-3xl font-black text-[#123B63] tracking-tight">{activeMadrasa?.name || 'Jamia Madrasa System'}</h2>
-          <p className="text-xs text-[var(--text-secondary)] mt-1 max-w-xl">
-            Real-time administrative operations, daily attendance analytics, Namaz times, financial balance, and educational tracking.
-          </p>
+    <div className="space-y-5 animate-in fade-in duration-300">
+      {/* ================= HERO & EXECUTIVE WELCOME BANNER ================= */}
+      {/* ================= PROTOTYPE HERO & EXECUTIVE BANNER ================= */}
+      <div className="hero">
+        <div className="text-[11px] font-bold text-[#b9c6ff] tracking-wide mb-1 flex items-center gap-2">
+          <span>{activeMadrasa?.nameUrdu ? `السَّلَامُ عَلَيْكُمْ • ${activeMadrasa.nameUrdu}` : 'Assalamu Alaikum'}</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-[#59c7ff] animate-pulse" />
         </div>
-
-        <div className="flex flex-wrap items-center gap-2.5 relative z-10">
-          {nextPrayer && (
-            <div className="px-3.5 py-2 rounded-2xl bg-white/70 border border-white/80 text-xs text-center backdrop-blur-md shadow-xs">
-              <span className="text-[10px] uppercase font-bold text-amber-700 block">Next Namaz</span>
-              <span className="font-bold text-slate-800">{nextPrayer.name} ({nextPrayer.targetType}): in <span className="font-mono text-emerald-700">{nextPrayer.countdownStr}</span></span>
-            </div>
-          )}
-          <button
-            onClick={() => onNavigateTab('students_add')}
-            className="glossy-btn glossy-btn-emerald px-4 py-2.5 text-xs font-bold gap-1.5 cursor-pointer"
-          >
-            <PlusCircle className="w-4 h-4" />
-            <span>{t('addStudent')}</span>
-          </button>
-          <button
-            onClick={() => setShowCollectFeeModal(true)}
-            className="glossy-btn glossy-btn-amber px-4 py-2.5 text-xs font-bold gap-1.5 cursor-pointer"
-          >
-            <Wallet className="w-4 h-4" />
-            <span>{t('collectFee')}</span>
-          </button>
-        </div>
-      </div>
-
-      {/* ================= FOUNDATION SETUP CHECKLIST / ACTION TABS ================= */}
-      {hasSetupPending && (
-        <div className="glossy-card p-5 border-2 border-emerald-500/30 bg-emerald-50/20 backdrop-blur-xl animate-in fade-in duration-300">
-          <div className="flex flex-wrap items-center justify-between gap-3 mb-4 pb-3 border-b border-slate-200/60 dark:border-slate-700/60">
-            <div className="flex items-center gap-2.5">
-              <div className="w-9 h-9 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-xs">
-                <Sparkles className="w-5 h-5 animate-pulse" />
-              </div>
-              <div>
-                <h3 className="text-sm font-bold text-slate-900 flex items-center gap-2">
-                  <span>Madrasa Setup Required</span>
-                  <span className="text-xs font-urdu text-emerald-800 font-medium">مدرسہ سیٹ اپ و ضروری ترتیبات</span>
-                </h3>
-                <p className="text-xs text-slate-500">
-                  Complete these essential setup steps to activate registers, timetables, and academic operations.
-                </p>
-              </div>
-            </div>
-            <span className="text-[11px] font-bold text-emerald-800 bg-emerald-100 dark:bg-emerald-950 dark:text-emerald-300 px-3 py-1 rounded-full border border-emerald-200 dark:border-emerald-800">
-              Action Required
-            </span>
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 relative z-10">
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-black text-white tracking-tight leading-snug">
+              Good Morning, {activeMadrasa?.name || 'Admin'}
+            </h1>
+            <p className="text-xs sm:text-sm text-[#cbd4ff] mt-1 font-medium max-w-xl">
+              Knowledge • Character • Brighter Future &nbsp;•&nbsp; <span className="font-mono text-white/90 font-bold bg-white/10 px-2 py-0.5 rounded-md">{activeMadrasa?.code || 'JDH-01'}</span>
+            </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
-            {/* Tab 1: Add Subjects (if no subjects) */}
-            {noSubjects && (
-              <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 shadow-xs hover:border-blue-500 transition-all flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 flex items-center justify-center">
-                      <BookOpen className="w-4 h-4" />
-                    </div>
-                    <span className="text-[10px] font-bold text-rose-600 bg-rose-50 dark:bg-rose-950 dark:text-rose-400 px-2 py-0.5 rounded-full">
-                      No Subjects
-                    </span>
-                  </div>
-                  <h4 className="text-xs font-bold text-slate-900">Add Subjects (مضامین)</h4>
-                  <p className="text-[11px] text-slate-500 mt-1 leading-snug">
-                    No curriculum subjects or books are registered for this madrasa.
-                  </p>
-                </div>
-                <button
-                  onClick={() => onNavigateTab('classes')}
-                  className="mt-3 w-full py-2 px-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
-                >
-                  <PlusCircle className="w-3.5 h-3.5" />
-                  <span>Add Subjects</span>
-                </button>
-              </div>
-            )}
-
-            {/* Tab 2: Add Classes (if no classes) */}
-            {noClasses && (
-              <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 shadow-xs hover:border-emerald-500 transition-all flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="w-8 h-8 rounded-lg bg-emerald-50 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 flex items-center justify-center">
-                      <GraduationCap className="w-4 h-4" />
-                    </div>
-                    <span className="text-[10px] font-bold text-rose-600 bg-rose-50 dark:bg-rose-950 dark:text-rose-400 px-2 py-0.5 rounded-full">
-                      No Classes
-                    </span>
-                  </div>
-                  <h4 className="text-xs font-bold text-slate-900">Add Classes (جماعتیں)</h4>
-                  <p className="text-[11px] text-slate-500 mt-1 leading-snug">
-                    No classroom sections (Hifz, Nazira, Alimiyat) exist yet.
-                  </p>
-                </div>
-                <button
-                  onClick={() => onNavigateTab('classes')}
-                  className="mt-3 w-full py-2 px-3 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
-                >
-                  <PlusCircle className="w-3.5 h-3.5" />
-                  <span>Add Classes</span>
-                </button>
-              </div>
-            )}
-
-            {/* Tab 3: Add Schedule (if no schedule) */}
-            {noSchedule && (
-              <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 shadow-xs hover:border-amber-500 transition-all flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="w-8 h-8 rounded-lg bg-amber-50 dark:bg-amber-950 text-amber-600 dark:text-amber-400 flex items-center justify-center">
-                      <Clock className="w-4 h-4" />
-                    </div>
-                    <span className="text-[10px] font-bold text-rose-600 bg-rose-50 dark:bg-rose-950 dark:text-rose-400 px-2 py-0.5 rounded-full">
-                      No Schedule
-                    </span>
-                  </div>
-                  <h4 className="text-xs font-bold text-slate-900">Add Schedule (شیڈول)</h4>
-                  <p className="text-[11px] text-slate-500 mt-1 leading-snug">
-                    Daily timetable and prayer schedule are not configured.
-                  </p>
-                </div>
-                <button
-                  onClick={() => onNavigateTab('schedule')}
-                  className="mt-3 w-full py-2 px-3 rounded-xl bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
-                >
-                  <PlusCircle className="w-3.5 h-3.5" />
-                  <span>Add Schedule</span>
-                </button>
-              </div>
-            )}
-
-            {/* Tab 4: Add Teachers (if no teachers) */}
-            {noTeachers && (
-              <div className="p-4 rounded-2xl bg-white/80 dark:bg-slate-800/80 border border-slate-200 dark:border-slate-700 shadow-xs hover:border-purple-500 transition-all flex flex-col justify-between">
-                <div>
-                  <div className="flex items-center justify-between mb-2">
-                    <div className="w-8 h-8 rounded-lg bg-purple-50 dark:bg-purple-950 text-purple-600 dark:text-purple-400 flex items-center justify-center">
-                      <UserPlus className="w-4 h-4" />
-                    </div>
-                    <span className="text-[10px] font-bold text-rose-600 bg-rose-50 dark:bg-rose-950 dark:text-rose-400 px-2 py-0.5 rounded-full">
-                      No Teachers
-                    </span>
-                  </div>
-                  <h4 className="text-xs font-bold text-slate-900">Add Teachers (اساتذہ)</h4>
-                  <p className="text-[11px] text-slate-500 mt-1 leading-snug">
-                    No faculty members or teachers enrolled in this madrasa.
-                  </p>
-                </div>
-                <button
-                  onClick={() => onNavigateTab('teachers')}
-                  className="mt-3 w-full py-2 px-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
-                >
-                  <PlusCircle className="w-3.5 h-3.5" />
-                  <span>Add Teachers</span>
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      )}
-
-      {/* ================= ROW 1: 5 TOP KPI CARDS WITH 3D GLOSSY SQUIRCLES ================= */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
-        {/* Card 1: Total Students */}
-        <div className="glossy-card glossy-card-hover p-4 flex items-center gap-3.5">
-          <div className="w-14 h-14 rounded-2xl glossy-squircle bg-[#079669] text-white flex items-center justify-center shrink-0 border border-white/30 shadow-[0_6px_16px_rgba(7,150,105,0.25)]">
-            <Users className="w-7 h-7 drop-shadow-xs relative z-10" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <span className="text-[11px] font-bold text-gray-500 block truncate">Total Students</span>
-            <div className="text-2xl font-black text-gray-900 leading-none my-1">{totalStudents}</div>
-            <div className="flex items-center gap-1 text-[10px] font-bold text-[#079669]">
-              <span>Active Students</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 2: Total Classes */}
-        <div className="glossy-card glossy-card-hover p-4 flex items-center gap-3.5">
-          <div className="w-14 h-14 rounded-2xl glossy-squircle bg-[#1677D2] text-white flex items-center justify-center shrink-0 border border-white/30 shadow-[0_6px_16px_rgba(22,119,210,0.25)]">
-            <GraduationCap className="w-7 h-7 drop-shadow-xs relative z-10" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <span className="text-[11px] font-bold text-gray-500 block truncate">Total Classes</span>
-            <div className="text-2xl font-black text-gray-900 leading-none my-1">{classes.length}</div>
-            <div className="text-[10px] font-bold text-[#1677D2]">
-              <span>Configured Classes</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 3: Teachers & Staff */}
-        <div className="glossy-card glossy-card-hover p-4 flex items-center gap-3.5">
-          <div className="w-14 h-14 rounded-2xl glossy-squircle bg-[#7655D6] text-white flex items-center justify-center shrink-0 border border-white/30 shadow-[0_6px_16px_rgba(118,85,214,0.25)]">
-            <User className="w-7 h-7 drop-shadow-xs relative z-10" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <span className="text-[11px] font-bold text-gray-500 block truncate">Teachers & Staff</span>
-            <div className="text-2xl font-black text-gray-900 leading-none my-1">{totalTeachers + staff.length}</div>
-            <div className="flex items-center gap-1 text-[10px] font-bold text-[#079669]">
-              <span>{totalTeachers} Teachers, {staff.length} Staff</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 4: Monthly Fee Collection */}
-        <div className="glossy-card glossy-card-hover p-4 flex items-center gap-3.5">
-          <div className="w-14 h-14 rounded-2xl glossy-squircle bg-[#C69A3A] text-white flex items-center justify-center shrink-0 border border-white/30 shadow-[0_6px_16px_rgba(198,154,58,0.25)]">
-            <span className="text-2xl font-black relative z-10">₹</span>
-          </div>
-          <div className="flex-1 min-w-0">
-            <span className="text-[11px] font-bold text-gray-500 block truncate">Monthly Fee Collection</span>
-            <div className="text-xl font-black text-gray-900 leading-none my-1">₹ {totalCollectedThisMonth.toLocaleString()}</div>
-            <div className="flex items-center gap-1 text-[10px] font-bold text-[#079669]">
-              <span>₹ {totalPendingThisMonth.toLocaleString()} Pending</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Card 5: Total Expenses */}
-        <div className="glossy-card glossy-card-hover p-4 flex items-center gap-3.5">
-          <div className="w-14 h-14 rounded-2xl glossy-squircle bg-[#D92D20] text-white flex items-center justify-center shrink-0 border border-white/30 shadow-[0_6px_16px_rgba(217,45,32,0.25)]">
-            <PieChart className="w-7 h-7 drop-shadow-xs relative z-10" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <span className="text-[11px] font-bold text-gray-500 block truncate">Total Expenses</span>
-            <div className="text-xl font-black text-gray-900 leading-none my-1">₹ {totalExpenses.toLocaleString()}</div>
-            <div className="flex items-center gap-1 text-[10px] font-bold text-[#D92D20]">
-              <span>Financial Outflow</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ================= ROW 2: SCHEDULE, ATTENDANCE DONUT & QUICK ACTIONS ================= */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
-        {/* Today's Schedule (4 cols) */}
-        <div className="lg:col-span-4 glossy-card p-5 flex flex-col justify-between">
-          <div className="flex items-center justify-between pb-3 border-b border-gray-100">
-            <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-emerald-600" />
-              <h3 className="text-xs font-bold text-gray-900">Today's Schedule</h3>
-            </div>
-            <button onClick={() => onNavigateTab('schedule')} className="text-[10px] font-bold text-sky-600 hover:text-sky-700 hover:underline flex items-center gap-1 cursor-pointer">
-              <span>View Full Schedule</span> &rarr;
+          <div className="flex flex-wrap items-center gap-2.5 shrink-0">
+            <button
+              onClick={() => onNavigateTab('students')}
+              className="btn primary shadow-md cursor-pointer"
+            >
+              <Users className="w-4 h-4" />
+              <span>Open Students</span>
             </button>
-          </div>
-          <div className="space-y-3 py-2 my-auto">
-            {schedule.length === 0 ? (
-              <div className="text-center py-6">
-                <Clock className="w-8 h-8 mx-auto mb-2 text-slate-400 opacity-60" />
-                <p className="text-xs font-semibold text-slate-500">No schedule items added yet</p>
-                <button
-                  onClick={() => onNavigateTab('schedule')}
-                  className="mt-2.5 inline-flex items-center gap-1 text-xs font-bold text-emerald-600 hover:text-emerald-700 underline cursor-pointer"
-                >
-                  <PlusCircle className="w-3.5 h-3.5" />
-                  <span>Configure Madrasa Schedule</span>
-                </button>
-              </div>
-            ) : (
-              schedule.slice(0, 5).map((item, idx) => (
-                <div key={item.id || idx} className="flex items-center justify-between text-xs py-1">
-                  <div className="flex items-center gap-2.5 min-w-0">
-                    <span className="font-mono text-[11px] text-gray-500 font-semibold w-20 shrink-0 truncate">{item.time}</span>
-                    <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0 ring-2 ring-white shadow-2xs" />
-                    <div className="min-w-0">
-                      <span className="font-bold text-gray-800 block text-xs leading-tight truncate">{item.title}</span>
-                      <span className="text-[10px] text-gray-400 block leading-tight truncate">{item.description}</span>
-                    </div>
-                  </div>
-                  <span className="text-[10px] font-bold text-gray-500 bg-gray-100/80 dark:bg-slate-700/80 px-2 py-0.5 rounded-md shrink-0">
-                    {item.category}
-                  </span>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-
-        {/* Attendance Overview Today (4 cols) */}
-        <div className="lg:col-span-4 glossy-card p-5 flex flex-col justify-between">
-          <div className="flex items-center justify-between pb-3 border-b border-gray-100">
-            <div className="flex items-center gap-2">
-              <UserCheck className="w-4 h-4 text-emerald-600" />
-              <h3 className="text-xs font-bold text-gray-900">Attendance Overview (Today)</h3>
-            </div>
-            <button onClick={() => onNavigateTab('attendance')} className="text-[10px] font-bold text-sky-600 hover:text-sky-700 hover:underline flex items-center gap-1 cursor-pointer">
-              <span>View Details</span> &rarr;
-            </button>
-          </div>
-
-          <div className="flex items-center justify-around py-3 my-auto gap-4">
-            {/* Donut Chart */}
-            <div className="relative w-36 h-36 flex items-center justify-center shrink-0">
-              <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-                <path className="text-slate-100 dark:text-slate-700" strokeWidth="3.8" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                <path className="text-emerald-500" strokeDasharray={`${attendanceRate}, 100`} strokeWidth="4.2" strokeLinecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-              </svg>
-              <div className="absolute flex flex-col items-center justify-center text-center">
-                <span className="text-2xl font-black text-gray-900">{attendanceRate}%</span>
-                <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Present</span>
-              </div>
-            </div>
-
-            {/* Legend */}
-            <div className="space-y-2 text-xs">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" />
-                <span className="text-gray-600">Present</span>
-                <span className="font-bold text-gray-900 ml-auto pl-2">{presentStudentsCount}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-rose-500 shrink-0" />
-                <span className="text-gray-600">Absent</span>
-                <span className="font-bold text-gray-900 ml-auto pl-2">{absentStudentsCount}</span>
-              </div>
-              <div className="flex items-center gap-2 pt-1 border-t border-gray-100">
-                <span className="w-2.5 h-2.5 rounded-full bg-slate-400 shrink-0" />
-                <span className="text-gray-600 font-bold">Total</span>
-                <span className="font-black text-gray-900 ml-auto pl-2">{totalStudents}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Quick Actions (4 cols) */}
-        <div className="lg:col-span-4 glossy-card p-5 flex flex-col justify-between">
-          <div className="flex items-center gap-2 pb-3 border-b border-gray-100">
-            <Zap className="w-4 h-4 text-emerald-600" />
-            <h3 className="text-xs font-bold text-gray-900">Quick Actions</h3>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3 py-2 my-auto">
-            <button onClick={() => onNavigateTab('students_add')} className="glossy-btn glossy-btn-emerald py-3 px-3 flex items-center justify-center gap-2 text-xs cursor-pointer">
-              <UserPlus className="w-4 h-4" />
-              <span>New Admission</span>
-            </button>
-            <button onClick={() => setShowCollectFeeModal(true)} className="glossy-btn glossy-btn-blue py-3 px-3 flex items-center justify-center gap-2 text-xs cursor-pointer">
-              <Wallet className="w-4 h-4" />
-              <span>Fee Collection</span>
-            </button>
-            <button onClick={() => onNavigateTab('attendance')} className="glossy-btn glossy-btn-purple py-3 px-3 flex items-center justify-center gap-2 text-xs cursor-pointer">
-              <CheckCircle2 className="w-4 h-4" />
-              <span>Mark Attendance</span>
-            </button>
-            <button onClick={() => onNavigateTab('roznamcha')} className="glossy-btn glossy-btn-amber py-3 px-3 flex items-center justify-center gap-2 text-xs cursor-pointer">
-              <BookOpen className="w-4 h-4" />
-              <span>Daily Sabaq</span>
-            </button>
-            <button onClick={() => onNavigateTab('income_expenses')} className="glossy-btn glossy-btn-rose py-3 px-3 flex items-center justify-center gap-2 text-xs cursor-pointer">
-              <TrendingUp className="w-4 h-4 rotate-180" />
-              <span>Add Expense</span>
-            </button>
-            <button onClick={() => onNavigateTab('reports')} className="glossy-btn glossy-btn-teal py-3 px-3 flex items-center justify-center gap-2 text-xs cursor-pointer">
+            <button
+              onClick={() => onNavigateTab('reports')}
+              className="btn text-white bg-white/15 hover:bg-white/20 backdrop-blur-md border border-white/20 transition-all cursor-pointer"
+            >
               <BarChart3 className="w-4 h-4" />
-              <span>Generate Report</span>
+              <span>Reports</span>
+            </button>
+            <button
+              onClick={() => setShowCollectFeeModal(true)}
+              className="btn text-white bg-white/15 hover:bg-white/20 backdrop-blur-md border border-white/20 transition-all cursor-pointer"
+            >
+              <Wallet className="w-4 h-4" />
+              <span>Collect Fee</span>
             </button>
           </div>
         </div>
       </div>
 
-      {/* ================= ROW 3: FINANCIAL SUMMARY, DEPARTMENTS & ACTIVITIES ================= */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
-        {/* Financial Summary (Current Month) */}
-        <div className="lg:col-span-4 glossy-card p-5 flex flex-col justify-between">
-          <div className="flex items-center justify-between pb-3 border-b border-gray-100">
-            <div className="flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-emerald-600" />
-              <h3 className="text-xs font-bold text-gray-900">Financial Summary (Current Month)</h3>
-            </div>
-            <button onClick={() => onNavigateTab('income_expenses')} className="text-[10px] font-bold text-sky-600 hover:text-sky-700 hover:underline flex items-center gap-1 cursor-pointer">
-              <span>View Ledger</span> &rarr;
-            </button>
-          </div>
-
-          <div className="grid grid-cols-2 gap-3 py-2 my-auto">
-            {/* Mint: Total Income */}
-            <div className="p-3.5 rounded-2xl bg-emerald-50/70 border border-emerald-200/70 shadow-xs relative overflow-hidden">
-              <span className="text-[10px] font-bold text-emerald-900 block truncate">Total Income</span>
-              <span className="text-base font-black text-emerald-950 block mt-0.5">₹ {totalIncome.toLocaleString()}</span>
-              <span className="text-[10px] font-bold text-emerald-700 block mt-1">Cash & Online</span>
-            </div>
-            {/* Coral: Total Expenses */}
-            <div className="p-3.5 rounded-2xl bg-rose-50/70 border border-rose-200/70 shadow-xs relative overflow-hidden">
-              <span className="text-[10px] font-bold text-rose-900 block truncate">Total Expenses</span>
-              <span className="text-base font-black text-rose-950 block mt-0.5">₹ {totalExpenses.toLocaleString()}</span>
-              <span className="text-[10px] font-bold text-rose-700 block mt-1">Operational</span>
-            </div>
-            {/* Sky Blue: Net Surplus */}
-            <div className="p-3.5 rounded-2xl bg-sky-50/70 border border-sky-200/70 shadow-xs relative overflow-hidden">
-              <span className="text-[10px] font-bold text-sky-900 block truncate">Net Surplus</span>
-              <span className="text-base font-black text-sky-950 block mt-0.5">₹ {netSurplus.toLocaleString()}</span>
-              <span className="text-[10px] font-bold text-sky-700 block mt-1">{netSurplus >= 0 ? 'Surplus' : 'Deficit'}</span>
-            </div>
-            {/* Lavender: Cash in Hand */}
-            <div className="p-3.5 rounded-2xl bg-purple-50/70 border border-purple-200/70 shadow-xs relative overflow-hidden">
-              <span className="text-[10px] font-bold text-purple-900 block truncate">Treasury Balance</span>
-              <span className="text-base font-black text-purple-950 block mt-0.5">₹ {cashInHand.toLocaleString()}</span>
-              <span className="text-[10px] font-bold text-purple-600 block mt-1">Liquid reserve</span>
-            </div>
-          </div>
+      {/* ================= TODAY'S PROTOTYPE BENTO STATS ================= */}
+      <div className="space-y-2.5">
+        <div className="sectionhead">
+          <h2>Today</h2>
+          <button onClick={() => onNavigateTab('schedule')} className="hover:underline">Full Schedule →</button>
         </div>
-
-        {/* Students by Department (Bar Chart) */}
-        <div className="lg:col-span-4 glossy-card p-5 flex flex-col justify-between">
-          <div className="flex items-center justify-between pb-3 border-b border-gray-100">
-            <div className="flex items-center gap-2">
-              <Users className="w-4 h-4 text-emerald-600" />
-              <h3 className="text-xs font-bold text-gray-900">Students by Department</h3>
-            </div>
-            <button onClick={() => onNavigateTab('classes')} className="text-[10px] font-bold text-sky-600 hover:text-sky-700 hover:underline flex items-center gap-1 cursor-pointer">
-              <span>View Details</span> &rarr;
-            </button>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+          {/* Stat 1: Total Students */}
+          <div 
+            onClick={() => onNavigateTab('students')}
+            className="stat cursor-pointer hover:scale-[1.02] transition-transform"
+          >
+            <div className="n">{totalStudents}</div>
+            <div className="l">Total Students</div>
           </div>
 
-          {students.length === 0 ? (
-            <div className="text-center py-8 my-auto text-slate-400">
-              <Users className="w-8 h-8 mx-auto mb-2 opacity-50" />
-              <p className="text-xs font-semibold text-slate-500">No students enrolled yet.</p>
-            </div>
-          ) : (
-            <div className="h-44 flex items-end justify-between gap-3 pt-4 px-2 my-auto">
-              {(() => {
-                const groups: { [key: string]: number } = {};
-                students.forEach(s => {
-                  const cls = s.class || s.category || 'General';
-                  groups[cls] = (groups[cls] || 0) + 1;
-                });
-                const entries = Object.entries(groups).slice(0, 5);
-                const maxCount = Math.max(...entries.map(e => e[1]), 1);
-                const colors = ['bg-emerald-500', 'bg-sky-500', 'bg-purple-500', 'bg-amber-500', 'bg-rose-500'];
-                return entries.map(([name, count], idx) => {
-                  const heightPercent = Math.max(22, Math.round((count / maxCount) * 100));
-                  return (
-                    <div key={idx} className="flex-1 flex flex-col items-center gap-1.5 h-full justify-end group">
-                      <span className="text-[10px] font-mono font-bold text-gray-600 dark:text-slate-300">{count}</span>
-                      <div style={{ height: `${heightPercent}%` }} className={`w-full max-w-[32px] rounded-t-xl ${colors[idx % colors.length]} shadow-xs transition-transform group-hover:scale-105`} />
-                      <span className="text-[9px] font-bold text-gray-500 dark:text-slate-400 truncate w-full text-center">{name}</span>
-                    </div>
-                  );
-                });
-              })()}
-            </div>
-          )}
-        </div>
-
-        {/* Recent Activities */}
-        <div className="lg:col-span-4 glossy-card p-5 flex flex-col justify-between">
-          <div className="flex items-center justify-between pb-3 border-b border-gray-100">
-            <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-emerald-600" />
-              <h3 className="text-xs font-bold text-gray-900">Recent Activities</h3>
-            </div>
-            <button onClick={() => onNavigateTab('reports')} className="text-[10px] font-bold text-sky-600 hover:text-sky-700 hover:underline flex items-center gap-1 cursor-pointer">
-              <span>View All</span> &rarr;
-            </button>
+          {/* Stat 2: Present Today */}
+          <div 
+            onClick={() => onNavigateTab('attendance')}
+            className="stat cursor-pointer hover:scale-[1.02] transition-transform"
+          >
+            <div className="n text-[#16b981]">{presentStudentsCount}</div>
+            <div className="l">Present Today ({attendanceRate}%)</div>
           </div>
 
-          <div className="space-y-2.5 py-1 my-auto">
-            {students.slice(0, 3).map((st) => (
-              <div key={st.id} className="flex items-start gap-2.5 text-xs">
-                <span className="font-mono text-[10px] text-gray-400 font-semibold w-16 shrink-0 pt-0.5 truncate">{st.admissionDate || 'Recent'}</span>
-                <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0 mt-1.5 ring-2 ring-white" />
-                <div className="leading-tight flex-1 min-w-0">
-                  <span className="font-bold text-gray-800 block text-xs truncate">Enrolled Student</span>
-                  <span className="text-[11px] text-gray-500 block truncate">{st.studentName} ({st.admissionNo})</span>
-                </div>
-              </div>
-            ))}
-            {fees.slice(0, 2).map((f) => (
-              <div key={f.id} className="flex items-start gap-2.5 text-xs">
-                <span className="font-mono text-[10px] text-gray-400 font-semibold w-16 shrink-0 pt-0.5 truncate">{f.date}</span>
-                <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0 mt-1.5 ring-2 ring-white" />
-                <div className="leading-tight flex-1 min-w-0">
-                  <span className="font-bold text-gray-800 block text-xs truncate">Fee Collected</span>
-                  <span className="text-[11px] text-gray-500 block truncate">₹{f.amount} - {f.studentName}</span>
-                </div>
-              </div>
-            ))}
-            {students.length === 0 && fees.length === 0 && (
-              <div className="text-center py-6 text-slate-400">
-                <p className="text-xs font-semibold">No recent transactions recorded yet.</p>
-              </div>
-            )}
+          {/* Stat 3: Teachers */}
+          <div 
+            onClick={() => onNavigateTab('teachers')}
+            className="stat cursor-pointer hover:scale-[1.02] transition-transform"
+          >
+            <div className="n text-[#3567ff]">{totalTeachers}</div>
+            <div className="l">Teachers Active</div>
+          </div>
+
+          {/* Stat 4: Fees This Month */}
+          <div 
+            onClick={() => onNavigateTab('fees')}
+            className="stat cursor-pointer hover:scale-[1.02] transition-transform"
+          >
+            <div className="n font-mono text-[#f6a83b]">₹{totalCollectedThisMonth.toLocaleString()}</div>
+            <div className="l">Fees This Month</div>
           </div>
         </div>
       </div>
 
-      {/* ================= ROW 4: FEE DEFAULTERS, LOW STOCK ALERTS & UPCOMING EVENTS ================= */}
+      {/* ================= PROTOTYPE QUICK ACTIONS MENU GRID ================= */}
+      <div className="space-y-2.5">
+        <div className="sectionhead">
+          <h2>Quick Actions</h2>
+        </div>
+        <div className="menuGrid">
+          <button className="menuCard" onClick={() => onNavigateTab('students_add')}>
+            <div className="mi">👨‍🎓</div>
+            <span>Add Student</span>
+          </button>
+          <button className="menuCard" onClick={() => setShowCollectFeeModal(true)}>
+            <div className="mi">₹</div>
+            <span>Collect Fee</span>
+          </button>
+          <button className="menuCard" onClick={() => onNavigateTab('attendance')}>
+            <div className="mi">✓</div>
+            <span>Attendance</span>
+          </button>
+          <button className="menuCard" onClick={() => onNavigateTab('roznamcha')}>
+            <div className="mi">📖</div>
+            <span>Daily Sabaq</span>
+          </button>
+          <button className="menuCard" onClick={() => onNavigateTab('inventory')}>
+            <div className="mi">📦</div>
+            <span>Inventory</span>
+          </button>
+          <button className="menuCard" onClick={() => onNavigateTab('reports')}>
+            <div className="mi">📊</div>
+            <span>Reports</span>
+          </button>
+        </div>
+      </div>
+
+      {/* ================= ROW 2: PRAYER TIMELINE & QUICK ACTIONS HUB ================= */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
-        {/* Fee Defaulters */}
-        <div className="lg:col-span-4 glossy-card p-5 flex flex-col justify-between">
-          <div className="flex items-center justify-between pb-3 border-b border-gray-100">
+        
+        {/* Interactive 5-Prayer Timeline Bar (8 Cols) */}
+        <div className="lg:col-span-8 heritage-card p-5 sm:p-6 flex flex-col justify-between border border-[#6679b4]/16 dark:border-white/10">
+          <div className="flex items-center justify-between pb-3.5 border-b border-[#6679b4]/12 dark:border-white/10">
+            <div className="flex items-center gap-2.5">
+              <Clock className="w-4 h-4 text-[#3567ff] dark:text-[#59c7ff]" />
+              <h3 className="text-xs font-black text-[#14204d] dark:text-white uppercase tracking-wider">Madrasa Namaz Timings</h3>
+              <span className="text-[11px] font-urdu font-bold text-[#3567ff] dark:text-[#59c7ff]">اوقاتِ پنجگانہ نماز</span>
+            </div>
+            <div className="flex items-center gap-2">
+              {nextPrayer && (
+                <span className="hidden sm:inline-block px-3 py-0.5 rounded-full text-[10px] font-bold bg-[#eef2ff] dark:bg-[#3567ff]/20 text-[#3567ff] dark:text-[#59c7ff] border border-[#3567ff]/30 shadow-2xs">
+                  Next: {nextPrayer.name} in {nextPrayer.countdownStr}
+                </span>
+              )}
+              <button
+                onClick={() => {
+                  setEditNamazState(namazTimings);
+                  setShowEditNamazModal(true);
+                }}
+                className="text-[11px] font-bold text-[#3567ff] dark:text-[#59c7ff] hover:text-[#7654ff] flex items-center gap-1 cursor-pointer transition-colors"
+              >
+                <Edit2 className="w-3 h-3" />
+                <span>Adjust</span>
+              </button>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-5 gap-2.5 py-4">
+            {(['fajr', 'zohr', 'asar', 'magrib', 'isha'] as const).map((pName) => {
+              const pData = namazTimings[pName];
+              const isNext = nextPrayer?.name.toLowerCase() === pName.toLowerCase();
+              const titleMap: Record<string, { en: string; ur: string }> = {
+                fajr: { en: 'Fajr', ur: 'فجر' },
+                zohr: { en: 'Zohr', ur: 'ظہر' },
+                asar: { en: 'Asr', ur: 'عصر' },
+                magrib: { en: 'Maghrib', ur: 'مغرب' },
+                isha: { en: 'Isha', ur: 'عشاء' }
+              };
+
+              return (
+                <div
+                  key={pName}
+                  className={`p-3 rounded-2xl text-center transition-all shadow-xs ${
+                    isNext
+                      ? 'bg-gradient-to-br from-[#3567ff] to-[#8752ff] text-white shadow-md ring-2 ring-[#59c7ff] scale-102'
+                      : 'bg-white/80 dark:bg-white/5 border border-[#6679b4]/16 dark:border-white/10 text-slate-800 dark:text-slate-200 hover:bg-white dark:hover:bg-white/10'
+                  }`}
+                >
+                  <span className={`text-xs font-black block ${isNext ? 'text-white' : 'text-[#14204d] dark:text-white'}`}>
+                    {titleMap[pName].en}
+                  </span>
+                  <span className={`text-[10px] font-urdu block ${isNext ? 'text-[#cbd4ff]' : 'text-slate-500'}`}>
+                    {titleMap[pName].ur}
+                  </span>
+                  <div className="mt-2 pt-1.5 border-t border-black/10 dark:border-white/10 font-mono text-[10px] leading-tight">
+                    <span className="block opacity-80">Azan: {pData.azan.split(' ')[0]}</span>
+                    <span className={`block font-black ${isNext ? 'text-white' : 'text-[#3567ff] dark:text-[#59c7ff]'}`}>Jamat: {pData.jamat}</span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="pt-3 border-t border-[#6679b4]/12 dark:border-white/10 flex items-center justify-between text-[11px] text-[#7180a6] dark:text-slate-400">
+            <span>Automated Daily Adhan & Jama'at schedule synchronized with institutional clocks.</span>
+            <button
+              onClick={() => onNavigateTab('schedule')}
+              className="font-bold text-[#3567ff] dark:text-[#59c7ff] hover:underline cursor-pointer transition-colors"
+            >
+              Full Daily Timetable &rarr;
+            </button>
+          </div>
+        </div>
+
+        {/* Quick Actions Hub (4 Cols) */}
+        <div className="lg:col-span-4 heritage-card p-5 sm:p-6 flex flex-col justify-between border border-[#065F46]/15 dark:border-[#10B981]/20">
+          <div className="flex items-center justify-between pb-3.5 border-b border-[#065F46]/10 dark:border-white/10">
+            <div className="flex items-center gap-2">
+              <Zap className="w-4 h-4 text-[#D97706]" />
+              <h3 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">Quick Operations</h3>
+            </div>
+            <span className="heritage-badge-gold text-[9px]">Fast Lane</span>
+          </div>
+
+          <div className="grid grid-cols-2 gap-2.5 py-3 my-auto">
+            <button
+              onClick={() => onNavigateTab('students_add')}
+              className="p-3 rounded-2xl bg-[#FAF5EB]/60 hover:bg-white dark:bg-white/5 dark:hover:bg-[#14221B] border border-[#065F46]/15 hover:border-[#D97706]/50 flex items-center gap-2.5 text-xs font-bold text-slate-800 dark:text-slate-200 hover:text-[#065F46] dark:hover:text-[#34D399] transition-all cursor-pointer shadow-2xs group"
+            >
+              <div className="w-7 h-7 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-[#065F46] dark:text-[#34D399] flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <UserPlus className="w-4 h-4" />
+              </div>
+              <span className="truncate">New Admission</span>
+            </button>
+
+            <button
+              onClick={() => setShowCollectFeeModal(true)}
+              className="p-3 rounded-2xl bg-[#FAF5EB]/60 hover:bg-white dark:bg-white/5 dark:hover:bg-[#14221B] border border-[#065F46]/15 hover:border-[#D97706]/50 flex items-center gap-2.5 text-xs font-bold text-slate-800 dark:text-slate-200 hover:text-[#D97706] dark:hover:text-amber-300 transition-all cursor-pointer shadow-2xs group"
+            >
+              <div className="w-7 h-7 rounded-xl bg-amber-100 dark:bg-amber-950/60 text-[#D97706] dark:text-amber-300 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <Wallet className="w-4 h-4" />
+              </div>
+              <span className="truncate">Collect Fee</span>
+            </button>
+
+            <button
+              onClick={() => onNavigateTab('attendance')}
+              className="p-3 rounded-2xl bg-[#FAF5EB]/60 hover:bg-white dark:bg-white/5 dark:hover:bg-[#14221B] border border-[#065F46]/15 hover:border-[#D97706]/50 flex items-center gap-2.5 text-xs font-bold text-slate-800 dark:text-slate-200 hover:text-purple-700 dark:hover:text-purple-300 transition-all cursor-pointer shadow-2xs group"
+            >
+              <div className="w-7 h-7 rounded-xl bg-purple-100 dark:bg-purple-950/60 text-purple-700 dark:text-purple-300 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <CheckCircle2 className="w-4 h-4" />
+              </div>
+              <span className="truncate">Attendance</span>
+            </button>
+
+            <button
+              onClick={() => onNavigateTab('roznamcha')}
+              className="p-3 rounded-2xl bg-[#FAF5EB]/60 hover:bg-white dark:bg-white/5 dark:hover:bg-[#14221B] border border-[#065F46]/15 hover:border-[#D97706]/50 flex items-center gap-2.5 text-xs font-bold text-slate-800 dark:text-slate-200 hover:text-blue-700 dark:hover:text-blue-300 transition-all cursor-pointer shadow-2xs group"
+            >
+              <div className="w-7 h-7 rounded-xl bg-blue-100 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <BookOpen className="w-4 h-4" />
+              </div>
+              <span className="truncate">Daily Sabaq</span>
+            </button>
+
+            <button
+              onClick={() => onNavigateTab('income_expenses')}
+              className="p-3 rounded-2xl bg-[#FAF5EB]/60 hover:bg-white dark:bg-white/5 dark:hover:bg-[#14221B] border border-[#065F46]/15 hover:border-[#D97706]/50 flex items-center gap-2.5 text-xs font-bold text-slate-800 dark:text-slate-200 hover:text-rose-700 dark:hover:text-rose-300 transition-all cursor-pointer shadow-2xs group"
+            >
+              <div className="w-7 h-7 rounded-xl bg-rose-100 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <TrendingUp className="w-4 h-4 text-rose-600 rotate-180" />
+              </div>
+              <span className="truncate">Add Expense</span>
+            </button>
+
+            <button
+              onClick={() => onNavigateTab('reports')}
+              className="p-3 rounded-2xl bg-[#FAF5EB]/60 hover:bg-white dark:bg-white/5 dark:hover:bg-[#14221B] border border-[#065F46]/15 hover:border-[#D97706]/50 flex items-center gap-2.5 text-xs font-bold text-slate-800 dark:text-slate-200 hover:text-teal-700 dark:hover:text-teal-300 transition-all cursor-pointer shadow-2xs group"
+            >
+              <div className="w-7 h-7 rounded-xl bg-teal-100 dark:bg-teal-950/60 text-teal-700 dark:text-teal-300 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                <BarChart3 className="w-4 h-4" />
+              </div>
+              <span className="truncate">Reports</span>
+            </button>
+          </div>
+
+          <div className="pt-3 border-t border-[#065F46]/10 dark:border-white/10 flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400">
+            <span>Global Shortcuts: Press <kbd className="px-1.5 py-0.5 rounded bg-[#FAF5EB] dark:bg-white/10 font-mono text-amber-800 dark:text-amber-300 border border-[#065F46]/20">⌘K</kbd> anywhere</span>
+          </div>
+        </div>
+      </div>
+
+      {/* ================= ROW 3: OPERATIONAL INSIGHTS BENTO ================= */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+        
+        {/* Col 1: Fee Defaulters Summary (4 Cols) */}
+        <div className="lg:col-span-4 heritage-card p-5 sm:p-6 flex flex-col justify-between border border-[#065F46]/15 dark:border-[#10B981]/20">
+          <div className="flex items-center justify-between pb-3.5 border-b border-[#065F46]/10 dark:border-white/10">
             <div className="flex items-center gap-2">
               <AlertCircle className="w-4 h-4 text-rose-600" />
-              <h3 className="text-xs font-bold text-gray-900">Fee Defaulters</h3>
+              <h3 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">Fee Defaulters & Dues</h3>
             </div>
-            <button onClick={() => onNavigateTab('fees')} className="text-[10px] font-bold text-sky-600 hover:text-sky-700 hover:underline flex items-center gap-1 cursor-pointer">
-              <span>View All</span> &rarr;
+            <button onClick={() => onNavigateTab('fees')} className="text-[10px] font-bold text-[#065F46] dark:text-[#34D399] hover:underline cursor-pointer">
+              View All &rarr;
             </button>
           </div>
-          <div className="overflow-x-auto py-2">
+
+          <div className="overflow-x-auto py-2 my-auto">
             {liveFeeDefaulters.length === 0 ? (
-              <div className="py-6 text-center text-slate-500">
-                <CheckCircle2 className="w-7 h-7 text-emerald-600 mx-auto mb-1.5" />
-                <p className="text-xs font-bold text-slate-700 dark:text-slate-200">No Pending Dues</p>
-                <p className="text-[10px] text-slate-400 font-urdu">تمام طلبہ کی فیس مکمل وصول ہے (الحمد للہ)</p>
+              <div className="py-8 text-center text-slate-500 dark:text-slate-400">
+                <CheckCircle2 className="w-8 h-8 text-[#059669] mx-auto mb-1.5" />
+                <p className="text-xs font-bold text-slate-800 dark:text-white">No Outstanding Dues</p>
+                <p className="text-[10px] text-slate-500 font-urdu mt-0.5">تمام طلبہ کی فیس مکمل وصول ہے (الحمد للہ)</p>
               </div>
             ) : (
               <table className="w-full text-[11px] text-left">
                 <thead>
-                  <tr className="text-gray-400 text-[10px] uppercase border-b border-gray-100 dark:border-slate-800">
-                    <th className="pb-1.5">#</th>
-                    <th className="pb-1.5">Student Name</th>
-                    <th className="pb-1.5">Pending (₹)</th>
+                  <tr className="text-slate-400 text-[10px] uppercase border-b border-[#065F46]/10 dark:border-white/10">
+                    <th className="pb-1.5">Student</th>
+                    <th className="pb-1.5 text-right">Pending</th>
                     <th className="pb-1.5 text-center">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-50 dark:divide-slate-800">
-                  {liveFeeDefaulters.map((st, idx) => (
-                    <tr key={st.id} className="hover:bg-rose-50/30 dark:hover:bg-rose-950/20 transition-colors">
-                      <td className="py-2 text-gray-400">{idx + 1}</td>
-                      <td className="py-2 font-bold text-gray-800 dark:text-slate-200">
-                        {st.name} <span className="text-[9px] text-gray-400 font-normal">({st.class})</span>
+                <tbody className="divide-y divide-slate-100 dark:divide-white/5">
+                  {liveFeeDefaulters.map((st) => (
+                    <tr key={st.id} className="hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+                      <td className="py-2 font-bold text-slate-800 dark:text-slate-200 truncate max-w-[140px]">
+                        {st.name} <span className="text-[9px] text-slate-400 font-normal">({st.class})</span>
                       </td>
-                      <td className="py-2 font-black text-rose-600 dark:text-rose-400">₹{st.pending.toLocaleString()}</td>
+                      <td className="py-2 text-right font-black text-rose-600 dark:text-rose-400 font-mono">
+                        ₹{st.pending.toLocaleString()}
+                      </td>
                       <td className="py-2 text-center">
                         <button 
-                          onClick={() => showToast(`Payment reminder dispatched to ${st.name}!`, 'info')} 
-                          className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-sky-50 dark:bg-sky-950 text-sky-700 dark:text-sky-300 hover:bg-sky-100 border border-sky-200 dark:border-sky-800 cursor-pointer"
+                          onClick={() => showToast(`Reminder dispatched to ${st.name}!`, 'info')} 
+                          className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-rose-50 dark:bg-rose-950/60 text-rose-700 dark:text-rose-300 hover:bg-rose-100 border border-rose-200 dark:border-rose-800 cursor-pointer"
                         >
                           Remind
                         </button>
@@ -801,50 +574,107 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
               </table>
             )}
           </div>
+
+          <div className="pt-2 border-t border-[#065F46]/10 dark:border-white/10 flex items-center justify-between text-[10px] text-slate-400">
+            <span>Outstanding fee recovery tracker</span>
+            <span className="font-bold text-slate-600 dark:text-slate-300">{liveFeeDefaulters.length} accounts overdue</span>
+          </div>
         </div>
 
-        {/* Low Stock Alerts (Mess & Campus Assets) */}
-        <div className="lg:col-span-4 glossy-card p-5 flex flex-col justify-between">
-          <div className="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-slate-800">
+        {/* Col 2: Students Distribution / Department Roster (4 Cols) */}
+        <div className="lg:col-span-4 heritage-card p-5 sm:p-6 flex flex-col justify-between border border-[#065F46]/15 dark:border-[#10B981]/20">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-100 dark:border-white/10">
             <div className="flex items-center gap-2">
-              <Boxes className="w-4 h-4 text-amber-600" />
-              <h3 className="text-xs font-bold text-gray-900 dark:text-slate-100">Low Stock Alerts (Assets & Mess)</h3>
+              <Users className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
+              <h3 className="text-xs font-bold text-slate-900 dark:text-white">Enrollment by Department</h3>
             </div>
-            <button onClick={() => onNavigateTab('inventory')} className="text-[10px] font-bold text-sky-600 hover:text-sky-700 hover:underline flex items-center gap-1 cursor-pointer">
-              <span>View All</span> &rarr;
+            <button onClick={() => onNavigateTab('classes')} className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400 hover:underline cursor-pointer">
+              Roster &rarr;
             </button>
           </div>
-          <div className="overflow-x-auto py-2">
+
+          {students.length === 0 ? (
+            <div className="text-center py-8 my-auto text-slate-400">
+              <Users className="w-8 h-8 mx-auto mb-2 opacity-40" />
+              <p className="text-xs font-semibold">No students registered yet.</p>
+            </div>
+          ) : (
+            <div className="space-y-2.5 py-2 my-auto">
+              {(() => {
+                const groups: Record<string, number> = {};
+                students.forEach(s => {
+                  const cls = s.class || 'General';
+                  groups[cls] = (groups[cls] || 0) + 1;
+                });
+                const entries = Object.entries(groups).slice(0, 4);
+                const max = Math.max(...entries.map(e => e[1]), 1);
+
+                return entries.map(([cName, count], idx) => {
+                  const pct = Math.round((count / max) * 100);
+                  const colors = ['bg-emerald-500', 'bg-blue-500', 'bg-indigo-500', 'bg-amber-500'];
+                  return (
+                    <div key={idx} className="space-y-1">
+                      <div className="flex justify-between text-xs font-semibold text-slate-700 dark:text-slate-300">
+                        <span className="truncate max-w-[180px]">{cName}</span>
+                        <span className="font-mono text-slate-500 dark:text-slate-400">{count} talaba</span>
+                      </div>
+                      <div className="h-2 rounded-full bg-slate-100 dark:bg-white/10 overflow-hidden">
+                        <div style={{ width: `${pct}%` }} className={`h-full rounded-full ${colors[idx % colors.length]}`} />
+                      </div>
+                    </div>
+                  );
+                });
+              })()}
+            </div>
+          )}
+
+          <div className="pt-2 border-t border-slate-100 dark:border-white/10 flex items-center justify-between text-[10px] text-slate-400">
+            <span>Classroom capacity & division metrics</span>
+            <span className="font-bold text-slate-600 dark:text-slate-300">{classes.length} active halqas</span>
+          </div>
+        </div>
+
+        {/* Col 3: Low Stock & Asset Watch (4 Cols) */}
+        <div className="lg:col-span-4 heritage-card p-5 sm:p-6 flex flex-col justify-between border border-[#065F46]/15 dark:border-[#10B981]/20">
+          <div className="flex items-center justify-between pb-3.5 border-b border-[#065F46]/10 dark:border-white/10">
+            <div className="flex items-center gap-2">
+              <Boxes className="w-4 h-4 text-[#D97706]" />
+              <h3 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">Assets & Low Stock Alerts</h3>
+            </div>
+            <button onClick={() => onNavigateTab('inventory')} className="text-[10px] font-bold text-[#065F46] dark:text-[#34D399] hover:underline cursor-pointer">
+              Inventory &rarr;
+            </button>
+          </div>
+
+          <div className="overflow-x-auto py-2 my-auto">
             {lowStockInventory.length === 0 ? (
-              <div className="py-6 text-center text-slate-500">
-                <CheckCircle2 className="w-7 h-7 text-emerald-600 mx-auto mb-1.5" />
-                <p className="text-xs font-bold text-slate-700 dark:text-slate-200">Adequate Stock Levels</p>
-                <p className="text-[10px] text-slate-400">All supplies within optimal inventory threshold.</p>
+              <div className="py-8 text-center text-slate-500 dark:text-slate-400">
+                <CheckCircle2 className="w-8 h-8 text-[#059669] mx-auto mb-1.5" />
+                <p className="text-xs font-bold text-slate-800 dark:text-white">Optimal Inventory Levels</p>
+                <p className="text-[10px] text-slate-400 mt-0.5">All ration and library supplies within safety buffer.</p>
               </div>
             ) : (
               <table className="w-full text-[11px] text-left">
                 <thead>
-                  <tr className="text-gray-400 text-[10px] uppercase border-b border-gray-100 dark:border-slate-800">
-                    <th className="pb-1.5">Item</th>
-                    <th className="pb-1.5">Quantity</th>
-                    <th className="pb-1.5">Status</th>
+                  <tr className="text-slate-400 text-[10px] uppercase border-b border-[#065F46]/10 dark:border-white/10">
+                    <th className="pb-1.5">Asset / Ration</th>
+                    <th className="pb-1.5">Level</th>
                     <th className="pb-1.5 text-center">Action</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-50 dark:divide-slate-800">
+                <tbody className="divide-y divide-slate-100 dark:divide-white/5">
                   {lowStockInventory.map((it) => (
-                    <tr key={it.id} className="hover:bg-amber-50/30 dark:hover:bg-amber-950/20 transition-colors">
-                      <td className="py-2 font-bold text-gray-800 dark:text-slate-200">{it.item}</td>
-                      <td className="py-2 font-mono text-gray-600 dark:text-slate-400">{it.quantity} {it.unit || ''}</td>
-                      <td className="py-2">
-                        <span className="text-[10px] font-bold text-rose-700 dark:text-rose-400 bg-rose-50 dark:bg-rose-950/60 px-1.5 py-0.5 rounded border border-rose-200 dark:border-rose-800">
-                          ⚠ {it.status}
-                        </span>
+                    <tr key={it.id} className="hover:bg-slate-50 dark:hover:bg-white/5 transition-colors">
+                      <td className="py-2 font-bold text-slate-800 dark:text-slate-200 truncate max-w-[140px]">
+                        {it.item}
+                      </td>
+                      <td className="py-2 font-mono text-amber-600 dark:text-amber-400 font-bold">
+                        {it.quantity} {it.unit || ''}
                       </td>
                       <td className="py-2 text-center">
                         <button 
-                          onClick={() => showToast(`Re-order requisition drafted for ${it.item}!`, 'success')} 
-                          className="px-2 py-0.5 rounded-md text-[10px] font-bold bg-amber-50 dark:bg-amber-950 text-amber-800 dark:text-amber-300 hover:bg-amber-100 border border-amber-200 dark:border-amber-800 cursor-pointer"
+                          onClick={() => showToast(`Requisition order submitted for ${it.item}!`, 'success')} 
+                          className="px-2.5 py-0.5 rounded-md text-[10px] font-bold bg-[#FEF3C7] dark:bg-amber-950/60 text-amber-900 dark:text-amber-200 hover:bg-amber-200 border border-amber-300 dark:border-amber-700 cursor-pointer shadow-2xs"
                         >
                           Order
                         </button>
@@ -855,113 +685,82 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
               </table>
             )}
           </div>
-        </div>
 
-        {/* Upcoming Events & Examinations */}
-        <div className="lg:col-span-4 glossy-card p-5 flex flex-col justify-between">
-          <div className="flex items-center justify-between pb-3 border-b border-gray-100 dark:border-slate-800">
+          <div className="pt-2 border-t border-[#065F46]/10 dark:border-white/10 flex items-center justify-between text-[10px] text-slate-400">
+            <span>Kitchen & Library buffer threshold</span>
+            <span className="font-bold text-slate-600 dark:text-slate-300">{inventory.length} items logged</span>
+          </div>
+        </div>
+      </div>
+
+      {/* ================= ROW 4: ACADEMIC CALENDAR & CAMPUS GALLERY ================= */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
+        {/* Upcoming Events & Examinations (5 Cols) */}
+        <div className="lg:col-span-5 heritage-card p-5 sm:p-6 flex flex-col justify-between border border-[#065F46]/15 dark:border-[#10B981]/20">
+          <div className="flex items-center justify-between pb-3.5 border-b border-[#065F46]/10 dark:border-white/10">
             <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-emerald-600" />
-              <h3 className="text-xs font-bold text-gray-900 dark:text-slate-100">Upcoming Events & Exams</h3>
+              <Calendar className="w-4 h-4 text-[#065F46] dark:text-[#34D399]" />
+              <h3 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">Upcoming Events & Exams</h3>
             </div>
-            <button onClick={() => onNavigateTab('examinations')} className="text-[10px] font-bold text-sky-600 hover:text-sky-700 hover:underline flex items-center gap-1 cursor-pointer">
-              <span>View All</span> &rarr;
+            <button onClick={() => onNavigateTab('examinations')} className="text-[10px] font-bold text-[#065F46] dark:text-[#34D399] hover:underline cursor-pointer">
+              View Calendar &rarr;
             </button>
           </div>
-          <div className="space-y-2 py-2">
+          <div className="space-y-2 py-3 my-auto">
             {dynamicUpcomingEvents.map((ev, idx) => (
-              <div key={idx} className="flex items-center justify-between py-1.5 px-2.5 rounded-xl bg-white/70 dark:bg-slate-800/80 hover:bg-white dark:hover:bg-slate-800 transition-all border border-gray-100 dark:border-slate-700 text-xs">
-                <span className="font-mono text-[10px] text-emerald-700 dark:text-emerald-400 font-bold bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-md">
+              <div key={idx} className="flex items-center justify-between py-2.5 px-3 rounded-2xl bg-[#FAF5EB]/60 hover:bg-white dark:bg-white/5 dark:hover:bg-[#14221B] transition-all border border-[#065F46]/15 dark:border-white/10 text-xs shadow-2xs">
+                <span className="font-mono text-[10px] text-[#064E3B] dark:text-[#A7F3D0] font-bold bg-[#065F46]/10 dark:bg-[#10B981]/15 border border-[#065F46]/20 px-2 py-0.5 rounded-md">
                   {ev.date}
                 </span>
-                <span className="font-bold text-gray-800 dark:text-slate-200 truncate ml-2">
+                <span className="font-semibold text-slate-800 dark:text-slate-200 truncate ml-2">
                   {ev.title}
                 </span>
               </div>
             ))}
           </div>
-        </div>
-      </div>
-
-      {/* ================= ROW 5: TODAY'S NAMAZ TIMES & MADRASA GALLERY ================= */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Today's Namaz Times */}
-        <div className="lg:col-span-5 p-6 rounded-3xl bg-[#123B63] text-white shadow-xl flex flex-col justify-between relative overflow-hidden border border-white/10">
-          <div className="flex items-center justify-between border-b border-white/10 pb-3 mb-4 relative z-10">
-            <div className="flex items-center gap-2">
-              <Clock className="w-5 h-5 text-amber-400" />
-              <div>
-                <h3 className="text-sm font-bold text-white">{t('namazTimes')}</h3>
-                <span className="text-[10px] text-emerald-200">Azan & Jamat Schedule</span>
-              </div>
-            </div>
-            <button
-              onClick={() => {
-                setEditNamazState(namazTimings);
-                setShowEditNamazModal(true);
-              }}
-              className="flex items-center gap-1 px-3 py-1 rounded-full bg-white/10 hover:bg-white/20 text-xs font-semibold text-emerald-100 transition-colors cursor-pointer"
-            >
-              <Edit2 className="w-3.5 h-3.5" />
-              <span>Edit Times</span>
-            </button>
-          </div>
-
-          <div className="space-y-2.5 relative z-10">
-            {[
-              { name: 'Fajr', urdu: 'فجر', times: namazTimings.fajr },
-              { name: 'Zohr', urdu: 'ظہر', times: namazTimings.zohr },
-              { name: 'Asar', urdu: 'عصر', times: namazTimings.asar },
-              { name: 'Magrib', urdu: 'مغرب', times: namazTimings.magrib },
-              { name: 'Isha', urdu: 'عشاء', times: namazTimings.isha },
-            ].map((prayer, idx) => (
-              <div key={idx} className="flex items-center justify-between p-2.5 rounded-2xl bg-white/5 hover:bg-white/10 transition-colors text-xs border border-white/5">
-                <div className="flex items-center gap-2">
-                  <span className="font-bold">{prayer.name}</span>
-                  <span className="text-[10px] font-urdu text-emerald-300">({prayer.urdu})</span>
-                </div>
-                <div className="flex items-center gap-4 text-[11px] font-mono">
-                  <span>Azan: <strong className="text-amber-300">{prayer.times.azan}</strong></span>
-                  <span>Jamat: <strong className="text-emerald-300">{prayer.times.jamat}</strong></span>
-                </div>
-              </div>
-            ))}
+          <div className="pt-2 border-t border-[#065F46]/10 dark:border-white/10 flex items-center justify-between text-[10px] text-slate-400">
+            <span>Academic schedule & holidays</span>
+            <span className="font-bold text-slate-600 dark:text-slate-300">{dynamicUpcomingEvents.length} events logged</span>
           </div>
         </div>
 
-        {/* Campus Gallery Preview */}
-        <div className="lg:col-span-7 p-6 rounded-3xl glossy-card shadow-sm flex flex-col justify-between">
-          <div className="flex items-center justify-between border-b border-gray-100 pb-3 mb-4">
+        {/* Campus Gallery & Highlights (7 Cols) */}
+        <div className="lg:col-span-7 heritage-card p-5 sm:p-6 flex flex-col justify-between border border-[#065F46]/15 dark:border-[#10B981]/20">
+          <div className="flex items-center justify-between pb-3.5 border-b border-[#065F46]/10 dark:border-white/10">
             <div className="flex items-center gap-2">
-              <ImageIcon className="w-5 h-5 text-emerald-700" />
+              <ImageIcon className="w-4 h-4 text-[#D97706]" />
               <div>
-                <h3 className="text-sm font-bold text-slate-900">{t('gallery')}</h3>
-                <span className="text-xs text-gray-500">Campus Infrastructure & Event Memories</span>
+                <h3 className="text-xs font-black text-slate-900 dark:text-white uppercase tracking-wider">{t('gallery')} & Highlights</h3>
               </div>
             </div>
             <button
               onClick={() => onNavigateTab('inventory')}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-50 hover:bg-emerald-100 text-xs font-semibold text-emerald-800 transition-colors cursor-pointer"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#065F46]/10 hover:bg-[#065F46]/20 text-[10px] font-bold text-[#064E3B] dark:text-[#34D399] border border-[#065F46]/20 transition-colors cursor-pointer shadow-2xs"
             >
-              <Upload className="w-3.5 h-3.5" />
+              <Upload className="w-3 h-3" />
               <span>Upload Photo</span>
             </button>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5 my-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 my-auto py-2">
             {gallery.slice(0, 3).map((item) => (
-              <div key={item.id} className="group relative rounded-2xl overflow-hidden border border-white/80 aspect-video shadow-xs">
+              <div key={item.id} className="group relative rounded-2xl overflow-hidden border border-[#D97706]/30 aspect-video shadow-xs">
                 <img
                   src={item.imageUrl}
                   alt={item.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                 />
-                <div className="absolute inset-0 bg-black/60 backdrop-blur-[1px] flex flex-col justify-end p-2.5 text-white">
-                  <span className="text-[9px] uppercase font-black text-emerald-300">{item.category}</span>
-                  <h4 className="text-xs font-bold truncate">{item.title}</h4>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent flex flex-col justify-end p-2.5 text-white">
+                  <span className="text-[8px] uppercase font-black text-amber-300">{item.category}</span>
+                  <h4 className="text-[11px] font-bold truncate">{item.title}</h4>
                 </div>
               </div>
             ))}
+          </div>
+
+          <div className="pt-2 border-t border-[#065F46]/10 dark:border-white/10 flex items-center justify-between text-[10px] text-slate-400">
+            <span>Visual records & campus archives</span>
+            <span className="font-bold text-slate-600 dark:text-slate-300">{gallery.length} photos</span>
           </div>
         </div>
       </div>
@@ -977,13 +776,13 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
           <div className="flex gap-2">
             <button
               onClick={() => setShowEditNamazModal(false)}
-              className="px-4 py-2 text-xs font-medium text-m3-on-surface-variant hover:bg-black/5 rounded-full"
+              className="px-4 py-2 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-black/5 dark:hover:bg-white/10 rounded-full cursor-pointer"
             >
               {t('cancel')}
             </button>
             <button
               onClick={handleSaveNamaz}
-              className="px-5 py-2 text-xs font-medium bg-m3-primary text-m3-on-primary rounded-full hover:bg-m3-primary/90 shadow-m3-1"
+              className="px-5 py-2 text-xs font-medium bg-emerald-600 hover:bg-emerald-700 text-white rounded-full shadow-sm cursor-pointer"
             >
               {t('save')}
             </button>
@@ -992,10 +791,10 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
       >
         <form onSubmit={handleSaveNamaz} className="space-y-3">
           {(['fajr', 'zohr', 'asar', 'magrib', 'isha'] as (keyof MadrasaNamazTimings)[]).map((prayer) => (
-            <div key={prayer} className="grid grid-cols-3 gap-3 items-center p-2.5 rounded-2xl bg-m3-surface-container-low border border-m3-outline-variant/30">
-              <span className="text-xs font-bold text-gray-900 uppercase">{prayer}</span>
+            <div key={prayer} className="grid grid-cols-3 gap-3 items-center p-2.5 rounded-2xl bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10">
+              <span className="text-xs font-bold text-slate-900 dark:text-white uppercase">{prayer}</span>
               <div>
-                <label className="text-[10px] text-gray-500 block">Azan Time</label>
+                <label className="text-[10px] text-slate-500 dark:text-slate-400 block mb-1">Azan Time</label>
                 <input
                   type="text"
                   value={editNamazState[prayer].azan}
@@ -1003,12 +802,12 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
                     ...editNamazState,
                     [prayer]: { ...editNamazState[prayer], azan: e.target.value }
                   })}
-                  className="w-full p-1.5 text-xs font-mono rounded-lg border bg-white"
+                  className="w-full p-2 text-xs font-mono rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                   required
                 />
               </div>
               <div>
-                <label className="text-[10px] text-gray-500 block">Jamat Time</label>
+                <label className="text-[10px] text-slate-500 dark:text-slate-400 block mb-1">Jamat Time</label>
                 <input
                   type="text"
                   value={editNamazState[prayer].jamat}
@@ -1016,7 +815,7 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
                     ...editNamazState,
                     [prayer]: { ...editNamazState[prayer], jamat: e.target.value }
                   })}
-                  className="w-full p-1.5 text-xs font-mono rounded-lg border bg-white"
+                  className="w-full p-2 text-xs font-mono rounded-lg border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                   required
                 />
               </div>
@@ -1040,7 +839,7 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
             <div className="flex justify-between w-full">
               <button
                 onClick={() => window.print()}
-                className="px-4 py-2 text-xs font-medium bg-m3-primary text-white rounded-full"
+                className="px-4 py-2 text-xs font-medium bg-emerald-600 hover:bg-emerald-700 text-white rounded-full cursor-pointer"
               >
                 Print Receipt
               </button>
@@ -1049,7 +848,7 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
                   setShowCollectFeeModal(false);
                   setLastReceipt(null);
                 }}
-                className="px-4 py-2 text-xs font-medium text-gray-600 rounded-full"
+                className="px-4 py-2 text-xs font-medium text-slate-600 dark:text-slate-300 rounded-full cursor-pointer"
               >
                 Done
               </button>
@@ -1058,13 +857,13 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
             <div className="flex gap-2">
               <button
                 onClick={() => setShowCollectFeeModal(false)}
-                className="px-4 py-2 text-xs font-medium text-gray-600 rounded-full"
+                className="px-4 py-2 text-xs font-medium text-slate-600 dark:text-slate-300 rounded-full cursor-pointer"
               >
                 {t('cancel')}
               </button>
               <button
                 onClick={handleCollectFeeSubmit}
-                className="px-5 py-2 text-xs font-medium bg-amber-600 text-white rounded-full hover:bg-amber-700 shadow-m3-1"
+                className="px-5 py-2 text-xs font-medium bg-emerald-600 hover:bg-emerald-700 text-white rounded-full shadow-sm cursor-pointer"
               >
                 Confirm & Collect
               </button>
@@ -1073,12 +872,12 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
         }
       >
         {lastReceipt ? (
-          <div className="p-6 bg-amber-50/50 rounded-2xl border-2 border-emerald-600/40 text-center space-y-3">
-            <div className="w-12 h-12 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center mx-auto">
+          <div className="p-6 bg-emerald-50 dark:bg-emerald-950/40 rounded-2xl border-2 border-emerald-600/40 dark:border-emerald-500/30 text-center space-y-3">
+            <div className="w-12 h-12 rounded-full bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-200 flex items-center justify-center mx-auto">
               <CheckCircle2 className="w-6 h-6" />
             </div>
-            <h4 className="text-base font-bold text-emerald-950">Payment Received Successfully!</h4>
-            <div className="text-xs text-gray-700 space-y-1 font-mono">
+            <h4 className="text-base font-bold text-emerald-950 dark:text-emerald-100">Payment Received Successfully!</h4>
+            <div className="text-xs text-slate-700 dark:text-slate-300 space-y-1 font-mono">
               <p>Receipt No: <strong>{lastReceipt.receiptNo}</strong></p>
               <p>Student: <strong>{lastReceipt.studentName}</strong></p>
               <p>Amount: <strong>₹{lastReceipt.amount}</strong> ({lastReceipt.month})</p>
@@ -1088,7 +887,7 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
         ) : (
           <form onSubmit={handleCollectFeeSubmit} className="space-y-3">
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1">Select Student</label>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Select Student</label>
               <select
                 value={selectedStudentForFee}
                 onChange={(e) => {
@@ -1096,7 +895,7 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
                   const st = students.find(s => s.id === e.target.value);
                   if (st) setFeeAmount(st.monthlyFees);
                 }}
-                className="w-full p-2.5 text-xs rounded-xl border bg-white"
+                className="w-full p-2.5 text-xs rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                 required
               >
                 {students.map(s => (
@@ -1109,33 +908,33 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
 
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">Amount (₹)</label>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Amount (₹)</label>
                 <input
                   type="number"
                   value={feeAmount}
                   onChange={(e) => setFeeAmount(Number(e.target.value))}
-                  className="w-full p-2.5 text-xs rounded-xl border bg-white font-mono"
+                  className="w-full p-2.5 text-xs rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-800 text-slate-900 dark:text-white font-mono"
                   required
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-gray-700 mb-1">Month</label>
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Month</label>
                 <input
                   type="text"
                   value={feeMonth}
                   onChange={(e) => setFeeMonth(e.target.value)}
-                  className="w-full p-2.5 text-xs rounded-xl border bg-white"
+                  className="w-full p-2.5 text-xs rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
                   required
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-gray-700 mb-1">Payment Mode</label>
+              <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Payment Mode</label>
               <select
                 value={feeMode}
                 onChange={(e) => setFeeMode(e.target.value as any)}
-                className="w-full p-2.5 text-xs rounded-xl border bg-white"
+                className="w-full p-2.5 text-xs rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
               >
                 <option value="Cash">Cash</option>
                 <option value="Online">Online / UPI</option>
@@ -1157,13 +956,13 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
           <div className="flex gap-2">
             <button
               onClick={() => setShowSendNoticeModal(false)}
-              className="px-4 py-2 text-xs font-medium text-gray-600 rounded-full"
+              className="px-4 py-2 text-xs font-medium text-slate-600 dark:text-slate-300 rounded-full cursor-pointer"
             >
               {t('cancel')}
             </button>
             <button
               onClick={handleSendNoticeSubmit}
-              className="px-5 py-2 text-xs font-medium bg-m3-primary text-white rounded-full hover:bg-m3-primary/90"
+              className="px-5 py-2 text-xs font-medium bg-emerald-600 hover:bg-emerald-700 text-white rounded-full cursor-pointer"
             >
               Publish Notice
             </button>
@@ -1172,23 +971,23 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
       >
         <form onSubmit={handleSendNoticeSubmit} className="space-y-3">
           <div>
-            <label className="block text-xs font-bold text-gray-700 mb-1">Notice Title</label>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Notice Title</label>
             <input
               type="text"
               value={noticeTitle}
               onChange={(e) => setNoticeTitle(e.target.value)}
               placeholder="e.g. Schedule for Monthly Assessment"
-              className="w-full p-2.5 text-xs rounded-xl border bg-white"
+              className="w-full p-2.5 text-xs rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
               required
             />
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-gray-700 mb-1">Target Audience</label>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Target Audience</label>
             <select
               value={noticeTarget}
               onChange={(e) => setNoticeTarget(e.target.value as any)}
-              className="w-full p-2.5 text-xs rounded-xl border bg-white"
+              className="w-full p-2.5 text-xs rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
             >
               <option value="All">All (Teachers, Students & Guardians)</option>
               <option value="Teachers">Teachers / Asatizah Only</option>
@@ -1197,13 +996,13 @@ export const MainDashboard: React.FC<MainDashboardProps> = ({ onNavigateTab, onS
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-gray-700 mb-1">Notice Content</label>
+            <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 mb-1">Notice Content</label>
             <textarea
               rows={3}
               value={noticeContent}
               onChange={(e) => setNoticeContent(e.target.value)}
               placeholder="Write circular content here..."
-              className="w-full p-2.5 text-xs rounded-xl border bg-white"
+              className="w-full p-2.5 text-xs rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-slate-800 text-slate-900 dark:text-white"
               required
             />
           </div>

@@ -49,6 +49,7 @@ import { PrintDocModal } from '../common/PrintDocModal';
 import { Modal } from '../common/Modal';
 import { generateDefaultCredentials } from '../../utils/credentialGenerator';
 import { compressImage } from '../../utils/imageCompressor';
+import { StudentDossierPrintSheet } from './StudentDossierPrintSheet';
 
 interface StudentProfileProps {
   student: Student;
@@ -62,7 +63,7 @@ export const StudentProfile: React.FC<StudentProfileProps> = ({
   onUpdateStudent
 }) => {
   const { activeMadrasa } = useAuth();
-  const { t, showToast } = useTheme();
+  const { language, t, showToast } = useTheme();
 
   // Active Profile Sub-Tab
   const [activeTab, setActiveTab] = useState<'dossier' | 'roznamchah' | 'attendance' | 'fees' | 'documents' | 'id_card' | 'update_logs'>('dossier');
@@ -517,9 +518,14 @@ export const StudentProfile: React.FC<StudentProfileProps> = ({
   const studentFeeHistory = db.getFees(activeMadrasa?.id).filter(f => f.studentId === student.id);
 
   return (
-    <div className="space-y-5 animate-in fade-in duration-300 select-none">
-      {/* Top Breadcrumbs & Actions Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white/70 backdrop-blur-xl p-4 sm:p-5 rounded-3xl border border-white/80 shadow-[0_4px_20px_-2px_rgba(18,59,99,0.05)]">
+    <>
+      {/* Official Institutional A4 Print Document (Activated on Print) */}
+      <StudentDossierPrintSheet student={student} madrasa={activeMadrasa} />
+
+      {/* Screen Interactive Workspace (Hidden during Print) */}
+      <div className="space-y-5 animate-in fade-in duration-300 select-none no-print">
+        {/* Top Breadcrumbs & Actions Header */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white/70 backdrop-blur-xl p-4 sm:p-5 rounded-3xl border border-white/80 shadow-[0_4px_20px_-2px_rgba(18,59,99,0.05)]">
         <div className="flex items-center gap-3">
           <button
             onClick={onBackToList}
@@ -706,106 +712,106 @@ export const StudentProfile: React.FC<StudentProfileProps> = ({
         </div>
       </div>
 
-      {/* Profile Tab Navigation Bar */}
-      <div className="flex flex-wrap gap-2 pb-1 no-print">
+      {/* Profile Tab Navigation Bar (Non-collapsing, responsive horizontal scroll) */}
+      <div className="flex items-center gap-2 overflow-x-auto pb-2 pt-1 no-scrollbar border-b border-slate-200/60 dark:border-[#2d3340]/60 no-print">
         <button
           type="button"
           onClick={() => setActiveTab('dossier')}
-          className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-2xs ${
+          className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold shrink-0 transition-all shadow-2xs whitespace-nowrap ${
             activeTab === 'dossier'
               ? 'bg-[#079669] text-white shadow-md'
-              : 'bg-white/70 text-slate-700 hover:bg-white border border-white/80'
+              : 'bg-white/80 dark:bg-[#181c22] text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-[#1f242d] border border-slate-200/80 dark:border-[#2d3340]'
           }`}
         >
           <BookOpen className="w-3.5 h-3.5" />
-          <span>Dossier &amp; Bio</span>
+          <span>{language === 'ur' ? 'کوائف و تفصیل' : 'Dossier & Bio'}</span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab('roznamchah')}
-          className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-2xs ${
+          className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold shrink-0 transition-all shadow-2xs whitespace-nowrap ${
             activeTab === 'roznamchah'
               ? 'bg-[#079669] text-white shadow-md'
-              : 'bg-white/70 text-slate-700 hover:bg-white border border-white/80'
+              : 'bg-white/80 dark:bg-[#181c22] text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-[#1f242d] border border-slate-200/80 dark:border-[#2d3340]'
           }`}
         >
           <Sparkles className="w-3.5 h-3.5" />
-          <span>Roznamcha &amp; Sabaq</span>
+          <span>{language === 'ur' ? 'روزنامچہ سبق' : 'Roznamcha & Sabaq'}</span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab('attendance')}
-          className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-2xs ${
+          className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold shrink-0 transition-all shadow-2xs whitespace-nowrap ${
             activeTab === 'attendance'
               ? 'bg-[#079669] text-white shadow-md'
-              : 'bg-white/70 text-slate-700 hover:bg-white border border-white/80'
+              : 'bg-white/80 dark:bg-[#181c22] text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-[#1f242d] border border-slate-200/80 dark:border-[#2d3340]'
           }`}
         >
           <CalendarCheck className="w-3.5 h-3.5" />
-          <span>Attendance Heatmap</span>
+          <span>{language === 'ur' ? 'حاضری رجسٹر' : 'Attendance Register'}</span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab('fees')}
-          className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-2xs ${
+          className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold shrink-0 transition-all shadow-2xs whitespace-nowrap ${
             activeTab === 'fees'
               ? 'bg-[#079669] text-white shadow-md'
-              : 'bg-white/70 text-slate-700 hover:bg-white border border-white/80'
+              : 'bg-white/80 dark:bg-[#181c22] text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-[#1f242d] border border-slate-200/80 dark:border-[#2d3340]'
           }`}
         >
           <Wallet className="w-3.5 h-3.5" />
-          <span>Fees Ledger ({studentFeeHistory.length})</span>
+          <span>{language === 'ur' ? `فیس کا حساب (${studentFeeHistory.length})` : `Fees Ledger (${studentFeeHistory.length})`}</span>
         </button>
 
         <button
           type="button"
           onClick={() => setShowExamReportModal(true)}
-          className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all bg-white/70 text-slate-700 hover:bg-white border border-white/80 shadow-2xs"
+          className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold shrink-0 transition-all bg-white/80 dark:bg-[#181c22] text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-[#1f242d] border border-slate-200/80 dark:border-[#2d3340] shadow-2xs whitespace-nowrap"
         >
           <Award className="w-3.5 h-3.5" />
-          <span>Examinations</span>
+          <span>{language === 'ur' ? 'امتحانات' : 'Examinations'}</span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab('documents')}
-          className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-2xs ${
+          className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold shrink-0 transition-all shadow-2xs whitespace-nowrap ${
             activeTab === 'documents'
               ? 'bg-[#079669] text-white shadow-md'
-              : 'bg-white/70 text-slate-700 hover:bg-white border border-white/80'
+              : 'bg-white/80 dark:bg-[#181c22] text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-[#1f242d] border border-slate-200/80 dark:border-[#2d3340]'
           }`}
         >
           <FileText className="w-3.5 h-3.5" />
-          <span>Documents</span>
+          <span>{language === 'ur' ? 'دستاویزات' : 'Documents'}</span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab('id_card')}
-          className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-2xs ${
+          className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold shrink-0 transition-all shadow-2xs whitespace-nowrap ${
             activeTab === 'id_card'
               ? 'bg-[#079669] text-white shadow-md'
-              : 'bg-white/70 text-slate-700 hover:bg-white border border-white/80'
+              : 'bg-white/80 dark:bg-[#181c22] text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-[#1f242d] border border-slate-200/80 dark:border-[#2d3340]'
           }`}
         >
           <QrCode className="w-3.5 h-3.5" />
-          <span>Student ID Card</span>
+          <span>{language === 'ur' ? 'شناختی کارڈ' : 'Student ID Card'}</span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveTab('update_logs')}
-          className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-2xs ${
+          className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold shrink-0 transition-all shadow-2xs whitespace-nowrap ${
             activeTab === 'update_logs'
               ? 'bg-[#079669] text-white shadow-md'
-              : 'bg-white/70 text-slate-700 hover:bg-white border border-white/80'
+              : 'bg-white/80 dark:bg-[#181c22] text-slate-700 dark:text-slate-300 hover:bg-white dark:hover:bg-[#1f242d] border border-slate-200/80 dark:border-[#2d3340]'
           }`}
         >
           <History className="w-3.5 h-3.5" />
-          <span>Update Logs (تاریخچہ ترامیم) ({studentLogs.length})</span>
+          <span>{language === 'ur' ? `تاریخچہ ترامیم (${studentLogs.length})` : `Audit History (${studentLogs.length})`}</span>
         </button>
       </div>
 
@@ -2541,6 +2547,7 @@ export const StudentProfile: React.FC<StudentProfileProps> = ({
               <label className="text-xs font-bold block mb-1">Fee Amount (₹)</label>
               <input
                 type="number"
+                inputMode="numeric"
                 value={feeAmount}
                 onChange={(e) => setFeeAmount(Number(e.target.value))}
                 className="w-full p-2 text-xs rounded-xl border bg-white font-mono"
@@ -2861,6 +2868,7 @@ export const StudentProfile: React.FC<StudentProfileProps> = ({
         docNumber={student.aadharNumber}
         issuedBy="Unique Identification Authority of India (UIDAI)"
       />
-    </div>
+      </div>
+    </>
   );
 };
